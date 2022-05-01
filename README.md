@@ -8,10 +8,10 @@ My Application.
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.0.13(php:8.0.13-fpm-alpine) |
+| PHP | 8.0.15(php:8.0.15-fpm-alpine) |
 | MySQL | 5.7 |
 | Nginx | 1.19(nginx:1.19-alpine) |
-| Laravel | 8.* |
+| Laravel | 9.* |
 
 [backend/README](./app/backend/README.md)
 
@@ -22,7 +22,7 @@ My Application.
 | npm | 8.1.0 |
 | node | 16.13.0 |
 | react | 17.0.2 |
-| TypeScript | 4.4.4 |
+| TypeScript | 4.5.2 |
 
 [frontend/README](./frontend/README.md)
 

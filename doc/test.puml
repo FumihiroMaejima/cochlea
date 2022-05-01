@@ -1,0 +1,22 @@
+@startuml testName
+
+[*] --> State1
+State1 --> [*]
+State1 : this is a string
+State1 : this is another string
+
+State2 : this is a string
+State2 : this is another string
+
+State3 : this is a string
+State3 : this is another string
+
+State1 -> State2 : next page
+State2 --> [*]
+
+State1 -> State3 : jump page
+State2 -> State3 : next page
+State3 -> State2 : previous page
+
+
+@enduml

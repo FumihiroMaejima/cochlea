@@ -1,0 +1,24 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Backend Application debug",
+            "type": "php",
+            "request": "launch",
+            // "mode": "auto",
+            // "program": "${file}",
+            // "cwd": "${fileDirname}",
+            "port": 9010,
+            "pathMappings": {
+                // {docker上のdocument root}: {ローカルのdocument root}
+                "/var/www/html": "/Users/user-name/path/laravel-project"
+            },
+            // "env": {},
+            // コマンドラインパラメーターを渡す場合
+            // "args": ["10", "20"]
+        }
+    ]
+}
