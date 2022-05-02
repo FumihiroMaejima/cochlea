@@ -7,10 +7,10 @@ EXPOSE 3000
 
 WORKDIR /frontend
 
-ADD ../next/package.json ./
+ADD ../frontend/package.json ./
 RUN yarn install
 
-COPY ../next .
+COPY ../frontend .
 RUN yarn build
 
 # # yarn install

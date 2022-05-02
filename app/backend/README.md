@@ -242,6 +242,8 @@ $ composer create-project laravel/laravel=8.* --prefer-dist backend
 バージョン7系以降をインストールする場合
 「GuzzleHttpClient」はバージョン7系だとデフォルトでインストールされる。
 
+*2022/05/01現在、「nunomaduro/phpinsights」は依存関係の都合からインストールが出来なかった。
+
 ```shell-session
 $ composer require guzzlehttp/guzzle
 $ composer require --dev nunomaduro/phpinsights
@@ -259,7 +261,7 @@ $ composer require --dev nunomaduro/phpinsights barryvdh/laravel-debugbar friend
 php-cs-fixer,phpcs,phpmdの設定ファイルを格納する
 
 ```shell-session
-backend/.php_cs
+backend/.php-cs-fixer.php
 backend/phpcs.xml
 backend/ruleset.xml
 ```
@@ -268,7 +270,7 @@ CI関係のコマンド
 
 ```shell-session
 vendor/bin/phpunit --testdox
-vendor/bin/php-cs-fixer fix -v
+vendor/bin/php-cs-fixer fix -v --diff ./src
 vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
 vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor
 ```

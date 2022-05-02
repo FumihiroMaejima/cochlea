@@ -28,6 +28,19 @@ My Application.
 
 ---
 
+## volumeとnetworkの作成
+
+networkは`gateway`と`subnet`を必ず指定する。(値は任意。)
+
+```shell
+docker volume create ${PROJECT_NAME}-db-store
+docker volume create ${PROJECT_NAME}-redis-store
+docker network create --gateway=172.19.0.1 --subnet=172.19.0.0/16 ${PROJECT_NAME}-net
+```
+
+
+---
+
 # Swaggerの設定
 
  ### ローカル環境にswagger-codegenのインストール(mockサーバーのコード出力)
