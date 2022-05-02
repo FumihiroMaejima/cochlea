@@ -1221,6 +1221,17 @@ DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
 
 .envの`host`には`host.docker.internal`を指定すれば同じくネットワーク内のredisコンテナにアクセス出来る。
 
+`.env`のredis設定は下記の通り
+
+```conf
+# REDIS_HOST=host.docker.internal
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_CLIENT=predis
+```
+
 ## redisコンテナへのアクセス
 
 初期状態ではkeyは何も入っていない。
