@@ -139,9 +139,11 @@ $ yarn dev
 # srcディレクトリの作成
 
 ```Shell-session
-$ mkdir
+$ mkdir src
 $ mv pages src/
 $ mv styles src/
+
+$ mkdir src && mv pages src/ && mv styles src/
 ```
 
 ---
