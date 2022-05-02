@@ -1152,6 +1152,71 @@ Modelでの利用例
 
 ---
 
+# レプリケーション設定
+
+`database.php`の`connections`の、`mysql`の設定を下記の通り設定する。
+
+```php
+    'connections' => [
+        ...
+        // master/slave設定
+        'mysql' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'read' => [
+                'host' => [
+                    env('DB_SLAVE_HOST', '127.0.0.1'),
+                ],
+                'database' => env('DB_SLAVE_DATABASE', 'forge'),
+                'username' => env('DB_SLAVE_USERNAME'),
+                'password' => env('DB_SLAVE_PASSWORD'),
+                'port' => env('DB_SLAVE_PORT', '3306'),
+            ],
+            'write' => [
+                'host' => [
+                    env('DB_MASTER_HOST', '127.0.0.1'),
+                ],
+                'database' => env('DB_MASTER_DATABASE', 'forge'),
+                'username' => env('DB_MASTER_USERNAME'),
+                'password' => env('DB_MASTER_PASSWORD'),
+                'port' => env('DB_MASTER_PORT', '3306'),
+            ],
+            'sticky' => true,
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+        ...
+    ],
+
+```
+
+backendの`.env`のDB設定を下記の通りに修正する。
+
+```conf
+DB_CONNECTION=mysql
+DB_MASTER_HOST=127.0.0.1
+DB_MASTER_PORT=3306
+DB_MASTER_DATABASE=laravel
+DB_MASTER_USERNAME=root
+DB_MASTER_PASSWORD=
+
+DB_SLAVE_HOST="${DB_MASTER_HOST}"
+DB_SLAVE_PORT="${DB_MASTER_PORT}"
+DB_SLAVE_DATABASE="${DB_MASTER_DATABASE}"
+DB_SLAVE_USERNAME="${DB_MASTER_USERNAME}"
+DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
+```
+
+---
+
 # Redis
 
 .envの`host`には`host.docker.internal`を指定すれば同じくネットワーク内のredisコンテナにアクセス出来る。
