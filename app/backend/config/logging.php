@@ -101,9 +101,27 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
-        'errorlog' => [
+        /* 'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
+        ], */
+
+        'accesslog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_ACCESS_PATH', storage_path('logs/access.log')),
+            'level'  => env('LOG_ACCESS_LEVEL', 'debug'),
+        ],
+
+        'errorlog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_ERROR_PATH', storage_path('logs/error.log')),
+            'level'  => env('LOG_ERROR_LEVEL', 'debug'),
+        ],
+
+        'sqllog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_SQL_PATH', storage_path('logs/sql.log')),
+            'level'  => env('LOG_SQL_LEVEL', 'debug'),
         ],
 
         'null' => [

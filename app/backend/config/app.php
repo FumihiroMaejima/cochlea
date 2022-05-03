@@ -195,6 +195,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+
+        // cusom service provider
+        // App\Providers\RepositoryServiceProvider::class,
+        App\Providers\DataBaseQueryServiceProvider::class,
+
     ],
 
     /*

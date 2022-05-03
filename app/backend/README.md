@@ -1217,6 +1217,74 @@ DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
 
 ---
 
+# ロギング設定
+
+`logging.php`の設定を下記の通りに修正する。
+
+
+```php
+        ...
+        /* 'errorlog' => [
+            'driver' => 'errorlog',
+            'level' => env('LOG_LEVEL', 'debug'),
+        ], */
+
+        'accesslog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_ACCESS_PATH', storage_path('logs/access.log')),
+            'level'  => env('LOG_ACCESS_LEVEL', 'debug'),
+        ],
+
+        'errorlog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_ERROR_PATH', storage_path('logs/error.log')),
+            'level'  => env('LOG_ERROR_LEVEL', 'debug'),
+        ],
+
+        'sqllog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_SQL_PATH', storage_path('logs/sql.log')),
+            'level'  => env('LOG_SQL_LEVEL', 'debug'),
+        ],
+       ...
+    ],
+```
+
+`.env`に下記の設定追加する。
+
+```conf
+# Log Setting(defalt : storage_path('logs/***.log'))
+# LOG_ACCESS_PATH=/usr/local/app/log/access.log
+# LOG_ERROR_PATH=/usr/local/app/log/error.log
+# LOG_SQL_PATH=/usr/local/app/log/sql.log
+APP_LOG_DEFAULT_CHANNEL="error"
+LOG_ACCESS_LEVEL=info
+LOG_ERROR_LEVEL=error
+LOG_SQL_LEVEL=info
+```
+
+*アクセスログを適用させる為に、`middleware`として`AccessLog.php`を作成する。(Karnel.phpにも設定を追加する。)
+*SQLログを適用させる為に、`ServiceProvider`として`DataBaseQueryServiceProvider.php`を作成する。(app.phpにも設定を追加する。)
+
+```php
+    protected $middleware = [
+        ...
+        \App\Http\Middleware\AccessLog::class,
+        ...
+    ];
+```
+
+```php
+    'providers' => [
+        ...
+        // cusom service provider
+        App\Providers\DataBaseQueryServiceProvider::class,
+        ...
+    ],
+```
+
+---
+
 # Redis
 
 .envの`host`には`host.docker.internal`を指定すれば同じくネットワーク内のredisコンテナにアクセス出来る。
