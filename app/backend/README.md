@@ -404,7 +404,9 @@ $ npm run dev or npm run production
 
 ## Json Web Tokens(JWT)の設定について
 
-tymon/jwt-authのインストール
+`firebase/php-jwt`と言うものもあるが証明書が必要らしいので割愛する。
+
+`tymon/jwt-auth`のインストール。(バージョン指定必須)
 
 ```shell-session
 $ composer require tymon/jwt-auth ^1.0.2
