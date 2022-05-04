@@ -6,17 +6,52 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens;
+    /* use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
-    use TwoFactorAuthenticatable;
+    use TwoFactorAuthenticatable; */
+
+    use HasFactory;
+    use Notifiable;
+    use SoftDeletes;
+    protected $carbon;
+    protected $now;
+
+    // カラム一覧
+    public const ID = 'id';
+    public const NAME = 'name';
+    public const MESSAGE = 'email';
+    public const EMAIL_VERIFIED_AT = 'email_verified_at';
+    public const PASSWORD = 'password';
+    public const ROLE = 'role';
+    public const REMEMBER_TOKEN = 'remember_token';
+    public const CURRENT_TEAM_ID = 'current_team_id';
+    public const PROFILE_PHOTO_PATH = 'profile_photo_path';
+    public const CRREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
+    // public const DELETED_AT = 'deleted_at';
+
+    //テーブル名指定
+    protected $table = 'users';
+
+    /**
+     * used in initializeSoftDeletes()
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -36,9 +71,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
+        'remember_token'
     ];
 
     /**
@@ -55,7 +88,26 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    protected $appends = [];
+
+    public function __construct()
+    {
+        $this->carbon = new Carbon();
+        $this->now = $this->carbon->now()->timestamp;
+    }
+
+    public function getUserId()
+    {
+        return  $this->id;
+    }
+
+    public function getUserName()
+    {
+        return $this->name;
+    }
+
+    public function getUserEmail()
+    {
+        return $this->email;
+    }
 }

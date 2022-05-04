@@ -92,6 +92,11 @@ phpmd:
 backend-serve:
 	cd app/backend && php artisan serve
 
+backend-clear-cache:
+	docker-compose exec app php artisan cache:clear && \
+	docker-compose exec app php artisan config:clear && \
+	docker-compose exec app composer dump-autoload
+
 ##############################
 # web server(nginx)
 ##############################
