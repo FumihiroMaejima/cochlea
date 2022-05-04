@@ -364,7 +364,7 @@ $ php artisan migrate:fresh (--seed)
 一度、migrate:freshなど実行しておくと良い。
 
 
-laravel/uiのインストール
+laravel/uiのインストール(Larevel 8以降は不要。)
 
 メモリ消費量が大きい為、コンテナ側で実行する。(php.iniの設定)
 
@@ -379,7 +379,7 @@ $ php artisan ui vue --auth
 ```
 
 Laravel8からlaravel/uiで認証を使わなくなった。(上記は不要)
-jetstreamを使う
+`jetstream`を使う
 
 ```shell-session
 $ composer require laravel/jetstream
