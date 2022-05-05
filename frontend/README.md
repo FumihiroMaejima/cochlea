@@ -350,8 +350,6 @@ $ yarn add --dev @types/node
 # jest
 
 
-下記のcssファイルの拡張子を`scss`に変更する
-
 ```Shell-session
 $ yarn add --dev jest ts-jest @types/jest @testing-library/react
 ```
