@@ -18,6 +18,7 @@ class AccessLog
     private string $ip;
     private string $uri;
     private string|null $contentType;
+    private int $statusCode;
     private string $responseTime;
     private mixed $requestContent;
     private string $plathome;
@@ -56,6 +57,8 @@ class AccessLog
         $this->responseTime = microtime(true) - $startTime;
         $this->memory = (string)memory_get_peak_usage();
 
+        $this->getLogParameterByResponse($response);
+
 
         // log出力
         $this->outputLog();
@@ -76,6 +79,7 @@ class AccessLog
     /**
      * get log parameter from request.
      * @param Request $request
+     * @return void
      */
     private function getLogParameterByRequest(Request $request): void
     {
@@ -91,14 +95,19 @@ class AccessLog
     /**
      * get log parameter from response.
      * @param Request $response
+     * @return void
      */
-    // private function getLogParameterByResponse(Response $response): void {}
+    private function getLogParameterByResponse(Response $response): void
+    {
+        $this->statusCode = $response->getStatusCode();
+    }
 
 
 
     /**
      * output access log in log file.
      * @param Request $request
+     * @return void
      */
     private function outputLog(): void
     {
@@ -109,6 +118,7 @@ class AccessLog
             'uri'              => $this->uri,
             'ip'               => $this->ip,
             'content_type'     => $this->contentType,
+            'status_code'      => $this->statusCode,
             'response_time'    => $this->responseTime,
             'request_content'  => $this->requestContent,
             'plathome'         => $this->plathome,
