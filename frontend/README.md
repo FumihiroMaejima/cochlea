@@ -150,6 +150,30 @@ $ mkdir src && mv pages src/ && mv styles src/
 
 # eslintの設定の修正
 
+### .eslintrc.jsonを使う場合
+
+下記のパッケージのみインストールすれば良い。
+
+`.eslintrc.json`に既存のものと同様の設定を追記されば良い。
+
+`.prettierrc`も作成しておくこと。
+
+```shell
+$ yarn add --dev @next/eslint-plugin-next
+$ yarn add --dev eslint-config-prettier
+```
+
+設定例
+
+```json
+{
+  // "extends": "next",
+  "extends": ["next/core-web-vitals", "prettier"]
+}
+
+```
+
+### .eslintrc.jsonを使わない場合
 既存の.eslintrc.jsonを削除し、react側で使用している.eslintrcを利用する。
 
 ```Shell-session
@@ -185,8 +209,6 @@ $ yarn add --dev @next/eslint-plugin-next
 ---
 
 # prettierのインストール
-
-// TODO next用のパッケージの追加
 
 ```Shell-session
 $ yarn add --dev prettier
