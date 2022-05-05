@@ -389,6 +389,7 @@ module.exports = {
 
 # Cypress
 
+専用の`tsconfig.json`を用意すること。
 
 ```Shell-session
 $ yarn add --dev cypress @types/jest
