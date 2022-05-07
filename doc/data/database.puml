@@ -1,0 +1,65 @@
+@startuml database
+
+
+Admin --> [*]
+Admin : Administrator of this service.
+Admin : 1. id
+Admin : 2. name
+Admin : 3. email
+Admin : 4. password
+Admin : 5. role
+Admin : 6. permission
+
+Master : Master Data of this service.
+
+Products --> [*]
+Products : Products in this service.
+Products : 1. id
+Products : 2. name
+Products : 3. type (商品の種類)
+Products : 4. price
+Products : 5. unit (単位)
+Products : 6. manufacturer (製造元)
+Products : 7. notice_start_at (予告開始日時)
+Products : 8. notice_end_at (予告終了日時)
+Products : 9. purchase_start_at (購入開始日時)
+Products : 10. purchase_end_at (購入終了日時)
+Products : 11. image (イメージ)
+Products -> Master : master data
+
+ProductTypes --> [*]
+ProductTypes : Product Types in this service.
+ProductTypes : 1. id
+ProductTypes : 2. name
+ProductTypes : 3. detail
+ProductTypes -> Master : master data
+
+Manufactureres --> [*]
+Manufactureres : Manufactureres of Product.
+Manufactureres : 1. id
+Manufactureres : 2. name
+Manufactureres : 3. detail
+Manufactureres -> Master : master data
+
+
+
+
+State1 --> [*]
+State1 : this is a string
+State1 : this is another string
+
+State2 : this is a string
+State2 : this is another string
+
+State3 : this is a string
+State3 : this is another string
+
+State1 -> State2 : next page
+State2 --> [*]
+
+State1 -> State3 : jump page
+State2 -> State3 : next page
+State3 -> State2 : previous page
+
+
+@enduml
