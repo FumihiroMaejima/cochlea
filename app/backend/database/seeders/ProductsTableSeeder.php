@@ -10,8 +10,9 @@ use App\Models\Master\Products;
 
 class ProductsTableSeeder extends Seeder
 {
-    // private const TABLE_NAME = 'game_area';
+    // private const TABLE_NAME = 'table_name';
     private const SEEDER_DATA_LENGTH = 5;
+    private const SEEDER_DATA_TESTING_LENGTH = 5;
     private const SEEDER_DEVELOP_DATA_LENGTH = 50;
     private int $count = 5;
     private string $tableName = '';
@@ -78,7 +79,7 @@ class ProductsTableSeeder extends Seeder
             return self::SEEDER_DATA_LENGTH;
         } elseif ($envName === 'testing') {
             // testの時
-            return self::SEEDER_DATA_LENGTH;
+            return self::SEEDER_DATA_TESTING_LENGTH;
         } else {
             // localやstaging
             return self::SEEDER_DEVELOP_DATA_LENGTH;
