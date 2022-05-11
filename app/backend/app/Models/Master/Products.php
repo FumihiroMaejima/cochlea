@@ -29,7 +29,7 @@ class Products extends Model
     public const DELETED_AT        = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'game_area';
+    protected $table = 'products';
 
     /**
      * Indicates if the model should be timestamped.
