@@ -16,15 +16,16 @@ Products --> [*]
 Products : Products in this service.
 Products : 1. id
 Products : 2. name
-Products : 3. type (商品の種類)
-Products : 4. price
-Products : 5. unit (単位)
-Products : 6. manufacturer (製造元)
-Products : 7. notice_start_at (予告開始日時)
-Products : 8. notice_end_at (予告終了日時)
-Products : 9. purchase_start_at (購入開始日時)
-Products : 10. purchase_end_at (購入終了日時)
-Products : 11. image (イメージ)
+Products : 3. detail
+Products : 4. type (商品の種類)
+Products : 5. price
+Products : 6. unit (単位)
+Products : 7. manufacturer (製造元)
+Products : 8. notice_start_at (予告開始日時)
+Products : 9. notice_end_at (予告終了日時)
+Products : 10. purchase_start_at (購入開始日時)
+Products : 11. purchase_end_at (購入終了日時)
+Products : 12. image (イメージ)
 Products -> Master : master data
 
 ProductTypes --> [*]
@@ -39,6 +40,8 @@ Manufactureres : Manufactureres of Product.
 Manufactureres : 1. id
 Manufactureres : 2. name
 Manufactureres : 3. detail
+Manufactureres : 4. address
+Manufactureres : 5. tel
 Manufactureres -> Master : master data
 
 

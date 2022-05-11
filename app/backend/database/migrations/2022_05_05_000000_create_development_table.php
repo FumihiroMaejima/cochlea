@@ -18,10 +18,10 @@ class CreateDevelopmentTable extends Migration
          */
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('name')->comment('管理者名');
+            $table->string('email')->unique()->comment('メールアドレス');
+            $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス確認日時');
+            $table->string('password')->comment('パスワード');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
