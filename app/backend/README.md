@@ -334,7 +334,7 @@ DBのテーブル内の状態を初期化したい場合は、refreshコマン�
 
 データベース全体を作り直すことが出来る。
 
-```shell-session
+```shell
 $ docker-compose exec app php artisan migrate:refresh
 Rolling back: 2019_08_19_000000_create_failed_jobs_table
 Rolled back:  2019_08_19_000000_create_failed_jobs_table (0.08 seconds)
@@ -356,6 +356,20 @@ $ php artisan migrate:refresh --seed
 
 ```shell-session
 $ php artisan migrate:fresh (--seed)
+```
+
+---
+
+## app.phpの設定について
+
+### timezoneの変更
+
+```php
+// 変更前
+'timezone' => 'UTC',
+
+// 変更後
+'timezone' => 'Asia/Tokyo',
 ```
 
 ---
