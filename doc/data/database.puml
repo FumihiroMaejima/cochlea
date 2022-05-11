@@ -35,14 +35,14 @@ ProductTypes : 2. name
 ProductTypes : 3. detail
 ProductTypes -> Master : master data
 
-Manufactureres --> [*]
-Manufactureres : Manufactureres of Product.
-Manufactureres : 1. id
-Manufactureres : 2. name
-Manufactureres : 3. detail
-Manufactureres : 4. address
-Manufactureres : 5. tel
-Manufactureres -> Master : master data
+Manufacturers --> [*]
+Manufacturers : Manufacturers of Product.
+Manufacturers : 1. id
+Manufacturers : 2. name
+Manufacturers : 3. detail
+Manufacturers : 4. address
+Manufacturers : 5. tel
+Manufacturers -> Master : master data
 
 
 

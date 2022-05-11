@@ -45,9 +45,9 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
-         * manufactureres table
+         * manufacturers table
          */
-        Schema::create('manufactureres', function (Blueprint $table) {
+        Schema::create('manufacturers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment('製造元名');
             $table->text('detail')->comment('詳細');
