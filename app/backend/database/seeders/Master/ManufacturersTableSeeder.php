@@ -1,15 +1,15 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Master;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Master\Products;
+use App\Models\Master\Manufacturers;
 use Database\Seeders\BaseSeeder;
 
-class ProductsTableSeeder extends BaseSeeder
+class ManufacturersTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
@@ -24,25 +24,18 @@ class ProductsTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Products())->getTable();
+        $this->tableName = (new Manufacturers())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timeZone'));
         $endDate = (new Carbon($now))->addMonth();
 
         $template = [
-            Products::NAME              => '',
-            Products::DETAIL            => '',
-            Products::TYPE              => 1,
-            Products::PRICE             => 600,
-            Products::UNIT              => '本',
-            Products::MANUFACTURE       => 'テストメーカー',
-            Products::NOTICE_START_AT   => $now,
-            Products::NOTICE_END_AT     => $endDate,
-            Products::PURCHASE_START_AT => $now,
-            Products::PURCHASE_END_AT   => $endDate,
-            Products::IMAGE             => '',
-            Products::CREATED_AT        => $now,
-            Products::UPDATED_AT        => $now
+            Manufacturers::NAME       => '',
+            Manufacturers::DETAIL     => '',
+            Manufacturers::ADDRESS    => 'test県test市test町',
+            Manufacturers::TEL        => '000-0000-0000',
+            Manufacturers::CREATED_AT => $now,
+            Manufacturers::UPDATED_AT => $now
         ];
 
         // insert用データ
@@ -55,10 +48,10 @@ class ProductsTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Products::NAME]          = 'product' . (string)($i);
-            $row[Products::DETAIL]        = 'testProduct' . (string)($i) . '@example.com';
-            $row[Products::MANUFACTURE]  .= ' product' . (string)($i);
-            $row[Products::IMAGE]         = '/product/image/' . (string)($i);
+            $row[Manufacturers::NAME]    = 'manufacturer' . (string)($i);
+            $row[Manufacturers::DETAIL]  = 'testManufacturer' . (string)($i) . 'Detail';
+            $row[Manufacturers::ADDRESS] = 'test県test市test' . (string)($i) . '町';
+            $row[Manufacturers::TEL]     = '000-0000-000' . (string)($i);
 
             $data[] = $row;
         }
