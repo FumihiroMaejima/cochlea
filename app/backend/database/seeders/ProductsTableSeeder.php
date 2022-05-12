@@ -7,15 +7,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use App\Models\Master\Products;
+use Database\Seeders\BaseSeeder;
 
-class ProductsTableSeeder extends Seeder
+class ProductsTableSeeder extends BaseSeeder
 {
-    // private const TABLE_NAME = 'table_name';
-    private const SEEDER_DATA_LENGTH = 5;
-    private const SEEDER_DATA_TESTING_LENGTH = 5;
-    private const SEEDER_DEVELOP_DATA_LENGTH = 50;
-    private int $count = 5;
-    private string $tableName = '';
+    protected const SEEDER_DATA_LENGTH = 5;
+    protected const SEEDER_DATA_TESTING_LENGTH = 5;
+    protected const SEEDER_DEVELOP_DATA_LENGTH = 50;
+    protected int $count = 5;
+    protected string $tableName = '';
 
     /**
      * Run the database seeds.
@@ -49,7 +49,7 @@ class ProductsTableSeeder extends Seeder
         $data = [];
 
         // データ数
-        $this->count = $this->getSeederDataLengthByEnv(Config::get('app.env'));
+        $this->count = $this->_getSeederDataLengthByEnv(Config::get('app.env'));
 
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
@@ -68,22 +68,21 @@ class ProductsTableSeeder extends Seeder
     }
 
     /**
-     * get data length by env.
-     * @param string $envName
+     * get data length by env in parent class pethod.
      *
+     * @param string $envName 環境の値(local,stg,production,testingなど)
+     * @param int $productionLength production時のインサートするデータ数
+     * @param int $testingLength testing時のインサートするデータ数
+     * @param int $developLength localや開発時のインサートするデータ数
      * @return int
      */
-    private function getSeederDataLengthByEnv(string $envName): int
+    protected function _getSeederDataLengthByEnv(
+        string $envName,
+        int $productionLength = self::SEEDER_DATA_LENGTH,
+        int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
+        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+    ): int
     {
-        if ($envName === 'production') {
-            return self::SEEDER_DATA_LENGTH;
-        } elseif ($envName === 'testing') {
-            // testの時
-            return self::SEEDER_DATA_TESTING_LENGTH;
-        } else {
-            // localやstaging
-            return self::SEEDER_DEVELOP_DATA_LENGTH;
-            // return self::SEEDER_DATA_LENGTH;
-        }
+        return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);
     }
 }
