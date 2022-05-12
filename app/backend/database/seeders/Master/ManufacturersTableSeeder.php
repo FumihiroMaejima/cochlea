@@ -27,7 +27,6 @@ class ManufacturersTableSeeder extends BaseSeeder
         $this->tableName = (new Manufacturers())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timeZone'));
-        $endDate = (new Carbon($now))->addMonth();
 
         $template = [
             Manufacturers::NAME       => '',

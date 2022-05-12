@@ -24,6 +24,7 @@ class Admins extends Authenticatable implements JWTSubject
     public const NAME = 'name';
     public const EMAIL = 'email';
     public const EMAIL_VERIFIED_AT = 'email_verified_at';
+    public const PASSWORD = 'password';
     public const REMEMBER_TOKEN = 'remember_token';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
@@ -44,7 +45,7 @@ class Admins extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = [self::DELETED_AT];
 
 
     /**
@@ -53,10 +54,10 @@ class Admins extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'updated_at'
+        self::NAME,
+        self::EMAIL,
+        self::PASSWORD,
+        self::UPDATED_AT
     ];
 
     /**

@@ -3,15 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Models\Admins;
+use Database\Seeders\BaseSeeder;
 
-class AdminsTableSeeder extends Seeder
+class AdminsTableSeeder extends BaseSeeder
 {
-    private const TABLE_NAME = 'admins';
-    private const SEEDER_DATA_LENGTH = 5;
-    private const SEEDER_DEVELOP_DATA_LENGTH = 50;
-    private int $count = 5;
+    protected const SEEDER_DATA_LENGTH = 5;
+    protected const SEEDER_DATA_TESTING_LENGTH = 5;
+    protected const SEEDER_DEVELOP_DATA_LENGTH = 50;
+    protected int $count = 5;
+    protected string $tableName = '';
 
     /**
      * Run the database seeds.
@@ -20,12 +24,16 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
+        $this->tableName = (new Admins())->getTable();
+
+        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+
         $template = [
-            'name'       => '',
-            'email'      => '',
-            'password'   => bcrypt(Config::get('myapp.seeder.password.testadmin')),
-            'created_at' => '2022-01-04 00:00:00',
-            'updated_at' => '2022-01-04 00:00:00'
+            Admins::NAME       => '',
+            Admins::EMAIL      => '',
+            Admins::PASSWORD   => bcrypt(Config::get('myapp.seeder.password.testadmin')),
+            Admins::CREATED_AT => $now,
+            Admins::UPDATED_AT => $now
         ];
 
         // insert用データ
@@ -38,33 +46,32 @@ class AdminsTableSeeder extends Seeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row['name']  = 'admin' . (string)($i);
-            $row['email'] = 'testadmin' . (string)($i) . '@example.com';
+            $row[Admins::NAME]  = 'admin' . (string)($i);
+            $row[Admins::EMAIL] = 'testadmin' . (string)($i) . '@example.com';
 
             $data[] = $row;
         }
 
         // テーブルへの格納
-        DB::table(self::TABLE_NAME)->insert($data);
+        DB::table($this->tableName)->insert($data);
     }
 
     /**
-     * get data length by env.
-     * @param string $envName
+     * get data length by env in parent class pethod.
      *
+     * @param string $envName 環境の値(local,stg,production,testingなど)
+     * @param int $productionLength production時のインサートするデータ数
+     * @param int $testingLength testing時のインサートするデータ数
+     * @param int $developLength localや開発時のインサートするデータ数
      * @return int
      */
-    private function getSeederDataLengthByEnv(string $envName): int
+    protected function _getSeederDataLengthByEnv(
+        string $envName,
+        int $productionLength = self::SEEDER_DATA_LENGTH,
+        int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
+        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+    ): int
     {
-        if ($envName === 'production') {
-            return self::SEEDER_DATA_LENGTH;
-        } elseif ($envName === 'testing') {
-            // testの時
-            return self::SEEDER_DATA_LENGTH;
-        } else {
-            // localやstaging
-            return self::SEEDER_DEVELOP_DATA_LENGTH;
-            // return self::SEEDER_DATA_LENGTH;
-        }
+        return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);
     }
 }
