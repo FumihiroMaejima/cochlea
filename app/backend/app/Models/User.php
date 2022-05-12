@@ -32,7 +32,7 @@ class User extends Authenticatable implements JWTSubject
     // カラム一覧
     public const ID = 'id';
     public const NAME = 'name';
-    public const MESSAGE = 'email';
+    public const EMAIL = 'email';
     public const EMAIL_VERIFIED_AT = 'email_verified_at';
     public const PASSWORD = 'password';
     public const ROLE = 'role';
@@ -41,7 +41,7 @@ class User extends Authenticatable implements JWTSubject
     public const PROFILE_PHOTO_PATH = 'profile_photo_path';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
-    // public const DELETED_AT = 'deleted_at';
+    public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
     protected $table = 'users';
@@ -51,7 +51,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = [self::DELETED_AT];
 
     /**
      * The attributes that are mass assignable.
@@ -59,9 +59,9 @@ class User extends Authenticatable implements JWTSubject
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        self::NAME,
+        self::EMAIL,
+        self::PASSWORD,
     ];
 
     /**
@@ -70,8 +70,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token'
+        self::PASSWORD,
+        self::REMEMBER_TOKEN
     ];
 
     /**
@@ -80,7 +80,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        self::EMAIL_VERIFIED_AT => 'datetime',
     ];
 
     /**
@@ -109,5 +109,26 @@ class User extends Authenticatable implements JWTSubject
     public function getUserEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.(JWTSubject)
+     *
+     * @a return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        // primary keyを取得
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.(JWTSubject)
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

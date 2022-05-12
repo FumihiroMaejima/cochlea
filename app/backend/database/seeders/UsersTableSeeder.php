@@ -3,14 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Models\User;
+use Database\Seeders\BaseSeeder;
 
 class UsersTableSeeder extends Seeder
 {
-    private const TABLE_NAME = 'users';
-    private const SEEDER_DATA_LENGTH = 5;
-    private int $count = 5;
+    protected const SEEDER_DATA_LENGTH = 5;
+    protected const SEEDER_DATA_TESTING_LENGTH = 5;
+    protected const SEEDER_DEVELOP_DATA_LENGTH = 50;
+    protected int $count = 5;
+    protected string $tableName = '';
 
     /**
      * Run the database seeds.
@@ -19,13 +24,17 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $this->tableName = (new User())->getTable();
+
+        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+
         $template = [
-            'name'       => '',
-            'email'      => '',
-            'password'   => bcrypt(Config::get('myapp.seeder.password.testuser')),
-            'role'       => 10,
-            'created_at' => '2022-05-05 00:00:00',
-            'updated_at' => '2023-01-04 00:00:00'
+            User::NAME       => '',
+            User::EMAIL      => '',
+            User::PASSWORD   => bcrypt(Config::get('myapp.seeder.password.testuser')),
+            User::ROLE       => 10,
+            User::CREATED_AT => $now,
+            User::UPDATED_AT => $now
         ];
 
         // insert用データ
@@ -35,13 +44,13 @@ class UsersTableSeeder extends Seeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row['name']  = 'user' . (string)($i);
-            $row['email'] = 'testuser' . (string)($i) . '@example.com';
+            $row[User::NAME]  = 'user' . (string)($i);
+            $row[User::EMAIL] = 'testuser' . (string)($i) . '@example.com';
 
             $data[] = $row;
         }
 
         // テーブルへの格納
-        DB::table(self::TABLE_NAME)->insert($data);
+        DB::table($this->tableName)->insert($data);
     }
 }
