@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('password')->comment('パスワード');
             $table->tinyInteger('role')->default(0)->comment('ロール');
             $table->rememberToken()->comment('リメンバートークン');
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+            // $table->foreignId('current_team_id')->nullable()->comment('チームID');
+            // $table->string('profile_photo_path', 2048)->nullable()->comment('プロフィールアイコンパス');
             $table->timestamps();
             $table->softDeletes();
         });

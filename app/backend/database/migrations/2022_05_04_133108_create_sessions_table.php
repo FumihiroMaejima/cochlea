@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->text('payload');
-            $table->integer('last_activity')->index();
+            $table->foreignId('user_id')->nullable()->index()->comment('ユーザーID');
+            $table->string('ip_address', 45)->nullable()->comment('IPアドレス');
+            $table->text('user_agent')->nullable()->comment('ユーザーエージェント');
+            $table->text('payload')->comment('ペイロード');
+            $table->integer('last_activity')->index()->comment('直前のアクティビティ');
         });
     }
 
