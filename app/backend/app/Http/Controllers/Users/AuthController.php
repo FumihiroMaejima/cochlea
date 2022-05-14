@@ -86,11 +86,11 @@ class AuthController extends Controller
         // ユーザー情報を返す。
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => [
-                'id' => auth('api')->user()->id,
-                'name' => auth('api')->user()->name
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
+            'user'         => [
+                'id'   => auth('api-users')->user()->id,
+                'name' => auth('api-users')->user()->name
             ]
         ]);
     }
