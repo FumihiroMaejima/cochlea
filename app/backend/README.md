@@ -713,6 +713,25 @@ localhost/api/auth/login
 }
 ```
 
+### JetStreamなど不要な機能の削除
+
+機能を自作したい時などはマイグレーションファイルのうち、下記をリネーム等して除外する。
+
+```shell
+2014_10_12_200000_add_two_factor_columns_to_users_table.php
+2019_08_19_000000_create_failed_jobs_table.php
+2019_12_14_000001_create_personal_access_tokens_table.php
+```
+
+`app.php`に記載されている下記のServiceProviderをコメントアウトをする。
+
+ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstream`も不要になる為削除する。
+
+```php
+    App\Providers\FortifyServiceProvider::class,
+    App\Providers\JetstreamServiceProvider::class,
+```
+
 ---
 # その他
 
