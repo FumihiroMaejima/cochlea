@@ -331,6 +331,10 @@ $ yarn add --dev @types/node
 # sass
 
 
+```Shell-session
+$ yarn add --dev sass
+```
+
 下記のcssファイルの拡張子を`scss`に変更する
 
 ```Shell-session
