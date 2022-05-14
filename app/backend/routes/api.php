@@ -31,17 +31,28 @@ Route::get('test', function () {
 Route::group(['prefix' => 'v1/admin'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', [AdminAuthController::class, 'login'])->name('auth.admin');
+        Route::post('login', [\App\Http\Controllers\Admins\AuthController::class, 'login'])->name('auth.admin');
     });
+    // \App\Http\Controllers\Admins\AdminsController
 
 
     // admin auth
     Route::middleware(['middleware' => 'auth:api-admins'])
     ->group(function () {
         Route::group(['prefix' => 'auth'], function () {
-            Route::post('logout', [AdminAuthController::class, 'logout']);
-            Route::post('refresh', [AdminAuthController::class, 'refresh']);
-            Route::post('self', [AdminAuthController::class, 'getAuthUser']);
+            Route::post('logout', [\App\Http\Controllers\Admins\AuthController::class, 'logout']);
+            Route::post('refresh', [\App\Http\Controllers\Admins\AuthController::class, 'refresh']);
+            Route::post('self', [\App\Http\Controllers\Admins\AuthController::class, 'getAuthUser']);
+        });
+
+
+        // admins
+        Route::group(['prefix' => 'admins'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\AdminsController::class, 'index'])->name('admin.admins.index');
+            // Route::get('/csv', [\App\Http\Controllers\Admins\AdminsController::class, 'download'])->name('admin.admins.download');
+            // Route::post('/admin', [\App\Http\Controllers\Admins\AdminsController::class, 'create'])->name('admin.admins.create');
+            // Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
+            // Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
         });
     });
 });
@@ -63,9 +74,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::middleware(['middleware' => 'auth:api-users'])
     ->group(function () {
         Route::group(['prefix' => 'auth'], function () {
-            Route::post('logout', [AuthController::class, 'logout']);
-            Route::post('refresh', [AuthController::class, 'refresh']);
-            Route::post('self', [AuthController::class, 'getAuthUser']);
+            Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout']);
+            Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh']);
+            Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser']);
         });
     });
 });

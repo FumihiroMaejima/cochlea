@@ -202,7 +202,7 @@ return [
 
 
         // cusom service provider
-        // App\Providers\RepositoryServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
         App\Providers\DataBaseQueryServiceProvider::class,
 
     ],

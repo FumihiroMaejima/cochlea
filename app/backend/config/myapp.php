@@ -18,6 +18,11 @@ return [
         'id'        => 'X-Auth-ID',
         'authority' => 'X-Auth-Authority'
     ],
+    'executionRole' => [
+        'services' => [
+            'admins' => ['master', 'administrator', 'develop'],
+        ]
+    ],
     'file' => [
         'download' => [
             'storage' => [
