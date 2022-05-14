@@ -725,7 +725,7 @@ localhost/api/auth/login
 
 `app.php`に記載されている下記のServiceProviderをコメントアウトをする。
 
-ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstream`も不要になる為削除する。
+ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstream`も不要になる為該当のServiceProvider含めて削除する。
 
 ```php
     App\Providers\FortifyServiceProvider::class,
