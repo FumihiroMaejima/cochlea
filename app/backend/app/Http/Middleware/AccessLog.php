@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -94,10 +95,10 @@ class AccessLog
 
     /**
      * get log parameter from response.
-     * @param Request $response
+     * @param Request | JsonResponse $response
      * @return void
      */
-    private function getLogParameterByResponse(Response $response): void
+    private function getLogParameterByResponse(Response | JsonResponse $response): void
     {
         $this->statusCode = $response->getStatusCode();
     }
