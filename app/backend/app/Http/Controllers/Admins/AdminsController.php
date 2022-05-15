@@ -80,9 +80,9 @@ class AdminsController extends Controller
      * @param  AdminCreateRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(AdminCreateRequest  $request): JsonResponse
+    public function create(AdminCreateRequest $request): JsonResponse
     {
-        return $$this->service->createAdmin($request);
+        return $this->service->createAdmin($request);
     }
 
     /**
