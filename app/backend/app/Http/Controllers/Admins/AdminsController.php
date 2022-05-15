@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 // use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Services\AdminsService;
-use App\Http\Requests\MemberCreateRequest;
-// use App\Http\Requests\MemberUpdateRequest;
-// use App\Http\Requests\MemberDeleteRequest;
+use App\Http\Requests\Admins\AdminCreateRequest;
+use App\Http\Requests\Admins\AdminDeleteRequest;
+use App\Http\Requests\Admins\AdminUpdateRequest;
 use App\Trait\CheckHeaderTrait;
 use Illuminate\Support\Facades\Config;
 
 class AdminsController extends Controller
 {
     use CheckHeaderTrait;
-    private $service;
+    private AdminsService $service;
 
     /**
      * Create a new MembersController instance.
@@ -77,24 +77,13 @@ class AdminsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \App\Http\Requests\MemberCreateRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  AdminCreateRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    /* public function create(MemberCreateRequest  $request)
+    public function create(AdminCreateRequest  $request): JsonResponse
     {
-        // 処理速度の計測
-        $time_start = microtime(true);
-
-        // サービスの実行
-        $response = $this->service->createMember($request);
-
-        $time = microtime(true) - $time_start;
-        // PHPによって割り当てられたメモリの最大値の取得
-        Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'peak usage memory size: ' . (string)memory_get_peak_usage());
-        // サービス処理の実行時間の取得
-        Log::debug(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'service execution time: ' . (string)$time);
-        return $response;
-    } */
+        return $$this->service->createAdmin($request);
+    }
 
     /**
      * Store a newly created resource in storage.

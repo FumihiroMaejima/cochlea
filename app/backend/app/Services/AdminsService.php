@@ -12,8 +12,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Repositories\Admins\AdminsRepositoryInterface;
-use App\Http\Resources\Admins\AdminsResource;
+use App\Http\Requests\Admins\AdminCreateRequest;
+use App\Http\Requests\Admins\AdminDeleteRequest;
+use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Resources\Admins\AdminCreateResource;
+use App\Http\Resources\Admins\AdminDeleteResource;
 use App\Http\Resources\Admins\AdminsCollection;
+use App\Http\Resources\Admins\AdminsResource;
+use App\Http\Resources\Admins\AdminUpdateResource;
+use \Symfony\Component\HttpKernel\Exception\HttpException;
 use Exception;
 
 class AdminsService
@@ -68,33 +75,29 @@ class AdminsService
     /**
      * update member data service
      *
-     * @param  \App\Http\Requests\MemberCreateRequest  $request
+     * @param  AdminCreateRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    /* public function createMember(MemberCreateRequest $request)
+    public function createAdmin(AdminCreateRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try {
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'request all: ' . json_encode($request->all()));
-
             $resource = app()->make(AdminCreateResource::class, ['resource' => $request])->toArray($request);
 
             $insertCount = $this->adminsRepository->createAdmin($resource); // if created => count is 1
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'insertCount: ' . json_encode($insertCount));
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
 
             // 権限情報の作成
-            $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
-            $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'roleIdResource: ' . json_encode($adminsRolesResource));
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'insert roles conut: ' . json_encode($insertAdminsRolesCount));
+            // $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
+            // $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
 
             DB::commit();
 
             // 作成されている場合は304
-            $message = ($insertCount > 0 && $insertAdminsRolesCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0 && $insertAdminsRolesCount > 0) ? 201 : 401;
+            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
+            $status = ($insertCount > 0) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
@@ -102,7 +105,7 @@ class AdminsService
             DB::rollback();
             abort(500);
         }
-    } */
+    }
 
     /**
      * update member data service
