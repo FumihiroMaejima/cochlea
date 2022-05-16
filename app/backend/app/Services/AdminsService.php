@@ -29,7 +29,7 @@ class AdminsService
     // protected $adminsRolesRepository;
 
     /**
-     * create MembersService instance
+     * create AdminsService instance
      * @param  \App\Repositories\Admins\AdminsRepositoryInterface  $adminsRepository
      * @param  \App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface  $adminsRepository
      * @return void
@@ -41,7 +41,7 @@ class AdminsService
     }
 
     /**
-     * get members data
+     * get admins data
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -60,7 +60,7 @@ class AdminsService
     }
 
     /**
-     * download member data by csv
+     * download admin data by csv
      *
      * @param  \Illuminate\Http\Request;  $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
@@ -73,7 +73,7 @@ class AdminsService
     } */
 
     /**
-     * update member data service
+     * creata admin data service
      *
      * @param  AdminCreateRequest  $request
      * @param  int  $id
@@ -108,38 +108,33 @@ class AdminsService
     }
 
     /**
-     * update member data service
+     * update admin data service
      *
-     * @param  \App\Http\Requests\MemberUpdateRequest  $request
+     * @param  \App\Http\Requests\AdminUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /* public function updateMemberData(MemberUpdateRequest $request, int $id)
+    public function updateAdminData(AdminUpdateRequest $request, int $id)
     {
         DB::beginTransaction();
         try {
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'request all: ' . json_encode($request->all()));
-
             $resource = app()->make(AdminUpdateResource::class, ['resource' => $request])->toArray($request);
 
             $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'updatedRowCount: ' . json_encode($updatedRowCount));
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
-            $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'roleIdResource: ' . json_encode($roleIdResource));
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'updated row: ' . json_encode($updatedAdminsRolesRowCount));
+            // $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
 
             // slack通知
-            $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
-            app()->make(MemberSlackNotificationService::class)->send('update member data.', $attachmentResource);
+            // $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
+            // app()->make(MemberSlackNotificationService::class)->send('update member data.', $attachmentResource);
 
             DB::commit();
 
             // 更新されていない場合は304
-            $message = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 200 : 304;
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
@@ -147,7 +142,7 @@ class AdminsService
             DB::rollback();
             abort(500);
         }
-    } */
+    }
 
     /**
      * delete member data service

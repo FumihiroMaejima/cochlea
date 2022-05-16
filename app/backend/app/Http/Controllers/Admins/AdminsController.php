@@ -121,25 +121,15 @@ class AdminsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\MemberUpdateRequest  $request
+     * @param  AdminUpdateRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /* public function update(MemberUpdateRequest $request, int $id)
+    public function update(AdminUpdateRequest $request, int $id)
     {
-        // 処理速度の計測
-        $time_start = microtime(true);
-
         // サービスの実行
-        $response = $this->service->updateMemberData($request, $id);
-
-        $time = microtime(true) - $time_start;
-        // PHPによって割り当てられたメモリの最大値の取得
-        Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'peak usage memory size: ' . (string)memory_get_peak_usage());
-        // サービス処理の実行時間の取得
-        Log::debug(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'service execution time: ' . (string)$time);
-        return $response;
-    } */
+        return $this->service->updateAdminData($request, $id);
+    }
 
     /**
      * Remove the specified resource from storage.
