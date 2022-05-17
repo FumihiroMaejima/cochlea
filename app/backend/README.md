@@ -902,13 +902,17 @@ class User extends Authenticatable
 }
 ```
 
-モデルのインスタンスかわnotifyトレイトを使い通知を実行する
+モデルのインスタンスかnotifyトレイトを使い通知を実行する
 
 ```PHP
 use App\Notifications\TestNotification;
 
 $user->notify(new TestNotification($data));
 ```
+
+`SlackMessage.php`の実体は下記にあるが、`namespace`が`Illuminate\Notifications\Messages`になっている為左記で参照出来る。
+
+`vendor/laravel/slack-notification-channel/src/Messages/SlackMessage.php`
 
 ---
 
@@ -1465,6 +1469,17 @@ $ composer require predis/predis
 
 ```shell-session
 $ composer update
+```
+
+### Composer パッケージの削除
+
+下記のコマンドでパッケージの削除が行える。`composer.lock`は更新される為、`composer install`を改めてかける。
+
+```shell-session
+$ composer remove packageName
+
+# composer.lockの更新
+$ composer install
 ```
 
 ---
