@@ -20,6 +20,8 @@ use App\Http\Resources\Admins\AdminDeleteResource;
 use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminUpdateResource;
+use App\Http\Resources\Admins\AdminUpdateNotificationResource;
+use App\Services\Notifications\AdminsSlackNotificationService;
 use \Symfony\Component\HttpKernel\Exception\HttpException;
 use Exception;
 
@@ -127,8 +129,8 @@ class AdminsService
             // $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
 
             // slack通知
-            // $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
-            // app()->make(MemberSlackNotificationService::class)->send('update member data.', $attachmentResource);
+            $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
+            app()->make(AdminsSlackNotificationService::class)->send('update admin data.', $attachmentResource);
 
             DB::commit();
 
