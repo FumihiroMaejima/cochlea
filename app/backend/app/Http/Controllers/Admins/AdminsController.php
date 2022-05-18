@@ -123,9 +123,9 @@ class AdminsController extends Controller
      *
      * @param  AdminUpdateRequest $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(AdminUpdateRequest $request, int $id)
+    public function update(AdminUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
         return $this->service->updateAdminData($request, $id);
@@ -135,9 +135,9 @@ class AdminsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  AdminDeleteRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(AdminDeleteRequest $request)
+    public function destroy(AdminDeleteRequest $request): JsonResponse
     {
         // サービスの実行
         return $response = $this->service->deleteAdmin($request);

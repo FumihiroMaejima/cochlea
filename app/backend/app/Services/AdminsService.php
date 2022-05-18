@@ -32,8 +32,8 @@ class AdminsService
 
     /**
      * create AdminsService instance
-     * @param  \App\Repositories\Admins\AdminsRepositoryInterface  $adminsRepository
-     * @param  \App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface  $adminsRepository
+     * @param \App\Repositories\Admins\AdminsRepositoryInterface $adminsRepository
+     * @param \App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface $adminsRepository
      * @return void
      */
     public function __construct(AdminsRepositoryInterface $adminsRepository)
@@ -45,7 +45,7 @@ class AdminsService
     /**
      * get admins data
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAdmins(Request $request): JsonResponse
@@ -77,8 +77,8 @@ class AdminsService
     /**
      * creata admin data service
      *
-     * @param  AdminCreateRequest  $request
-     * @param  int  $id
+     * @param AdminCreateRequest $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -112,11 +112,11 @@ class AdminsService
     /**
      * update admin data service
      *
-     * @param  \App\Http\Requests\AdminUpdateRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\AdminUpdateRequest $request
+     * @param int  $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateAdminData(AdminUpdateRequest $request, int $id)
+    public function updateAdminData(AdminUpdateRequest $request, int $id): JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -149,11 +149,11 @@ class AdminsService
     /**
      * delete admin data service
      *
-     * @param  AdminDeleteRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param AdminDeleteRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteAdmin(AdminDeleteRequest $request)
+    public function deleteAdmin(AdminDeleteRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try {
