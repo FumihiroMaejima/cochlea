@@ -3,11 +3,14 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    private const LOG_CAHNNEL_NAME = 'errorlog';
+
     /**
      * A list of Http Error Message.
      *
@@ -113,6 +116,12 @@ class Handler extends ExceptionHandler
             ];
             return response($response, $status);
         }
+
+        if (config('app.env') !== 'testing') {
+            // エラーログの出力
+            Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $request->toArray());
+        }
+
         return parent::render($request, $e);
     }
 }
