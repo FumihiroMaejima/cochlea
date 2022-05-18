@@ -110,7 +110,7 @@ class AdminsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -134,22 +134,12 @@ class AdminsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Http\Requests\MemberDeleteRequest  $request
+     * @param  AdminDeleteRequest  $request
      * @return \Illuminate\Http\Response
      */
-   /*  public function destroy(MemberDeleteRequest $request)
+    public function destroy(AdminDeleteRequest $request)
     {
-        // 処理速度の計測
-        $time_start = microtime(true);
-
         // サービスの実行
-        $response = $this->service->deleteMember($request);
-
-        $time = microtime(true) - $time_start;
-        // PHPによって割り当てられたメモリの最大値の取得
-        Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'peak usage memory size: ' . (string)memory_get_peak_usage());
-        // サービス処理の実行時間の取得
-        Log::debug(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'service execution time: ' . (string)$time);
-        return $response;
-    } */
+        return $response = $this->service->deleteAdmin($request);
+    }
 }

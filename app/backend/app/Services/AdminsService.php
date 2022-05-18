@@ -147,13 +147,13 @@ class AdminsService
     }
 
     /**
-     * delete member data service
+     * delete admin data service
      *
-     * @param  \App\Http\Requests\MemberDeleteRequest  $request
+     * @param  AdminDeleteRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /* public function deleteMember(MemberDeleteRequest $request)
+    public function deleteAdmin(AdminDeleteRequest $request)
     {
         DB::beginTransaction();
         try {
@@ -162,19 +162,16 @@ class AdminsService
             $resource = app()->make(AdminDeleteResource::class, ['resource' => $request])->toArray($request);
 
             $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'deleteRowCount: ' . json_encode($deleteRowCount));
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
-            $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'roleIdResource: ' . json_encode($roleIdResource));
-            Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'delete row: ' . json_encode($deleteAdminsRolesRowCount));
+            // $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
+            // $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
 
             DB::commit();
 
             // 更新されていない場合は304
-            $message = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 200 : 401;
+            $message = ($deleteRowCount > 0) ? 'success' : 'not deleted';
+            $status = ($deleteRowCount > 0) ? 200 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
@@ -182,5 +179,5 @@ class AdminsService
             DB::rollback();
             abort(500);
         }
-    } */
+    }
 }
