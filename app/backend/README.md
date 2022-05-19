@@ -882,6 +882,8 @@ $ php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
 ```shell-session
 $ php artisan make:export TestExport --model=App\\Models\\Admins
 $ php artisan make:import TestImport --model=App\\Models\\Admins
+# 子ディレクトリ内に作成する場合
+$ php artisan make:export Admins\\TestExport --model=App\\Models\\Admins
 ```
 
 - ファイルダウンロード

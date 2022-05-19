@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AccessLog
 {
@@ -96,10 +97,12 @@ class AccessLog
 
     /**
      * get log parameter from response.
-     * @param RedirectResponse | Request | JsonResponse $response
+     * @param RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
      * @return void
      */
-    private function getLogParameterByResponse(RedirectResponse | Response | JsonResponse $response): void
+    private function getLogParameterByResponse(
+        RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
+    ): void
     {
         $this->statusCode = $response->getStatusCode();
     }

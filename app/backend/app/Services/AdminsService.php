@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +9,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Admins\AdminsExport;
 use App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Repositories\Admins\AdminsRepositoryInterface;
 use App\Http\Requests\Admins\AdminCreateRequest;
@@ -22,7 +23,8 @@ use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminUpdateResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
 use App\Services\Notifications\AdminsSlackNotificationService;
-use \Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
 
 class AdminsService
@@ -64,15 +66,15 @@ class AdminsService
     /**
      * download admin data by csv
      *
-     * @param  \Illuminate\Http\Request;  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    /* public function downloadCSV(Request $request)
+    public function downloadCSV(Request $request): BinaryFileResponse
     {
         $data = $this->adminsRepository->getAdminsList();
 
-        return Excel::download(new AdminsExport($data), 'member_info_' . Carbon::now()->format('YmdHis') . '.csv');
-    } */
+        return Excel::download(new AdminsExport($data), 'admins_list_' . Carbon::now()->format('YmdHis') . '.csv');
+    }
 
     /**
      * creata admin data service
