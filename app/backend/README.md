@@ -846,9 +846,12 @@ $ php artisan make:request TestPostRequest
 
 ```shell-session
 $ composer require maatwebsite/excel
+
+# php8+Laravel9から、「psr/simple-cache」もインストールする必要がある。(上記でエラーが発生するなら下記で対応。)
+$ composer require psr/simple-cache:^1.0 maatwebsite/excel
 ```
 
-- サービスプロパイダとファサードを登録
+- app.phpにサービスプロパイダ(providers)とファサード(aliases)を登録
 
 app.php
 
@@ -856,6 +859,16 @@ app.php
 Maatwebsite\Excel\ExcelServiceProvider::class,
 
 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+```
+
+`Laravel9`から、デフォルトのFacadeは`Facade`クラス内に設定されるようになったらしい。
+
+```PHP
+    'aliases' => Facade::defaultAliases()->merge([
+        // 'ExampleClass' => App\Example\ExampleClass::class,
+        // add
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+    ])->toArray(),
 ```
 
 - stubの作成

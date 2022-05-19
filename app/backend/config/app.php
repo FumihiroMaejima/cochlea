@@ -205,6 +205,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\DataBaseQueryServiceProvider::class,
 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -220,6 +221,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        // add
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];
