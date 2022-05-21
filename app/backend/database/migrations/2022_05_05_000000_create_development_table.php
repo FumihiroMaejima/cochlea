@@ -43,24 +43,24 @@ class CreateDevelopmentTable extends Migration
         /**
          * permission table
          */
-        /* Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('パーミッション名');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
 
         /**
          * role table
          */
-        /* Schema::create('roles', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('ロール名');
             $table->string('code')->comment('ロールコード名');
             $table->string('detail')->comment('詳細');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
 
         /**
          * role_permissions table

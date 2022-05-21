@@ -21,6 +21,7 @@ return [
     'executionRole' => [
         'services' => [
             'admins' => ['master', 'administrator', 'develop'],
+            'roles'  => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [
