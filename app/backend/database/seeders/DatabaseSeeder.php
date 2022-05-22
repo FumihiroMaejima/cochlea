@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RolePermissions;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Master\ProductsTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
+        $this->call(RolePermissionsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
     }
 }
