@@ -33,8 +33,9 @@ return [
     ],
     'executionRole' => [
         'services' => [
-            'admins' => ['master', 'administrator', 'develop'],
-            'roles'  => ['master', 'administrator', 'develop'],
+            'admins'      => ['master', 'administrator', 'develop'],
+            'permissions' => ['master', 'administrator', 'develop'],
+            'roles'       => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [
