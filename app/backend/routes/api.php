@@ -54,6 +54,11 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
             Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
         });
+
+        // permissions
+        Route::group(['prefix' => 'permissions'], function () {
+            Route::get('/list', [\App\Http\Controllers\Admins\PermissionsController::class, 'list'])->name('admin.permissions.list');
+        });
     });
 });
 
