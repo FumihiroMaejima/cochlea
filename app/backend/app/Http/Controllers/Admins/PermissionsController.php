@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\PermissionsService;
 use App\Services\RolesService;
 use App\Trait\CheckHeaderTrait;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
 class PermissionsController extends Controller
@@ -39,9 +40,9 @@ class PermissionsController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response|\Illuminate\Contracts\Routing\ResponseFactory
+     * @return JsonResponse
      */
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.permissions'))) {
