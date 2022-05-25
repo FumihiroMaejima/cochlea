@@ -16,6 +16,7 @@ use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Http\Resources\Admins\RoleUpdateResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Http\Resources\Admins\RolesServiceResource;
+use App\Http\Resources\Admins\PermissionsListResource;
 use App\Http\Resources\Admins\RolesListResource;
 use App\Http\Resources\Admins\RolePermissionsUpdateResource;
 use App\Http\Resources\Admins\RolePermissionsDeleteResource;

@@ -72,7 +72,7 @@ class RolesController extends Controller
     public function download(Request $request)
     {
         // 権限チェック
-        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.members'))) {
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.roles'))) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
