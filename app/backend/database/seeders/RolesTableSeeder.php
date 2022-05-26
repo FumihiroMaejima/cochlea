@@ -6,12 +6,16 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Models\Roles;
+use Database\Seeders\BaseSeeder;
 
-class RolesTableSeeder extends Seeder
+class RolesTableSeeder extends BaseSeeder
 {
     private const TABLE_NAME = 'roles';
-    private const SEEDER_DATA_LENGTH = 5;
-    private int $count = 5;
+    protected const SEEDER_DATA_LENGTH = 5;
+    protected const SEEDER_DATA_TESTING_LENGTH = 5;
+    protected const SEEDER_DEVELOP_DATA_LENGTH = 5;
+    protected int $count = 5;
 
     /**
      * Run the database seeds.
@@ -20,12 +24,16 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        $this->tableName = (new Roles())->getTable();
+
+        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+
         $template = [
             'name'       => '',
             'code'       => '',
             'detail'     => '',
-            'created_at' => '2021-01-14 00:00:00',
-            'updated_at' => '2021-01-14 00:00:00'
+            'created_at' => $now,
+            'updated_at' => $now
         ];
 
         $nameList = Config::get('myapp.seeder.authority.rolesNameList');
@@ -34,6 +42,9 @@ class RolesTableSeeder extends Seeder
 
         // insert用データ
         $data = [];
+
+        // データ数
+        $this->count = $this->_getSeederDataLengthByEnv(Config::get('app.env'));
 
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
@@ -47,6 +58,25 @@ class RolesTableSeeder extends Seeder
         }
 
         // テーブルへの格納
-        DB::table(self::TABLE_NAME)->insert($data);
+        DB::table($this->tableName)->insert($data);
+    }
+
+    /**
+     * get data length by env in parent class pethod.
+     *
+     * @param string $envName 環境の値(local,stg,production,testingなど)
+     * @param int $productionLength production時のインサートするデータ数
+     * @param int $testingLength testing時のインサートするデータ数
+     * @param int $developLength localや開発時のインサートするデータ数
+     * @return int
+     */
+    protected function _getSeederDataLengthByEnv(
+        string $envName,
+        int $productionLength = self::SEEDER_DATA_LENGTH,
+        int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
+        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+    ): int
+    {
+        return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);
     }
 }

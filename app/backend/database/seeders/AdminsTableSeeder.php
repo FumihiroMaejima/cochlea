@@ -40,7 +40,7 @@ class AdminsTableSeeder extends BaseSeeder
         $data = [];
 
         // データ数
-        $this->count = $this->getSeederDataLengthByEnv(Config::get('app.env'));
+        $this->count = $this->_getSeederDataLengthByEnv(Config::get('app.env'));
 
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
