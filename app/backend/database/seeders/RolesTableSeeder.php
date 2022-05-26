@@ -11,7 +11,6 @@ use Database\Seeders\BaseSeeder;
 
 class RolesTableSeeder extends BaseSeeder
 {
-    private const TABLE_NAME = 'roles';
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DEVELOP_DATA_LENGTH = 5;
