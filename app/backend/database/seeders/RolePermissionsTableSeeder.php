@@ -14,7 +14,6 @@ class RolePermissionsTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_LENGTH = 12;
     protected const SEEDER_DATA_TESTING_LENGTH = 12;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 12;
-    protected int $count = 12;
     private int $masterCount = 4;
     private int $adminCount = 8;
     private int $developCount = 11;

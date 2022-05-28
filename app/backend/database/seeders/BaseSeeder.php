@@ -10,11 +10,15 @@ use App\Models\Master\Products;
 
 class BaseSeeder extends Seeder
 {
-    // private const TABLE_NAME = 'table_name';
+    /** @var int SEEDER_DATA_LENGTH 本番環境等でインサートするレコード数 */
     protected const SEEDER_DATA_LENGTH = 10;
+    /** @var int SEEDER_DATA_TESTING_LENGTH テスト実行時にインサートするレコード数 */
     protected const SEEDER_DATA_TESTING_LENGTH = 10;
+    /** @var int SEEDER_DATA_DEVELOP_LENGTH ローカル環境等でインサートするレコード数 */
     protected const SEEDER_DATA_DEVELOP_LENGTH = 10;
+    /** @var int $count インサートするレコード数 */
     protected int $count = 10;
+    /** @var int $tableName テーブル名 */
     protected string $tableName = '';
 
     /**

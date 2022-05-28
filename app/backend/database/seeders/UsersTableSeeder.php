@@ -14,8 +14,6 @@ class UsersTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
-    protected int $count = 5;
-    protected string $tableName = '';
 
     /**
      * Run the database seeds.

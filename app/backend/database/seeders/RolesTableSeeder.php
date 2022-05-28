@@ -14,7 +14,6 @@ class RolesTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
-    protected int $count = 5;
 
     /**
      * Run the database seeds.
