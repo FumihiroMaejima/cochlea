@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DateTime;
+use DateTimeImmutable;
 
 class DataBaseQueryServiceProvider extends ServiceProvider
 {
@@ -46,7 +47,7 @@ class DataBaseQueryServiceProvider extends ServiceProvider
                     $binding = 'NULL';
                 } elseif ($binding instanceof Carbon) {
                     $binding = "'{$binding->toDateTimeString()}'";
-                } elseif ($binding instanceof \DateTimeImmutable) {
+                } elseif ($binding instanceof DateTimeImmutable) {
                     $binding = "'{$binding->format('Y-m-d H:i:s')}'";
                 }
 
