@@ -28,15 +28,15 @@ return $config
         'global_namespace_import'    => [
             'import_classes'   => true,
             'import_constants' => true,
-            'import_functions' => true,
+            //'import_functions' => true,
         ],
         'php_unit_test_case_static_method_calls' => [
             'call_type' => 'this'
         ],
-        'phpdoc_align' => [
+        /* 'phpdoc_align' => [
             'align' => 'left',
-        ],
-        'not_operator_with_successor_space'      => true,
+        ], */
+        // 'not_operator_with_successor_space'      => true,
         'blank_line_after_namespace'             => true,
         // 'final_class'                            => true,
         'date_time_immutable'                    => true,
