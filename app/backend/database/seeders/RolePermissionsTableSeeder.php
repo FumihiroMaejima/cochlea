@@ -3,14 +3,18 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Models\RolePermissions;
+use Database\Seeders\BaseSeeder;
 
-class RolePermissionsTableSeeder extends Seeder
+class RolePermissionsTableSeeder extends BaseSeeder
 {
-    private const TABLE_NAME = 'role_permissions';
-    private const SEEDER_DATA_LENGTH = 12;
-    private int $count = 12;
+    protected const SEEDER_DATA_LENGTH = 12;
+    protected const SEEDER_DATA_TESTING_LENGTH = 12;
+    protected const SEEDER_DEVELOP_DATA_LENGTH = 12;
+    protected int $count = 12;
     private int $masterCount = 4;
     private int $adminCount = 8;
     private int $developCount = 11;
@@ -23,6 +27,9 @@ class RolePermissionsTableSeeder extends Seeder
      */
     public function run()
     {
+        $this->tableName = (new RolePermissions())->getTable();
+        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+
         // $template = [
         //     'name'          => '',
         //     'role_id'       => 1,
@@ -38,6 +45,9 @@ class RolePermissionsTableSeeder extends Seeder
         // insert用データ
         $data = [];
 
+        // データ数
+        $this->count = $this->_getSeederDataLengthByEnv(Config::get('app.env'));
+
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
             // $row = $template;
@@ -46,41 +56,61 @@ class RolePermissionsTableSeeder extends Seeder
             // ロール順にロールとパーミッションの割り当てを行う
             if ($i <= $this->masterCount) {
                 // マスターの場合
-                $row = $this->makeRowResource($roles[0], $permissions[$i - 1]);
+                $row = $this->makeRowResource($roles[0], $permissions[$i - 1], $now);
             } elseif (($this->masterCount < $i) && ($i <= $this->adminCount)) {
                 // 管理者の場合
-                $row = $this->makeRowResource($roles[1], $permissions[$i - 5]);
+                $row = $this->makeRowResource($roles[1], $permissions[$i - 5], $now);
             } elseif (($this->adminCount < $i) && ($i <= $this->developCount)) {
                 // 開発者の場合
-                $row = $this->makeRowResource($roles[2], $permissions[$i - 9]);
+                $row = $this->makeRowResource($roles[2], $permissions[$i - 9], $now);
             } elseif (($i === $this->readOnlyCount)) {
                 // 読取専用の場合
-                $row = $this->makeRowResource($roles[3], $permissions[1]);
+                $row = $this->makeRowResource($roles[3], $permissions[1], $now);
             }
 
             $data[] = $row;
         }
 
         // テーブルへの格納
-        DB::table(self::TABLE_NAME)->insert($data);
+        DB::table($this->tableName)->insert($data);
     }
 
     /**
      * make row data.
      * @param object $role
      * @param object $permission
+     * @param string $dateTime
      *
      * @return array
      */
-    private function makeRowResource(object $role, object $permission): array
+    private function makeRowResource(object $role, object $permission, string $dateTime): array
     {
         return [
             'name'          => $role->name . '_' . $permission->name,
             'short_name'    => $permission->name,
             'role_id'       => $role->key,
             'permission_id' => $permission->key,
-            'created_at'    => '2021-01-14 00:00:00',
-            'updated_at'    => '2021-01-14 00:00:00'
+            'created_at'    => $dateTime,
+            'updated_at'    => $dateTime
         ];
+    }
+
+        /**
+     * get data length by env in parent class pethod.
+     *
+     * @param string $envName 環境の値(local,stg,production,testingなど)
+     * @param int $productionLength production時のインサートするデータ数
+     * @param int $testingLength testing時のインサートするデータ数
+     * @param int $developLength localや開発時のインサートするデータ数
+     * @return int
+     */
+    protected function _getSeederDataLengthByEnv(
+        string $envName,
+        int $productionLength = self::SEEDER_DATA_LENGTH,
+        int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
+        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+    ): int
+    {
+        return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);
     }
 }
