@@ -13,7 +13,7 @@ class BaseSeeder extends Seeder
     // private const TABLE_NAME = 'table_name';
     protected const SEEDER_DATA_LENGTH = 10;
     protected const SEEDER_DATA_TESTING_LENGTH = 10;
-    protected const SEEDER_DEVELOP_DATA_LENGTH = 10;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 10;
     protected int $count = 10;
     protected string $tableName = '';
 
@@ -30,7 +30,7 @@ class BaseSeeder extends Seeder
         string $envName,
         int $productionLength = self::SEEDER_DATA_LENGTH,
         int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
-        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+        int $developLength = self::SEEDER_DATA_DEVELOP_LENGTH,
     ): int
     {
         if ($envName === 'production') {

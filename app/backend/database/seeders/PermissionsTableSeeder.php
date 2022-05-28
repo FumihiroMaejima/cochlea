@@ -13,7 +13,7 @@ class PermissionsTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 4;
     protected const SEEDER_DATA_TESTING_LENGTH = 4;
-    protected const SEEDER_DEVELOP_DATA_LENGTH = 4;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 4;
     protected int $count = 4;
     protected string $tableName = '';
 
@@ -68,7 +68,7 @@ class PermissionsTableSeeder extends BaseSeeder
         string $envName,
         int $productionLength = self::SEEDER_DATA_LENGTH,
         int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
-        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+        int $developLength = self::SEEDER_DATA_DEVELOP_LENGTH,
     ): int
     {
         return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);

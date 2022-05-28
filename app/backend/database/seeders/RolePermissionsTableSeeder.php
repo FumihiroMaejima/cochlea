@@ -13,7 +13,7 @@ class RolePermissionsTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 12;
     protected const SEEDER_DATA_TESTING_LENGTH = 12;
-    protected const SEEDER_DEVELOP_DATA_LENGTH = 12;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 12;
     protected int $count = 12;
     private int $masterCount = 4;
     private int $adminCount = 8;
@@ -50,7 +50,7 @@ class RolePermissionsTableSeeder extends BaseSeeder
             Config::get('app.env'),
             self::SEEDER_DATA_LENGTH,
             self::SEEDER_DATA_TESTING_LENGTH,
-            self::SEEDER_DEVELOP_DATA_LENGTH
+            self::SEEDER_DATA_DEVELOP_LENGTH
         );
 
         // 1~$this->countの数字の配列でforを回す

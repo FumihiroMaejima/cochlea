@@ -13,7 +13,7 @@ class RolesTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DEVELOP_DATA_LENGTH = 5;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
     protected int $count = 5;
 
     /**
@@ -73,7 +73,7 @@ class RolesTableSeeder extends BaseSeeder
         string $envName,
         int $productionLength = self::SEEDER_DATA_LENGTH,
         int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
-        int $developLength = self::SEEDER_DEVELOP_DATA_LENGTH,
+        int $developLength = self::SEEDER_DATA_DEVELOP_LENGTH,
     ): int
     {
         return parent::getSeederDataLengthByEnv($envName, $productionLength, $testingLength, $developLength);
