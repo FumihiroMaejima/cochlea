@@ -46,7 +46,7 @@ class DataBaseQueryServiceProvider extends ServiceProvider
                     $binding = 'NULL';
                 } elseif ($binding instanceof Carbon) {
                     $binding = "'{$binding->toDateTimeString()}'";
-                } elseif ($binding instanceof DateTime) {
+                } elseif ($binding instanceof \DateTimeImmutable) {
                     $binding = "'{$binding->format('Y-m-d H:i:s')}'";
                 }
 
