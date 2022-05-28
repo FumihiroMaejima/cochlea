@@ -41,6 +41,7 @@ return $config
         // 'final_class'                            => true,
         'date_time_immutable'                    => true,
         'declare_parentheses'                    => true,
+        'native_function_invocation'             => false,
         // 'final_public_method_for_abstract_class' => true,
         'mb_str_functions'                       => true,
         'simplified_if_return'                   => true,
