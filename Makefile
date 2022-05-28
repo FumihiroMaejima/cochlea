@@ -94,6 +94,10 @@ backend-serve:
 
 backend-clear-cache:
 	docker-compose exec app php artisan cache:clear && \
+	docker-compose exec app php artisan config:clear
+
+backend-clear-full-cache:
+	docker-compose exec app php artisan cache:clear && \
 	docker-compose exec app php artisan config:clear && \
 	docker-compose exec app composer dump-autoload
 
