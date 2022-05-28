@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Config;
 
 class RolePermissionsUpdateResource extends JsonResource
 {
+    public const RESOURCE_KEY_NAME = 'name';
+    public const RESOURCE_KEY_SHORT_NAME = 'short_name';
+    public const RESOURCE_KEY_ROLE_ID = 'role_id';
+    public const RESOURCE_KEY_PERMISSION_ID = 'permission_id';
+    public const RESOURCE_KEY_CREATED_AT = 'created_at';
+    public const RESOURCE_KEY_UPDATED_AT = 'updated_at';
+
     /**
      * Transform the resource into an array.
      *
@@ -23,12 +30,12 @@ class RolePermissionsUpdateResource extends JsonResource
 
         foreach (range(0, (count($request->permissions) - 1)) as $i) {
             $row = [
-                'name'          => $request->name . '_' . $permissionsNameList[$i],
-                'short_name'    => $permissionsNameList[$i],
-                'role_id'       => $request->id,
-                'permission_id' => $request->permissions[$i],
-                'created_at'    => $dateTime,
-                'updated_at'    => $dateTime
+                self::RESOURCE_KEY_NAME          => $request->name . '_' . $permissionsNameList[$i],
+                self::RESOURCE_KEY_SHORT_NAME    => $permissionsNameList[$i],
+                self::RESOURCE_KEY_ROLE_ID       => $request->id,
+                self::RESOURCE_KEY_PERMISSION_ID => $request->permissions[$i],
+                self::RESOURCE_KEY_CREATED_AT    => $dateTime,
+                self::RESOURCE_KEY_UPDATED_AT    => $dateTime
             ];
             $data[] = $row;
         }
