@@ -80,10 +80,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $e
+     * @param  Throwable  $e
      * @return void
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     /* public function report(Throwable $e)
     {
@@ -96,10 +96,10 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable | Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
+     * @param  Throwable|Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function render($request, Throwable|HttpExceptionInterface $e)
     {

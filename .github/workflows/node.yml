@@ -1,0 +1,35 @@
+name: Node
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  node-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # see https://github.com/actions/setup-node
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'yarn'
+        cache-dependency-path: frontend/yarn.lock
+    - name: Install Dependencies
+      run: cd frontend && yarn install
+    - name: Execute tests(Unit Test)
+      run: cd frontend && yarn test:unit
+
+# steps:
+# # see https://github.com/actions/setup-node
+# - uses: actions/checkout@v2
+# - uses: actions/setup-node@v2
+#   with:
+#     node-version: '14'
+#     cache: 'yarn'
+# - run: yarn install
+# - run: yarn test:unit

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DateTime;
+use DateTimeImmutable;
 
 class DataBaseQueryServiceProvider extends ServiceProvider
 {
@@ -46,14 +47,14 @@ class DataBaseQueryServiceProvider extends ServiceProvider
                     $binding = 'NULL';
                 } elseif ($binding instanceof Carbon) {
                     $binding = "'{$binding->toDateTimeString()}'";
-                } elseif ($binding instanceof DateTime) {
+                } elseif ($binding instanceof DateTimeImmutable) {
                     $binding = "'{$binding->format('Y-m-d H:i:s')}'";
                 }
 
                 $sql = preg_replace('/\\?/', $binding, $sql, 1);
             }
 
-           //  Log::debug('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
+            //  Log::debug('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
             Log::channel(self::LOG_CAHNNEL_NAME)->info('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
 
             Event::listen(TransactionBeginning::class, function (TransactionBeginning $event): void {

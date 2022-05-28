@@ -1,19 +1,19 @@
 <?php
 
-namespace Database\Seeders\Master;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Master\Manufacturers;
+use App\Models\Roles;
 use Database\Seeders\BaseSeeder;
 
-class ManufacturersTableSeeder extends BaseSeeder
+class RolesTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
 
     /**
      * Run the database seeds.
@@ -22,18 +22,21 @@ class ManufacturersTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Manufacturers())->getTable();
+        $this->tableName = (new Roles())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timeZone'));
 
         $template = [
-            Manufacturers::NAME       => '',
-            Manufacturers::DETAIL     => '',
-            Manufacturers::ADDRESS    => 'test県test市test町',
-            Manufacturers::TEL        => '000-0000-0000',
-            Manufacturers::CREATED_AT => $now,
-            Manufacturers::UPDATED_AT => $now
+            'name'       => '',
+            'code'       => '',
+            'detail'     => '',
+            'created_at' => $now,
+            'updated_at' => $now
         ];
+
+        $nameList = Config::get('myapp.seeder.authority.rolesNameList');
+        $codeList = Config::get('myapp.seeder.authority.rolesCodeList');
+        $detailList = Config::get('myapp.seeder.authority.rolesDetailList');
 
         // insert用データ
         $data = [];
@@ -50,10 +53,9 @@ class ManufacturersTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Manufacturers::NAME]    = 'manufacturer' . (string)($i);
-            $row[Manufacturers::DETAIL]  = 'testManufacturer' . (string)($i) . 'Detail';
-            $row[Manufacturers::ADDRESS] = 'test県test市test' . (string)($i) . '町';
-            $row[Manufacturers::TEL]     = '000-0000-000' . (string)($i);
+            $row['name']   = $nameList[$i - 1];
+            $row['code']   = $codeList[$i - 1];
+            $row['detail'] = $detailList[$i - 1];
 
             $data[] = $row;
         }
