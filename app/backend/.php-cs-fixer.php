@@ -16,7 +16,8 @@ $config = new PhpCsFixer\Config();
 return $config
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PhpCsFixer:risky'            => true,
+        // '@PhpCsFixer:risky'            => true,
+        '@PSR2' => true,
         'blank_line_after_opening_tag' => false,
         'linebreak_after_opening_tag'  => false,
         // 'declare_strict_types'         => true,

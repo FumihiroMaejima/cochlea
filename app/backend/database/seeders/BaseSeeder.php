@@ -35,8 +35,7 @@ class BaseSeeder extends Seeder
         int $productionLength = self::SEEDER_DATA_LENGTH,
         int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
         int $developLength = self::SEEDER_DATA_DEVELOP_LENGTH,
-    ): int
-    {
+    ): int {
         if ($envName === 'production') {
             return $productionLength;
         } elseif ($envName === 'testing') {

@@ -44,24 +44,24 @@ class RolePermissions extends Model
      */
     protected $hidden = [];
 
-     /**
-     * Define a many-to-many relationship.
-     * 設定されているロールの取得
-     *
-     * @return Roles|null
-     */
+    /**
+    * Define a many-to-many relationship.
+    * 設定されているロールの取得
+    *
+    * @return Roles|null
+    */
     public function roles()
     {
         return $this->belongsTo(Roles::class, 'role_id');
         // return $this->belongsToMany(Roles::class, 'role_id');
     }
 
-     /**
-     * Define a many-to-many relationship.
-     * 設定されている権限の取得
-     *
-     * @return Permissions|null
-     */
+    /**
+    * Define a many-to-many relationship.
+    * 設定されている権限の取得
+    *
+    * @return Permissions|null
+    */
     public function permissions()
     {
         return $this->belongsTo(Permissions::class, 'permission_id');

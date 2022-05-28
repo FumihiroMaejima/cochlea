@@ -102,8 +102,7 @@ class AccessLog
      */
     private function getLogParameterByResponse(
         RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
-    ): void
-    {
+    ): void {
         $this->statusCode = $response->getStatusCode();
     }
 

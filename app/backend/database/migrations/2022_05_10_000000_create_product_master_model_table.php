@@ -56,7 +56,6 @@ class CreateProductMasterModelTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
     }
 
     /**

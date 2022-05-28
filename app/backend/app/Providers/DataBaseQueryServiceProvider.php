@@ -54,7 +54,7 @@ class DataBaseQueryServiceProvider extends ServiceProvider
                 $sql = preg_replace('/\\?/', $binding, $sql, 1);
             }
 
-           //  Log::debug('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
+            //  Log::debug('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
             Log::channel(self::LOG_CAHNNEL_NAME)->info('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
 
             Event::listen(TransactionBeginning::class, function (TransactionBeginning $event): void {
