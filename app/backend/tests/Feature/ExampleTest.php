@@ -15,7 +15,7 @@ class ExampleTest extends TestCase
     public function testBasicTest()
     {
         // port設定がある為、ローカルではこける。
-        $response = $this->get('');
+        $response = $this->get('/');
         // $response = $this->get(route('api.test.route'));
 
         $response->assertStatus(200);
