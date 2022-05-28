@@ -43,29 +43,29 @@ class CreateDevelopmentTable extends Migration
         /**
          * permission table
          */
-        /* Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('パーミッション名');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
 
         /**
          * role table
          */
-        /* Schema::create('roles', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('ロール名');
             $table->string('code')->comment('ロールコード名');
             $table->string('detail')->comment('詳細');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
 
         /**
          * role_permissions table
          */
-        /* Schema::create('role_permissions', function (Blueprint $table) {
+        Schema::create('role_permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('short_name')->comment('省略名');
@@ -73,7 +73,7 @@ class CreateDevelopmentTable extends Migration
             $table->foreignId('permission_id')->constrained('permissions')->comment('パーミッションID');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
 
         /**
          * admins_roles table
@@ -95,10 +95,10 @@ class CreateDevelopmentTable extends Migration
     public function down()
     {
         Schema::dropIfExists('admins');
-        /* Schema::dropIfExists('admins_log');
+        // Schema::dropIfExists('admins_log');
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
         Schema::dropIfExists('role_permissions');
-        Schema::dropIfExists('admins_roles'); */
+        // Schema::dropIfExists('admins_roles');
     }
 }

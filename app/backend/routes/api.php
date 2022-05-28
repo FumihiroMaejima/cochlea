@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('test', function () {
     return 'api connection test!';
-});
+})->name('api.test.route');
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +53,22 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/admin', [\App\Http\Controllers\Admins\AdminsController::class, 'create'])->name('admin.admins.create');
             Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
             Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
+        });
+
+
+        // roles
+        Route::group(['prefix' => 'roles'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\RolesController::class, 'index'])->name('admin.roles.index');
+            Route::get('/list', [\App\Http\Controllers\Admins\RolesController::class, 'list'])->name('admin.roles.list');
+            Route::get('/csv', [\App\Http\Controllers\Admins\RolesController::class, 'download'])->name('admin.roles.download');
+            Route::post('/role', [\App\Http\Controllers\Admins\RolesController::class, 'create'])->name('admin.roles.create');
+            Route::patch('/role/{id}', [\App\Http\Controllers\Admins\RolesController::class, 'update'])->name('admin.roles.update');
+            Route::delete('/role', [\App\Http\Controllers\Admins\RolesController::class, 'destroy'])->name('admin.roles.delete');
+        });
+
+        // permissions
+        Route::group(['prefix' => 'permissions'], function () {
+            Route::get('/list', [\App\Http\Controllers\Admins\PermissionsController::class, 'list'])->name('admin.permissions.list');
         });
     });
 });

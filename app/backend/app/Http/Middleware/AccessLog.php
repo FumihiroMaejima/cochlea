@@ -36,7 +36,7 @@ class AccessLog
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -97,13 +97,12 @@ class AccessLog
 
     /**
      * get log parameter from response.
-     * @param RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
+     * @param RedirectResponse|Response|JsonResponse|BinaryFileResponse $response
      * @return void
      */
     private function getLogParameterByResponse(
         RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
-    ): void
-    {
+    ): void {
         $this->statusCode = $response->getStatusCode();
     }
 

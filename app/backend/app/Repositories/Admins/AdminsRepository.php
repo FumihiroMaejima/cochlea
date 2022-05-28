@@ -100,7 +100,7 @@ class AdminsRepository implements AdminsRepositoryInterface
             ->latest()
             // ->where('deleted_at', '=', null)
             ->first();
-            // ->get();
+        // ->get();
     }
 
     /**
