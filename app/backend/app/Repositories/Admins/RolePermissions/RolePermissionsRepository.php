@@ -15,7 +15,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     protected $rolesModel;
 
     /**
-     * Create a new AuthInfoController instance.
+     * create a new AuthInfoController instance.
      *
      * @return void
      */
@@ -27,9 +27,9 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * Get Model Table Name in This Repository.
+     * get Model Table Name in This Repository.
      *
-     * @return Collection
+     * @return string
      */
     public function getTable(): string
     {
@@ -37,13 +37,13 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * Get All Role Data.
+     * get All Role Data.
      * @param int $roleId
      * @return Collection
      */
     public function getByRoleId(int $roleId): Collection
     {
-        $rolePermissions = $this->model->getTable();
+        $rolePermissions = $this->getTable();
         $roles = $this->rolesModel->getTable();
 
         return DB::table($rolePermissions)
@@ -60,7 +60,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
      */
     public function createRolePermission(array $resource): int
     {
-        return DB::table($this->model->getTable())->insert($resource);
+        return DB::table($this->getTable())->insert($resource);
     }
 
     /**
@@ -90,11 +90,8 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
      */
     public function deleteRolePermissionsData(array $resource, int $roleId): int
     {
-        // role_permissions
-        $rolePermissions = $this->model->getTable();
-
         // Query Builderのupdate
-        return DB::table($rolePermissions)
+        return DB::table($this->getTable())
             // ->whereIn('id', [$id])
             ->where('role_id', '=', $roleId)
             ->where('deleted_at', '=', null)
@@ -109,10 +106,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
      */
     public function deleteRolePermissionsByIds(array $resource, array $ids): int
     {
-        // role_permissions
-        $rolePermissions = $this->model->getTable();
-
-        return DB::table($rolePermissions)
+        return DB::table($this->getTable())
             ->whereIn('role_id', $ids)
             ->where('deleted_at', '=', null)
             ->update($resource);

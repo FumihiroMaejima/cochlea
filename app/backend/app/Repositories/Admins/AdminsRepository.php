@@ -15,7 +15,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     protected $adminsRolesModel;
 
     /**
-     * Create a new AdminsRepository instance.
+     * create a new AdminsRepository instance.
      * @param \App\Models\Admins $model
      *
      * @return void
@@ -27,9 +27,9 @@ class AdminsRepository implements AdminsRepositoryInterface
 
 
     /**
-     * Get Model Table Name in This Repository.
+     * get Model Table Name in This Repository.
      *
-     * @return Collection
+     * @return string
      */
     public function getTable(): string
     {

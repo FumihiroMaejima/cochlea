@@ -13,7 +13,7 @@ class RolesRepository implements RolesRepositoryInterface
     protected $rolePermissionsModel;
 
     /**
-     * Create a new RolesRepository instance.
+     * create a new RolesRepository instance.
      * @param \App\Models\Roles $model
      * @param \App\Models\RolePermissions $rolePermissions
      * @return void
@@ -25,9 +25,9 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * Get Model Table Name in This Repository.
+     * get Model Table Name in This Repository.
      *
-     * @return Collection
+     * @return string
      */
     public function getTable(): string
     {
@@ -35,14 +35,14 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * Get All Role Data.
+     * get All Role Data.
      *
      * @return Collection
      */
     public function getRoles(): Collection
     {
         // roles
-        $roles = $this->model->getTable();
+        $roles = $this->getTable();
         // role_permissions
         $rolePermissions = $this->rolePermissionsModel->getTable();
 
@@ -57,14 +57,14 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * Get Roles as List.
+     * get Roles as List.
      *
      * @return Collection
      */
     public function getRolesList(): Collection
     {
         // roles
-        $roles = $this->model->getTable();
+        $roles = $this->getTable();
 
         // collection
         return DB::table($roles)
@@ -79,7 +79,7 @@ class RolesRepository implements RolesRepositoryInterface
      */
     public function getLatestRole(): object
     {
-        return DB::table($this->model->getTable())
+        return DB::table($this->getTable())
             ->latest()
             ->first();
     }
@@ -91,7 +91,7 @@ class RolesRepository implements RolesRepositoryInterface
      */
     public function createRole(array $resource): int
     {
-        return DB::table($this->model->getTable())->insert($resource);
+        return DB::table($this->getTable())->insert($resource);
     }
 
     /**
@@ -101,11 +101,8 @@ class RolesRepository implements RolesRepositoryInterface
      */
     public function updateRoleData(array $resource, int $id): int
     {
-        // roles
-        $roles = $this->model->getTable();
-
         // Query Builderのupdate
-        return DB::table($roles)
+        return DB::table($this->getTable())
             // ->whereIn('id', [$id])
             ->where('id', '=', [$id])
             ->where('deleted_at', '=', null)
@@ -120,11 +117,8 @@ class RolesRepository implements RolesRepositoryInterface
      */
     public function deleteRoleData(array $resource, array $ids): int
     {
-        // roles
-        $roles = $this->model->getTable();
-
         // Query Builderのupdate
-        return DB::table($roles)
+        return DB::table($this->getTable())
             ->whereIn('id', $ids)
             // ->where('id', '=', $id)
             ->where('deleted_at', '=', null)
