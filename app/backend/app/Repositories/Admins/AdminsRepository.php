@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class AdminsRepository implements AdminsRepositoryInterface
 {
-    protected $model;
+    protected Admins $model;
     protected $adminsRolesModel;
 
     /**

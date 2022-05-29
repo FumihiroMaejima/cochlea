@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class PermissionsRepository implements PermissionsRepositoryInterface
 {
-    protected $model;
+    protected Permissions $model;
 
     /**
      * create a new PermissionsRepository instance.

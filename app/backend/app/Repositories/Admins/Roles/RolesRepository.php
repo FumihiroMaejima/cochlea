@@ -9,8 +9,8 @@ use Illuminate\Support\Collection;
 
 class RolesRepository implements RolesRepositoryInterface
 {
-    protected $model;
-    protected $rolePermissionsModel;
+    protected Roles $model;
+    protected RolePermissions $rolePermissionsModel;
 
     /**
      * create a new RolesRepository instance.

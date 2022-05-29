@@ -10,13 +10,16 @@ use Illuminate\Support\Collection;
 
 class RolePermissionsRepository implements RolePermissionsRepositoryInterface
 {
-    protected $model;
-    protected $permissionsModel;
-    protected $rolesModel;
+    protected RolePermissions $model;
+    protected Permissions $permissionsModel;
+    protected Roles $rolesModel;
 
     /**
      * create a new AuthInfoController instance.
      *
+     * @param RolePermissions $model
+     * @param Permissions $permissionsModel
+     * @param Roles $rolesModel
      * @return void
      */
     public function __construct(RolePermissions $model, Permissions $permissionsModel, Roles $rolesModel)
