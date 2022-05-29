@@ -104,8 +104,8 @@ class RolesRepository implements RolesRepositoryInterface
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where('id', '=', [$id])
-            ->where('deleted_at', '=', null)
+            ->where(Roles::ID, '=', [$id])
+            ->where(Roles::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -119,9 +119,9 @@ class RolesRepository implements RolesRepositoryInterface
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->whereIn('id', $ids)
+            ->whereIn(Roles::ID, $ids)
             // ->where('id', '=', $id)
-            ->where('deleted_at', '=', null)
+            ->where(Roles::DELETED_AT, '=', null)
             ->update($resource);
     }
 }

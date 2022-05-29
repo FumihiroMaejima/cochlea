@@ -77,8 +77,8 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($rolePermissions)
             // ->whereIn('id', [$id])
-            ->where('role_id', '=', [$roleId])
-            ->where('deleted_at', '=', null)
+            ->where(RolePermissions::ROLE_ID, '=', [$roleId])
+            ->where(RolePermissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -93,8 +93,8 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where('role_id', '=', $roleId)
-            ->where('deleted_at', '=', null)
+            ->where(RolePermissions::ROLE_ID, '=', $roleId)
+            ->where(RolePermissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -107,8 +107,8 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     public function deleteRolePermissionsByIds(array $resource, array $ids): int
     {
         return DB::table($this->getTable())
-            ->whereIn('role_id', $ids)
-            ->where('deleted_at', '=', null)
+            ->whereIn(RolePermissions::ROLE_ID, $ids)
+            ->where(RolePermissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 }

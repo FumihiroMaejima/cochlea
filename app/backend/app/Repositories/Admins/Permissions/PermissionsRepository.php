@@ -80,8 +80,8 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($permissions)
             // ->whereIn('id', [$id])
-            ->where('id', '=', [$id])
-            ->where('deleted_at', '=', null)
+            ->where(Permissions::ID, '=', [$id])
+            ->where(Permissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -99,8 +99,8 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($permissions)
             // ->whereIn('id', [$id])
-            ->where('id', '=', $id)
-            ->where('deleted_at', '=', null)
+            ->where(Permissions::ID, '=', $id)
+            ->where(Permissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 }
