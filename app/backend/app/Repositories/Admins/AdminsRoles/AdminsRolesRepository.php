@@ -97,7 +97,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     public function deleteAdminsRoleData(array $resource): int
     {
         // Query Builderのupdate
-        return DB::table($$this->getTable())
+        return DB::table($this->getTable())
             ->where(AdminsRoles::ADMIN_ID, '=', [$resource['admin_id']])
             ->where(AdminsRoles::DELETED_AT, '=', null)
             ->update($resource);

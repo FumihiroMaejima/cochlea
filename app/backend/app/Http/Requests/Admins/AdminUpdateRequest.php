@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Admins;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Repositories\Roles\RolesRepositoryInterface;
+use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
-// use App\Models\Roles;
+use App\Models\Roles;
 use Illuminate\Contracts\Validation\Validator;
 // use Illuminate\Validation\ValidationException;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -46,13 +46,13 @@ class AdminUpdateRequest extends FormRequest
         // ロールリストのidのみの配列を取得
         /* $rolesCollection = app()->make(RolesRepositoryInterface::class)->getRolesList();
         Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'collection pluck: ' . json_encode($rolesCollection->pluck('id'))); */
-        // $roleModel = app()->make(Roles::class);
+        $roleModel = app()->make(Roles::class);
 
         return [
             'id'     => 'required|integer',
             'name'   => 'required|string|between:1,50',
             'email'  => 'required|string|email:rfc|between:1,50',
-            // 'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
+            'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
             // 'tel' => 'required|numeric|digits_between:8,11'
             // 'tel' => 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/'
         ];

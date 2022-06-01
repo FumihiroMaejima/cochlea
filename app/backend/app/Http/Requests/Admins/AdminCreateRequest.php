@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Admins;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Repositories\Roles\RolesRepositoryInterface;
+use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
-// use App\Models\Roles;
+use App\Models\Roles;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;
@@ -41,13 +41,13 @@ class AdminCreateRequest extends FormRequest
      */
     public function rules()
     {
-        // $roleModel = app()->make(Roles::class);
+        $roleModel = app()->make(Roles::class);
 
         return [
             'name'   => 'required|string|between:1,50',
             'email'  => 'required|string|email:rfc|between:1,50',
             // 'email' => ['regex:/^.+@.+$/i']
-            // 'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
+            'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
             'password'   => 'required|string|between:8,100|confirmed',
             'password_confirmation'   => 'same:password',
         ];

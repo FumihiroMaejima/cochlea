@@ -3,7 +3,7 @@
 namespace App\Repositories\Admins;
 
 use App\Models\Admins;
-// use App\Models\AdminsRoles;
+use App\Models\AdminsRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -12,17 +12,19 @@ use Illuminate\Support\Facades\Log;
 class AdminsRepository implements AdminsRepositoryInterface
 {
     protected Admins $model;
-    protected $adminsRolesModel;
+    protected AdminsRoles $adminsRolesModel;
 
     /**
      * create a new AdminsRepository instance.
-     * @param \App\Models\Admins $model
      *
+     * @param \App\Models\Admins $model
+     * @param \App\Models\AdminsRoles $adminsRolesModel
      * @return void
      */
-    public function __construct(Admins $model)
+    public function __construct(Admins $model, AdminsRoles $adminsRolesModel)
     {
         $this->model = $model;
+        $this->adminsRolesModel = $adminsRolesModel;
     }
 
 
@@ -58,12 +60,12 @@ class AdminsRepository implements AdminsRepositoryInterface
         // admins
         $admins = $this->getTable();
         // admins_roles
-        // $adminsRoles = $this->adminsRolesModel->getTable();
+        $adminsRoles = $this->adminsRolesModel->getTable();
 
         // collection
         return DB::table($admins)
-            ->select([$admins . '.id', $admins . '.name', $admins . '.email'])
-            // ->leftJoin($adminsRoles, $admins.'.id', '=', $adminsRoles.'.admin_id')
+            ->select([$admins . '.id', $admins . '.name', $admins . '.email', $adminsRoles . '.role_id as roleId'])
+            ->leftJoin($adminsRoles, $admins.'.id', '=', $adminsRoles.'.admin_id')
             ->where($admins . '.deleted_at', '=', null)
             ->get();
 
