@@ -13,7 +13,10 @@ class AdminsRolesTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
+
+    // 一番権限の小さいロールのID
+    PRIVATE const MINIMUM_ROLE_ID = 5;
 
     /**
      * Run the database seeds.
@@ -49,7 +52,7 @@ class AdminsRolesTableSeeder extends BaseSeeder
             $row = $template;
 
             $row['admin_id'] = $i;
-            $row['role_id']  = $i;
+            $row['role_id']  = $i > self::MINIMUM_ROLE_ID ? self::MINIMUM_ROLE_ID : $i;
 
             $data[] = $row;
         }
