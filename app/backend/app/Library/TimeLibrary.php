@@ -25,4 +25,15 @@ class TimeLibrary
 
         return Carbon::now()->format(self::DEFAULT_DATE_TIME_FORMAT);
     }
+
+    /**
+     * get current date time.
+     *
+     * @param string $dateTime 日時
+     * @return array 曜日
+     */
+    public static function getDays(string $dateTime): array
+    {
+        return (new Carbon($dateTime))->getDays();
+    }
 }
