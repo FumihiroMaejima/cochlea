@@ -24,7 +24,7 @@ class AdminsTableSeeder extends BaseSeeder
     {
         $this->tableName = (new Admins())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+        $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
             Admins::NAME       => '',

@@ -24,7 +24,7 @@ class PermissionsTableSeeder extends BaseSeeder
     {
         $this->tableName = (new Permissions())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+        $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
             'name'       => '',
