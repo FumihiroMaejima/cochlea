@@ -6,8 +6,8 @@ namespace Tests\Unit\Service;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+// use Illuminate\Foundation\Testing\DatabaseMigrations;
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Trait\HelperTrait;
 use Database\Seeders\AdminsTableSeeder;
 use Database\Seeders\AdminsRolesTableSeeder;
@@ -34,7 +34,6 @@ class AdminsServiceTest extends TestCase
         // $this->refreshDatabase();
         // $this->refreshTestDatabase();
         // $this->runDatabaseMigrations();
-        // $this->seed([AdminsTableSeeder::class])->init();
 
         $this->artisan('migrate:fresh');
         $this->seed([
@@ -49,8 +48,6 @@ class AdminsServiceTest extends TestCase
             'email'    => Config::get('myapp.test.admin.login.email'),
             'password' => Config::get('myapp.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
-
-        // echo var_dump($response) . "\n";
 
         return [
             'token'          => $response['access_token'],
