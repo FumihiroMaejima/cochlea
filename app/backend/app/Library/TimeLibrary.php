@@ -34,6 +34,16 @@ class TimeLibrary
     }
 
     /**
+     * get timestamp of current date time.
+     *
+     * @return int|float|string timestamp
+     */
+    public static function getCurrentDateTimeTimeStamp(): int|float|string
+    {
+        return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
+    }
+
+    /**
      * get current date time.
      *
      * @param string $dateTime 日時
@@ -42,5 +52,17 @@ class TimeLibrary
     public static function getDays(string $dateTime): array
     {
         return (new Carbon($dateTime))->getDays();
+    }
+
+    /**
+     * add mounth to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param string $format datetime format
+     * @return array 曜日
+     */
+    public static function addMounth(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT): array
+    {
+        return (new Carbon($dateTime))->addMonth()->format($format);
     }
 }
