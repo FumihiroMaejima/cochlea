@@ -103,16 +103,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable|HttpExceptionInterface $e)
     {
-        if (config('app.env') !== 'testing') {
+        $message = $e->getMessage();
+
+        if (config('app.env') !== 'testing' && $message !== '') {
             // エラーログの出力
             // Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $request->toArray());
-            Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', [$e->getMessage()]);
+            Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', [$message]);
         }
 
         // HttpExceptionクラスの場合
         if ($this->isHttpException($e)) {
             $status = $e->getStatusCode();
-            if (!$message = $e->getMessage()) {
+            if ($message === '') {
                 $message = $this->httpErrorsMessage[$status];
             }
             $response = [
