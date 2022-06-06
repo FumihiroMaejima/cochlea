@@ -115,7 +115,7 @@ class AdminsService
 
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
-                ExceptionStatusCodeMessages::MESSAGE_500
+                $e->getMessage()
             );
             // abort(500);
         }
@@ -157,7 +157,7 @@ class AdminsService
 
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
-                ExceptionStatusCodeMessages::MESSAGE_500
+                $e->getMessage()
             );
             // abort(500);
         }
@@ -195,9 +195,10 @@ class AdminsService
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
 
+            // $e->getTraceAsString();
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
-                ExceptionStatusCodeMessages::MESSAGE_500
+                $e->getMessage()
             );
             // abort(500);
         }
