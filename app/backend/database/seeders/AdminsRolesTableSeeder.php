@@ -16,7 +16,7 @@ class AdminsRolesTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
 
     // 一番権限の小さいロールのID
-    PRIVATE const MINIMUM_ROLE_ID = 5;
+    private const MINIMUM_ROLE_ID = 5;
 
     /**
      * Run the database seeds.

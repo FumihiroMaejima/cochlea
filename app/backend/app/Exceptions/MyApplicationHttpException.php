@@ -27,8 +27,7 @@ class MyApplicationHttpException extends HttpException
         Throwable $previous = null,
         array $headers = [],
         int $code = 0
-    )
-    {
+    ) {
         $this->statusCode = $statusCode;
         $this->headers = $headers;
 

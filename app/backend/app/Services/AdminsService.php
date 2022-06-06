@@ -114,7 +114,8 @@ class AdminsService
             DB::rollback();
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                ExceptionStatusCodeMessages::MESSAGE_500
             );
             // abort(500);
         }
@@ -155,7 +156,8 @@ class AdminsService
             DB::rollback();
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                ExceptionStatusCodeMessages::MESSAGE_500
             );
             // abort(500);
         }
@@ -194,7 +196,8 @@ class AdminsService
             DB::rollback();
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                ExceptionStatusCodeMessages::MESSAGE_500
             );
             // abort(500);
         }
