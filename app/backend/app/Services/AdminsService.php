@@ -10,6 +10,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Exports\Admins\AdminsExport;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Repositories\Admins\AdminsRepositoryInterface;
@@ -110,7 +112,11 @@ class AdminsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            abort(500);
+
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+            );
+            // abort(500);
         }
     }
 
@@ -147,7 +153,11 @@ class AdminsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            abort(500);
+
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+            );
+            // abort(500);
         }
     }
 
@@ -182,7 +192,11 @@ class AdminsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            abort(500);
+
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500, ExceptionStatusCodeMessages::MESSAGE_500
+            );
+            // abort(500);
         }
     }
 }
