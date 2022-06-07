@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use App\Library\TimeLibrary;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 use Exception;
 
@@ -23,17 +23,17 @@ class ErrorLog
     /**
      * constructer.
      *
-     * @param string $message message
+     * @param Throwable|HttpExceptionInterface $error error
      * @return void
      */
     public function __construct(
-        string $message = '',
+        Throwable|HttpExceptionInterface $error,
     ) {
         $this->requestDateTime = TimeLibrary::getCurrentDateTime();
-        $this->message         = $message;
+        $this->message         = $error->getMessage();
         $this->pid             = getmypid();
         $this->memory = (string)memory_get_peak_usage();
-        $this->stackTrace      = getmypid();
+        $this->stackTrace      = $error->getTraceAsString();
 
         $this->outputLog();
     }
