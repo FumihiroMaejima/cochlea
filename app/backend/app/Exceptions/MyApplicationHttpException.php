@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\ErrorLog;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -9,16 +10,11 @@ use Throwable;
 // class MyApplicationHttpException extends RuntimeException implements HttpExceptionInterface
 class MyApplicationHttpException extends HttpException
 {
-    private const LOG_CAHNNEL_NAME = 'errorlog';
-
     // ステータスコード
     private int $statusCode;
 
     // ヘッダー情報
     private array $headers;
-
-    // メッセージ
-    private string $exceptionMessage;
 
     /**
      * Application Http Exception class.
@@ -42,16 +38,15 @@ class MyApplicationHttpException extends HttpException
         $this->statusCode = $statusCode;
         $this->headers = $headers;
 
-        // レスポンスとして返す場合
-        if ($isResponseMessage) {
-            $this->setExceptionMessage($message);
-        } else {
-            // ログに出力
-            $this->setErrorLog($message);
-            $this->setExceptionMessage('');
-        }
+        parent::__construct($statusCode, $message, $previous, $headers, $code);
 
-        parent::__construct($statusCode, $this->getExceptionMessage(), $previous, $headers, $code);
+        // メッセージをレスポンスとして返さない場合
+        if (!$isResponseMessage) {
+            // ログに出力
+            $this->setErrorLog();
+            // ログ出力後にメッセージを初期化(Handlerクラスでエラーメッセージを設定する)
+            $this->message = '';
+        }
     }
 
     /**
@@ -86,37 +81,15 @@ class MyApplicationHttpException extends HttpException
     }
 
     /**
-     * get exception message.
-     *
-     * @return string
-     */
-    private function getExceptionMessage(): string
-    {
-        return $this->exceptionMessage;
-    }
-
-    /**
-     * set exception message.
-     *
-     * @param string $message message.
-     * @return void
-     */
-    private function setExceptionMessage(string $message): void
-    {
-        $this->exceptionMessage = $message;
-    }
-
-    /**
      * set message to error log.
      *
-     * @param string $message log message.
      * @return void
      */
-    private function setErrorLog(string $message): void
+    private function setErrorLog(): void
     {
         if (config('app.env') !== 'testing') {
             // エラーログの出力
-            Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', [$message]);
+            new ErrorLog($this);
         }
     }
 }
