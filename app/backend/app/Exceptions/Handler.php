@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\ErrorLog;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -108,7 +109,7 @@ class Handler extends ExceptionHandler
         if (config('app.env') !== 'testing' && $message !== '') {
             // エラーログの出力
             // Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $request->toArray());
-            Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', [$message]);
+            new ErrorLog($e);
         }
 
         // HttpExceptionクラスの場合
