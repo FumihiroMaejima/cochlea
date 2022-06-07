@@ -127,6 +127,7 @@ class AdminsService
      * @param \App\Http\Requests\AdminUpdateRequest $request
      * @param int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function updateAdminData(AdminUpdateRequest $request, int $id): JsonResponse
     {
@@ -169,6 +170,7 @@ class AdminsService
      * @param AdminDeleteRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function deleteAdmin(AdminDeleteRequest $request): JsonResponse
     {
@@ -198,7 +200,7 @@ class AdminsService
             // $e->getTraceAsString();
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
-                $e->getMessage()
+                $e->getMessage(),
             );
             // abort(500);
         }
