@@ -23,7 +23,6 @@ class BaseRequest extends FormRequest
     private const ERROR_RESPONSE_KEY_ERRORS = 'errors';
     private const ERROR_RESPONSE_KEY_MESSAGE = 'message';
 
-
     // attribute keys
     private const ATTRIBUTE_ID                    = 'id';
     private const ATTRIBUTE_NAME                  = 'name';
@@ -46,6 +45,25 @@ class BaseRequest extends FormRequest
     private const RULE_ROLE_ID = 'required|integer|exists:'; // model のidカラムを指定(. $roleModel->getTable() . ',id')
     private const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
     private const RULE_PASSWORD_CONFIRMATION = 'same:password';
+
+    // rule key
+    private const RULE_KEY_EMAIL_EMAIL = 'email.email';
+    private const RULE_KEY_REQUIRED = 'required';
+    private const RULE_KEY_STRING = 'string';
+    private const RULE_KEY_BETWEEN = 'between';
+    private const RULE_KEY_CONFIRMED = 'confirmed';
+    private const RULE_KEY_SAME = 'same';
+    private const RULE_KEY_EMAIL = 'email';
+    private const RULE_KEY_TEL_REGEX = 'tel.regex';
+
+    private const RULE_KEY_MESSAGE_EMAIL_EMAIL = ':attributeの形式が正しくありません。';
+    private const RULE_KEY_MESSAGE_REQUIRED = ':attributeは必須項目です。';
+    private const RULE_KEY_MESSAGE_STRING = ':attributeは文字列を入力してください。';
+    private const RULE_KEY_MESSAGE_BETWEEN = ':attributeは:min〜:max文字以内で入力してください。';
+    private const RULE_KEY_MESSAGE_CONFIRMED = ':attributeは確認用にもう一度入力してください。';
+    private const RULE_KEY_MESSAGE_SAME = ':attributeは同一の値ではありません。';
+    private const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
+    private const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -99,12 +117,12 @@ class BaseRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.email' => ':attributeの形式が正しくありません。',
-            'required'    => ':attributeは必須項目です。',
-            'string'      => ':attributeは文字列を入力してください。',
-            'between'     => ':attributeは:min〜:max文字以内で入力してください。',
-            'confirmed'     => ':attributeは確認用にもう一度入力してください。',
-            'same'     => ':attributeは同一の値ではありません。'
+            self::RULE_KEY_EMAIL_EMAIL => self::RULE_KEY_MESSAGE_EMAIL_EMAIL,
+            self::RULE_KEY_REQUIRED    => self::RULE_KEY_MESSAGE_REQUIRED,
+            self::RULE_KEY_STRING      => self::RULE_KEY_MESSAGE_STRING,
+            self::RULE_KEY_BETWEEN     => self::RULE_KEY_MESSAGE_BETWEEN,
+            self::RULE_KEY_CONFIRMED     => self::RULE_KEY_MESSAGE_CONFIRMED,
+            self::RULE_KEY_SAME     => self::RULE_KEY_MESSAGE_SAME
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
         ];
