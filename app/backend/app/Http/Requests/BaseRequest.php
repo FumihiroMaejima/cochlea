@@ -23,6 +23,30 @@ class BaseRequest extends FormRequest
     private const ERROR_RESPONSE_KEY_ERRORS = 'errors';
     private const ERROR_RESPONSE_KEY_MESSAGE = 'message';
 
+
+    // attribute keys
+    private const ATTRIBUTE_ID                    = 'id';
+    private const ATTRIBUTE_NAME                  = 'name';
+    private const ATTRIBUTE_EMAIL                 = 'email';
+    private const ATTRIBUTE_ROLE_ID               = 'roleId';
+    private const ATTRIBUTE_PASSWORD              = 'password';
+    private const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
+
+    // attribute name
+    private const ATTRIBUTE_NAME_ID                    = 'id';
+    private const ATTRIBUTE_NAME_NAME                  = '氏名';
+    private const ATTRIBUTE_NAME_EMAIL                 = 'メールアドレス';
+    private const ATTRIBUTE_NAME_ROLE_ID               = '権限';
+    private const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
+    private const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
+
+    // rules
+    private const RULE_NAME = 'required|string|between:1,50';
+    private const RULE_EMAIL = 'required|string|email:rfc|between:1,50';
+    private const RULE_ROLE_ID = 'required|integer|exists:'; // model のidカラムを指定(. $roleModel->getTable() . ',id')
+    private const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
+    private const RULE_PASSWORD_CONFIRMATION = 'same:password';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +54,11 @@ class BaseRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.admins'), true);
+        return in_array(
+            $this->header(Config::get('myapp.headers.authority')),
+            Config::get('myapp.executionRole.services.admins'),
+            true
+        );
     }
 
     /**
@@ -54,12 +82,12 @@ class BaseRequest extends FormRequest
         $roleModel = app()->make(Roles::class);
 
         return [
-            'name'   => 'required|string|between:1,50',
-            'email'  => 'required|string|email:rfc|between:1,50',
+            self::ATTRIBUTE_NAME   => self::RULE_NAME,
+            self::ATTRIBUTE_EMAIL  => self::RULE_EMAIL,
             // 'email' => ['regex:/^.+@.+$/i']
-            'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
-            'password'   => 'required|string|between:8,100|confirmed',
-            'password_confirmation'   => 'same:password',
+            self::ATTRIBUTE_ROLE_ID => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
+            self::ATTRIBUTE_PASSWORD   => self::RULE_PASSWORD,
+            self::ATTRIBUTE_PASSWORD_CONFIRMATION   => self::RULE_PASSWORD_CONFIRMATION,
         ];
     }
 
@@ -90,12 +118,12 @@ class BaseRequest extends FormRequest
     public function attributes()
     {
         return [
-            'id'                    => 'id',
-            'name'                  => '氏名',
-            'email'                 => 'メールアドレス',
-            'roleId'                => '権限',
-            'password'              => 'パスワード',
-            'password_confirmation' => '確認用パスワード'
+            self::ATTRIBUTE_ID                    => self::ATTRIBUTE_NAME_ID,
+            self::ATTRIBUTE_NAME                  => self::ATTRIBUTE_NAME_NAME,
+            self::ATTRIBUTE_EMAIL                 => self::ATTRIBUTE_NAME_EMAIL,
+            self::ATTRIBUTE_ROLE_ID               => self::ATTRIBUTE_NAME_ROLE_ID,
+            self::ATTRIBUTE_PASSWORD              => self::ATTRIBUTE_NAME_PASSWORD,
+            self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::ATTRIBUTE_NAME_PASSWORD_CONFIRMATION,
         ];
     }
 
