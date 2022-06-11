@@ -70,7 +70,7 @@ class BaseRequest extends FormRequest
     private const NO_AUTHORITIES_COUNT = 0;
 
     /** @var array $requestAuthorities approved autorities in this requst */
-    private array $requestAuthorities = [];
+    protected array $requestAuthorities = [];
 
     /**
      * Determine if the user is authorized to make this request.
