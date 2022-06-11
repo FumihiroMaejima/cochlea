@@ -34,8 +34,8 @@ use Exception;
 
 class AdminsService
 {
-    protected $adminsRepository;
-    protected $adminsRolesRepository;
+    protected AdminsRepositoryInterface $adminsRepository;
+    protected AdminsRolesRepositoryInterface $adminsRolesRepository;
 
     /**
      * create AdminsService instance
