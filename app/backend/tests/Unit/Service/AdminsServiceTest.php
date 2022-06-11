@@ -45,8 +45,9 @@ class AdminsServiceTest extends TestCase
         ]);
 
         # TODO test
-        echo 'routing test.';
-        echo route('auth.admin.login');
+        echo 'routing test.' . "\n";
+        echo route('auth.admin.login') . "\n";
+        echo config('app.env') . "\n";
 
         $response = $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myapp.test.admin.login.email'),
