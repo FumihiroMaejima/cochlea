@@ -29,6 +29,8 @@ jobs:
       # run: |
       #  cd app/backend && mkdir -p database
       #  cd app/backend && touch database/database.sqlite
+    - name: Create JWT:SECRET
+      run: php artisan jwt:secret
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
