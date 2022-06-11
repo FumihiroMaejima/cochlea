@@ -69,8 +69,8 @@ class BaseRequest extends FormRequest
     // authority
     private const NO_AUTHORITIES_COUNT = 0;
 
-    /** @var array $requestAuthorities approved autorities in this requst */
-    protected array $requestAuthorities = [];
+    /** @var array|null $requestAuthorities approved autorities in this requst */
+    protected array|null $requestAuthorities = null;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -79,8 +79,11 @@ class BaseRequest extends FormRequest
      */
     public function authorize()
     {
-        if (count($this->requestAuthorities) === self::NO_AUTHORITIES_COUNT) {
+        if (is_null($this->requestAuthorities)) {
             return true;
+        } else {
+            $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
+            return $this->checkRequestAuthority($this->requestAuthorities);
         }
         // if has authorities
         // $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');

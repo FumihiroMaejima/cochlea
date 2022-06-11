@@ -8,9 +8,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\BaseRequest;
 use App\Models\Admins;
 
-class AdminDeleteRequest extends FormRequest
+class AdminDeleteRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,7 +20,8 @@ class AdminDeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.admins'), true);
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
+        return $this->checkRequestAuthority($this->requestAuthorities);
     }
 
     /**
@@ -70,43 +72,5 @@ class AdminDeleteRequest extends FormRequest
         return [
             'id' => '管理者ID'
         ];
-    }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        $response = [
-            'status'  => 403,
-            'errors'  => [],
-            'message' => 'Forbidden'
-        ];
-
-        throw (new HttpResponseException(response()->json($response, 403)));
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = [
-            'status'  => 422,
-            'errors'  => [],
-            'message' => 'Unprocessable Entity'
-        ];
-
-        $response['errors'] = $validator->errors()->toArray();
-        throw (new HttpResponseException(response()->json($response, 422)));
     }
 }
