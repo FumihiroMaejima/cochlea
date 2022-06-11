@@ -14,10 +14,10 @@ class RoleSlackNotificationService
      * send slack notification
      *
      * @param  string $message
-     * @param  mixed $attachment
+     * @param  array $attachment
      * @return void
      */
-    public function send($message = null, $attachment = null)
+    public function send(string $message = null, array $attachment = null): void
     {
         if (Config::get('app.env') !== 'testing') {
             $this->notify(new RoleUpdateNotification($message, $attachment));
