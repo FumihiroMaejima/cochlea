@@ -3,13 +3,12 @@
 namespace App\Services\Notifications;
 
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\Admins\RoleUpdateNotification;
 use Illuminate\Support\Facades\Config;
+use App\Notifications\Admins\RoleUpdateNotification;
+use App\Services\Notifications\BaseSlackNotificationService;
 
-class RoleSlackNotificationService
+class RoleSlackNotificationService extends BaseSlackNotificationService
 {
-    use Notifiable;
-
     /**
      * send slack notification
      *
@@ -22,16 +21,5 @@ class RoleSlackNotificationService
         if (Config::get('app.env') !== 'testing') {
             $this->notify(new RoleUpdateNotification($message, $attachment));
         }
-    }
-
-    /**
-     * Route notifications for the Slack channel.
-     *
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @return string
-     */
-    public function routeNotificationForSlack($notification)
-    {
-        return Config::get('myapp.slack.url');
     }
 }

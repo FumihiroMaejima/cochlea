@@ -3,12 +3,14 @@
 namespace App\Services\Notifications;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Config;
 use App\Notifications\Admins\AdminUpdateNotification;
-use App\Services\Notifications\BaseSlackNotificationService;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Notifications\Notification;
 
-class AdminsSlackNotificationService extends BaseSlackNotificationService
+class BaseSlackNotificationService
 {
+    use Notifiable;
+
     /**
      * send slack notification
      *
@@ -18,8 +20,20 @@ class AdminsSlackNotificationService extends BaseSlackNotificationService
      */
     public function send(string $message = null, array $attachment = null): void
     {
+
         if (Config::get('app.env') !== 'testing') {
             $this->notify(new AdminUpdateNotification($message, $attachment));
         }
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return Config::get('myapp.slack.url');
     }
 }
