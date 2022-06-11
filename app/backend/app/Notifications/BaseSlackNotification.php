@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Admins;
+namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -8,20 +8,64 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
-use App\Notifications\BaseSlackNotification;
 
-class AdminUpdateNotification extends BaseSlackNotification
+class BaseSlackNotification extends Notification
 {
+    use Queueable;
+
+    private const NOTICFICATION_CHANNEL_SLACK = 'slack';
+
+    // attachment
+    protected const ATTACHMENT_KEY_PRE_TEXT = 'pretext';
+    protected const ATTACHMENT_KEY_TITLE = 'title';
+    protected const ATTACHMENT_KEY_TITLE_LINK = 'titleLink';
+    protected const ATTACHMENT_KEY_CONTENT = 'content';
+    protected const ATTACHMENT_KEY_COLOR = 'color';
+
+    protected string $messageContent = ':book: Check following message.';
+    protected string $footerContent = '@';
+
+    protected string $message;
+    protected array $attachment;
+
     /**
      * Create a new notification instance.
      *
+     * @param string $message message
+     * @param array $attachment slack notification resource
      * @return void
      */
-    public function __construct($message = null, $attachment = null)
+    public function __construct(string $message = '', array $attachment = [])
     {
         $this->message = $message;
         $this->attachment = $attachment;
     }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function via($notifiable)
+    {
+        // return ['mail'];
+        return [self::NOTICFICATION_CHANNEL_SLACK];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    /* public function toMail($notifiable)
+    {
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
+    } */
 
     /**
      * Get the Slack representation of the notification.
@@ -55,5 +99,18 @@ class AdminUpdateNotification extends BaseSlackNotification
                         ->footer($this->footerContent . Config::get('app.name'));
                 }
             });
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
     }
 }
