@@ -22,7 +22,7 @@ class RoleDeleteRequest extends BaseRequest
     public function authorize()
     {
         $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
-        return $this->checkRequestAuthority($this->requestAuthorities);
+        return parent::authorize();
     }
 
     /**

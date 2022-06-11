@@ -24,7 +24,7 @@ class AdminUpdateRequest extends BaseRequest
     public function authorize()
     {
         $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        return $this->checkRequestAuthority($this->requestAuthorities);
+        return parent::authorize();
     }
 
     /**
