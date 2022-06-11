@@ -5,7 +5,6 @@ namespace Tests\Unit\Service;
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,18 +35,14 @@ class AdminsServiceTest extends TestCase
         // $this->refreshTestDatabase();
         // $this->runDatabaseMigrations();
 
-        Artisan::call('migrate:fresh');
-        Artisan::call('db:seed');
-
-        // TODO テスト後に戻す
-        /* $this->artisan('migrate:fresh');
+        $this->artisan('migrate:fresh');
         $this->seed([
             AdminsTableSeeder::class,
             PermissionsTableSeeder::class,
             RolesTableSeeder::class,
             RolePermissionsTableSeeder::class,
             AdminsRolesTableSeeder::class,
-        ]); */
+        ]);
 
         $response = $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myapp.test.admin.login.email'),
