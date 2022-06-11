@@ -44,18 +44,10 @@ class AdminsServiceTest extends TestCase
             AdminsRolesTableSeeder::class,
         ]);
 
-        # TODO test
-        echo 'routing test.' . "\n";
-        echo route('auth.admin.login') . "\n";
-        echo config('app.env') . "\n";
-
         $response = $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myapp.test.admin.login.email'),
             'password' => Config::get('myapp.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
-
-        echo 'response.' . "\n";
-        echo var_dump($response);
 
         return [
             'token'          => $response['access_token'],
