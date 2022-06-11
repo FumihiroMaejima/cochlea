@@ -44,6 +44,10 @@ class AdminsServiceTest extends TestCase
             AdminsRolesTableSeeder::class,
         ]);
 
+        # TODO test
+        echo 'routing test.';
+        echo route('auth.admin.login');
+
         $response = $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myapp.test.admin.login.email'),
             'password' => Config::get('myapp.test.admin.login.password')
