@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 use Exception;
 
-
 class ErrorLog
 {
     private const LOG_CAHNNEL_NAME = 'errorlog';

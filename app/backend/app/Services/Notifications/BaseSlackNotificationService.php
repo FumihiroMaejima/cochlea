@@ -20,7 +20,6 @@ class BaseSlackNotificationService
      */
     public function send(string $message = null, array $attachment = null): void
     {
-
         if (Config::get('app.env') !== 'testing') {
             $this->notify(new AdminUpdateNotification($message, $attachment));
         }
