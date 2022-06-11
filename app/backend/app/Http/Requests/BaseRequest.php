@@ -82,12 +82,8 @@ class BaseRequest extends FormRequest
         if (is_null($this->requestAuthorities)) {
             return true;
         } else {
-            $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
             return $this->checkRequestAuthority($this->requestAuthorities);
         }
-        // if has authorities
-        // $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        // return $this->checkRequestAuthority($this->requestAuthorities);
     }
 
     /**
