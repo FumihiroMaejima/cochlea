@@ -30,7 +30,7 @@ jobs:
       #  cd app/backend && mkdir -p database
       #  cd app/backend && touch database/database.sqlite
     - name: Publish JWT:SECRET
-      run: cd app/backend && sed -i -e "JWT_SECRET=/JWT_SECRET=testsecret/g" .env
+      run: cd app/backend && sed -i -e \"JWT_SECRET=/JWT_SECRET=testsecret/g\" .env
     - name: clear config cache
       run: cd app/backend && php artisan config:clear
     - name: Execute tests (Unit and Feature tests) via PHPUnit
