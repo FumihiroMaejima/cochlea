@@ -56,6 +56,7 @@ class BaseRequest extends FormRequest
     private const RULE_KEY_EMAIL = 'email';
     private const RULE_KEY_TEL_REGEX = 'tel.regex';
 
+    // message
     private const RULE_KEY_MESSAGE_EMAIL_EMAIL = ':attributeの形式が正しくありません。';
     private const RULE_KEY_MESSAGE_REQUIRED = ':attributeは必須項目です。';
     private const RULE_KEY_MESSAGE_STRING = ':attributeは文字列を入力してください。';
@@ -65,6 +66,12 @@ class BaseRequest extends FormRequest
     private const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
     private const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
 
+    // authority
+    private const NO_AUTHORITIES_COUNT = 0;
+
+    /** @var array $requestAuthorities approved autorities in this requst */
+    private array $requestAuthorities = [];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -72,11 +79,12 @@ class BaseRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array(
-            $this->header(Config::get('myapp.headers.authority')),
-            Config::get('myapp.executionRole.services.admins'),
-            true
-        );
+        if (count($this->requestAuthorities) === self::NO_AUTHORITIES_COUNT) {
+            return true;
+        }
+        // if has authorities
+        // $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
+        // return $this->checkRequestAuthority($this->requestAuthorities);
     }
 
     /**
@@ -181,5 +189,16 @@ class BaseRequest extends FormRequest
 
         $response[self::ERROR_RESPONSE_KEY_ERRORS] = $validator->errors()->toArray();
         throw (new HttpResponseException(response()->json($response, self::VALIDATION_ERROR_STATUS_CODE)));
+    }
+
+    /**
+     * check user authority from header
+     *
+     * @param array $targets authorities by function(API)
+     * @return boolean
+     */
+    protected function checkRequestAuthority(array $targets)
+    {
+        return in_array($this->header(Config::get('myapp.headers.authority')), $targets, true);
     }
 }
