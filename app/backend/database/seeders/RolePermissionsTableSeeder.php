@@ -27,7 +27,7 @@ class RolePermissionsTableSeeder extends BaseSeeder
     public function run()
     {
         $this->tableName = (new RolePermissions())->getTable();
-        $now = Carbon::now()->timezone(Config::get('app.timeZone'));
+        $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         // $template = [
         //     'name'          => '',

@@ -8,10 +8,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\BaseRequest;
 use App\Models\Admins;
 use App\Models\Roles;
 
-class RoleDeleteRequest extends FormRequest
+class RoleDeleteRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,7 +21,8 @@ class RoleDeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.roles'), true);
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
+        return parent::authorize();
     }
 
     /**

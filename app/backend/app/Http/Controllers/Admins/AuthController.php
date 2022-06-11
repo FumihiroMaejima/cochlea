@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-// use App\Repositories\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
@@ -117,11 +117,10 @@ class AuthController extends Controller
      */
     protected function getRoleCode(int $adminId): array
     {
-        return [];
-        /* return app()->make(AdminsRolesRepositoryInterface::class)->getByAdminId($adminId)
+        return app()->make(AdminsRolesRepositoryInterface::class)->getByAdminId($adminId)
             ->pluck('code')
             ->values()
-            ->toArray(); */
+            ->toArray();
     }
 
     /**

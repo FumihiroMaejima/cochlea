@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class RolesResource extends JsonResource
 {
+    public const RESOURCE_KEY_DATA = 'data';
+
     /**
      * Transform the resource into an array.
      *
@@ -17,7 +19,7 @@ class RolesResource extends JsonResource
         // $this->resourceはcollection
         // $this->resource->itemsは検索結果の各レコードをstdClassオブジェクトとして格納した配列
         return [
-            'data' => $this->resource->toArray($request)
+            self::RESOURCE_KEY_DATA => $this->resource->toArray($request)
         ];
     }
 }

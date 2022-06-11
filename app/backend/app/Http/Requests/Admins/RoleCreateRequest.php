@@ -2,15 +2,16 @@
 
 namespace App\Http\Requests\Admins;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Collection;
-use App\Models\Permissions;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\BaseRequest;
+use App\Models\Permissions;
 
-class RoleCreateRequest extends FormRequest
+class RoleCreateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,7 +20,8 @@ class RoleCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.roles'), true);
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
+        return parent::authorize();
     }
 
     /**
@@ -79,43 +81,5 @@ class RoleCreateRequest extends FormRequest
             'detail'      => '詳細',
             'permissions' => 'パーミッション'
         ];
-    }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        $response = [
-            'status'  => 403,
-            'errors'  => [],
-            'message' => 'Forbidden'
-        ];
-
-        throw (new HttpResponseException(response()->json($response, 403)));
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = [
-            'status'  => 422,
-            'errors'  => [],
-            'message' => 'Unprocessable Entity'
-        ];
-
-        $response['errors'] = $validator->errors()->toArray();
-        throw (new HttpResponseException(response()->json($response, 422)));
     }
 }

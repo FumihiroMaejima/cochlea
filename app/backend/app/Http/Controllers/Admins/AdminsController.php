@@ -52,9 +52,9 @@ class AdminsController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
      */
-    public function download(Request $request): BinaryFileResponse
+    public function download(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.admins'))) {

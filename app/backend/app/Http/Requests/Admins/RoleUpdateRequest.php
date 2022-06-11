@@ -2,18 +2,20 @@
 
 namespace App\Http\Requests\Admins;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Repositories\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Collection;
-use App\Models\Roles;
-use Illuminate\Contracts\Validation\Validator;
-// use Illuminate\Validation\ValidationException;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\BaseRequest;
+use App\Repositories\Roles\RolesRepositoryInterface;
+use App\Models\Roles;
 
-class RoleUpdateRequest extends FormRequest
+// use Symfony\Component\HttpKernel\Exception\HttpException;
+// use Illuminate\Validation\ValidationException;
+
+class RoleUpdateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +24,8 @@ class RoleUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.roles'), true);
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
+        return parent::authorize();
     }
 
     /**

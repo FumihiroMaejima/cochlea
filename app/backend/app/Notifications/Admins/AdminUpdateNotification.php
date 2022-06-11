@@ -8,16 +8,10 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
+use App\Notifications\BaseSlackNotification;
 
-class AdminUpdateNotification extends Notification
+class AdminUpdateNotification extends BaseSlackNotification
 {
-    use Queueable;
-
-    private const NOTICFICATION_CHANNEL_SLACK = 'slack';
-
-    protected $message;
-    protected $attachment;
-
     /**
      * Create a new notification instance.
      *
@@ -28,32 +22,6 @@ class AdminUpdateNotification extends Notification
         $this->message = $message;
         $this->attachment = $attachment;
     }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        // return ['mail'];
-        return [self::NOTICFICATION_CHANNEL_SLACK];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    /* public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    } */
 
     /**
      * Get the Slack representation of the notification.
@@ -67,35 +35,25 @@ class AdminUpdateNotification extends Notification
         return (new SlackMessage)
             ->from(Config::get('app.name') . ': ' . Config::get('myapp.slack.name'), Config::get('myapp.slack.icon'))
             ->to(Config::get('myapp.slack.channel'))
-            ->content(':book: Check following message.' . "\n" . $this->message)
+            ->content($this->messageContent . "\n" . $this->message)
             ->attachment(function ($attachment) {
-                if ($this->attachment) {
+                if (!empty($this->attachment)) {
                     // Illuminate\Notifications\Messages\SlackAttachment $attachment
-                    $attachment->pretext($this->attachment['pretext'])
-                        ->title($this->attachment['title'], $this->attachment['titleLink'])
-                        ->content($this->attachment['content'])
-                        ->color($this->attachment['color'])
+                    $attachment->pretext($this->attachment[self::ATTACHMENT_KEY_PRE_TEXT])
+                        ->title(
+                            $this->attachment[self::ATTACHMENT_KEY_TITLE],
+                            $this->attachment[self::ATTACHMENT_KEY_TITLE_LINK]
+                        )
+                        ->content($this->attachment[self::ATTACHMENT_KEY_CONTENT])
+                        ->color($this->attachment[self::ATTACHMENT_KEY_COLOR])
                         ->fields([
                             'ID'     => $this->attachment['id'],
                             'Name'   => $this->attachment['name'],
                             'Status' => $this->attachment['status'],
                             'Detail' => $this->attachment['detail'],
                         ])
-                        ->footer('@' . Config::get('app.name'));
+                        ->footer($this->footerContent . Config::get('app.name'));
                 }
             });
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

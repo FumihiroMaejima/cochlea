@@ -31,7 +31,7 @@ Route::get('test', function () {
 Route::group(['prefix' => 'v1/admin'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', [\App\Http\Controllers\Admins\AuthController::class, 'login'])->name('auth.admin');
+        Route::post('login', [\App\Http\Controllers\Admins\AuthController::class, 'login'])->name('auth.admin.login');
     });
     // \App\Http\Controllers\Admins\AdminsController
 

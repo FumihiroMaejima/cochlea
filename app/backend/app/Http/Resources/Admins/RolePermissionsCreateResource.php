@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Config;
 
 class RolePermissionsCreateResource extends JsonResource
 {
+    public const RESOURCE_KEY_NAME = 'name';
+    public const RESOURCE_KEY_SHORT_NAME = 'short_name';
+    public const RESOURCE_KEY_ROLE_ID = 'role_id';
+    public const RESOURCE_KEY_PERMISSION_ID = 'permission_id';
+    public const RESOURCE_KEY_CREATED_AT = 'created_at';
+    public const RESOURCE_KEY_UPDATED_AT = 'updated_at';
+
     /**
      * Transform the resource into an array.
      *
@@ -21,12 +28,12 @@ class RolePermissionsCreateResource extends JsonResource
 
         foreach (range(0, (count($request->permissions) - 1)) as $i) {
             $row = [
-                'name'          => $request->name . '_' . $permissionsNameList[$i],
-                'short_name'    => $permissionsNameList[$i],
-                'role_id'       => $this->resource->id,
-                'permission_id' => $request->permissions[$i],
-                'created_at'    => $this->resource->created_at,
-                'updated_at'    => $this->resource->updated_at
+                self::RESOURCE_KEY_NAME          => $request->name . '_' . $permissionsNameList[$i],
+                self::RESOURCE_KEY_SHORT_NAME    => $permissionsNameList[$i],
+                self::RESOURCE_KEY_ROLE_ID       => $this->resource->id,
+                self::RESOURCE_KEY_PERMISSION_ID => $request->permissions[$i],
+                self::RESOURCE_KEY_CREATED_AT    => $this->resource->created_at,
+                self::RESOURCE_KEY_UPDATED_AT    => $this->resource->updated_at
             ];
             $data[] = $row;
         }
