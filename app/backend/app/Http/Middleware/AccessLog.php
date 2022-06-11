@@ -71,6 +71,7 @@ class AccessLog
 
     /**
      * check current path is log exclude path.
+     *
      * @param Request $request
      * @return bool
      */
@@ -81,6 +82,7 @@ class AccessLog
 
     /**
      * get log parameter from request.
+     *
      * @param Request $request
      * @return void
      */
@@ -97,6 +99,7 @@ class AccessLog
 
     /**
      * get log parameter from response.
+     *
      * @param RedirectResponse|Response|JsonResponse|BinaryFileResponse $response
      * @return void
      */
@@ -110,7 +113,7 @@ class AccessLog
 
     /**
      * output access log in log file.
-     * @param Request $request
+     *
      * @return void
      */
     private function outputLog(): void

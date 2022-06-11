@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Support\Collection;
+use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 
 class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMapping
 {
@@ -18,15 +19,17 @@ class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMappi
     private $roles;
 
     /**
+     * constructer
+     *
      * @param \Illuminate\Support\Collection $resource
      * @return void
      */
     public function __construct(Collection $resource)
     {
         $this->resource = $resource;
-        // $roles = app()->make(RolesRepositoryInterface::class)->getRolesList();
-        // $this->roleIds = $roles->pluck('id')->toArray();
-        // $this->roles = $roles->toArray();
+        $roles = app()->make(RolesRepositoryInterface::class)->getRolesList();
+        $this->roleIds = $roles->pluck('id')->toArray();
+        $this->roles = $roles->toArray();
     }
 
     /**
@@ -39,6 +42,7 @@ class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMappi
 
     /**
      * setting file headers
+     *
      * @return array
      */
     public function headings(): array
@@ -53,6 +57,7 @@ class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMappi
 
     /**
      * setting sheet title (Excel only)
+     *
      * @return string
      */
     public function title(): string
@@ -62,6 +67,7 @@ class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMappi
 
     /**
      * 1行あたりのデータの設定を行う
+     *
      * @return array
      */
     public function map($item): array
@@ -72,12 +78,13 @@ class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMappi
             'name'   => $item->name,
             'email'  => $item->email,
             // 'roleId' => $item->roleId,
-            // 'roleId' => $this->getRoleName($item->roleId),
+            'roleId' => $this->getRoleName($item->roleId),
         ];
     }
 
     /**
      * idに紐付く権限名の取得
+     *
      * @return string
      */
     public function getRoleName(int $id)

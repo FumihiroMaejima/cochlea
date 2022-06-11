@@ -78,13 +78,13 @@ class CreateDevelopmentTable extends Migration
         /**
          * admins_roles table
          */
-        /* Schema::create('admins_roles', function (Blueprint $table) {
+        Schema::create('admins_roles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
             $table->foreignId('role_id')->constrained('roles')->unique()->comment('ロールID');
             $table->timestamps();
             $table->softDeletes();
-        }); */
+        });
     }
 
     /**
@@ -99,6 +99,6 @@ class CreateDevelopmentTable extends Migration
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
         Schema::dropIfExists('role_permissions');
-        // Schema::dropIfExists('admins_roles');
+        Schema::dropIfExists('admins_roles');
     }
 }

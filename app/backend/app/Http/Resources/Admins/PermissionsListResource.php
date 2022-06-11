@@ -6,6 +6,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PermissionsListResource extends JsonResource
 {
+    public const RESOURCE_KEY_DATA = 'data';
+    public const RESOURCE_KEY_TEXT = 'text';
+    public const RESOURCE_KEY_VALUE = 'value';
+
     /**
      * Transform the resource into an array.
      *
@@ -22,11 +26,11 @@ class PermissionsListResource extends JsonResource
         foreach ($this->resource as $item) {
             // 各itemのresourceはstdClassオブジェクトの１レコード分のデータ
             $role = [
-                'text' => $item->name,
-                'value' => $item->id,
+                self::RESOURCE_KEY_TEXT  => $item->name,
+                self::RESOURCE_KEY_VALUE => $item->id,
             ];
             // 多次元配列の中の連想配列を格納
-            $response['data'][] = $role;
+            $response[self::RESOURCE_KEY_DATA][] = $role;
         }
 
         return $response;

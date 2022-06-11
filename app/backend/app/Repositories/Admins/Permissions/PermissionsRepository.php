@@ -9,10 +9,10 @@ use Illuminate\Support\Collection;
 
 class PermissionsRepository implements PermissionsRepositoryInterface
 {
-    protected $model;
+    protected Permissions $model;
 
     /**
-     * Create a new PermissionsRepository instance.
+     * create a new PermissionsRepository instance.
      * @param \App\Models\Permissions $model
      * @return void
      */
@@ -22,9 +22,9 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * Get Model Table Name in This Repository.
+     * get Model Table Name in This Repository.
      *
-     * @return Collection
+     * @return string
      */
     public function getTable(): string
     {
@@ -32,7 +32,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * Get All Role Data.
+     * get All Role Data.
      *
      * @return Collection
      */
@@ -42,14 +42,14 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * Get Roles as List.
+     * get Roles as List.
      *
      * @return Collection
      */
     public function getPermissionsList(): Collection
     {
         // permissions
-        $permissions = $this->model->getTable();
+        $permissions = $this->getTable();
 
         // collection
         return DB::table($permissions)
@@ -64,7 +64,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
      */
     public function createPermission(array $resource): int
     {
-        return DB::table($this->model->getTable())->insert($resource);
+        return DB::table($this->getTable())->insert($resource);
     }
 
     /**
@@ -75,13 +75,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     public function updatePermissionData(array $resource, int $id): int
     {
         // permissions
-        $permissions = $this->model->getTable();
+        $permissions = $this->getTable();
 
         // Query Builderのupdate
         return DB::table($permissions)
             // ->whereIn('id', [$id])
-            ->where('id', '=', [$id])
-            ->where('deleted_at', '=', null)
+            ->where(Permissions::ID, '=', [$id])
+            ->where(Permissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -94,13 +94,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     public function deletePermissionsData(array $resource, int $id): int
     {
         // permissions
-        $permissions = $this->model->getTable();
+        $permissions = $this->getTable();
 
         // Query Builderのupdate
         return DB::table($permissions)
             // ->whereIn('id', [$id])
-            ->where('id', '=', $id)
-            ->where('deleted_at', '=', null)
+            ->where(Permissions::ID, '=', $id)
+            ->where(Permissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 }

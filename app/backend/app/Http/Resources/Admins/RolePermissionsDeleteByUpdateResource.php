@@ -7,6 +7,10 @@ use Illuminate\Support\Carbon;
 
 class RolePermissionsDeleteByUpdateResource extends JsonResource
 {
+    public const RESOURCE_KEY_NAME = 'name';
+    public const RESOURCE_KEY_UPDATED_AT = 'updated_at';
+    public const RESOURCE_KEY_DELETED_AT = 'deleted_at';
+
     /**
      * Transform the resource into an array.
      *
@@ -17,9 +21,9 @@ class RolePermissionsDeleteByUpdateResource extends JsonResource
     {
         $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         return [
-            'name'       => $request->name . '_' . $dateTime,
-            'updated_at' => $dateTime,
-            'deleted_at' => $dateTime
+            self::RESOURCE_KEY_NAME       => $request->name . '_' . $dateTime,
+            self::RESOURCE_KEY_UPDATED_AT => $dateTime,
+            self::RESOURCE_KEY_DELETED_AT => $dateTime
         ];
     }
 }

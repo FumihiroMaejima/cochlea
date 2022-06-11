@@ -2,18 +2,20 @@
 
 namespace App\Http\Requests\Admins;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Repositories\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Collection;
-// use App\Models\Roles;
-use Illuminate\Contracts\Validation\Validator;
-// use Illuminate\Validation\ValidationException;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Http\Requests\BaseRequest;
+use App\Models\Roles;
 
-class AdminUpdateRequest extends FormRequest
+// use Symfony\Component\HttpKernel\Exception\HttpException;
+// use Illuminate\Validation\ValidationException;
+
+class AdminUpdateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +24,8 @@ class AdminUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return in_array($this->header(Config::get('myapp.headers.authority')), Config::get('myapp.executionRole.services.admins'), true);
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
+        return parent::authorize();
     }
 
     /**
@@ -46,13 +49,13 @@ class AdminUpdateRequest extends FormRequest
         // ロールリストのidのみの配列を取得
         /* $rolesCollection = app()->make(RolesRepositoryInterface::class)->getRolesList();
         Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'collection pluck: ' . json_encode($rolesCollection->pluck('id'))); */
-        // $roleModel = app()->make(Roles::class);
+        $roleModel = app()->make(Roles::class);
 
         return [
             'id'     => 'required|integer',
             'name'   => 'required|string|between:1,50',
             'email'  => 'required|string|email:rfc|between:1,50',
-            // 'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
+            'roleId' => 'required|integer|exists:' . $roleModel->getTable() . ',id',
             // 'tel' => 'required|numeric|digits_between:8,11'
             // 'tel' => 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/'
         ];
@@ -89,48 +92,5 @@ class AdminUpdateRequest extends FormRequest
             'email'  => 'メールアドレス',
             'roleId' => '権限'
         ];
-    }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        $response = [
-            'status'  => 403,
-            'errors'  => [],
-            'message' => 'Forbidden'
-        ];
-
-        throw (new HttpResponseException(response()->json($response, 403)));
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = [
-            'status'  => 422,
-            'errors'  => [],
-            'message' => 'Unprocessable Entity'
-        ];
-
-        $response['errors'] = $validator->errors()->toArray();
-        throw (new HttpResponseException(response()->json($response, 422)));
-
-        // 本来のエラークラス
-        /* throw (new ValidationException($validator))
-            ->errorBag($this->errorBag)
-            ->redirectTo($this->getRedirectUrl()); */
     }
 }

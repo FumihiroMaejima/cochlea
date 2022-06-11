@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class RolesServiceResource extends JsonResource
 {
+    public const RESOURCE_KEY_DATA = 'data';
+
     /**
      * Transform the resource into an array.
      *
@@ -21,7 +23,7 @@ class RolesServiceResource extends JsonResource
             $item->permissions = !$item->permissions ? [] : array_map(function ($permission) {
                 return (int)$permission;
             }, explode(',', $item->permissions));
-            $response['data'][] = $item;
+            $response[self::RESOURCE_KEY_DATA][] = $item;
         }
 
         return $response;

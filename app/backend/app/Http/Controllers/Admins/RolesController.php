@@ -12,6 +12,7 @@ use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
 use App\Trait\CheckHeaderTrait;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RolesController extends Controller
 {
@@ -67,9 +68,9 @@ class RolesController extends Controller
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
      */
-    public function download(Request $request)
+    public function download(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.roles'))) {
