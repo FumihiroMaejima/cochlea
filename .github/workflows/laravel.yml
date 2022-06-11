@@ -31,7 +31,7 @@ jobs:
       #  cd app/backend && touch database/database.sqlite
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        APP_ENV: testing
+        APP_URL: http://localhost
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: cd app/backend && vendor/bin/phpunit
