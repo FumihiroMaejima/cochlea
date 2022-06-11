@@ -54,6 +54,9 @@ class AdminsServiceTest extends TestCase
             'password' => Config::get('myapp.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
+        echo 'response.' . "\n";
+        echo var_dump($response);
+
         return [
             'token'          => $response['access_token'],
             'user_id'        => $response['user']['id'],
