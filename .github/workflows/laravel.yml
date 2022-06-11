@@ -33,6 +33,10 @@ jobs:
       run: cd app/backend && php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
     - name: Create JWT:SECRET
       run: cd app/backend && php artisan jwt:secret
+    - name: clear cache
+      run: cd app/backend && php artisan cache:clear
+    - name: clear config cache
+      run: cd app/backend && php artisan config:clear
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
