@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Config;
 
 class AuthController extends Controller
 {
+    // login response
+    private const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
+    private const LOGIN_RESEPONSE_KEY_TOKEN_TYPE = 'token_type';
+    private const LOGIN_RESEPONSE_KEY_EXPIRES_IN = 'expires_in';
+    private const LOGIN_RESEPONSE_KEY_USER = 'user';
+
+    // admin resource key
+    private const ADMIN_RESOURCE_KEY_ID = 'id';
+    private const ADMIN_RESOURCE_KEY_NAME = 'name';
+    private const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
+
     /**
      * Create a new AuthController instance.
      *
@@ -102,10 +113,10 @@ class AuthController extends Controller
         // Tymon\JWTAuth\Claims\Factory
         // ユーザー情報を返す。
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api-admins')->factory()->getTTL() * 60,
-            'user' => $this->getAdminResource($user)
+            self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
+            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => 'bearer',
+            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth('api-admins')->factory()->getTTL() * 60,
+            self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
         ]);
     }
 
@@ -132,9 +143,9 @@ class AuthController extends Controller
     protected function getAdminResource(Authenticatable $user): array
     {
         return [
-            'id'        => $user->id,
-            'name'      => $user->name,
-            'authority' => $this->getRoleCode($user->id)
+            self::ADMIN_RESOURCE_KEY_ID        => $user->id,
+            self::ADMIN_RESOURCE_KEY_NAME      => $user->name,
+            self::ADMIN_RESOURCE_KEY_AUTHORITY => $this->getRoleCode($user->id)
         ];
     }
 }

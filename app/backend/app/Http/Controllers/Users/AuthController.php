@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    // login response
+    private const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
+    private const LOGIN_RESEPONSE_KEY_TOKEN_TYPE = 'token_type';
+    private const LOGIN_RESEPONSE_KEY_EXPIRES_IN = 'expires_in';
+    private const LOGIN_RESEPONSE_KEY_USER = 'user';
+
+    // user resource key
+    private const USER_RESOURCE_KEY_ID = 'id';
+    private const USER_RESOURCE_KEY_NAME = 'name';
+
     /**
      * Create a new AuthController instance.
      *
@@ -85,12 +95,12 @@ class AuthController extends Controller
         // Tymon\JWTAuth\Claims\Factory
         // ユーザー情報を返す。
         return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60,
-            'user'         => [
-                'id'   => auth('api-users')->user()->id,
-                'name' => auth('api-users')->user()->name
+            self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
+            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE   => 'bearer',
+            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN   => auth()->factory()->getTTL() * 60,
+            self::LOGIN_RESEPONSE_KEY_USER         => [
+                self::USER_RESOURCE_KEY_ID   => auth('api-users')->user()->id,
+                self::USER_RESOURCE_KEY_NAME => auth('api-users')->user()->name
             ]
         ]);
     }
