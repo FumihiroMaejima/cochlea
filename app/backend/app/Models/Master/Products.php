@@ -52,6 +52,27 @@ class Products extends Model
      */
     protected $primaryKey = self::ID;
 
+    /**
+     * The attributes that are mass assignable(複数代入可能な属性(カラム)).
+     *
+     * @var array
+     */
+    protected $fillable = [
+        self::NAME,
+        self::DETAIL,
+        self::TYPE,
+        self::PRICE,
+        self::UNIT,
+        self::MANUFACTURE,
+        self::NOTICE_START_AT,
+        self::NOTICE_END_AT,
+        self::PURCHASE_START_AT,
+        self::PURCHASE_END_AT,
+        self::IMAGE,
+        self::CRREATED_AT,
+        self::UPDATED_AT
+    ];
+
     public function __construct()
     {
     }
