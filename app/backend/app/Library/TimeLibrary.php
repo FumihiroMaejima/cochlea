@@ -59,9 +59,9 @@ class TimeLibrary
      *
      * @param string $dateTime 日時
      * @param string $format datetime format
-     * @return array 曜日
+     * @return string 曜日
      */
-    public static function addMounth(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT): array
+    public static function addMounth(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
     {
         return (new Carbon($dateTime))->addMonth()->format($format);
     }
