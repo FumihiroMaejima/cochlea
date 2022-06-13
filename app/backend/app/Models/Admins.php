@@ -47,6 +47,13 @@ class Admins extends Authenticatable implements JWTSubject
      */
     protected $dates = [self::DELETED_AT];
 
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = self::ID;
+
 
     /**
      * The attributes that are mass assignable.

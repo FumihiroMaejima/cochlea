@@ -45,6 +45,13 @@ class Products extends Model
      */
     protected $dates = [self::DELETED_AT];
 
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = self::ID;
+
     public function __construct()
     {
     }

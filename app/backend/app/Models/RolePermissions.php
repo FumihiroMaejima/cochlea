@@ -32,6 +32,13 @@ class RolePermissions extends Model
     // ソフトデリートの有効化(日付へキャストする属性)
     protected $dates = [self::DELETED_AT];
 
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = self::ID;
+
     // 更新可能なカラムリスト
     protected $fillable = [
         self::UPDATED_AT
