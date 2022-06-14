@@ -93,7 +93,8 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(AdminCreateResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(AdminCreateResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForCreate($request);
 
             $insertCount = $this->adminsRepository->createAdmin($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
@@ -124,7 +125,7 @@ class AdminsService
     /**
      * update admin data service
      *
-     * @param \App\Http\Requests\AdminUpdateRequest $request
+     * @param AdminUpdateRequest $request
      * @param int  $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -133,7 +134,8 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(AdminUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(AdminUpdateResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
 
@@ -178,7 +180,8 @@ class AdminsService
         try {
             $id = $request->id;
 
-            $resource = app()->make(AdminDeleteResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(AdminDeleteResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForDelete();
 
             $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
 
