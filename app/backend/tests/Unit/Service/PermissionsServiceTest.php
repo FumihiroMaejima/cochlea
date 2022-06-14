@@ -44,8 +44,8 @@ class PermissionsServiceTest extends TestCase
         ]);
 
         $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myapp.test.admin.login.email'),
-            'password' => Config::get('myapp.test.admin.login.password')
+            'email'    => Config::get('myappTest.test.admin.login.email'),
+            'password' => Config::get('myappTest.test.admin.login.password')
         ])->json();
 
         return [

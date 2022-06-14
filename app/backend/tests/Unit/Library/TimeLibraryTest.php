@@ -54,7 +54,7 @@ class TimeLibraryTest extends TestCase
         $this->createApplication();
 
         return [
-            'create member data' => Config::get('myapp.test.member.create.success')
+            'create member data' => Config::get('myappTest.test.member.create.success')
         ];
     } */
 
