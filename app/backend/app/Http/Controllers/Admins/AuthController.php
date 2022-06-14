@@ -48,7 +48,7 @@ class AuthController extends Controller
             // ローカル開発時はnameだけでログインする。
             $credentials = [
                 'name'     => request()->email,
-                'password' => Config::get('myapp.seeder.password.testadmin')
+                'password' => Config::get('myappSeeder.seeder.password.testadmin')
             ];
         }
 

@@ -34,9 +34,9 @@ class RolesTableSeeder extends BaseSeeder
             'updated_at' => $now
         ];
 
-        $nameList = Config::get('myapp.seeder.authority.rolesNameList');
-        $codeList = Config::get('myapp.seeder.authority.rolesCodeList');
-        $detailList = Config::get('myapp.seeder.authority.rolesDetailList');
+        $nameList = Config::get('myappSeeder.seeder.authority.rolesNameList');
+        $codeList = Config::get('myappSeeder.seeder.authority.rolesCodeList');
+        $detailList = Config::get('myappSeeder.seeder.authority.rolesDetailList');
 
         // insert用データ
         $data = [];

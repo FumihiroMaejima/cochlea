@@ -26,7 +26,7 @@ class RolePermissionsUpdateResource extends JsonResource
         // insert用データ
         $data = [];
         $dateTime = Carbon::now()->format('Y-m-d H:i:s');
-        $permissionsNameList = Config::get('myapp.seeder.authority.permissionsNameList');
+        $permissionsNameList = Config::get('myappSeeder.seeder.authority.permissionsNameList');
 
         foreach (range(0, (count($request->permissions) - 1)) as $i) {
             $row = [
