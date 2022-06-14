@@ -126,7 +126,7 @@ class AccessLog
     {
         if (is_array($headers)) {
             $response = [];
-            foreach($headers as $key => $value) {
+            foreach ($headers as $key => $value) {
                 if ($key === self::AUTHORIZATION_HEADER_KEY) {
                     // $valueは配列になる想定
                     $response[$key] = mb_substr(
@@ -134,7 +134,6 @@ class AccessLog
                         self::AUTHORIZATION_HEADER_VALUE_START_POSITION,
                         self::AUTHORIZATION_HEADER_VALUE_END_POSITION
                     ) . self::AUTHORIZATION_HEADER_VALUE_SUFFIX;
-
                 } else {
                     $response[$key] = $value;
                 }
