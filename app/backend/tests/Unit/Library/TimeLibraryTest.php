@@ -36,6 +36,16 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * get current time stamp.
+     *
+     * @return void
+     */
+    public function testStrToTimeStamp(): void
+    {
+        $this->assertIsInt(TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime()));
+    }
+
+    /**
      * member crerate data
      * @return array
      */

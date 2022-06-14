@@ -44,6 +44,17 @@ class TimeLibrary
     }
 
     /**
+     * get current date timestamp.
+     *
+     * @param string $dateTime 日時
+     * @return int タイムスタンプ
+     */
+    public static function strToTimeStamp(string $dateTime): int
+    {
+        return strtotime($dateTime);
+    }
+
+    /**
      * get current date time.
      *
      * @param string $dateTime 日時
