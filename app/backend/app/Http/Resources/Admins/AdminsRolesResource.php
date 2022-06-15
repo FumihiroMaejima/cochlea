@@ -53,10 +53,10 @@ class AdminsRolesResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     * @param Collection $admin
+     * @param object $admin
      * @return array
      */
-    public static function toArrayForCreate(Request $request, Collection $admin): array
+    public static function toArrayForCreate(Request $request, object $admin): array
     {
         return [
             self::RESOURCE_KEY_ROLE_ID    => $request->roleId,
@@ -75,7 +75,7 @@ class AdminsRolesResource extends JsonResource
      * @param Request  $request
      * @return array
      */
-    public function toArrayForDelete(Request $request): array
+    public static function toArrayForDelete(Request $request): array
     {
         // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();

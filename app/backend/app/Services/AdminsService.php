@@ -25,6 +25,7 @@ use App\Http\Resources\Admins\AdminsRolesCreateResource;
 use App\Http\Resources\Admins\AdminsRolesDeleteResource;
 use App\Http\Resources\Admins\AdminsRolesUpdateResource;
 use App\Http\Resources\Admins\AdminsResource;
+use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
 use App\Services\Notifications\AdminsSlackNotificationService;
@@ -101,7 +102,8 @@ class AdminsService
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
 
             // 権限情報の作成
-            $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
+            // $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
+            $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
             $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
 
             DB::commit();
@@ -141,7 +143,8 @@ class AdminsService
             $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
+            $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
             $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
 
             // slack通知
@@ -187,7 +190,8 @@ class AdminsService
             $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
+            // $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
+            $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
 
             DB::commit();
