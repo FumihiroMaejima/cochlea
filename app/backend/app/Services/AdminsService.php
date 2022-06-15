@@ -60,7 +60,8 @@ class AdminsService
         $admins = $this->adminsRepository->getAdminsList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
         // コンストラクタのresourceに割り当てる値を渡す
-        $resourceCollection = app()->make(AdminsCollection::class, ['resource' => $admins]);
+        // $resourceCollection = app()->make(AdminsCollection::class, ['resource' => $admins]);
+        $resourceCollection = new AdminsCollection($admins);
         // $resourceCollection = app()->make(AdminsResource::class, ['resource' => $admins]);
         // $resource = app()->make(AdminsResource::class, ['resource' => $data]);
 
