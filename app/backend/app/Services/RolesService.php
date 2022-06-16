@@ -28,8 +28,8 @@ use Exception;
 
 class RolesService
 {
-    protected $rolesRepository;
-    protected $rolePermissionsRepository;
+    protected RolesRepositoryInterface $rolesRepository;
+    protected RolePermissionsRepositoryInterface $rolePermissionsRepository;
 
     /**
      * create RolesService instance
