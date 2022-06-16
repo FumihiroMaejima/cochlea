@@ -69,6 +69,7 @@ class RolesRepository implements RolesRepositoryInterface
         // collection
         return DB::table($roles)
             ->select([$roles . '.id', $roles . '.name'])
+            ->where($roles . '.deleted_at', '=', null)
             ->get();
     }
 
