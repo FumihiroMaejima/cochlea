@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Services\Notifications\RoleSlackNotificationService;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
+use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Http\Resources\Admins\RolesServiceResource;
@@ -101,7 +102,9 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(RoleCreateResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(RoleCreateResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForCreate($request);
+
 
             $insertCount = $this->rolesRepository->createRole($resource); // if created => count is 1
             $latestRoles = $this->rolesRepository->getLatestRole();
@@ -135,7 +138,8 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(RoleUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(RoleUpdateResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->rolesRepository->updateRoleData($resource, $id);
 
@@ -177,7 +181,8 @@ class RolesService
         try {
             $roleIds = $request->roles;
 
-            $resource = app()->make(RoleDeleteResource::class, ['resource' => $request])->toArray($request);
+            // $resource = app()->make(RoleDeleteResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForDelete($request);
 
             $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
 
