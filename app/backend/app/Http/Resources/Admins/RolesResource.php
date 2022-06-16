@@ -4,6 +4,9 @@ namespace App\Http\Resources\Admins;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Requests\Admins\RoleUpdateRequest;
+use App\Http\Requests\Admins\RoleDeleteRequest;
+use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Library\TimeLibrary;
 
 class RolesResource extends JsonResource
@@ -34,10 +37,10 @@ class RolesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param RoleCreateRequest $request
      * @return array
      */
-    public static function toArrayForCreate($request)
+    public static function toArrayForCreate(RoleCreateRequest $request): array
     {
         /* $carbon = new Carbon();
         $test = $carbon->now()->format('Y-m-d H:i:s'); */
@@ -56,10 +59,10 @@ class RolesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param $request
      * @return array
      */
-    public static function toArrayForUpdate($request)
+    public static function toArrayForUpdate(RoleUpdateRequest $request): array
     {
         // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
@@ -75,10 +78,10 @@ class RolesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param RoleDeleteRequest $request
      * @return array
      */
-    public static function toArrayForDelete($request)
+    public static function toArrayForDelete(RoleDeleteRequest $request): array
     {
         // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();

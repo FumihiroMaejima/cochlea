@@ -94,7 +94,7 @@ class RolesService
     /**
      * update role data service
      *
-     * @param  \App\Http\Requests\RoleCreateRequest  $request
+     * @param  RoleCreateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -130,7 +130,7 @@ class RolesService
     /**
      * update role data service
      *
-     * @param  \App\Http\Requests\RoleUpdateRequest  $request
+     * @param  RoleUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -171,7 +171,7 @@ class RolesService
     /**
      * delete role data service
      *
-     * @param  \App\Http\Requests\RoleDeleteRequest  $request
+     * @param  RoleDeleteRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
