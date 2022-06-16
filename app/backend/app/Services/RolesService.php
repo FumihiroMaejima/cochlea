@@ -23,6 +23,7 @@ use App\Http\Resources\Admins\RolePermissionsUpdateResource;
 use App\Http\Resources\Admins\RolePermissionsDeleteResource;
 use App\Http\Resources\Admins\RolePermissionsDeleteByUpdateResource;
 use App\Http\Resources\Admins\RolePermissionsCreateResource;
+use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Resources\Admins\RoleDeleteResource;
 use App\Http\Resources\Admins\RoleCreateResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
@@ -110,7 +111,9 @@ class RolesService
             $latestRoles = $this->rolesRepository->getLatestRole();
 
             // 権限情報の作成
-            $permissonsResource = app()->make(RolePermissionsCreateResource::class, ['resource' => $latestRoles])->toArray($request);
+            // $permissonsResource = app()->make(RolePermissionsCreateResource::class, ['resource' => $latestRoles])->toArray($request);
+            $permissonsResource = RolePermissionsResource::toArrayForCreate($request, $latestRoles);
+
             $insertRolePermissionsCount = $this->rolePermissionsRepository->createRolePermission($permissonsResource);
 
             DB::commit();
@@ -147,7 +150,8 @@ class RolesService
             $removeResource = app()->make(RolePermissionsDeleteByUpdateResource::class, ['resource' => $request])->toArray($request);
             $this->rolePermissionsRepository->deleteRolePermissionsData($removeResource, $id);
 
-            $updateResource = app()->make(RolePermissionsUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $updateResource = app()->make(RolePermissionsUpdateResource::class, ['resource' => $request])->toArray($request);
+            $updateResource = RolePermissionsResource::toArrayForUpdate($request);
             $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->createRolePermission($updateResource, $id);
 
             // slack通知
@@ -187,7 +191,8 @@ class RolesService
             $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
 
             // 権限情報の更新
-            $rolePermissionsResource = app()->make(RolePermissionsDeleteResource::class, ['resource' => $request])->toArray($request);
+            // $rolePermissionsResource = app()->make(RolePermissionsDeleteResource::class, ['resource' => $request])->toArray($request);
+            $rolePermissionsResource = RolePermissionsResource::toArrayForDelete($request);
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
             DB::commit();
