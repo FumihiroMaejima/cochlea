@@ -16,7 +16,6 @@ use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Http\Resources\Admins\RolesServiceResource;
-use App\Http\Resources\Admins\RolesListResource;
 use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
@@ -66,9 +65,11 @@ class RolesService
         $data = $this->rolesRepository->getRolesList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
         // コンストラクタのresourceに割り当てる値を渡す
-        $resource = app()->make(RolesListResource::class, ['resource' => $data]);
+        // $resource = app()->make(RolesListResource::class, ['resource' => $data]);
+        // $resource->toArray($request);
+        $resource = RolesResource::toArrayForGetTextAndValueList($data);
 
-        return response()->json($resource->toArray($request), 200);
+        return response()->json($resource, 200);
     }
 
     /**
