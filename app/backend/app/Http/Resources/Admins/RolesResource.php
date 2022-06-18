@@ -5,7 +5,6 @@ namespace App\Http\Resources\Admins;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
-use App\Http\Requests\Admins\RoleDeleteRequest;
 use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Library\TimeLibrary;
 
@@ -76,10 +75,9 @@ class RolesResource extends JsonResource
     /**
      * Transform the resource into an array for delete.
      *
-     * @param RoleDeleteRequest $request
      * @return array
      */
-    public static function toArrayForDelete(RoleDeleteRequest $request): array
+    public static function toArrayForDelete(): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 

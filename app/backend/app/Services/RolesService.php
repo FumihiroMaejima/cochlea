@@ -174,12 +174,12 @@ class RolesService
         try {
             $roleIds = $request->roles;
 
-            $resource = RolesResource::toArrayForDelete($request);
+            $resource = RolesResource::toArrayForDelete();
 
             $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
 
             // 権限情報の更新
-            $rolePermissionsResource = RolePermissionsResource::toArrayForDelete($request);
+            $rolePermissionsResource = RolePermissionsResource::toArrayForDelete();
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
             DB::commit();
