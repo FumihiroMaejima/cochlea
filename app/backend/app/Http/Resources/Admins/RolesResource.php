@@ -38,6 +38,27 @@ class RolesResource extends JsonResource
     }
 
     /**
+     * Transform the resource into an array for get roles collection.
+     *
+     * @param Collection $collection
+     * @return array
+     */
+    public static function toArrayForGetRolesCollection(Collection $collection)
+    {
+        // レスポンス
+        $response = [];
+
+        foreach ($collection as $item) {
+            $item->permissions = !$item->permissions ? [] : array_map(function ($permission) {
+                return (int)$permission;
+            }, explode(',', $item->permissions));
+            $response[self::RESOURCE_KEY_DATA][] = $item;
+        }
+
+        return $response;
+    }
+
+    /**
      * Transform the resource into an array for get text => value list.
      *
      * @param Collection $collection

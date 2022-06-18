@@ -15,7 +15,6 @@ use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
-use App\Http\Resources\Admins\RolesServiceResource;
 use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
@@ -49,9 +48,11 @@ class RolesService
     public function getRoles(Request $request): JsonResponse
     {
         $collection = $this->rolesRepository->getRoles();
-        $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+        // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+        // $resourceCollection->toArray($request)
+        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
 
-        return response()->json($resourceCollection->toArray($request), 200);
+        return response()->json($resourceCollection, 200);
     }
 
     /**
