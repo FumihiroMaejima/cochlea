@@ -732,6 +732,8 @@ ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstre
     App\Providers\JetstreamServiceProvider::class,
 ```
 
+上記を削除したら`App/Actions`ディレクトリをまとめて削除しても良い。
+
 ---
 # その他
 
