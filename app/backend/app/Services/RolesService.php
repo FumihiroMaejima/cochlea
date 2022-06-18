@@ -18,7 +18,6 @@ use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Http\Resources\Admins\RolesServiceResource;
 use App\Http\Resources\Admins\PermissionsListResource;
 use App\Http\Resources\Admins\RolesListResource;
-use App\Http\Resources\Admins\RolePermissionsDeleteByUpdateResource;
 use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
