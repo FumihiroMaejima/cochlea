@@ -82,7 +82,7 @@ class RolePermissionsResource extends JsonResource
     {
         // insert用データ
         $data = [];
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
+
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         $permissionsNameList = Config::get('myappSeeder.seeder.authority.permissionsNameList');
@@ -109,7 +109,6 @@ class RolePermissionsResource extends JsonResource
      */
     public static function toArrayForDeleteByUpdateResource(RoleUpdateRequest $request)
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
@@ -127,7 +126,6 @@ class RolePermissionsResource extends JsonResource
      */
     public static function toArrayForDelete(RoleDeleteRequest $request): array
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [

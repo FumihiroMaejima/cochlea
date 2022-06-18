@@ -47,7 +47,6 @@ class AdminsResource extends JsonResource
     {
         /* $carbon = new Carbon();
         $test = $carbon->now()->format('Y-m-d H:i:s'); */
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
@@ -67,7 +66,6 @@ class AdminsResource extends JsonResource
      */
     public static function toArrayForUpdate(AdminUpdateRequest $request): array
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
@@ -84,7 +82,6 @@ class AdminsResource extends JsonResource
      */
     public static function toArrayForDelete(): array
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [

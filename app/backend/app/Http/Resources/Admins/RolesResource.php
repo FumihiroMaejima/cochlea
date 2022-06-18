@@ -44,7 +44,6 @@ class RolesResource extends JsonResource
     {
         /* $carbon = new Carbon();
         $test = $carbon->now()->format('Y-m-d H:i:s'); */
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
@@ -64,7 +63,6 @@ class RolesResource extends JsonResource
      */
     public static function toArrayForUpdate(RoleUpdateRequest $request): array
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
@@ -83,7 +81,6 @@ class RolesResource extends JsonResource
      */
     public static function toArrayForDelete(RoleDeleteRequest $request): array
     {
-        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [

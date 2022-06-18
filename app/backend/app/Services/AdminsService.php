@@ -89,14 +89,12 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            // $resource = app()->make(AdminCreateResource::class, ['resource' => $request])->toArray($request);
             $resource = AdminsResource::toArrayForCreate($request);
 
             $insertCount = $this->adminsRepository->createAdmin($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
 
             // 権限情報の作成
-            // $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
             $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
 
@@ -131,13 +129,11 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            // $resource = app()->make(AdminUpdateResource::class, ['resource' => $request])->toArray($request);
             $resource = AdminsResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
 
             // 権限情報の更新
-            // $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
             $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
 
@@ -178,13 +174,11 @@ class AdminsService
         try {
             $id = $request->id;
 
-            // $resource = app()->make(AdminDeleteResource::class, ['resource' => $request])->toArray($request);
             $resource = AdminsResource::toArrayForDelete();
 
             $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
 
             // 権限情報の更新
-            // $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
 

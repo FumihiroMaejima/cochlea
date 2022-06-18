@@ -2,11 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
@@ -14,7 +10,7 @@ use App\Http\Resources\Admins\PermissionsListResource;
 
 class PermissionsService
 {
-    protected $permissionsRepository;
+    protected PermissionsRepositoryInterface $permissionsRepository;
 
     /**
      * create PermissionsService instance

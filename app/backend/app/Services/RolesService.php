@@ -16,7 +16,6 @@ use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Http\Resources\Admins\RolesServiceResource;
-use App\Http\Resources\Admins\PermissionsListResource;
 use App\Http\Resources\Admins\RolesListResource;
 use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
@@ -96,7 +95,6 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            // $resource = app()->make(RoleCreateResource::class, ['resource' => $request])->toArray($request);
             $resource = RolesResource::toArrayForCreate($request);
 
 
@@ -104,7 +102,6 @@ class RolesService
             $latestRoles = $this->rolesRepository->getLatestRole();
 
             // 権限情報の作成
-            // $permissonsResource = app()->make(RolePermissionsCreateResource::class, ['resource' => $latestRoles])->toArray($request);
             $permissonsResource = RolePermissionsResource::toArrayForCreate($request, $latestRoles);
 
             $insertRolePermissionsCount = $this->rolePermissionsRepository->createRolePermission($permissonsResource);
@@ -134,18 +131,15 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            // $resource = app()->make(RoleUpdateResource::class, ['resource' => $request])->toArray($request);
             $resource = RolesResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->rolesRepository->updateRoleData($resource, $id);
 
             // 権限情報の更新
-            // $removeResource = app()->make(RolePermissionsDeleteByUpdateResource::class, ['resource' => $request])->toArray($request);
             $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
 
             $this->rolePermissionsRepository->deleteRolePermissionsData($removeResource, $id);
 
-            // $updateResource = app()->make(RolePermissionsUpdateResource::class, ['resource' => $request])->toArray($request);
             $updateResource = RolePermissionsResource::toArrayForUpdate($request);
             $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->createRolePermission($updateResource, $id);
 
@@ -180,13 +174,11 @@ class RolesService
         try {
             $roleIds = $request->roles;
 
-            // $resource = app()->make(RoleDeleteResource::class, ['resource' => $request])->toArray($request);
             $resource = RolesResource::toArrayForDelete($request);
 
             $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
 
             // 権限情報の更新
-            // $rolePermissionsResource = app()->make(RolePermissionsDeleteResource::class, ['resource' => $request])->toArray($request);
             $rolePermissionsResource = RolePermissionsResource::toArrayForDelete($request);
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
