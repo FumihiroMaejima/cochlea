@@ -104,6 +104,24 @@ class RolePermissionsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param RoleUpdateRequest $request
+     * @return array
+     */
+    public static function toArrayForDeleteByUpdateResource(RoleUpdateRequest $request)
+    {
+        // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        return [
+            self::RESOURCE_KEY_NAME       => $request->name . '_' . $dateTime,
+            self::RESOURCE_KEY_UPDATED_AT => $dateTime,
+            self::RESOURCE_KEY_DELETED_AT => $dateTime
+        ];
+    }
+
+    /**
+     * Transform the resource into an array.
+     *
      * @param RoleDeleteRequest $request
      * @return array
      */

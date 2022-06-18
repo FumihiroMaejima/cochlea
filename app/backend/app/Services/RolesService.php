@@ -141,7 +141,9 @@ class RolesService
             $updatedRowCount = $this->rolesRepository->updateRoleData($resource, $id);
 
             // 権限情報の更新
-            $removeResource = app()->make(RolePermissionsDeleteByUpdateResource::class, ['resource' => $request])->toArray($request);
+            // $removeResource = app()->make(RolePermissionsDeleteByUpdateResource::class, ['resource' => $request])->toArray($request);
+            $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
+
             $this->rolePermissionsRepository->deleteRolePermissionsData($removeResource, $id);
 
             // $updateResource = app()->make(RolePermissionsUpdateResource::class, ['resource' => $request])->toArray($request);
