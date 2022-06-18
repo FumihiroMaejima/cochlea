@@ -38,7 +38,7 @@ class AdminsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for create.
      *
      * @param AdminCreateRequest $request
      * @return array
@@ -59,7 +59,7 @@ class AdminsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for update.
      *
      * @param AdminUpdateRequest $request
      * @return array
@@ -76,7 +76,7 @@ class AdminsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for delete.
      *
      * @return array
      */

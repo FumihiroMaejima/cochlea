@@ -32,23 +32,7 @@ class AdminsRolesResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array
-     */
-    public static function toArrayForUpdate(Request $request): array
-    {
-        $dateTime = TimeLibrary::getCurrentDateTime();
-
-        return [
-            self::RESOURCE_KEY_ROLE_ID    => $request->roleId,
-            self::RESOURCE_KEY_UPDATED_AT => $dateTime
-        ];
-    }
-
-    /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for create.
      *
      * @param Request $request
      * @param object $admin
@@ -68,7 +52,23 @@ class AdminsRolesResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for update.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function toArrayForUpdate(Request $request): array
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        return [
+            self::RESOURCE_KEY_ROLE_ID    => $request->roleId,
+            self::RESOURCE_KEY_UPDATED_AT => $dateTime
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for delete.
      *
      * @param Request  $request
      * @return array

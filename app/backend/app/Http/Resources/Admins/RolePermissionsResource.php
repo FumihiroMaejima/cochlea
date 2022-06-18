@@ -46,7 +46,7 @@ class RolePermissionsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for create.
      *
      * @param RoleCreateRequest $request
      * @param object $role role record.
@@ -73,7 +73,7 @@ class RolePermissionsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for update.
      *
      * @param RoleUpdateRequest $request
      * @return array
@@ -102,7 +102,7 @@ class RolePermissionsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for delete by update request.
      *
      * @param RoleUpdateRequest $request
      * @return array
@@ -119,7 +119,7 @@ class RolePermissionsResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array for delete.
      *
      * @param RoleDeleteRequest $request
      * @return array
