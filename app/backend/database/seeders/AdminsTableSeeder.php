@@ -29,7 +29,7 @@ class AdminsTableSeeder extends BaseSeeder
         $template = [
             Admins::NAME       => '',
             Admins::EMAIL      => '',
-            Admins::PASSWORD   => bcrypt(Config::get('myapp.seeder.password.testadmin')),
+            Admins::PASSWORD   => bcrypt(Config::get('myappSeeder.seeder.password.testadmin')),
             Admins::CREATED_AT => $now,
             Admins::UPDATED_AT => $now
         ];

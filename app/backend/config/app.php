@@ -196,7 +196,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 
-        // not used.
+        // not used & deleted already.
         // App\Providers\FortifyServiceProvider::class,
         // App\Providers\JetstreamServiceProvider::class,
 

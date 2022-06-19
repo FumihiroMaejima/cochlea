@@ -18,14 +18,9 @@ use App\Repositories\Admins\AdminsRepositoryInterface;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
-use App\Http\Resources\Admins\AdminCreateResource;
-use App\Http\Resources\Admins\AdminDeleteResource;
 use App\Http\Resources\Admins\AdminsCollection;
-use App\Http\Resources\Admins\AdminsRolesCreateResource;
-use App\Http\Resources\Admins\AdminsRolesDeleteResource;
-use App\Http\Resources\Admins\AdminsRolesUpdateResource;
 use App\Http\Resources\Admins\AdminsResource;
-use App\Http\Resources\Admins\AdminUpdateResource;
+use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
 use App\Services\Notifications\AdminsSlackNotificationService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -60,7 +55,8 @@ class AdminsService
         $admins = $this->adminsRepository->getAdminsList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
         // コンストラクタのresourceに割り当てる値を渡す
-        $resourceCollection = app()->make(AdminsCollection::class, ['resource' => $admins]);
+        // $resourceCollection = app()->make(AdminsCollection::class, ['resource' => $admins]);
+        $resourceCollection = new AdminsCollection($admins);
         // $resourceCollection = app()->make(AdminsResource::class, ['resource' => $admins]);
         // $resource = app()->make(AdminsResource::class, ['resource' => $data]);
 
@@ -93,13 +89,13 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(AdminCreateResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForCreate($request);
 
             $insertCount = $this->adminsRepository->createAdmin($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
 
             // 権限情報の作成
-            $adminsRolesResource = app()->make(AdminsRolesCreateResource::class, ['resource' => $latestAdmin])->toArray($request);
+            $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
             $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
 
             DB::commit();
@@ -124,7 +120,7 @@ class AdminsService
     /**
      * update admin data service
      *
-     * @param \App\Http\Requests\AdminUpdateRequest $request
+     * @param AdminUpdateRequest $request
      * @param int  $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -133,12 +129,12 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(AdminUpdateResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesUpdateResource::class, ['resource' => $request])->toArray($request);
+            $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
             $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
 
             // slack通知
@@ -178,12 +174,12 @@ class AdminsService
         try {
             $id = $request->id;
 
-            $resource = app()->make(AdminDeleteResource::class, ['resource' => $request])->toArray($request);
+            $resource = AdminsResource::toArrayForDelete();
 
             $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
 
             // 権限情報の更新
-            $roleIdResource = app()->make(AdminsRolesDeleteResource::class, ['resource' => $request])->toArray($request);
+            $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
 
             DB::commit();

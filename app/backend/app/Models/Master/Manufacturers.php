@@ -38,6 +38,27 @@ class Manufacturers extends Model
      */
     protected $dates = [self::DELETED_AT];
 
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = self::ID;
+
+    /**
+     * The attributes that are mass assignable(複数代入可能な属性(カラム)).
+     *
+     * @var array
+     */
+    protected $fillable = [
+        self::NAME,
+        self::DETAIL,
+        self::ADDRESS,
+        self::TEL,
+        self::CRREATED_AT,
+        self::UPDATED_AT
+    ];
+
     public function __construct()
     {
     }

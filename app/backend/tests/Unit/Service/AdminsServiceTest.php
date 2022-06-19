@@ -45,8 +45,8 @@ class AdminsServiceTest extends TestCase
         ]);
 
         $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myapp.test.admin.login.email'),
-            'password' => Config::get('myapp.test.admin.login.password')
+            'email'    => Config::get('myappTest.test.admin.login.email'),
+            'password' => Config::get('myappTest.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
         return [
@@ -99,7 +99,7 @@ class AdminsServiceTest extends TestCase
     public function memberDataProvider(): array
     {
         return [
-            'member' => [1, 'test name', Config::get('myapp.test.admin.login.email'), 1]
+            'member' => [1, 'test name', Config::get('myappTest.test.admin.login.email'), 1]
         ];
     }
 
@@ -112,7 +112,7 @@ class AdminsServiceTest extends TestCase
         $this->createApplication();
 
         return [
-            'create member data' => Config::get('myapp.test.member.create.success')
+            'create member data' => Config::get('myappTest.test.member.create.success')
         ];
     }
 
@@ -145,7 +145,7 @@ class AdminsServiceTest extends TestCase
 
         $testCase = [];
         foreach ($caseKeys as $key) {
-            $testCase[$key] = Config::get('myapp.test.member.create.success');
+            $testCase[$key] = Config::get('myappTest.test.member.create.success');
         }
 
         // データの整形
@@ -166,7 +166,7 @@ class AdminsServiceTest extends TestCase
      */
     public function testCreateMember422Failed(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
-        /* $data = Config::get('myapp.test.member.create.success');
+        /* $data = Config::get('myappTest.test.member.create.success');
         $data['name'] = ''; */
         $response = $this->json('POST', route('admin.admins.create'), [
             'name'                  => $name,
@@ -201,7 +201,7 @@ class AdminsServiceTest extends TestCase
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
             'name'   => 'test name',
-            'email'  => Config::get('myapp.test.admin.login.email'),
+            'email'  => Config::get('myappTest.test.admin.login.email'),
             'roleId' => 1
         ]);
         $response->assertStatus(200);
@@ -216,7 +216,7 @@ class AdminsServiceTest extends TestCase
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
             'name'   => '',
-            'email'  => Config::get('myapp.test.admin.login.email'),
+            'email'  => Config::get('myappTest.test.admin.login.email'),
             'roleId' => 1
         ]);
         $response->assertStatus(422);

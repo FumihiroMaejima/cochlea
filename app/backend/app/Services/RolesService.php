@@ -13,17 +13,9 @@ use Illuminate\Http\Request;
 use App\Services\Notifications\RoleSlackNotificationService;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
-use App\Http\Resources\Admins\RoleUpdateResource;
+use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
-use App\Http\Resources\Admins\RolesServiceResource;
-use App\Http\Resources\Admins\PermissionsListResource;
-use App\Http\Resources\Admins\RolesListResource;
-use App\Http\Resources\Admins\RolePermissionsUpdateResource;
-use App\Http\Resources\Admins\RolePermissionsDeleteResource;
-use App\Http\Resources\Admins\RolePermissionsDeleteByUpdateResource;
-use App\Http\Resources\Admins\RolePermissionsCreateResource;
-use App\Http\Resources\Admins\RoleDeleteResource;
-use App\Http\Resources\Admins\RoleCreateResource;
+use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
 use App\Http\Requests\Admins\RoleCreateRequest;
@@ -32,8 +24,8 @@ use Exception;
 
 class RolesService
 {
-    protected $rolesRepository;
-    protected $rolePermissionsRepository;
+    protected RolesRepositoryInterface $rolesRepository;
+    protected RolePermissionsRepositoryInterface $rolePermissionsRepository;
 
     /**
      * create RolesService instance
@@ -56,9 +48,11 @@ class RolesService
     public function getRoles(Request $request): JsonResponse
     {
         $collection = $this->rolesRepository->getRoles();
-        $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+        // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+        // $resourceCollection->toArray($request)
+        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
 
-        return response()->json($resourceCollection->toArray($request), 200);
+        return response()->json($resourceCollection, 200);
     }
 
     /**
@@ -72,9 +66,11 @@ class RolesService
         $data = $this->rolesRepository->getRolesList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
         // コンストラクタのresourceに割り当てる値を渡す
-        $resource = app()->make(RolesListResource::class, ['resource' => $data]);
+        // $resource = app()->make(RolesListResource::class, ['resource' => $data]);
+        // $resource->toArray($request);
+        $resource = RolesResource::toArrayForGetTextAndValueList($data);
 
-        return response()->json($resource->toArray($request), 200);
+        return response()->json($resource, 200);
     }
 
     /**
@@ -93,7 +89,7 @@ class RolesService
     /**
      * update role data service
      *
-     * @param  \App\Http\Requests\RoleCreateRequest  $request
+     * @param  RoleCreateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -101,13 +97,15 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(RoleCreateResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForCreate($request);
+
 
             $insertCount = $this->rolesRepository->createRole($resource); // if created => count is 1
             $latestRoles = $this->rolesRepository->getLatestRole();
 
             // 権限情報の作成
-            $permissonsResource = app()->make(RolePermissionsCreateResource::class, ['resource' => $latestRoles])->toArray($request);
+            $permissonsResource = RolePermissionsResource::toArrayForCreate($request, $latestRoles);
+
             $insertRolePermissionsCount = $this->rolePermissionsRepository->createRolePermission($permissonsResource);
 
             DB::commit();
@@ -127,7 +125,7 @@ class RolesService
     /**
      * update role data service
      *
-     * @param  \App\Http\Requests\RoleUpdateRequest  $request
+     * @param  RoleUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -135,15 +133,16 @@ class RolesService
     {
         DB::beginTransaction();
         try {
-            $resource = app()->make(RoleUpdateResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->rolesRepository->updateRoleData($resource, $id);
 
             // 権限情報の更新
-            $removeResource = app()->make(RolePermissionsDeleteByUpdateResource::class, ['resource' => $request])->toArray($request);
+            $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
+
             $this->rolePermissionsRepository->deleteRolePermissionsData($removeResource, $id);
 
-            $updateResource = app()->make(RolePermissionsUpdateResource::class, ['resource' => $request])->toArray($request);
+            $updateResource = RolePermissionsResource::toArrayForUpdate($request);
             $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->createRolePermission($updateResource, $id);
 
             // slack通知
@@ -167,7 +166,7 @@ class RolesService
     /**
      * delete role data service
      *
-     * @param  \App\Http\Requests\RoleDeleteRequest  $request
+     * @param  RoleDeleteRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -177,12 +176,12 @@ class RolesService
         try {
             $roleIds = $request->roles;
 
-            $resource = app()->make(RoleDeleteResource::class, ['resource' => $request])->toArray($request);
+            $resource = RolesResource::toArrayForDelete();
 
             $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
 
             // 権限情報の更新
-            $rolePermissionsResource = app()->make(RolePermissionsDeleteResource::class, ['resource' => $request])->toArray($request);
+            $rolePermissionsResource = RolePermissionsResource::toArrayForDelete();
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
             DB::commit();

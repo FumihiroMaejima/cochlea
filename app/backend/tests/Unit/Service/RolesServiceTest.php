@@ -44,8 +44,8 @@ class RolesServiceTest extends TestCase
         ]);
 
         $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myapp.test.admin.login.email'),
-            'password' => Config::get('myapp.test.admin.login.password')
+            'email'    => Config::get('myappTest.test.admin.login.email'),
+            'password' => Config::get('myappTest.test.admin.login.password')
         ])->json();
 
         return [
@@ -110,7 +110,7 @@ class RolesServiceTest extends TestCase
         $this->createApplication();
 
         return [
-            'create role data' => Config::get('myapp.test.roles.create.success')
+            'create role data' => Config::get('myappTest.test.roles.create.success')
         ];
     }
 
@@ -141,7 +141,7 @@ class RolesServiceTest extends TestCase
         $caseKeys = ['no_name', 'no_code', 'no_detail', 'no_permission', 'no_exist_permission'];
         $testCase = [];
         foreach ($caseKeys as $key) {
-            $testCase[$key] = Config::get('myapp.test.roles.create.success');
+            $testCase[$key] = Config::get('myappTest.test.roles.create.success');
         }
 
         // データの整形

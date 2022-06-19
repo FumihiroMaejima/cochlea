@@ -32,7 +32,7 @@ class PermissionsTableSeeder extends BaseSeeder
             'updated_at' => $now
         ];
 
-        $dataList = Config::get('myapp.seeder.authority.permissionsNameList');
+        $dataList = Config::get('myappSeeder.seeder.authority.permissionsNameList');
 
         // データ数
         $this->count = $this->getSeederDataLengthByEnv(
