@@ -9,7 +9,6 @@ use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
 use App\Library\TimeLibrary;
 
-
 class AdminsResource extends JsonResource
 {
     public const RESOURCE_KEY_DATA = 'data';
