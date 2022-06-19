@@ -29,7 +29,7 @@ class UsersTableSeeder extends BaseSeeder
         $template = [
             User::NAME       => '',
             User::EMAIL      => '',
-            User::PASSWORD   => bcrypt(Config::get('myapp.seeder.password.testuser')),
+            User::PASSWORD   => bcrypt(Config::get('myappSeeder.seeder.password.testuser')),
             User::ROLE       => 10,
             User::CREATED_AT => $now,
             User::UPDATED_AT => $now

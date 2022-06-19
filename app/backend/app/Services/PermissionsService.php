@@ -2,19 +2,15 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
-use App\Http\Resources\Admins\PermissionsListResource;
+use App\Http\Resources\Admins\PermissionsResource;
 
 class PermissionsService
 {
-    protected $permissionsRepository;
+    protected PermissionsRepositoryInterface $permissionsRepository;
 
     /**
      * create PermissionsService instance
@@ -35,8 +31,8 @@ class PermissionsService
     public function getPermissionsList(Request $request): JsonResponse
     {
         $collection = $this->permissionsRepository->getPermissionsList();
-        $resource = app()->make(PermissionsListResource::class, ['resource' => $collection]);
+        $resource = PermissionsResource::toArrayForGetTextAndValueList($collection);
 
-        return response()->json($resource->toArray($request), 200);
+        return response()->json($resource, 200);
     }
 }
