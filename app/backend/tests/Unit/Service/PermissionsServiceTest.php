@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
-use App\Trait\HelperTrait;
-use Database\Seeders\AdminsTableSeeder;
-use Database\Seeders\AdminsRolesTableSeeder;
-use Database\Seeders\PermissionsTableSeeder;
-use Database\Seeders\RolePermissionsTableSeeder;
-use Database\Seeders\RolesTableSeeder;
 
 class PermissionsServiceTest extends ServiceBaseTestCase
 {

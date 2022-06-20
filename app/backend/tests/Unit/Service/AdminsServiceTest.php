@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Trait\HelperTrait;
-use Database\Seeders\AdminsTableSeeder;
-use Database\Seeders\AdminsRolesTableSeeder;
-use Database\Seeders\PermissionsTableSeeder;
-use Database\Seeders\RolePermissionsTableSeeder;
-use Database\Seeders\RolesTableSeeder;
-use App\Models\Admins;
 
 class AdminsServiceTest extends ServiceBaseTestCase
 {
