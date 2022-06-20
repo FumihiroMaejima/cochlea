@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
+
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
