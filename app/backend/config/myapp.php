@@ -2,8 +2,9 @@
 
 return [
     'headers' => [
-        'id'        => 'X-Auth-ID',
-        'authority' => 'X-Auth-Authority'
+        'id'            => 'X-Auth-ID',
+        'authority'     => 'X-Auth-Authority',
+        'authorization' => 'Authorization',
     ],
     'executionRole' => [
         'services' => [

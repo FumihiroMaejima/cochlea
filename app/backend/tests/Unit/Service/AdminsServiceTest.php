@@ -36,10 +36,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
             $this->initialized = true;
         }
 
+        // Config::get('myapp.headers.authority')
         $this->withHeaders([
-            'X-Auth-ID'        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            'X-Auth-Authority' => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-            'Authorization'    => 'Bearer ' . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
+            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+            Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
+            Config::get('myapp.headers.authorization') => 'Bearer ' . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
         ]);
     }
 
