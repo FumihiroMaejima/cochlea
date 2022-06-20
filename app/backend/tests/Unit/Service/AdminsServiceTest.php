@@ -37,9 +37,9 @@ class AdminsServiceTest extends ServiceBaseTestCase
         }
 
         $this->withHeaders([
-            'X-Auth-ID'        => $loginUser['user_id'],
-            'X-Auth-Authority' => $loginUser['user_authority'],
-            'Authorization'    => 'Bearer ' . $loginUser['token'],
+            'X-Auth-ID'        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+            'X-Auth-Authority' => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
+            'Authorization'    => 'Bearer ' . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
         ]);
     }
 

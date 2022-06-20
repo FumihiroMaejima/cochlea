@@ -22,6 +22,22 @@ class ServiceBaseTestCase extends TestCase
 {
     use HelperTrait;
 
+    // login response
+    protected const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
+    protected const LOGIN_RESEPONSE_KEY_TOKEN_TYPE = 'token_type';
+    protected const LOGIN_RESEPONSE_KEY_EXPIRES_IN = 'expires_in';
+    protected const LOGIN_RESEPONSE_KEY_USER = 'user';
+
+    // admin resource key
+    protected const ADMIN_RESOURCE_KEY_ID = 'id';
+    protected const ADMIN_RESOURCE_KEY_NAME = 'name';
+    protected const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
+
+    // init() response key
+    protected const INIT_REQUEST_RESPONSE_TOKEN = 'token';
+    protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
+    protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
+
     protected $initialized = false;
 
     /**
@@ -44,15 +60,16 @@ class ServiceBaseTestCase extends TestCase
             AdminsRolesTableSeeder::class,
         ]);
 
+        // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myappTest.test.admin.login.email'),
             'password' => Config::get('myappTest.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
         return [
-            'token'          => $response['access_token'],
-            'user_id'        => $response['user']['id'],
-            'user_authority' => $response['user']['authority']
+            self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN],
+            self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID],
+            self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY]
         ];
     }
 
