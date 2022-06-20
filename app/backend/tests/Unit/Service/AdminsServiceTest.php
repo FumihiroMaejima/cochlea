@@ -4,6 +4,7 @@ namespace Tests\Unit\Service;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -16,45 +17,10 @@ use Database\Seeders\RolePermissionsTableSeeder;
 use Database\Seeders\RolesTableSeeder;
 use App\Models\Admins;
 
-class AdminsServiceTest extends TestCase
+class AdminsServiceTest extends ServiceBaseTestCase
 {
-    use HelperTrait;
     // use DatabaseMigrations;
     // use RefreshDatabase;
-
-    protected $initialized = false;
-
-    /**
-     * 初期化処理
-     *
-     * @return array
-     */
-    protected function init(): array
-    {
-        // $this->refreshDatabase();
-        // $this->refreshTestDatabase();
-        // $this->runDatabaseMigrations();
-
-        $this->artisan('migrate:fresh');
-        $this->seed([
-            AdminsTableSeeder::class,
-            PermissionsTableSeeder::class,
-            RolesTableSeeder::class,
-            RolePermissionsTableSeeder::class,
-            AdminsRolesTableSeeder::class,
-        ]);
-
-        $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myappTest.test.admin.login.email'),
-            'password' => Config::get('myappTest.test.admin.login.password')
-        ], ['Content-Type' => 'application/json'])->json();
-
-        return [
-            'token'          => $response['access_token'],
-            'user_id'        => $response['user']['id'],
-            'user_authority' => $response['user']['authority']
-        ];
-    }
 
     /**
      * setUpは各テストメソッドが実行される前に実行する
