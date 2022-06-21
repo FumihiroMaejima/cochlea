@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admins;
 
-use App\Models\Admins;
+use App\Models\Masters\Admins;
 use App\Models\AdminsRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
