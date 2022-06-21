@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders\Master;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Master\Manufacturers;
+use App\Models\Masters\Manufacturers;
 use Database\Seeders\BaseSeeder;
 
 class ManufacturersTableSeeder extends BaseSeeder
