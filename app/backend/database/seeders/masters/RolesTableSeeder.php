@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Roles;
+use App\Models\Masters\Roles;
 use Database\Seeders\BaseSeeder;
 
 class RolesTableSeeder extends BaseSeeder

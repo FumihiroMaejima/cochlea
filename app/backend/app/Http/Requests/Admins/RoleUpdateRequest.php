@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
 use App\Repositories\Roles\RolesRepositoryInterface;
-use App\Models\Roles;
+use App\Models\Masters\Roles;
 
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 // use Illuminate\Validation\ValidationException;

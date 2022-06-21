@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Admins;
-use App\Models\Roles;
+use App\Models\Masters\Roles;
 
 class RoleDeleteRequest extends BaseRequest
 {

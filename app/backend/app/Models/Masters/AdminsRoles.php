@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Masters\Admins;
 use App\Models\Masters\Permissions;
-use App\Models\RolePermissions;
-use App\Models\Roles;
+use App\Models\Masters\RolePermissions;
+use App\Models\Masters\Roles;
 
 class AdminsRoles extends Model
 {

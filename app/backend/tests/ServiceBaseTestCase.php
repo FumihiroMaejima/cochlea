@@ -12,8 +12,8 @@ use App\Trait\HelperTrait;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\PermissionsTableSeeder;
-use Database\Seeders\RolePermissionsTableSeeder;
-use Database\Seeders\RolesTableSeeder;
+use Database\Seeders\Masters\RolePermissionsTableSeeder;
+use Database\Seeders\Masters\RolesTableSeeder;
 
 /**
  * Serviceクラスのテスト用Baseクラス

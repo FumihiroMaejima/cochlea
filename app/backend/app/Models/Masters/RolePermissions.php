@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Masters\Admins;
+use App\Models\Masters\Permissions;
+use App\Models\Masters\Roles;
 
-class Roles extends Model
+class RolePermissions extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -15,14 +16,15 @@ class Roles extends Model
     // カラム一覧
     public const ID = 'id';
     public const NAME = 'name';
-    public const CODE = 'code';
-    public const DETAIL = 'detail';
+    public const SHORT_NAME = 'short_name';
+    public const ROLE_ID = 'role_id';
+    public const PERMISSION_ID = 'permission_id';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'roles';
+    protected $table = 'role_permissions';
 
     // カラムの自動更新をEloquentに許可
     public $timestamps = true;
@@ -39,8 +41,6 @@ class Roles extends Model
 
     // 更新可能なカラムリスト
     protected $fillable = [
-        self::NAME,
-        self::CODE,
         self::UPDATED_AT
     ];
 
@@ -50,4 +50,27 @@ class Roles extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+    * Define a many-to-many relationship.
+    * 設定されているロールの取得
+    *
+    * @return Roles|null
+    */
+    public function roles()
+    {
+        return $this->belongsTo(Roles::class, 'role_id');
+        // return $this->belongsToMany(Roles::class, 'role_id');
+    }
+
+    /**
+    * Define a many-to-many relationship.
+    * 設定されている権限の取得
+    *
+    * @return Permissions|null
+    */
+    public function permissions()
+    {
+        return $this->belongsTo(Permissions::class, 'permission_id');
+    }
 }

@@ -4,7 +4,7 @@ namespace App\Repositories\Admins\AdminsRoles;
 
 use App\Models\Masters\Admins;
 use App\Models\Masters\AdminsRoles;
-use App\Models\Roles;
+use App\Models\Masters\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
