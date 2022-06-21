@@ -3,7 +3,7 @@
 namespace App\Repositories\Admins\AdminsRoles;
 
 use App\Models\Masters\Admins;
-use App\Models\AdminsRoles;
+use App\Models\Masters\AdminsRoles;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

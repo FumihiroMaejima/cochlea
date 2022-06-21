@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Masters\Admins;
-use App\Models\Permissions;
+use App\Models\Masters\Permissions;
 use App\Models\RolePermissions;
 use App\Models\Roles;
 

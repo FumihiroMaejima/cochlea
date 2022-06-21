@@ -10,8 +10,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Trait\HelperTrait;
 use Database\Seeders\Masters\AdminsTableSeeder;
-use Database\Seeders\AdminsRolesTableSeeder;
-use Database\Seeders\PermissionsTableSeeder;
+use Database\Seeders\Masters\AdminsRolesTableSeeder;
+use Database\Seeders\Masters\PermissionsTableSeeder;
 use Database\Seeders\RolePermissionsTableSeeder;
 use Database\Seeders\RolesTableSeeder;
 

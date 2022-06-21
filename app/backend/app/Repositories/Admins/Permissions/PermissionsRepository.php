@@ -3,7 +3,7 @@
 namespace App\Repositories\Admins\Permissions;
 
 use App\Models\Roles;
-use App\Models\Permissions;
+use App\Models\Masters\Permissions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 

@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
          // $this->call(Logs\AdminsLogTableSeeder::class);
         $this->call(Masters\ManufacturersTableSeeder::class);
         $this->call(Masters\ProductsTableSeeder::class);
-        $this->call(PermissionsTableSeeder::class);
+        $this->call(Masters\PermissionsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(RolePermissionsTableSeeder::class);
-        $this->call(AdminsRolesTableSeeder::class);
+        $this->call(Masters\AdminsRolesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
     }
 }

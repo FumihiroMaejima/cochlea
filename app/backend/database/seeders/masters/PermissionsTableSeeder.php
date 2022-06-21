@@ -1,22 +1,19 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\AdminsRoles;
+use App\Models\Masters\Permissions;
 use Database\Seeders\BaseSeeder;
 
-class AdminsRolesTableSeeder extends BaseSeeder
+class PermissionsTableSeeder extends BaseSeeder
 {
-    protected const SEEDER_DATA_LENGTH = 5;
-    protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
-
-    // 一番権限の小さいロールのID
-    private const MINIMUM_ROLE_ID = 5;
+    protected const SEEDER_DATA_LENGTH = 4;
+    protected const SEEDER_DATA_TESTING_LENGTH = 4;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 4;
 
     /**
      * Run the database seeds.
@@ -25,19 +22,17 @@ class AdminsRolesTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new AdminsRoles())->getTable();
+        $this->tableName = (new Permissions())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
-            'admin_id'   => 1,
-            'role_id'    => 1,
+            'name'       => '',
             'created_at' => $now,
             'updated_at' => $now
         ];
 
-        // insert用データ
-        $data = [];
+        $dataList = Config::get('myappSeeder.seeder.authority.permissionsNameList');
 
         // データ数
         $this->count = $this->getSeederDataLengthByEnv(
@@ -47,12 +42,14 @@ class AdminsRolesTableSeeder extends BaseSeeder
             self::SEEDER_DATA_DEVELOP_LENGTH
         );
 
+        // insert用データ
+        $data = [];
+
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row['admin_id'] = $i;
-            $row['role_id']  = $i > self::MINIMUM_ROLE_ID ? self::MINIMUM_ROLE_ID : $i;
+            $row['name'] = $dataList[$i - 1];
 
             $data[] = $row;
         }
