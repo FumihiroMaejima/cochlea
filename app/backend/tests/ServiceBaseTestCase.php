@@ -63,6 +63,9 @@ class ServiceBaseTestCase extends TestCase
         // DB内のテーブルの削除
         $this->artisan('db:wipe', ['--database' => 'mysql']);
         $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
+        $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
+        $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
+        $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
         $this->artisan('migrate:fresh');
         $this->seed($this->seederClasses);
 
