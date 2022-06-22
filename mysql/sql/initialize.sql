@@ -16,3 +16,24 @@ CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON cochlea_logs.* TO 'root'@'%';
 
 FLUSH PRIVILEGES;
+
+-- user DB1
+CREATE DATABASE IF NOT EXISTS cochlea_user1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON cochlea_user1.* TO 'root'@'%';
+
+FLUSH PRIVILEGES;
+
+-- user DB2
+CREATE DATABASE IF NOT EXISTS cochlea_user2 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON cochlea_user2.* TO 'root'@'%';
+
+FLUSH PRIVILEGES;
+
+-- user DB3
+CREATE DATABASE IF NOT EXISTS cochlea_user3 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON cochlea_user3.* TO 'root'@'%';
+
+FLUSH PRIVILEGES;
