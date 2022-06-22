@@ -33,6 +33,8 @@ class CreateLogsTable extends Migration
             $table->timestamp('action_time')->comment('実行日時');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('admin action table');
         });
 
 

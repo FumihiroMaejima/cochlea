@@ -30,6 +30,8 @@ class CreateUserData1Table extends Migration
             $table->integer('price')->comment('価格');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('about user payment table');
         });
 
         /**
@@ -41,6 +43,8 @@ class CreateUserData1Table extends Migration
             $table->text('comment')->comment('コメント文');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('about user comment table');
         });
     }
 

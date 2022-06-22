@@ -25,6 +25,8 @@ class CreateDevelopmentTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('administrators table');
         });
 
         /**
@@ -48,6 +50,8 @@ class CreateDevelopmentTable extends Migration
             $table->string('name')->comment('パーミッション名');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('administrator permissions table');
         });
 
         /**
@@ -60,6 +64,8 @@ class CreateDevelopmentTable extends Migration
             $table->string('detail')->comment('詳細');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('administrator roles table');
         });
 
         /**
@@ -73,6 +79,8 @@ class CreateDevelopmentTable extends Migration
             $table->foreignId('permission_id')->constrained('permissions')->comment('パーミッションID');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('permissions that role has table');
         });
 
         /**
@@ -84,6 +92,8 @@ class CreateDevelopmentTable extends Migration
             $table->foreignId('role_id')->constrained('roles')->unique()->comment('ロールID');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('roles that admin has table');
         });
     }
 

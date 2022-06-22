@@ -25,6 +25,8 @@ return new class extends Migration
             // $table->string('profile_photo_path', 2048)->nullable()->comment('プロフィールアイコンパス');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('users table');
         });
     }
 
