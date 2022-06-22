@@ -21,6 +21,13 @@ class AdminsLog extends Model
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
+    /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql_logs';
+
     //テーブル名指定
     protected $table = 'admins_log';
 

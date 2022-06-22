@@ -30,7 +30,7 @@ class CreateDevelopmentTable extends Migration
         /**
          * admins_log table
          */
-        Schema::create('admins_log', function (Blueprint $table) {
+        /* Schema::create('admins_log', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
             $table->string('function', 255)->comment('実行ファンクション');
@@ -38,7 +38,7 @@ class CreateDevelopmentTable extends Migration
             $table->timestamp('action_time')->comment('実行日時');
             $table->timestamps();
             $table->softDeletes();
-        });
+        }); */
 
         /**
          * permission table
@@ -95,7 +95,7 @@ class CreateDevelopmentTable extends Migration
     public function down()
     {
         Schema::dropIfExists('admins');
-        Schema::dropIfExists('admins_log');
+        // Schema::dropIfExists('admins_log');
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
         Schema::dropIfExists('role_permissions');
