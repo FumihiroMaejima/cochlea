@@ -10,7 +10,7 @@ GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
 
 FLUSH PRIVILEGES;
 
--- log DB
+-- logs DB
 CREATE DATABASE IF NOT EXISTS cochlea_logs CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON cochlea_logs.* TO 'root'@'%';

@@ -60,6 +60,9 @@ class ServiceBaseTestCase extends TestCase
         // $this->refreshTestDatabase();
         // $this->runDatabaseMigrations();
 
+        // DB内のテーブルの削除
+        $this->artisan('db:wipe', ['--database' => 'mysql']);
+        $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
         $this->artisan('migrate:fresh');
         $this->seed($this->seederClasses);
 
