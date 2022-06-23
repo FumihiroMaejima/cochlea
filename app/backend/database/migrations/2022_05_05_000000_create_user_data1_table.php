@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserData1Table extends Migration
 {
+    /** @var array<int, int> NODE_NUMBERS ユーザー用DBのノード数(番号) */
     private const NODE_NUMBERS = [1, 2, 3];
+
+    /** @var string BASE_CONNECTION_NAME DBへのコネクション名のベース(prefix) */
     private const BASE_CONNECTION_NAME = 'mysql_user';
 
     /**
