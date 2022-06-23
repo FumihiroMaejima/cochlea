@@ -6,12 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserData1Table extends Migration
 {
-    /**
-     * The name of the database connection to use.
-     *
-     * @var string|null
-     */
-    protected $connection = 'mysql_user1';
+    protected array $nodeNumbers = [1, 2, 3];
+    protected string $baseConnectionName = 'mysql_user';
 
     /**
      * Run the migrations.
@@ -20,32 +16,34 @@ class CreateUserData1Table extends Migration
      */
     public function up()
     {
-        /**
-         * user_payments table
-         */
-        Schema::create('user_payments', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id')->comment('ユーザーID');
-            $table->integer('product_id')->comment('製品ID');
-            $table->integer('price')->comment('価格');
-            $table->timestamps();
-            $table->softDeletes();
+        foreach ($this->nodeNumbers as $node) {
+            /**
+             * user_payments table
+             */
+            Schema::connection($this->getConnectionName($node))->create('user_payments', function (Blueprint $table) {
+                $table->id();
+                $table->integer('user_id')->comment('ユーザーID');
+                $table->integer('product_id')->comment('製品ID');
+                $table->integer('price')->comment('価格');
+                $table->timestamps();
+                $table->softDeletes();
 
-            $table->comment('about user payment table');
-        });
+                $table->comment('about user payment table');
+            });
 
-        /**
-         * user_comments table
-         */
-        Schema::create('user_comments', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id')->comment('ユーザーID');
-            $table->text('comment')->comment('コメント文');
-            $table->timestamps();
-            $table->softDeletes();
+            /**
+             * user_comments table
+             */
+            Schema::connection($this->getConnectionName($node))->create('user_comments', function (Blueprint $table) {
+                $table->id();
+                $table->integer('user_id')->comment('ユーザーID');
+                $table->text('comment')->comment('コメント文');
+                $table->timestamps();
+                $table->softDeletes();
 
-            $table->comment('about user comment table');
-        });
+                $table->comment('about user comment table');
+            });
+        }
     }
 
     /**
@@ -55,7 +53,21 @@ class CreateUserData1Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_payments');
-        Schema::dropIfExists('user_comments');
+        foreach ($this->nodeNumbers as $node) {
+            Schema::connection($this->getConnectionName($node))->dropIfExists('user_payments');
+            Schema::connection($this->getConnectionName($node))->dropIfExists('user_comments');
+        }
+    }
+
+
+    /**
+     * get connection name by node number.
+     *
+     * @param int $nodeNumber node number
+     * @return string
+     */
+    public function getConnectionName(int $nodeNumber): string
+    {
+        return $this->baseConnectionName . (string)$nodeNumber;
     }
 }
