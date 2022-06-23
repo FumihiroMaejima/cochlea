@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserData1Table extends Migration
 {
-    protected array $nodeNumbers = [1, 2, 3];
-    protected string $baseConnectionName = 'mysql_user';
+    private const NODE_NUMBERS = [1, 2, 3];
+    private const BASE_CONNECTION_NAME = 'mysql_user';
 
     /**
      * Run the migrations.
@@ -16,11 +16,14 @@ class CreateUserData1Table extends Migration
      */
     public function up()
     {
-        foreach ($this->nodeNumbers as $node) {
+        foreach (self::NODE_NUMBERS as $node) {
+            // ex: mysql_user1 ..etc.
+            $connectionName = self::getConnectionName($node);
+
             /**
              * user_payments table
              */
-            Schema::connection($this->getConnectionName($node))->create('user_payments', function (Blueprint $table) {
+            Schema::connection($connectionName)->create('user_payments', function (Blueprint $table) {
                 $table->id();
                 $table->integer('user_id')->comment('ユーザーID');
                 $table->integer('product_id')->comment('製品ID');
@@ -34,7 +37,7 @@ class CreateUserData1Table extends Migration
             /**
              * user_comments table
              */
-            Schema::connection($this->getConnectionName($node))->create('user_comments', function (Blueprint $table) {
+            Schema::connection($connectionName)->create('user_comments', function (Blueprint $table) {
                 $table->id();
                 $table->integer('user_id')->comment('ユーザーID');
                 $table->text('comment')->comment('コメント文');
@@ -53,9 +56,11 @@ class CreateUserData1Table extends Migration
      */
     public function down()
     {
-        foreach ($this->nodeNumbers as $node) {
-            Schema::connection($this->getConnectionName($node))->dropIfExists('user_payments');
-            Schema::connection($this->getConnectionName($node))->dropIfExists('user_comments');
+        foreach (self::NODE_NUMBERS as $node) {
+            $connectionName = self::getConnectionName($node);
+
+            Schema::connection($connectionName)->dropIfExists('user_payments');
+            Schema::connection($connectionName)->dropIfExists('user_comments');
         }
     }
 
@@ -66,8 +71,8 @@ class CreateUserData1Table extends Migration
      * @param int $nodeNumber node number
      * @return string
      */
-    public function getConnectionName(int $nodeNumber): string
+    public static function getConnectionName(int $nodeNumber): string
     {
-        return $this->baseConnectionName . (string)$nodeNumber;
+        return self::BASE_CONNECTION_NAME . (string)$nodeNumber;
     }
 }
