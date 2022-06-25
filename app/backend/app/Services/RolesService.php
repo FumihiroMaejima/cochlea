@@ -20,6 +20,7 @@ use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
 use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Exports\Admins\RolesExport;
+use App\Library\Cache\CacheLibrary;
 use Exception;
 
 class RolesService
@@ -47,10 +48,27 @@ class RolesService
      */
     public function getRoles(Request $request): JsonResponse
     {
-        $collection = $this->rolesRepository->getRoles();
+       $cache = CacheLibrary::getByKey('admin_role_list');
+
+       // キャッシュチェック
+       if (is_null($cache)) {
+            $collection = $this->rolesRepository->getRoles();
+            // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+            // $resourceCollection->toArray($request)
+            $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
+
+            if (Config::get('app.env') !== 'testing') {
+                CacheLibrary::setCache('admin_role_list', $resourceCollection);
+            }
+       } else {
+            $resourceCollection = $cache;
+       }
+
+        // TODO GitHub ActionsのUnitテストが成功したら削除
+        /* $collection = $this->rolesRepository->getRoles();
         // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
         // $resourceCollection->toArray($request)
-        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
+        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection); */
 
         return response()->json($resourceCollection, 200);
     }
