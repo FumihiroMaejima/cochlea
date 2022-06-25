@@ -48,10 +48,10 @@ class RolesService
      */
     public function getRoles(Request $request): JsonResponse
     {
-       $cache = CacheLibrary::getByKey('admin_role_list');
+        $cache = CacheLibrary::getByKey('admin_role_list');
 
-       // キャッシュチェック
-       if (is_null($cache)) {
+        // キャッシュチェック
+        if (is_null($cache)) {
             $collection = $this->rolesRepository->getRoles();
             // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
             // $resourceCollection->toArray($request)
@@ -60,9 +60,9 @@ class RolesService
             if (Config::get('app.env') !== 'testing') {
                 CacheLibrary::setCache('admin_role_list', $resourceCollection);
             }
-       } else {
+        } else {
             $resourceCollection = $cache;
-       }
+        }
 
         // TODO GitHub ActionsのUnitテストが成功したら削除
         /* $collection = $this->rolesRepository->getRoles();

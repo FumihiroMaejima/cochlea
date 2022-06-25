@@ -65,10 +65,10 @@ class BaseUserDataModel extends Model
         if (($shardId % Config::get('myapp.databese.users.modBaseNumber')) === 0) {
             // user database3
             return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber3');
-        } else if (in_array($shardId, Config::get('myapp.databese.users.node1ShardIds'), true)) {
+        } elseif (in_array($shardId, Config::get('myapp.databese.users.node1ShardIds'), true)) {
             // user database1
             return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber1');
-        } else{
+        } else {
             // user database2
             return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber2');
         }

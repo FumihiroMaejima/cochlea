@@ -20,7 +20,6 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-
         /**
          * admins_log table
          */
@@ -36,9 +35,6 @@ class CreateLogsTable extends Migration
 
             $table->comment('admin action table');
         });
-
-
-
     }
 
     /**
