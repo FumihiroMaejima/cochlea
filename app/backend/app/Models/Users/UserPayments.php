@@ -5,8 +5,9 @@ namespace App\Models\Users;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Users\BaseUserDataModel;
 
-class UserPayments extends Model
+class UserPayments extends BaseUserDataModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -19,13 +20,6 @@ class UserPayments extends Model
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
-
-    /**
-     * The connection name for the model.
-     *
-     * @var string|null
-     */
-    protected $connection = 'mysql_user1';
 
     //テーブル名指定
     protected $table = 'user_payments';
