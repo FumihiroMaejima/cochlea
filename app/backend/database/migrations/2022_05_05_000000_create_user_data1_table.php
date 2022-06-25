@@ -6,8 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserData1Table extends Migration
 {
-    /** @var array<int, int> NODE_NUMBERS ユーザー用DBのノード数(番号) */
-    private const NODE_NUMBERS = [1, 2, 3];
+    /** @var array<int, array<int, int>> NODE_NUMBERS ユーザー用DBのノード数(番号) */
+    private const NODE_NUMBERS = [
+        1 => [1, 4, 7, 10],
+        2 => [2, 5, 8, 11],
+        3 => [3, 6, 9, 12]
+    ];
 
     /** @var string BASE_CONNECTION_NAME DBへのコネクション名のベース(prefix) */
     private const BASE_CONNECTION_NAME = 'mysql_user';
@@ -19,36 +23,38 @@ class CreateUserData1Table extends Migration
      */
     public function up()
     {
-        foreach (self::NODE_NUMBERS as $node) {
+        foreach (self::NODE_NUMBERS as $node => $shardIds) {
             // ex: mysql_user1 ..etc.
             $connectionName = self::getConnectionName($node);
 
-            /**
-             * user_payments table
-             */
-            Schema::connection($connectionName)->create('user_payments', function (Blueprint $table) {
-                $table->id();
-                $table->integer('user_id')->comment('ユーザーID');
-                $table->integer('product_id')->comment('製品ID');
-                $table->integer('price')->comment('価格');
-                $table->timestamps();
-                $table->softDeletes();
+            foreach ($shardIds as $shardId) {
+                /**
+                 * user_payments table
+                 */
+                Schema::connection($connectionName)->create('user_payments'.$shardId, function (Blueprint $table) {
+                    $table->id();
+                    $table->integer('user_id')->comment('ユーザーID');
+                    $table->integer('product_id')->comment('製品ID');
+                    $table->integer('price')->comment('価格');
+                    $table->timestamps();
+                    $table->softDeletes();
 
-                $table->comment('about user payment table');
-            });
+                    $table->comment('about user payment table');
+                });
 
-            /**
-             * user_comments table
-             */
-            Schema::connection($connectionName)->create('user_comments', function (Blueprint $table) {
-                $table->id();
-                $table->integer('user_id')->comment('ユーザーID');
-                $table->text('comment')->comment('コメント文');
-                $table->timestamps();
-                $table->softDeletes();
+                /**
+                 * user_comments table
+                 */
+                Schema::connection($connectionName)->create('user_comments'.$shardId, function (Blueprint $table) {
+                    $table->id();
+                    $table->integer('user_id')->comment('ユーザーID');
+                    $table->text('comment')->comment('コメント文');
+                    $table->timestamps();
+                    $table->softDeletes();
 
-                $table->comment('about user comment table');
-            });
+                    $table->comment('about user comment table');
+                });
+            }
         }
     }
 
@@ -59,11 +65,13 @@ class CreateUserData1Table extends Migration
      */
     public function down()
     {
-        foreach (self::NODE_NUMBERS as $node) {
+        foreach (self::NODE_NUMBERS as $node => $shardIds) {
             $connectionName = self::getConnectionName($node);
 
-            Schema::connection($connectionName)->dropIfExists('user_payments');
-            Schema::connection($connectionName)->dropIfExists('user_comments');
+            foreach ($shardIds as $shardId) {
+                Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
+            }
         }
     }
 
