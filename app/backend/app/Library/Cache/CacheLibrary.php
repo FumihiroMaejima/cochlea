@@ -4,6 +4,7 @@ namespace App\Library\Cache;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
+use Predis\Response\Status;
 use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
 use App\Trait\CheckHeaderTrait;
@@ -12,17 +13,19 @@ class CacheLibrary
 {
     use CheckHeaderTrait;
 
+    private const SET_CACHE_RESULT_VALUE = 'OK';
+
     /**
      * get cache value by Key.
      *
      * @param string $key
-     * @return string
+     * @return mixed
      */
-    public static function getByKey(string $key): string
+    public static function getByKey(string $key): mixed
     {
-        $session = Redis::get($key);
+        $cache = Redis::get($key);
 
-        return $session ?? '';
+        return $cache;
     }
 
     /**
@@ -30,11 +33,26 @@ class CacheLibrary
      *
      * @param string $key
      * @param mixed $value
-     * @return bool
+     * @return void
      */
     public static function setCache(string $key, mixed $value): void
     {
-        Redis::set($key, $value);
+        if (is_array($value)) {
+            $value = json_encode($value);
+        }
+
+        /**
+         * @var Status $result;
+         */
+        $result = Redis::set($key, $value);
+        $payload = $result->getPayload();
+
+        if ($payload !== self::SET_CACHE_RESULT_VALUE) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'cache set action is failure.'
+            );
+        }
     }
 
     /**
@@ -49,7 +67,7 @@ class CacheLibrary
 
         if (empty($cache)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::MESSAGE_500,
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'cache is not exist.'
             );
         }
