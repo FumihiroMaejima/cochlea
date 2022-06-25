@@ -32,12 +32,12 @@ class BaseUserDataModel extends Model
 
 
     /**
-     * get connection name by node number.
+     * get connection name by user id.
      *
      * @param int $userId user id.
      * @return string
      */
-    public static function getConnectionByUserId(int $userId): string
+    public static function getConnectionNameByUserId(int $userId): string
     {
         return self::getNodeName(self::getShardId($userId));
     }
@@ -50,7 +50,7 @@ class BaseUserDataModel extends Model
      */
     public static function setConnectionName(int $userId): string
     {
-        $connectionName = self::ggetConnectionByUserId($userId);
+        $connectionName = self::getConnectionNameByUserId($userId);
         return parent::setConnection($connectionName);
     }
 
