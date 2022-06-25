@@ -15,6 +15,9 @@ class CacheLibrary
 
     private const SET_CACHE_RESULT_VALUE = 'OK';
 
+    private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
+    private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
+
     /**
      * get cache value by Key.
      *
@@ -41,27 +44,25 @@ class CacheLibrary
             $value = json_encode($value);
         }
 
-        /**
-         * @var Status $result;
-         */
+        /** @var Status $result redisへの設定処理結果 */
         $result = Redis::set($key, $value);
         $payload = $result->getPayload();
 
         if ($payload !== self::SET_CACHE_RESULT_VALUE) {
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
-                'cache set action is failure.'
+                'set cache action is failure.'
             );
         }
     }
 
     /**
-     * remove session by request header data.
+     * remove cache by request header data.
      *
      * @param string $key
      * @return bool
      */
-    public static function removeSession(string $key): void
+    public static function deleteCache(string $key): void
     {
         $cache = self::getByKey($key);
 
@@ -72,7 +73,15 @@ class CacheLibrary
             );
         }
 
-        Redis::del($key);
+        /** @var int $result 削除結果 */
+        $result = Redis::del($key);
+
+        if ($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'delete cache action is failure.'
+            );
+        }
     }
 
     /**
