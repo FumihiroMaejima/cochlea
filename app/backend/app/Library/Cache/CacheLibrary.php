@@ -60,13 +60,18 @@ class CacheLibrary
      * remove cache by request header data.
      *
      * @param string $key
+     * @param bool $isIgnore ignore data check.
      * @return bool
      */
-    public static function deleteCache(string $key): void
+    public static function deleteCache(string $key, bool $isIgnore = false): void
     {
         $cache = self::getByKey($key);
 
         if (empty($cache)) {
+            if ($isIgnore) {
+                return;
+            }
+
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'cache is not exist.'
@@ -76,7 +81,7 @@ class CacheLibrary
         /** @var int $result 削除結果 */
         $result = Redis::del($key);
 
-        if ($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) {
+        if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'delete cache action is failure.'
