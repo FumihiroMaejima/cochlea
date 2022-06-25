@@ -32,14 +32,15 @@ return [
     'service' => [],
     'database' => [
         'users' => [
-            'baseConnectionName'    => 'mysql_user',
-            'shardCount'    => 12,
-            'nodeNumber1'    => 1,
-            'nodeNumber2'    => 2,
-            'nodeNumber3'    => 3,
-            'node1ShardIds'    => [1, 4, 7, 10],
-            'node2ShardIds'    => [2, 5, 8, 11],
-            'node3ShardIds'    => [3, 6, 9, 12],
+            'baseConnectionName' => 'mysql_user',
+            'shardCount'         => 12,
+            'modBaseNumber'      => 3,
+            'nodeNumber1'        => 1,
+            'nodeNumber2'        => 2,
+            'nodeNumber3'        => 3,
+            'node1ShardIds'      => [1, 4, 7, 10],
+            'node2ShardIds'      => [2, 5, 8, 11],
+            'node3ShardIds'      => [3, 6, 9, 12],
         ]
     ],
 ];

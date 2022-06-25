@@ -62,10 +62,10 @@ class BaseUserDataModel extends Model
         $baseConnectionName = Config::get('myapp.databese.users.baseConnectionName');
 
         // 3で割り切れる場合はnode3
-        if (($shardId % 3) === 0) {
+        if (($shardId % Config::get('myapp.databese.users.modBaseNumber')) === 0) {
             // user database3
             return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber3');
-        } else if (in_array($shardId, self::NODE1_SHARDS, true)) {
+        } else if (in_array($shardId, Config::get('myapp.databese.users.node1ShardIds'), true)) {
             // user database1
             return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber1');
         } else{
