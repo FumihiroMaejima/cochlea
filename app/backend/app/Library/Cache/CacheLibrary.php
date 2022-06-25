@@ -25,7 +25,7 @@ class CacheLibrary
     {
         $cache = Redis::get($key);
 
-        return $cache;
+        return is_null($cache) ? $cache : json_decode($cache, true);
     }
 
     /**
