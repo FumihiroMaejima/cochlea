@@ -3,24 +3,10 @@
 namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class BaseUserDataModel extends Model
 {
-    /** @var string BASE_CONNECTION_NAME DBへのコネクション名のベース(prefix) */
-    private const BASE_CONNECTION_NAME = 'mysql_user';
-
-    /** @var int NODE_NUMBER_1 nodeの番号 */
-    private const NODE_NUMBER_1 = 1;
-
-    /** @var int NODE_NUMBER_2 nodeの番号 */
-    private const NODE_NUMBER_2 = 2;
-
-    /** @var int NODE_NUMBER_3 nodeの番号 */
-    private const NODE_NUMBER_3 = 3;
-
-    /** @var int SHAERD_COUNT シャードの合計数 */
-    private const SHAERD_COUNT = 12;
-
     /** @var array<int, int> NODE1_SHARDS Node1のDBに設定されているシャードのidを格納 */
     private const NODE1_SHARDS = [1, 4, 7, 10];
 
@@ -29,7 +15,6 @@ class BaseUserDataModel extends Model
 
     /** @var array<int, int> NODE3_SHARDS Node3のDBに設定されているシャードのidを格納 */
     private const NODE3_SHARDS = [3, 6, 9, 12];
-
 
     /**
      * get connection name by user id.
@@ -63,7 +48,7 @@ class BaseUserDataModel extends Model
     public static function getShardId(int $userId): int
     {
         // 除算の余り
-        return $userId % self::SHAERD_COUNT;
+        return $userId % Config::get('myapp.databese.users.shardCount');
     }
 
     /**
@@ -74,16 +59,18 @@ class BaseUserDataModel extends Model
      */
     public static function getNodeName(int $shardId): string
     {
+        $baseConnectionName = Config::get('myapp.databese.users.baseConnectionName');
+
         // 3で割り切れる場合はnode3
         if (($shardId % 3) === 0) {
             // user database3
-            return self::BASE_CONNECTION_NAME .(string)self::NODE_NUMBER_3;
+            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber3');
         } else if (in_array($shardId, self::NODE1_SHARDS, true)) {
             // user database1
-            return self::BASE_CONNECTION_NAME .(string)self::NODE_NUMBER_1;
+            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber1');
         } else{
             // user database2
-            return self::BASE_CONNECTION_NAME .(string)self::NODE_NUMBER_2;
+            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber2');
         }
     }
 }
