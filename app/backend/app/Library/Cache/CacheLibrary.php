@@ -45,30 +45,33 @@ class CacheLibrary
      */
     public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHEE_EXPIRE): void
     {
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
+        // test時は時効しない
+        if (Config::get('app.env') !== 'testing') {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
 
-        /** @var Status $result redisへの設定処理結果 */
-        $result = Redis::set($key, $value);
-        $payload = $result->getPayload();
+            /** @var Status $result redisへの設定処理結果 */
+            $result = Redis::set($key, $value);
+            $payload = $result->getPayload();
 
-        if ($payload !== self::SET_CACHE_RESULT_VALUE) {
-            throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
-                'set cache action is failure.'
-            );
-        }
+            if ($payload !== self::SET_CACHE_RESULT_VALUE) {
+                throw new MyApplicationHttpException(
+                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    'set cache action is failure.'
+                );
+            }
 
-        // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
-        /** @var int $setExpireResult 毅然設定処理結果 */
-        $setExpireResult = Redis::expireAt($key, time() + $expire);
+            // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
+            /** @var int $setExpireResult 毅然設定処理結果 */
+            $setExpireResult = Redis::expireAt($key, time() + $expire);
 
-        if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
-            throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
-                'set cache expire action is failure.'
-            );
+            if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
+                throw new MyApplicationHttpException(
+                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    'set cache expire action is failure.'
+                );
+            }
         }
     }
 

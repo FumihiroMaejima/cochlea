@@ -25,6 +25,9 @@ use Exception;
 
 class RolesService
 {
+    // cache keys
+    private const CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST = 'admin_role_collection_list';
+
     protected RolesRepositoryInterface $rolesRepository;
     protected RolePermissionsRepositoryInterface $rolePermissionsRepository;
 
@@ -48,7 +51,7 @@ class RolesService
      */
     public function getRoles(Request $request): JsonResponse
     {
-        $cache = CacheLibrary::getByKey('admin_role_list');
+        $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST);
 
         // キャッシュチェック
         if (is_null($cache)) {
@@ -57,8 +60,8 @@ class RolesService
             // $resourceCollection->toArray($request)
             $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
 
-            if (Config::get('app.env') !== 'testing') {
-                CacheLibrary::setCache('admin_role_list', $resourceCollection);
+            if (!empty($resourceCollection)) {
+                CacheLibrary::setCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, $resourceCollection);
             }
         } else {
             $resourceCollection = $cache;
