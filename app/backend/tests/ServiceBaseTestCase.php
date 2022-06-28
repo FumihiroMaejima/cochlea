@@ -79,7 +79,13 @@ class ServiceBaseTestCase extends TestCase
         }
 
         $this->artisan('migrate:fresh');
-        $this->seed($this->seederClasses);
+        $this->seed([
+            AdminsTableSeeder::class,
+            PermissionsTableSeeder::class,
+            RolesTableSeeder::class,
+            RolePermissionsTableSeeder::class,
+            AdminsRolesTableSeeder::class,
+        ]);
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
