@@ -40,7 +40,7 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        $connectionName = Config::get('myapp.databese.logs.baseConnectionName');
+        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
 
         Schema::connection($connectionName)->dropIfExists('admins_log');
     }
