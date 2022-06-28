@@ -38,6 +38,9 @@ class ServiceBaseTestCase extends TestCase
     protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
     protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
 
+    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_CI = 'sqlite';
+
     protected $initialized = false;
 
     // target seeders.
@@ -60,12 +63,22 @@ class ServiceBaseTestCase extends TestCase
         // $this->refreshTestDatabase();
         // $this->runDatabaseMigrations();
 
-        // DB内のテーブルの削除
-        $this->artisan('db:wipe', ['--database' => 'mysql']);
-        $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
-        $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
-        $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
-        $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
+        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
+        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
+
+        // connection 設定がデフォルトで無い場合
+        if (!(
+            ($logsConnectionName === self::CONNECTION_NAME_FOR_CI) &&
+                ($userConnectionName === self::CONNECTION_NAME_FOR_CI)
+        )) {
+            // DB内のテーブルの削除
+            $this->artisan('db:wipe', ['--database' => 'mysql']);
+            $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
+            $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
+            $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
+            $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
+        }
+
         $this->artisan('migrate:fresh');
         $this->seed($this->seederClasses);
 
