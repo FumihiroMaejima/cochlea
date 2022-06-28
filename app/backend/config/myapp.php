@@ -31,8 +31,11 @@ return [
     ],
     'service' => [],
     'database' => [
+        'logs' => [
+            'baseConnectionName' => env('DB_LOGS_BASE_CONNECTION'),
+        ],
         'users' => [
-            'baseConnectionName' => 'mysql_user',
+            'baseConnectionName' => env('DB_USER_BASE_CONNECTION'),
             'shardCount'         => 12,
             'modBaseNumber'      => 3,
             'nodeNumber1'        => 1,
