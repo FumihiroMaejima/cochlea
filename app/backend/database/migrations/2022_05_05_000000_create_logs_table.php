@@ -2,17 +2,11 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
 class CreateLogsTable extends Migration
 {
-    /**
-     * The name of the database connection to use.
-     *
-     * @var string|null
-     */
-    protected $connection = 'mysql_logs';
-
     /**
      * Run the migrations.
      *
@@ -20,10 +14,12 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
+        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
+
         /**
          * admins_log table
          */
-        Schema::create('admins_log', function (Blueprint $table) {
+        Schema::connection($connectionName)->create('admins_log', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID'); // DBを変える為指定出来ない
             $table->integer('admin_id')->comment('管理者ID');
@@ -44,6 +40,8 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admins_log');
+        $connectionName = Config::get('myapp.databese.logs.baseConnectionName');
+
+        Schema::connection($connectionName)->dropIfExists('admins_log');
     }
 }

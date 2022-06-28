@@ -5,6 +5,7 @@ namespace App\Models\Logs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
 
 class AdminsLog extends Model
 {
@@ -55,4 +56,15 @@ class AdminsLog extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * constructer.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
+        parent::setConnection($connectionName);
+    }
 }

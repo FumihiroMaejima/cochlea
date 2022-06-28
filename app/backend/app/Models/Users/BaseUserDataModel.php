@@ -48,7 +48,7 @@ class BaseUserDataModel extends Model
     public static function getShardId(int $userId): int
     {
         // 除算の余り
-        return $userId % Config::get('myapp.databese.users.shardCount');
+        return $userId % Config::get('myapp.database.users.shardCount');
     }
 
     /**
@@ -59,18 +59,18 @@ class BaseUserDataModel extends Model
      */
     public static function getNodeName(int $shardId): string
     {
-        $baseConnectionName = Config::get('myapp.databese.users.baseConnectionName');
+        $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
         // 3で割り切れる場合はnode3
-        if (($shardId % Config::get('myapp.databese.users.modBaseNumber')) === 0) {
+        if (($shardId % Config::get('myapp.database.users.modBaseNumber')) === 0) {
             // user database3
-            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber3');
-        } elseif (in_array($shardId, Config::get('myapp.databese.users.node1ShardIds'), true)) {
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber3');
+        } elseif (in_array($shardId, Config::get('myapp.database.users.node1ShardIds'), true)) {
             // user database1
-            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber1');
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber1');
         } else {
             // user database2
-            return $baseConnectionName .(string)Config::get('myapp.databese.users.nodeNumber2');
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber2');
         }
     }
 }
