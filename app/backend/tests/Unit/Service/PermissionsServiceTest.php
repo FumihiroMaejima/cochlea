@@ -8,6 +8,11 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\Masters\AdminsTableSeeder;
+use Database\Seeders\Masters\AdminsRolesTableSeeder;
+use Database\Seeders\Masters\PermissionsTableSeeder;
+use Database\Seeders\Masters\RolePermissionsTableSeeder;
+use Database\Seeders\Masters\RolesTableSeeder;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -20,6 +25,14 @@ class PermissionsServiceTest extends ServiceBaseTestCase
      */
     protected function setUp(): void
     {
+        $this->seederClasses = [
+            AdminsTableSeeder::class,
+            PermissionsTableSeeder::class,
+            RolesTableSeeder::class,
+            RolePermissionsTableSeeder::class,
+            AdminsRolesTableSeeder::class,
+        ];
+
         parent::setUp();
         $loginUser = [];
 
