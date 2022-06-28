@@ -45,11 +45,11 @@ class ServiceBaseTestCase extends TestCase
 
     // target seeders.
     protected array $seederClasses = [
-        AdminsTableSeeder::class,
-        PermissionsTableSeeder::class,
-        RolesTableSeeder::class,
-        RolePermissionsTableSeeder::class,
-        AdminsRolesTableSeeder::class,
+        \Database\Seeders\Masters\AdminsTableSeeder::class,
+        \Database\Seeders\Masters\PermissionsTableSeeder::class,
+        \Database\Seeders\Masters\RolesTableSeeder::class,
+        \Database\Seeders\Masters\RolePermissionsTableSeeder::class,
+        \Database\Seeders\Masters\AdminsRolesTableSeeder::class,
     ];
 
     /**
@@ -79,13 +79,9 @@ class ServiceBaseTestCase extends TestCase
         }
 
         $this->artisan('migrate:fresh');
-        $this->seed([
-            AdminsTableSeeder::class,
-            PermissionsTableSeeder::class,
-            RolesTableSeeder::class,
-            RolePermissionsTableSeeder::class,
-            AdminsRolesTableSeeder::class,
-        ]);
+
+        echo var_dump($this->seederClasses);
+        $this->seed($this->seederClasses);
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
