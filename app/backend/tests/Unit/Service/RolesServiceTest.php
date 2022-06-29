@@ -21,18 +21,6 @@ class RolesServiceTest extends ServiceBaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $loginUser = [];
-
-        if (!$this->initialized) {
-            $loginUser         = $this->init();
-            $this->initialized = true;
-        }
-
-        $this->withHeaders([
-            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-            Config::get('myapp.headers.authorization') => 'Bearer ' . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-        ]);
     }
 
     /**
