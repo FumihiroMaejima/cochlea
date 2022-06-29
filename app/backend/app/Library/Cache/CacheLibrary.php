@@ -30,6 +30,10 @@ class CacheLibrary
      */
     public static function getByKey(string $key): mixed
     {
+        if (Config::get('app.env') === 'testing') {
+            return null;
+        }
+
         $cache = Redis::get($key);
 
         return is_null($cache) ? $cache : json_decode($cache, true);
