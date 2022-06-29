@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
-use App\Models\Roles;
+use App\Models\Masters\Roles;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;

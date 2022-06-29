@@ -1,30 +1,36 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Logs;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Permissions;
-use App\Models\Roles;
+use Illuminate\Support\Facades\Config;
 
-class RolePermissions extends Model
+class AdminsLog extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     // カラム一覧
     public const ID = 'id';
-    public const NAME = 'name';
-    public const SHORT_NAME = 'short_name';
-    public const ROLE_ID = 'role_id';
-    public const PERMISSION_ID = 'permission_id';
+    public const ADMIN_ID = 'admin_id';
+    public const FUNCTION_NAME = 'function';
+    public const STATUS = 'status';
+    public const ACTION_TIME = 'action_time';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
+    /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql_logs';
+
     //テーブル名指定
-    protected $table = 'role_permissions';
+    protected $table = 'admins_log';
 
     // カラムの自動更新をEloquentに許可
     public $timestamps = true;
@@ -52,25 +58,13 @@ class RolePermissions extends Model
     protected $hidden = [];
 
     /**
-    * Define a many-to-many relationship.
-    * 設定されているロールの取得
-    *
-    * @return Roles|null
-    */
-    public function roles()
+     * constructer.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        return $this->belongsTo(Roles::class, 'role_id');
-        // return $this->belongsToMany(Roles::class, 'role_id');
-    }
-
-    /**
-    * Define a many-to-many relationship.
-    * 設定されている権限の取得
-    *
-    * @return Permissions|null
-    */
-    public function permissions()
-    {
-        return $this->belongsTo(Permissions::class, 'permission_id');
+        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
+        parent::setConnection($connectionName);
     }
 }

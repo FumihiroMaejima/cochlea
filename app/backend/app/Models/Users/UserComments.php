@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Admins;
+use App\Models\Users\BaseUserDataModel;
 
-class Roles extends Model
+class UserComments extends BaseUserDataModel
 {
     use HasFactory;
     use SoftDeletes;
 
     // カラム一覧
     public const ID = 'id';
-    public const NAME = 'name';
-    public const CODE = 'code';
-    public const DETAIL = 'detail';
+    public const USER_ID = 'user_id';
+    public const COMMENT = 'comment';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'roles';
+    protected $table = 'user_comments';
 
     // カラムの自動更新をEloquentに許可
     public $timestamps = true;
@@ -39,8 +38,6 @@ class Roles extends Model
 
     // 更新可能なカラムリスト
     protected $fillable = [
-        self::NAME,
-        self::CODE,
         self::UPDATED_AT
     ];
 

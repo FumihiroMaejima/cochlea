@@ -40,6 +40,14 @@ frontend-build:
 migrate:
 	docker-compose exec app php artisan migrate
 
+migrate-wipe:
+	docker-compose exec app php artisan db:wipe --database mysql && \
+	docker-compose exec app php artisan db:wipe --database mysql_logs && \
+	docker-compose exec app php artisan db:wipe --database mysql_user1 && \
+	docker-compose exec app php artisan db:wipe --database mysql_user2 && \
+	docker-compose exec app php artisan db:wipe --database mysql_user3 && \
+	docker-compose exec app php artisan migrate:fresh --seed
+
 # データベースから全テーブルをドロップし、その後migrateを行う
 migrate-fresh:
 	docker-compose exec app php artisan migrate:fresh --seed
@@ -47,6 +55,9 @@ migrate-fresh:
 # 全部のデータベースマイグレーションを最初にロールバックし,その後migrateを行う
 migrate-refresh:
 	docker-compose exec app php artisan migrate:refresh --seed
+
+migrate-rollback:
+	docker-compose exec app php artisan migrate:rollback
 
 # migrationを全てロールバックする
 migrate-reset:

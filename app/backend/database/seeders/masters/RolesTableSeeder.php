@@ -1,22 +1,19 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\AdminsRoles;
+use App\Models\Masters\Roles;
 use Database\Seeders\BaseSeeder;
 
-class AdminsRolesTableSeeder extends BaseSeeder
+class RolesTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
-
-    // 一番権限の小さいロールのID
-    private const MINIMUM_ROLE_ID = 5;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
 
     /**
      * Run the database seeds.
@@ -25,16 +22,21 @@ class AdminsRolesTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new AdminsRoles())->getTable();
+        $this->tableName = (new Roles())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
-            'admin_id'   => 1,
-            'role_id'    => 1,
+            'name'       => '',
+            'code'       => '',
+            'detail'     => '',
             'created_at' => $now,
             'updated_at' => $now
         ];
+
+        $nameList = Config::get('myappSeeder.seeder.authority.rolesNameList');
+        $codeList = Config::get('myappSeeder.seeder.authority.rolesCodeList');
+        $detailList = Config::get('myappSeeder.seeder.authority.rolesDetailList');
 
         // insert用データ
         $data = [];
@@ -51,8 +53,9 @@ class AdminsRolesTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row['admin_id'] = $i;
-            $row['role_id']  = $i > self::MINIMUM_ROLE_ID ? self::MINIMUM_ROLE_ID : $i;
+            $row['name']   = $nameList[$i - 1];
+            $row['code']   = $codeList[$i - 1];
+            $row['detail'] = $detailList[$i - 1];
 
             $data[] = $row;
         }

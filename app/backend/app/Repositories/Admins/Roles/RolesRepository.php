@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Admins\Roles;
 
-use App\Models\Roles;
-use App\Models\RolePermissions;
+use App\Models\Masters\Roles;
+use App\Models\Masters\RolePermissions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 

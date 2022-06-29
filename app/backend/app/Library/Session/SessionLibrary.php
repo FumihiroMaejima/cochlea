@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Library;
+namespace App\Library\Session;
 
 use Illuminate\Http\Request;
-use App\Trait\CheckHeaderTrait;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
+use App\Trait\CheckHeaderTrait;
 
 class SessionLibrary
 {

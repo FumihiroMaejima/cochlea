@@ -9,7 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
-use App\Models\Permissions;
+use App\Models\Masters\Permissions;
 
 class RoleCreateRequest extends BaseRequest
 {

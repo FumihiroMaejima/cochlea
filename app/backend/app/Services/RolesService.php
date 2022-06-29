@@ -20,10 +20,14 @@ use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;
 use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Exports\Admins\RolesExport;
+use App\Library\Cache\CacheLibrary;
 use Exception;
 
 class RolesService
 {
+    // cache keys
+    private const CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST = 'admin_role_collection_list';
+
     protected RolesRepositoryInterface $rolesRepository;
     protected RolePermissionsRepositoryInterface $rolePermissionsRepository;
 
@@ -47,10 +51,27 @@ class RolesService
      */
     public function getRoles(Request $request): JsonResponse
     {
-        $collection = $this->rolesRepository->getRoles();
+        $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST);
+
+        // キャッシュチェック
+        if (is_null($cache)) {
+            $collection = $this->rolesRepository->getRoles();
+            // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
+            // $resourceCollection->toArray($request)
+            $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
+
+            if (!empty($resourceCollection)) {
+                CacheLibrary::setCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, $resourceCollection);
+            }
+        } else {
+            $resourceCollection = $cache;
+        }
+
+        // TODO GitHub ActionsのUnitテストが成功したら削除
+        /* $collection = $this->rolesRepository->getRoles();
         // $resourceCollection = app()->make(RolesServiceResource::class, ['resource' => $collection]);
         // $resourceCollection->toArray($request)
-        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
+        $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection); */
 
         return response()->json($resourceCollection, 200);
     }

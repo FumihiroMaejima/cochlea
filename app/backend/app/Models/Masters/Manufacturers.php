@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Master;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProductType extends Model
+class Manufacturers extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -15,12 +15,14 @@ class ProductType extends Model
     public const ID                = 'id';
     public const NAME              = 'name';
     public const DETAIL            = 'detail';
+    public const ADDRESS           = 'address';
+    public const TEL               = 'tel';
     public const CRREATED_AT       = 'created_at';
     public const UPDATED_AT        = 'updated_at';
     public const DELETED_AT        = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'product_types';
+    protected $table = 'manufacturers';
 
     /**
      * Indicates if the model should be timestamped.
@@ -51,6 +53,8 @@ class ProductType extends Model
     protected $fillable = [
         self::NAME,
         self::DETAIL,
+        self::ADDRESS,
+        self::TEL,
         self::CRREATED_AT,
         self::UPDATED_AT
     ];

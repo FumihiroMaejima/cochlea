@@ -1,15 +1,15 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Admins;
+use App\Models\Masters\Manufacturers;
 use Database\Seeders\BaseSeeder;
 
-class AdminsTableSeeder extends BaseSeeder
+class ManufacturersTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
@@ -22,16 +22,17 @@ class AdminsTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Admins())->getTable();
+        $this->tableName = (new Manufacturers())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
-            Admins::NAME       => '',
-            Admins::EMAIL      => '',
-            Admins::PASSWORD   => bcrypt(Config::get('myappSeeder.seeder.password.testadmin')),
-            Admins::CREATED_AT => $now,
-            Admins::UPDATED_AT => $now
+            Manufacturers::NAME       => '',
+            Manufacturers::DETAIL     => '',
+            Manufacturers::ADDRESS    => 'test県test市test町',
+            Manufacturers::TEL        => '000-0000-0000',
+            Manufacturers::CREATED_AT => $now,
+            Manufacturers::UPDATED_AT => $now
         ];
 
         // insert用データ
@@ -49,8 +50,10 @@ class AdminsTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Admins::NAME]  = 'admin' . (string)($i);
-            $row[Admins::EMAIL] = 'testadmin' . (string)($i) . '@example.com';
+            $row[Manufacturers::NAME]    = 'manufacturer' . (string)($i);
+            $row[Manufacturers::DETAIL]  = 'testManufacturer' . (string)($i) . 'Detail';
+            $row[Manufacturers::ADDRESS] = 'test県test市test' . (string)($i) . '町';
+            $row[Manufacturers::TEL]     = '000-0000-000' . (string)($i);
 
             $data[] = $row;
         }
