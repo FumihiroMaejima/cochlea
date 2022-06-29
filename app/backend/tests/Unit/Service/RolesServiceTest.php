@@ -8,92 +8,12 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Trait\HelperTrait;
-use Database\Seeders\Masters\AdminsTableSeeder;
-use Database\Seeders\Masters\AdminsRolesTableSeeder;
-use Database\Seeders\Masters\PermissionsTableSeeder;
-use Database\Seeders\Masters\RolePermissionsTableSeeder;
-use Database\Seeders\Masters\RolesTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RolesServiceTest extends TestCase
+class RolesServiceTest extends ServiceBaseTestCase
 {
-    use HelperTrait;
-
-    // login response
-    protected const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
-    protected const LOGIN_RESEPONSE_KEY_TOKEN_TYPE = 'token_type';
-    protected const LOGIN_RESEPONSE_KEY_EXPIRES_IN = 'expires_in';
-    protected const LOGIN_RESEPONSE_KEY_USER = 'user';
-
-    // admin resource key
-    protected const ADMIN_RESOURCE_KEY_ID = 'id';
-    protected const ADMIN_RESOURCE_KEY_NAME = 'name';
-    protected const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
-
-    // init() response key
-    protected const INIT_REQUEST_RESPONSE_TOKEN = 'token';
-    protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
-    protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
-
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-
-    protected $initialized = false;
-
-    // target seeders.
-    protected array $seederClasses = [
-        AdminsTableSeeder::class,
-        PermissionsTableSeeder::class,
-        RolesTableSeeder::class,
-        RolePermissionsTableSeeder::class,
-        AdminsRolesTableSeeder::class,
-    ];
-
-    /**
-     * 初期化処理
-     *
-     * @return array
-     */
-    protected function init(): array
-    {
-        // $this->refreshDatabase();
-        // $this->refreshTestDatabase();
-        // $this->runDatabaseMigrations();
-
-        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
-        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
-
-        // connection 設定がデフォルトの場合
-        if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
-            $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
-        } else {
-            // DB内のテーブルの削除
-            $this->artisan('db:wipe', ['--database' => 'mysql']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
-        }
-
-        $this->artisan('migrate:fresh');
-        $this->seed($this->seederClasses);
-
-        // ログインリクエスト
-        $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myappTest.test.admin.login.email'),
-            'password' => Config::get('myappTest.test.admin.login.password')
-        ], ['Content-Type' => 'application/json'])->json();
-
-        return [
-            self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN],
-            self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID],
-            self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY]
-        ];
-    }
-
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
