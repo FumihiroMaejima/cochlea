@@ -31,6 +31,8 @@ class CreateProductMasterModelTable extends Migration
             $table->string('image', 255)->comment('イメージ');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('products table');
         });
 
         /**
@@ -42,6 +44,8 @@ class CreateProductMasterModelTable extends Migration
             $table->text('detail')->comment('詳細');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('type of product table');
         });
 
         /**
@@ -55,6 +59,8 @@ class CreateProductMasterModelTable extends Migration
             $table->string('tel', 255)->comment('電話番号');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->comment('manufacturers table');
         });
     }
 

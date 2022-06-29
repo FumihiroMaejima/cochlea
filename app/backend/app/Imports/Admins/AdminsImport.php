@@ -2,7 +2,7 @@
 
 namespace App\Imports\Admins;
 
-use App\Models\Admins;
+use App\Models\Masters\Admins;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class AdminsImport implements ToModel

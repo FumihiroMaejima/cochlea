@@ -1,31 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Masters\Roles;
 
-use App\Models\Admins;
-use App\Models\Permissions;
-use App\Models\RolePermissions;
-use App\Models\Roles;
-
-class AdminsRoles extends Model
+class Permissions extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     // カラム一覧
     public const ID = 'id';
-    public const ADMIN_ID = 'admin_id';
-    public const ROLE_ID = 'role_id';
+    public const NAME = 'name';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'admins_roles';
+    protected $table = 'permissions';
 
     // カラムの自動更新をEloquentに許可
     public $timestamps = true;
@@ -51,15 +46,4 @@ class AdminsRoles extends Model
      * @var array
      */
     protected $hidden = [];
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     * 各ロールが設定されている管理者の取得
-     *
-     * @return Admins|null
-     */
-    public function admin()
-    {
-        return $this->belongsTo(Admins::class, self::ADMIN_ID);
-    }
 }

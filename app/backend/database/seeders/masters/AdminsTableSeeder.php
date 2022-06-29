@@ -1,19 +1,19 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Roles;
+use App\Models\Masters\Admins;
 use Database\Seeders\BaseSeeder;
 
-class RolesTableSeeder extends BaseSeeder
+class AdminsTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 5;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
 
     /**
      * Run the database seeds.
@@ -22,21 +22,17 @@ class RolesTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Roles())->getTable();
+        $this->tableName = (new Admins())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
-            'name'       => '',
-            'code'       => '',
-            'detail'     => '',
-            'created_at' => $now,
-            'updated_at' => $now
+            Admins::NAME       => '',
+            Admins::EMAIL      => '',
+            Admins::PASSWORD   => bcrypt(Config::get('myappSeeder.seeder.password.testadmin')),
+            Admins::CREATED_AT => $now,
+            Admins::UPDATED_AT => $now
         ];
-
-        $nameList = Config::get('myappSeeder.seeder.authority.rolesNameList');
-        $codeList = Config::get('myappSeeder.seeder.authority.rolesCodeList');
-        $detailList = Config::get('myappSeeder.seeder.authority.rolesDetailList');
 
         // insert用データ
         $data = [];
@@ -53,9 +49,8 @@ class RolesTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row['name']   = $nameList[$i - 1];
-            $row['code']   = $codeList[$i - 1];
-            $row['detail'] = $detailList[$i - 1];
+            $row[Admins::NAME]  = 'admin' . (string)($i);
+            $row[Admins::EMAIL] = 'testadmin' . (string)($i) . '@example.com';
 
             $data[] = $row;
         }

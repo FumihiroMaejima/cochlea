@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Service;
+namespace Tests;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+// use Illuminate\Foundation\Testing\DatabaseMigrations;
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Trait\HelperTrait;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
@@ -15,12 +15,11 @@ use Database\Seeders\Masters\PermissionsTableSeeder;
 use Database\Seeders\Masters\RolePermissionsTableSeeder;
 use Database\Seeders\Masters\RolesTableSeeder;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Illuminate\Foundation\Testing\DatabaseMigrations;
-
-class PermissionsServiceTest extends TestCase
+/**
+ * Serviceクラスのテスト用Baseクラス
+ */
+class ServiceBaseTestCase extends TestCase
 {
-
     use HelperTrait;
 
     // login response
@@ -94,6 +93,7 @@ class PermissionsServiceTest extends TestCase
             self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY]
         ];
     }
+
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
@@ -101,29 +101,5 @@ class PermissionsServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $loginUser = [];
-
-        if (!$this->initialized) {
-            $loginUser         = $this->init();
-            $this->initialized = true;
-        }
-
-        $this->withHeaders([
-            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-            Config::get('myapp.headers.authorization') => 'Bearer ' . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-        ]);
-    }
-
-    /**
-     * roles get request test.
-     *
-     * @return void
-     */
-    public function testGetPermissionsList(): void
-    {
-        $response = $this->get(route('admin.permissions.list'));
-        $response->assertStatus(200)
-            ->assertJsonCount(4, 'data');
     }
 }

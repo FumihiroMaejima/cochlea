@@ -1,19 +1,21 @@
 <?php
 
-namespace Database\Seeders\Master;
+namespace Database\Seeders\Logs;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Models\Master\Manufacturers;
+use App\Models\Logs\AdminsLog;
 use Database\Seeders\BaseSeeder;
 
-class ManufacturersTableSeeder extends BaseSeeder
+class AdminsLogTableSeeder extends BaseSeeder
 {
+    private int $count = 5;
+
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 100;
 
     /**
      * Run the database seeds.
@@ -22,17 +24,17 @@ class ManufacturersTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Manufacturers())->getTable();
+        $this->tableName = (new AdminsLog())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
 
         $template = [
-            Manufacturers::NAME       => '',
-            Manufacturers::DETAIL     => '',
-            Manufacturers::ADDRESS    => 'test県test市test町',
-            Manufacturers::TEL        => '000-0000-0000',
-            Manufacturers::CREATED_AT => $now,
-            Manufacturers::UPDATED_AT => $now
+            'admin_id'    => 1,
+            'function'    => 'GET',
+            'status'      => '200',
+            'action_time' => $now,
+            'created_at'  => $now,
+            'updated_at'  => $now
         ];
 
         // insert用データ
@@ -50,10 +52,9 @@ class ManufacturersTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Manufacturers::NAME]    = 'manufacturer' . (string)($i);
-            $row[Manufacturers::DETAIL]  = 'testManufacturer' . (string)($i) . 'Detail';
-            $row[Manufacturers::ADDRESS] = 'test県test市test' . (string)($i) . '町';
-            $row[Manufacturers::TEL]     = '000-0000-000' . (string)($i);
+            $row['function']    = ($i % 2 === 0) ? 'GET' : 'POST';
+            $row['status']      = 'admins log' . ($i % 2 === 0) ? '200' : '404';
+            $row['action_time'] = $now;
 
             $data[] = $row;
         }
