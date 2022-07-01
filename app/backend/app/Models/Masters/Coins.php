@@ -16,7 +16,7 @@ class Coins extends Model
     public const NAME        = 'name';
     public const DETAIL      = 'detail';
     public const PRICE       = 'price';
-    public const MANUFACTURE = 'manufacturer';
+    public const COST        = 'cost';
     public const START_AT    = 'start_at';
     public const END_AT      = 'end_at';
     public const IMAGE       = 'image';
@@ -57,6 +57,7 @@ class Coins extends Model
         self::NAME,
         self::DETAIL,
         self::PRICE,
+        self::COST,
         self::START_AT,
         self::END_AT,
         self::IMAGE,
