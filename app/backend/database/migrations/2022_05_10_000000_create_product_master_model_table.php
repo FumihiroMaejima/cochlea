@@ -16,6 +16,23 @@ class CreateProductMasterModelTable extends Migration
         /**
          * products table
          */
+        Schema::create('coins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('コイン名');
+            $table->text('detail')->comment('詳細');
+            $table->integer('price')->comment('コインの購入価格');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->string('image', 255)->comment('イメージ');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->comment('coins table');
+        });
+
+        /**
+         * products table
+         */
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment('商品名');
