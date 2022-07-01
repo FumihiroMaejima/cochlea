@@ -25,7 +25,7 @@ class CoinsTableSeeder extends BaseSeeder
         $this->tableName = (new Coins())->getTable();
 
         $now = Carbon::now()->timezone(Config::get('app.timezone'));
-        $endDate = (new Carbon($now))->addMonth();
+        $endDate = (new Carbon($now))->addYears(5);
 
         $template = [
             Coins::NAME              => '',
