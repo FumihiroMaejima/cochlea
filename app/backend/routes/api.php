@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,13 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/list', [\App\Http\Controllers\Admins\PermissionsController::class, 'list'])->name('admin.permissions.list');
         });
     });
+
+    // debug API
+    if (Config::get('app.env') !== 'production') {
+        Route::group(['prefix' => 'debug'], function () {
+            Route::get('test', [\App\Http\Controllers\Admins\AdminDebugController::class, 'test'])->name('admin.debug.test');
+        });
+    }
 });
 
 /*
