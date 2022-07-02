@@ -1501,6 +1501,17 @@ $ composer install
 ```
 
 ---
+
+
+## Stripeの利用について
+
+### StripeのPHP用パッケージの追加
+
+```shell-session
+$ composer require stripe/stripe-php
+```
+
+---
 ### backendのpackage.jsonのアップデート
 
 update対象の確認
