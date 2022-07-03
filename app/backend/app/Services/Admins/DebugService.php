@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
 use App\Http\Resources\Admins\PermissionsResource;
 use Stripe\StripeClient;
+use Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Util\RequestOptions;
 
 class DebugService
 {
@@ -32,7 +35,13 @@ class DebugService
     public function getList(): JsonResponse
     {
         // $this->stripe->getApiBase();
-        $resource = ['getApiBase' => $this->stripe->getApiBase()];
+        // $this->stripe->request('GET', '/');
+        $resource = [
+            'getApiBase' => $this->stripe->getApiBase(),
+            'customers' => $this->stripe->customers,
+            // 'api_customers' => $this->stripe->request('GET', '/v1/customers', [], []),
+            'api_customers' => $this->stripe->request('GET', '/v1/customers', ['limit' => 3], []),
+        ];
 
         return response()->json($resource, 200);
     }
