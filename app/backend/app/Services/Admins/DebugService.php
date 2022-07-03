@@ -3,23 +3,24 @@
 namespace App\Services\Admins;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
 use App\Http\Resources\Admins\PermissionsResource;
+use Stripe\StripeClient;
 
 class DebugService
 {
-    protected PermissionsRepositoryInterface $permissionsRepository;
+    protected StripeClient $stripe;
 
     /**
      * create PermissionsService instance
-     * @param  \App\Repositories\Permissions\PermissionsRepositoryInterface  $permissionsRepository
      * @return void
      */
-    public function __construct(PermissionsRepositoryInterface $permissionsRepository)
+    public function __construct()
     {
-        $this->permissionsRepository = $permissionsRepository;
+        $this->stripe = new StripeClient(Config::get('stripe.apiKey.private'));
     }
 
     /**
@@ -28,10 +29,10 @@ class DebugService
      * @param  \Illuminate\Http\Request $request
      * @return JsonResponse
      */
-    public function getPermissionsList(Request $request): JsonResponse
+    public function getList(): JsonResponse
     {
-        $collection = $this->permissionsRepository->getPermissionsList();
-        $resource = PermissionsResource::toArrayForGetTextAndValueList($collection);
+        // $this->stripe->getApiBase();
+        $resource = ['getApiBase' => $this->stripe->getApiBase()];
 
         return response()->json($resource, 200);
     }

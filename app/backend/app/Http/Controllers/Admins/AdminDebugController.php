@@ -55,13 +55,8 @@ class AdminDebugController extends Controller
      */
     public function list(Request $request): JsonResponse
     {
-        // 権限チェック
-        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.permissions'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
-
         // サービスの実行
-        return $this->service->getPermissionsList($request);
+        return $this->service->getList($request);
     }
 
     /**
