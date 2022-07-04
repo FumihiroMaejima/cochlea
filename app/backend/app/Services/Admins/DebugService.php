@@ -62,7 +62,8 @@ class DebugService
             // 'api_tax_codes' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/tax_codes', [], []),
             // 'api_invoices' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/invoices', [], []),
             // 'api_invoiceitems' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/invoiceitems', [], []),
-            'api_subscriptions' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/subscriptions', [], []),
+            // 'api_subscriptions' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/subscriptions', [], []),
+            'api_orders' => $this->stripe->request(self::REQUEST_METHOD_GET, '/v1/orders', [], []),
         ];
 
         return response()->json($resource, 200);
