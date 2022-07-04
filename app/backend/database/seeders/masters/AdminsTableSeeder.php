@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\TimeLibrary;
 use App\Models\Masters\Admins;
 use Database\Seeders\BaseSeeder;
 
@@ -24,7 +25,7 @@ class AdminsTableSeeder extends BaseSeeder
     {
         $this->tableName = (new Admins())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
+        $now = TimeLibrary::getCurrentDateTime();
 
         $template = [
             Admins::NAME       => '',

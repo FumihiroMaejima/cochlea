@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\TimeLibrary;
 use App\Models\Masters\RolePermissions;
 use Database\Seeders\BaseSeeder;
 
@@ -27,7 +28,8 @@ class RolePermissionsTableSeeder extends BaseSeeder
     public function run()
     {
         $this->tableName = (new RolePermissions())->getTable();
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
+
+        $now = TimeLibrary::getCurrentDateTime();
 
         // $template = [
         //     'name'          => '',

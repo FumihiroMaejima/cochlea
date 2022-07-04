@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\TimeLibrary;
 use App\Models\Masters\Coins;
 use Database\Seeders\BaseSeeder;
 
@@ -24,7 +25,7 @@ class CoinsTableSeeder extends BaseSeeder
     {
         $this->tableName = (new Coins())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
+        $now = TimeLibrary::getCurrentDateTime();
         $endDate = (new Carbon($now))->addYears(5);
 
         $template = [
