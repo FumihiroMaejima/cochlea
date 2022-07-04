@@ -6,12 +6,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Stripe\StripeClient;
 use App\Library\Stripe\StripeLibrary;
 
 class DebugService
 {
-    protected StripeClient $stripe;
+    protected string $prop;
 
     /**
      * create PermissionsService instance
@@ -19,7 +18,7 @@ class DebugService
      */
     public function __construct()
     {
-        $this->stripe = new StripeClient(Config::get('stripe.apiKey.private'));
+        $this->prop = 'debug propaty';
     }
 
     /**

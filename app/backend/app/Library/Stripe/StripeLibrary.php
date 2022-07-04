@@ -11,6 +11,7 @@ use Stripe\StripeClient;
 use Stripe\Exception\ApiConnectionException;
 use Stripe\Exception\AuthenticationException;
 use Stripe\Util\RequestOptions;
+use Stripe\StripeObject;
 
 class StripeLibrary
 {
@@ -33,7 +34,6 @@ class StripeLibrary
         return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
     }
 
-
     /**
      * get permissions data for frontend parts
      *
@@ -42,7 +42,7 @@ class StripeLibrary
      */
     public static function getTestList(): JsonResponse
     {
-        $stripe = new StripeClient(Config::get(self::CONFIG_KEY_NAME));
+        $stripe = self::getStripeClient();
         // $stripe->getApiBase();
         // $stripe->request(self::REQUEST_METHOD_GET, '/');
         // TODO 確認したいものからコメントアウトを外す。
@@ -75,5 +75,34 @@ class StripeLibrary
         ];
 
         return response()->json($resource, 200);
+    }
+
+    /**
+     * get permissions data for frontend parts
+     *
+     * @param string $path — the path of the request
+     * @param array $params — the parameters of the request
+     * @param array|RequestOptions $options the special modifiers of the request
+     * @return StripeObject
+     */
+    public static function getRequest(
+        string $path,
+        array $params = [],
+        array|RequestOptions $options = []
+    ): StripeObject
+    {
+        $stripe = self::getStripeClient();
+
+        return $stripe->request(self::REQUEST_METHOD_GET, $path, $params, $options);
+    }
+
+    /**
+     * get StripeClient.
+     *
+     * @return StripeClient
+     */
+    private static function getStripeClient(): StripeClient
+    {
+        return new StripeClient(Config::get(self::CONFIG_KEY_NAME));
     }
 }
