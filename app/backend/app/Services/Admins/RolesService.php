@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Services\Notifications\RoleSlackNotificationService;
+use App\Services\Admins\Notifications\RoleSlackNotificationService;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Http\Resources\Admins\RolesResource;

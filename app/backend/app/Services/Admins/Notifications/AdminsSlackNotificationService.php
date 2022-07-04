@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Notifications;
+namespace App\Services\Admins\Notifications;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Config;
-use App\Notifications\Admins\RoleUpdateNotification;
-use App\Services\Notifications\BaseSlackNotificationService;
+use App\Notifications\Admins\AdminUpdateNotification;
+use App\Services\Admins\Notifications\BaseSlackNotificationService;
 
-class RoleSlackNotificationService extends BaseSlackNotificationService
+class AdminsSlackNotificationService extends BaseSlackNotificationService
 {
     /**
      * send slack notification
@@ -19,7 +19,7 @@ class RoleSlackNotificationService extends BaseSlackNotificationService
     public function send(string $message = null, array $attachment = null): void
     {
         if (Config::get('app.env') !== 'testing') {
-            $this->notify(new RoleUpdateNotification($message, $attachment));
+            $this->notify(new AdminUpdateNotification($message, $attachment));
         }
     }
 }

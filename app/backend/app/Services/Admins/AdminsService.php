@@ -22,7 +22,7 @@ use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
-use App\Services\Notifications\AdminsSlackNotificationService;
+use App\Services\Admins\Notifications\AdminsSlackNotificationService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
