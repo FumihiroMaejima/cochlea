@@ -16,6 +16,9 @@ class ProductsTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
 
+    // 終了日時として設定する加算月数
+    private const END_DATE_ADDITIONAL_MOUNTHS = 1;
+
     /**
      * Run the database seeds.
      *
@@ -26,7 +29,7 @@ class ProductsTableSeeder extends BaseSeeder
         $this->tableName = (new Products())->getTable();
 
         $now = TimeLibrary::getCurrentDateTime();
-        $endDate = (new Carbon($now))->addMonth();
+        $endDate = TimeLibrary::addMounths($now, self::END_DATE_ADDITIONAL_MOUNTHS);
 
         $template = [
             Products::NAME              => '',

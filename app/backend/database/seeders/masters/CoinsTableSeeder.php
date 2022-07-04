@@ -16,6 +16,9 @@ class CoinsTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 10;
 
+    // 終了日時として設定する加算年数
+    private const END_DATE_ADDITIONAL_YEARS = 5;
+
     /**
      * Run the database seeds.
      *
@@ -26,7 +29,7 @@ class CoinsTableSeeder extends BaseSeeder
         $this->tableName = (new Coins())->getTable();
 
         $now = TimeLibrary::getCurrentDateTime();
-        $endDate = (new Carbon($now))->addYears(5);
+        $endDate = TimeLibrary::addYears($now, self::END_DATE_ADDITIONAL_YEARS);
 
         $template = [
             Coins::NAME              => '',
