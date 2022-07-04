@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admins;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;

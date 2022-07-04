@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Services\RolesService;
+use App\Services\Admins\RolesService;
 use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Http\Requests\Admins\RoleUpdateRequest;
 use App\Http\Requests\Admins\RoleDeleteRequest;

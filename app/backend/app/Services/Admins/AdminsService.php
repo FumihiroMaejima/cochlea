@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admins;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
