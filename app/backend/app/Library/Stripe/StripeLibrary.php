@@ -98,6 +98,44 @@ class StripeLibrary
     }
 
     /**
+     * exec stripe api request for POST
+     *
+     * @param string $path — the path of the request
+     * @param array $params — the parameters of the request
+     * @param array|RequestOptions $options the special modifiers of the request
+     * @return StripeObject
+     */
+    public static function PostRequest(
+        string $path,
+        array $params = [],
+        array|RequestOptions $options = []
+    ): StripeObject
+    {
+        $stripe = self::getStripeClient();
+
+        return $stripe->request(self::REQUEST_METHOD_POST, $path, $params, $options);
+    }
+
+    /**
+     * exec stripe api request for DELETE
+     *
+     * @param string $path — the path of the request
+     * @param array $params — the parameters of the request
+     * @param array|RequestOptions $options the special modifiers of the request
+     * @return StripeObject
+     */
+    public static function DeleteRequest(
+        string $path,
+        array $params = [],
+        array|RequestOptions $options = []
+    ): StripeObject
+    {
+        $stripe = self::getStripeClient();
+
+        return $stripe->request(self::REQUEST_METHOD_DELETE, $path, $params, $options);
+    }
+
+    /**
      * get StripeClient.
      *
      * @return StripeClient
