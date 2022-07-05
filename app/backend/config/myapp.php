@@ -11,6 +11,7 @@ return [
             'admins'      => ['master', 'administrator', 'develop'],
             'permissions' => ['master', 'administrator', 'develop'],
             'roles'       => ['master', 'administrator', 'develop'],
+            'coins'       => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [
