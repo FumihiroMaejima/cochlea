@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Services\Admins\CoinsService;
-use App\Services\Admins\RolesService;
-use App\Http\Requests\Admins\RoleCreateRequest;
-use App\Http\Requests\Admins\RoleUpdateRequest;
-use App\Http\Requests\Admins\RoleDeleteRequest;
-use App\Trait\CheckHeaderTrait;
-use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admins\Coins\CoinCreateRequest;
+use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
+use App\Services\Admins\CoinsService;
+use App\Trait\CheckHeaderTrait;
 
 class CoinsController extends Controller
 {
@@ -68,10 +67,10 @@ class CoinsController extends Controller
     /**
      * creating a new resource.
      *
-     * @param  RoleCreateRequest  $request
+     * @param  CoinCreateRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(RoleCreateRequest $request)
+    public function create(CoinCreateRequest $request)
     {
         // サービスの実行
         return $this->service->createCoin($request);
@@ -113,11 +112,11 @@ class CoinsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  RoleUpdateRequest  $request
+     * @param  CoinUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RoleUpdateRequest $request, int $id)
+    public function update(CoinUpdateRequest $request, int $id)
     {
         // サービスの実行
         return $this->service->updateCoin($request, $id);
@@ -126,10 +125,10 @@ class CoinsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  RoleDeleteRequest  $request
+     * @param  CoinDeleteRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RoleDeleteRequest $request)
+    public function destroy(CoinDeleteRequest $request)
     {
         // サービスの実行
         return $this->service->deleteCoin($request);

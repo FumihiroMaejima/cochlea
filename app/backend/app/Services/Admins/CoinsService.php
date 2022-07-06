@@ -10,12 +10,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admins\Coins\CoinCreateRequest;
+use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
+use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
-use App\Http\Resources\Admins\RolesResource;
-use App\Http\Requests\Admins\RoleUpdateRequest;
-use App\Http\Requests\Admins\RoleDeleteRequest;
-use App\Http\Requests\Admins\RoleCreateRequest;
 use App\Exports\Admins\RolesExport;
 use App\Library\Cache\CacheLibrary;
 use Exception;
@@ -26,7 +26,6 @@ class CoinsService
     private const CACHE_KEY_ADMIN_COIN_COLLECTION_LIST = 'admin_coin_collection_list';
 
     protected CoinsRepositoryInterface $coinsRepository;
-    protected RolesRepositoryInterface $rolesRepository;
 
     /**
      * create CoinsService instance
@@ -34,7 +33,7 @@ class CoinsService
      * @param  \App\Repositories\Admins\Coins\CoinsRepositoryInterface $coinsRepository
      * @return void
      */
-    public function __construct(RolesRepositoryInterface $coinsRepository)
+    public function __construct(CoinsRepositoryInterface $coinsRepository)
     {
         $this->coinsRepository = $coinsRepository;
     }
@@ -52,7 +51,7 @@ class CoinsService
         // キャッシュチェック
         if (is_null($cache)) {
             $collection = $this->coinsRepository->getCoins();
-            $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection);
+            $resourceCollection = CoinsResource::toArrayForGetRolesCollection($collection);
 
             if (!empty($resourceCollection)) {
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, $resourceCollection);
@@ -74,21 +73,21 @@ class CoinsService
     {
         $data = $this->coinsRepository->getCoins();
 
-        return Excel::download(new RolesExport($data), 'roles_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new RolesExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
     }
 
     /**
      * update coin data service
      *
-     * @param  RoleCreateRequest  $request
+     * @param  CoinCreateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function createCoin(RoleCreateRequest $request)
+    public function createCoin(CoinCreateRequest $request)
     {
         DB::beginTransaction();
         try {
-            $resource = RolesResource::toArrayForCreate($request);
+            $resource = CoinsResource::toArrayForCreate($request);
 
             $insertCount = $this->coinsRepository->createCoin($resource);
 
@@ -109,15 +108,15 @@ class CoinsService
     /**
      * update coin data service
      *
-     * @param  RoleUpdateRequest $request
+     * @param  CoinUpdateRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateCoin(RoleUpdateRequest $request, int $id)
+    public function updateCoin(CoinUpdateRequest $request, int $id)
     {
         DB::beginTransaction();
         try {
-            $resource = RolesResource::toArrayForUpdate($request);
+            $resource = CoinsResource::toArrayForUpdate($request);
 
             $updatedRowCount = $this->coinsRepository->updateCoin($resource, $id);
 
@@ -138,17 +137,17 @@ class CoinsService
     /**
      * delete coin data service
      *
-     * @param  RoleDeleteRequest $request
+     * @param  CoinDeleteRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteCoin(RoleDeleteRequest $request)
+    public function deleteCoin(CoinDeleteRequest $request)
     {
         DB::beginTransaction();
         try {
             $coinIds = $request->roles;
 
-            $resource = RolesResource::toArrayForDelete();
+            $resource = CoinsResource::toArrayForDelete();
 
             $deleteRowCount = $this->coinsRepository->deleteCoin($resource, $coinIds);
 
