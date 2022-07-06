@@ -1511,6 +1511,29 @@ $ composer install
 $ composer require stripe/stripe-php
 ```
 
+.envに環境変数としてpublic keyとprivate keyを設定する。(configで参照出来る様にする。)
+
+```shell-session
+STRIPE_PUBLIC_KEY=test_public_key
+STRIPE_SECRET_KEY=test_private_key
+```
+
+### StripeClientのインスタンスの作成とロジックの例
+
+```php
+use Stripe\StripeClient;
+
+// StripeClientのパラメーターにSTRIPE_SECRET_KEYを設定する。
+$stripe = new StripeClient(Config::get('config.name'));
+
+// customers情報の一覧を取得する場合
+$stripe->request('GET', '/v1/customers', $params = [], $options = []);
+// 取得数を制限する場合
+$stripe->request('GET', '/v1/customers', $params = ['limit' => 3], $options = []);
+
+```
+
+
 ---
 ### backendのpackage.jsonのアップデート
 
