@@ -55,7 +55,19 @@ class TimeLibrary
     }
 
     /**
-     * get current date time.
+     * get formatted date time.
+     *
+     * @param string $dateTime 日時
+     * @param string $format datetime format
+     * @return array 曜日
+     */
+    public static function format(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT_SLASH): string
+    {
+        return (new Carbon($dateTime))->format($format);
+    }
+
+    /**
+     * get parameter days.
      *
      * @param string $dateTime 日時
      * @return array 曜日

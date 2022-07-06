@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
 use App\Library\TimeLibrary;
+use App\Models\Masters\Coins;
 
 class CoinsResource extends JsonResource
 {
@@ -47,12 +48,18 @@ class CoinsResource extends JsonResource
      * @param Collection $collection
      * @return array
      */
-    public static function toArrayForGetRolesCollection(Collection $collection)
+    public static function toArrayForGetCoinsCollection(Collection $collection)
     {
         // レスポンス
         $response = [];
 
         foreach ($collection as $item) {
+            $item->{Coins::START_AT} = TimeLibrary::format($item->{Coins::START_AT});
+            $item->{Coins::END_AT} = TimeLibrary::format($item->{Coins::END_AT});
+
+            // if array
+            // $item[Coins::START_AT] = TimeLibrary::format($item[Coins::START_AT]);
+            // $item[Coins::END_AT] = TimeLibrary::format($item[Coins::END_AT]);
             $response[self::RESOURCE_KEY_DATA][] = $item;
         }
 

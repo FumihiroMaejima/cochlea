@@ -51,7 +51,7 @@ class CoinsService
         // キャッシュチェック
         if (is_null($cache)) {
             $collection = $this->coinsRepository->getCoins();
-            $resourceCollection = CoinsResource::toArrayForGetRolesCollection($collection);
+            $resourceCollection = CoinsResource::toArrayForGetCoinsCollection($collection);
 
             if (!empty($resourceCollection)) {
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, $resourceCollection);
