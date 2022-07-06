@@ -16,8 +16,12 @@ class CoinsResource extends JsonResource
     public const RESOURCE_KEY_VALUE = 'value';
 
     public const RESOURCE_KEY_NAME = 'name';
-    public const RESOURCE_KEY_CODE = 'code';
     public const RESOURCE_KEY_DETAIL = 'detail';
+    public const RESOURCE_KEY_PRICE = 'price';
+    public const RESOURCE_KEY_COST = 'cost';
+    public const RESOURCE_KEY_START_AT = 'start_at';
+    public const RESOURCE_KEY_END_AT = 'end_at';
+    public const RESOURCE_KEY_IMAGE = 'image';
     public const RESOURCE_KEY_CREATED_AT = 'created_at';
     public const RESOURCE_KEY_UPDATED_AT = 'updated_at';
     public const RESOURCE_KEY_DELETED_AT = 'deleted_at';
@@ -49,9 +53,6 @@ class CoinsResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
-            $item->permissions = !$item->permissions ? [] : array_map(function ($permission) {
-                return (int)$permission;
-            }, explode(',', $item->permissions));
             $response[self::RESOURCE_KEY_DATA][] = $item;
         }
 
@@ -92,16 +93,18 @@ class CoinsResource extends JsonResource
      */
     public static function toArrayForCreate(CoinCreateRequest $request): array
     {
-        /* $carbon = new Carbon();
-        $test = $carbon->now()->format('Y-m-d H:i:s'); */
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME        => $request->name,
-            self::RESOURCE_KEY_CODE        => $request->code,
-            self::RESOURCE_KEY_DETAIL      => $request->detail,
-            self::RESOURCE_KEY_CREATED_AT  => $dateTime,
-            self::RESOURCE_KEY_UPDATED_AT  => $dateTime
+            self::RESOURCE_KEY_NAME       => $request->name,
+            self::RESOURCE_KEY_DETAIL     => $request->detail,
+            self::RESOURCE_KEY_PRICE      => $request->price,
+            self::RESOURCE_KEY_COST       => $request->cost,
+            self::RESOURCE_KEY_START_AT   => $request->start_at,
+            self::RESOURCE_KEY_END_AT     => $request->end_at,
+            self::RESOURCE_KEY_IMAGE      => $request->image,
+            self::RESOURCE_KEY_CREATED_AT => $dateTime,
+            self::RESOURCE_KEY_UPDATED_AT => $dateTime,
         ];
     }
 
@@ -116,10 +119,15 @@ class CoinsResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME        => $request->name,
-            self::RESOURCE_KEY_CODE        => $request->code,
-            self::RESOURCE_KEY_DETAIL      => $request->detail,
-            self::RESOURCE_KEY_UPDATED_AT  => $dateTime
+            self::RESOURCE_KEY_NAME       => $request->name,
+            self::RESOURCE_KEY_DETAIL     => $request->detail,
+            self::RESOURCE_KEY_PRICE      => $request->price,
+            self::RESOURCE_KEY_COST       => $request->cost,
+            self::RESOURCE_KEY_START_AT   => $request->start_at,
+            self::RESOURCE_KEY_END_AT     => $request->end_at,
+            self::RESOURCE_KEY_IMAGE      => $request->image,
+            self::RESOURCE_KEY_CREATED_AT => $dateTime,
+            self::RESOURCE_KEY_UPDATED_AT => $dateTime
         ];
     }
 
