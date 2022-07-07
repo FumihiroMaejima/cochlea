@@ -83,7 +83,7 @@ class CacheLibrary
      * remove cache by request header data.
      *
      * @param string $key
-     * @param bool $isIgnore ignore data check.
+     * @param bool $isIgnore ignore data check result.
      * @return bool
      */
     public static function deleteCache(string $key, bool $isIgnore = false): void

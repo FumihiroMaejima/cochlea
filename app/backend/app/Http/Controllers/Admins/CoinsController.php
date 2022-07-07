@@ -68,9 +68,9 @@ class CoinsController extends Controller
      * creating a new resource.
      *
      * @param  CoinCreateRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create(CoinCreateRequest $request)
+    public function create(CoinCreateRequest $request): JsonResponse
     {
         // サービスの実行
         return $this->service->createCoin($request);
@@ -114,9 +114,9 @@ class CoinsController extends Controller
      *
      * @param  CoinUpdateRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(CoinUpdateRequest $request, int $id)
+    public function update(CoinUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
         return $this->service->updateCoin($request, $id);
@@ -126,9 +126,9 @@ class CoinsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  CoinDeleteRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(CoinDeleteRequest $request)
+    public function destroy(CoinDeleteRequest $request): JsonResponse
     {
         // サービスの実行
         return $this->service->deleteCoin($request);

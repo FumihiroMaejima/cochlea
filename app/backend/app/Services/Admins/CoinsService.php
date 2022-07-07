@@ -81,14 +81,14 @@ class CoinsService
      *
      * @param  CoinCreateRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function createCoin(CoinCreateRequest $request)
+    public function createCoin(CoinCreateRequest $request): JsonResponse
     {
+        $resource = CoinsResource::toArrayForCreate($request);
+
         DB::beginTransaction();
         try {
-            $resource = CoinsResource::toArrayForCreate($request);
-
             $insertCount = $this->coinsRepository->createCoin($resource);
 
             DB::commit();
@@ -113,17 +113,20 @@ class CoinsService
      *
      * @param  CoinUpdateRequest $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateCoin(CoinUpdateRequest $request, int $id)
+    public function updateCoin(CoinUpdateRequest $request, int $id): JsonResponse
     {
+        $resource = CoinsResource::toArrayForUpdate($request);
+
         DB::beginTransaction();
         try {
-            $resource = CoinsResource::toArrayForUpdate($request);
-
             $updatedRowCount = $this->coinsRepository->updateCoin($resource, $id);
 
             DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
             // 更新されていない場合は304
             $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
@@ -142,9 +145,9 @@ class CoinsService
      *
      * @param  CoinDeleteRequest $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteCoin(CoinDeleteRequest $request)
+    public function deleteCoin(CoinDeleteRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try {
