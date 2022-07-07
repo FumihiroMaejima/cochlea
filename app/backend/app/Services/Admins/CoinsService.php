@@ -93,6 +93,9 @@ class CoinsService
 
             DB::commit();
 
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
+
             // 作成されている場合は304
             $message = ($insertCount > 0) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0) ? 201 : 401;

@@ -49,8 +49,8 @@ class CoinUpdateRequest extends BaseRequest
             'detail'      => 'required|string|between:1,100',
             'price'       => 'required|integer|min:0|max:100000',
             'cost'        => 'required|integer|min:0|max:100000',
-            'start_at'    => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
-            'end_at'      => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
+            'start_at'    => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
+            'end_at'      => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH.'|after:start_at',
             'image'       => 'file|image|max:512', // 最大512KB
         ];
     }
@@ -73,6 +73,7 @@ class CoinUpdateRequest extends BaseRequest
             'max'         => ':attributeは:max以下で入力してください。',
             'date'        => ':attributeは日付の形式で入力してください。',
             'date_format' => ':attributeは:date_formatの形式で入力してください。',
+            'after'       => ':attributeは公開開始日時より後の日付で入力してください。',
             'file'        => ':attributeはファイル形式で入力してください。',
             'image'       => ':attributeは画像ファイルで入力してください。',
             'image.max'   => ':attributeは最大:max KBで入力してください。',

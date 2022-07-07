@@ -82,8 +82,8 @@ class CoinsResource extends JsonResource
         foreach ($collection as $item) {
             // 各itemのresourceはstdClassオブジェクトの１レコード分のデータ
             $role = [
-                self::RESOURCE_KEY_TEXT => $item->name,
-                self::RESOURCE_KEY_VALUE => $item->id,
+                self::RESOURCE_KEY_TEXT => $item->{Coins::NAME},
+                self::RESOURCE_KEY_VALUE => $item->{Coins::ID},
             ];
             // 多次元配列の中の連想配列を格納
             $response[self::RESOURCE_KEY_DATA][] = $role;
@@ -103,13 +103,13 @@ class CoinsResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME       => $request->name,
-            self::RESOURCE_KEY_DETAIL     => $request->detail,
-            self::RESOURCE_KEY_PRICE      => $request->price,
-            self::RESOURCE_KEY_COST       => $request->cost,
-            self::RESOURCE_KEY_START_AT   => $request->start_at,
-            self::RESOURCE_KEY_END_AT     => $request->end_at,
-            self::RESOURCE_KEY_IMAGE      => $request->image,
+            self::RESOURCE_KEY_NAME       => $request->{Coins::NAME},
+            self::RESOURCE_KEY_DETAIL     => $request->{Coins::DETAIL},
+            self::RESOURCE_KEY_PRICE      => $request->{Coins::PRICE},
+            self::RESOURCE_KEY_COST       => $request->{Coins::COST},
+            self::RESOURCE_KEY_START_AT   => $request->{Coins::START_AT},
+            self::RESOURCE_KEY_END_AT     => $request->{Coins::END_AT},
+            self::RESOURCE_KEY_IMAGE      => $request->{Coins::IMAGE} ?? '',
             self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime,
         ];
@@ -126,13 +126,13 @@ class CoinsResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME       => $request->name,
-            self::RESOURCE_KEY_DETAIL     => $request->detail,
-            self::RESOURCE_KEY_PRICE      => $request->price,
-            self::RESOURCE_KEY_COST       => $request->cost,
-            self::RESOURCE_KEY_START_AT   => $request->start_at,
-            self::RESOURCE_KEY_END_AT     => $request->end_at,
-            self::RESOURCE_KEY_IMAGE      => $request->image,
+            self::RESOURCE_KEY_NAME       => $request->{Coins::NAME},
+            self::RESOURCE_KEY_DETAIL     => $request->{Coins::DETAIL},
+            self::RESOURCE_KEY_PRICE      => $request->{Coins::PRICE},
+            self::RESOURCE_KEY_COST       => $request->{Coins::COST},
+            self::RESOURCE_KEY_START_AT   => $request->{Coins::START_AT},
+            self::RESOURCE_KEY_END_AT     => $request->{Coins::END_AT},
+            self::RESOURCE_KEY_IMAGE      => $request->{Coins::IMAGE} ?? '',
             self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime
         ];

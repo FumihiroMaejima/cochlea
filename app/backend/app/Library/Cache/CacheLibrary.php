@@ -91,7 +91,7 @@ class CacheLibrary
         $cache = self::getByKey($key);
 
         if (empty($cache)) {
-            if ($isIgnore) {
+            if ($isIgnore || (Config::get('app.env') === 'testing')) {
                 return;
             }
 
