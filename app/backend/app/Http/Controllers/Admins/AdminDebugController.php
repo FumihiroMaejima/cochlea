@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Services\Admins\DebugService;
-use App\Trait\CheckHeaderTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Services\Admins\DebugService;
+use App\Trait\CheckHeaderTrait;
 
 class AdminDebugController extends Controller
 {
@@ -55,6 +56,23 @@ class AdminDebugController extends Controller
     {
         // サービスの実行
         return $this->service->getList($request);
+    }
+
+    /**
+     * 画像ファイルイメージのアップロード
+     *
+     * @param DebugFileUploadRequest $request
+     * @return JsonResponse
+     */
+    public function image(DebugFileUploadRequest $request): JsonResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // サービスの実行
+        return $this->service->uploadImage($request);
     }
 
     /**
