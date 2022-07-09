@@ -62,8 +62,14 @@ class DebugService
 
             $uuid = UnidLibrary::uuidVersion4();
 
+            // オリジナルファイル名
+            $originalName = $file->getClientOriginalName();
+
+            // 拡張子
+            $extention = $file->getClientOriginalExtension();
+
             // ファイル名
-            $fileName = TimeLibrary::getCurrentDateTimeTimeStamp() . '_' . $uuid . '_' . $file->getClientOriginalName();
+            $fileName = $uuid . '.' . $extention;
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
