@@ -4,8 +4,8 @@ namespace App\Http\Resources\Admins;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Config;
-use App\Http\Requests\Admins\RoleUpdateRequest;
-use App\Http\Requests\Admins\RoleCreateRequest;
+use App\Http\Requests\Admins\Roles\RoleCreateRequest;
+use App\Http\Requests\Admins\Roles\RoleUpdateRequest;
 use App\Library\TimeLibrary;
 
 class RolePermissionsResource extends JsonResource
