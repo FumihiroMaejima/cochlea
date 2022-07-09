@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Debug;
 
 use Illuminate\Console\Command;
 use App\Library\Time\TimeLibrary;
 
-class DebugTestCommand extends Command
+class TestCommand extends Command
 {
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
