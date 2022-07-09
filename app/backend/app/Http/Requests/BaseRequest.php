@@ -31,6 +31,7 @@ class BaseRequest extends FormRequest
     private const ATTRIBUTE_PASSWORD              = 'password';
     private const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
     private const ATTRIBUTE_TEL                   = 'tel';
+    private const ATTRIBUTE_IMAGE                 = 'image';
 
     // attribute name
     private const ATTRIBUTE_NAME_ID                    = 'id';
@@ -40,6 +41,7 @@ class BaseRequest extends FormRequest
     private const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
     private const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
     private const ATTRIBUTE_NAME_TEL                   = '電話番号';
+    private const ATTRIBUTE_NAME_IMAGE                 = '画像';
 
     // rules
     private const RULE_NAME = 'required|string|between:1,50';
@@ -48,6 +50,8 @@ class BaseRequest extends FormRequest
     private const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
     private const RULE_PASSWORD_CONFIRMATION = 'same:password';
     private const RULE_TEL = 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/';
+    // 最大512KB,指定された拡張子(jpg,png),最小縦横100px 最大縦横600px
+    private const RULE_IMAGE = 'nullable|file|image|max:512|mimes:jpg,png|dimensions:min_width=100,min_height=100,max_width=600,max_height=600';
 
     // rule key
     private const RULE_KEY_EMAIL_EMAIL = 'email.email';
@@ -58,6 +62,10 @@ class BaseRequest extends FormRequest
     private const RULE_KEY_SAME = 'same';
     private const RULE_KEY_EMAIL = 'email';
     private const RULE_KEY_TEL_REGEX = 'tel.regex';
+    private const RULE_KEY_IMAGE = 'image';
+    private const RULE_KEY_IMAGE_MIMES = 'image.mimes';
+    private const RULE_KEY_IMAGE_MAX = 'image.max';
+    private const RULE_KEY_IMAGE_DIMENTIONS = 'image.dimensions';
 
     // message
     private const RULE_KEY_MESSAGE_EMAIL_EMAIL = ':attributeの形式が正しくありません。';
@@ -68,6 +76,10 @@ class BaseRequest extends FormRequest
     private const RULE_KEY_MESSAGE_SAME = ':attributeは同一の値ではありません。';
     private const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
     private const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
+    private const RULE_KEY_MESSAGE_IMAGE = ':attributeは画像ファイルをアップロードしてください。';
+    private const RULE_KEY_MESSAGE_IMAGE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
+    private const RULE_KEY_MESSAGE_IMAGE_MAX = 'ファイルの容量を超過しています。';
+    private const RULE_KEY_MESSAGE_IMAGE_DIMENTIONS = ':attributeは指定された縦横のサイズの範囲でアップロードしてください。';
 
     // authority
     private const NO_AUTHORITIES_COUNT = 0;
@@ -110,13 +122,14 @@ class BaseRequest extends FormRequest
         $roleModel = app()->make(Roles::class);
 
         return [
-            self::ATTRIBUTE_NAME   => self::RULE_NAME,
-            self::ATTRIBUTE_EMAIL  => self::RULE_EMAIL,
+            self::ATTRIBUTE_NAME                  => self::RULE_NAME,
+            self::ATTRIBUTE_EMAIL                 => self::RULE_EMAIL,
             // 'email' => ['regex:/^.+@.+$/i']
-            self::ATTRIBUTE_ROLE_ID => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
-            self::ATTRIBUTE_PASSWORD   => self::RULE_PASSWORD,
-            self::ATTRIBUTE_PASSWORD_CONFIRMATION   => self::RULE_PASSWORD_CONFIRMATION,
-            self::ATTRIBUTE_TEL   => self::RULE_TEL,
+            self::ATTRIBUTE_ROLE_ID               => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
+            self::ATTRIBUTE_PASSWORD              => self::RULE_PASSWORD,
+            self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::RULE_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_TEL                   => self::RULE_TEL,
+            self::ATTRIBUTE_IMAGE                 => self::RULE_IMAGE,
         ];
     }
 
@@ -128,13 +141,17 @@ class BaseRequest extends FormRequest
     public function messages()
     {
         return [
-            self::RULE_KEY_EMAIL_EMAIL => self::RULE_KEY_MESSAGE_EMAIL_EMAIL,
-            self::RULE_KEY_REQUIRED    => self::RULE_KEY_MESSAGE_REQUIRED,
-            self::RULE_KEY_STRING      => self::RULE_KEY_MESSAGE_STRING,
-            self::RULE_KEY_BETWEEN     => self::RULE_KEY_MESSAGE_BETWEEN,
-            self::RULE_KEY_CONFIRMED   => self::RULE_KEY_MESSAGE_CONFIRMED,
-            self::RULE_KEY_SAME        => self::RULE_KEY_MESSAGE_SAME,
-            self::RULE_KEY_TEL_REGEX   => self::RULE_KEY_TEL_REGEX,
+            self::RULE_KEY_EMAIL_EMAIL      => self::RULE_KEY_MESSAGE_EMAIL_EMAIL,
+            self::RULE_KEY_REQUIRED         => self::RULE_KEY_MESSAGE_REQUIRED,
+            self::RULE_KEY_STRING           => self::RULE_KEY_MESSAGE_STRING,
+            self::RULE_KEY_BETWEEN          => self::RULE_KEY_MESSAGE_BETWEEN,
+            self::RULE_KEY_CONFIRMED        => self::RULE_KEY_MESSAGE_CONFIRMED,
+            self::RULE_KEY_SAME             => self::RULE_KEY_MESSAGE_SAME,
+            self::RULE_KEY_TEL_REGEX        => self::RULE_KEY_MESSAGE_TEL_REGEX,
+            self::RULE_KEY_IMAGE            => self::RULE_KEY_MESSAGE_IMAGE,
+            self::RULE_KEY_IMAGE_MIMES      => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
+            self::RULE_KEY_IMAGE_MAX        => self::RULE_KEY_MESSAGE_IMAGE_MAX,
+            self::RULE_KEY_IMAGE_DIMENTIONS => self::RULE_KEY_MESSAGE_IMAGE_DIMENTIONS,
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
         ];
@@ -155,6 +172,7 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_PASSWORD              => self::ATTRIBUTE_NAME_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::ATTRIBUTE_NAME_PASSWORD_CONFIRMATION,
             self::ATTRIBUTE_TEL                   => self::ATTRIBUTE_NAME_TEL,
+            self::ATTRIBUTE_IMAGE                 => self::ATTRIBUTE_NAME_IMAGE,
         ];
     }
 
