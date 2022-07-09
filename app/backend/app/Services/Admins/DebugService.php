@@ -13,6 +13,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\Time\TimeLibrary;
+use App\Library\String\UnidLibrary;
 
 class DebugService
 {
@@ -59,8 +60,10 @@ class DebugService
                 return response()->json(['message' => 'No file uploaded!', 'status' => 200], 200);
             }
 
+            $uuid = UnidLibrary::uuidVersion4();
+
             // ファイル名
-            $fileName = TimeLibrary::getCurrentDateTimeTimeStamp() . '_' . $file->getClientOriginalName();
+            $fileName = TimeLibrary::getCurrentDateTimeTimeStamp() . '_' . $uuid . '_' . $file->getClientOriginalName();
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
