@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Library\Stripe\StripeLibrary;
+use App\Library\Time\TimeLibrary;
 
 class DebugService
 {
@@ -47,14 +48,19 @@ class DebugService
     {
         try{
             // アップロードするディレクトリ名を指定
-            $uploadDirectory = 'debug/';
+            // $uploadDirectory = '/images/debug/';
+            $uploadDirectory = Config::get('myappFile.upload.storage.local.images.debug');
 
             /** @var UploadedFile $file */
             $file = $request->image;
 
+            // ファイルが存在しない場合
+            if (is_null($file)) {
+                return response()->json(['message' => 'No file uploaded!', 'status' => 200], 200);
+            }
 
             // ファイル名
-            $fileName = $file->getClientOriginalName();
+            $fileName = TimeLibrary::getCurrentDateTimeTimeStamp() . '_' . $file->getClientOriginalName();
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
@@ -65,7 +71,6 @@ class DebugService
         }
 
         $status = !$result ? 503 : 200;
-
         return response()->json(['message' => $result, 'status' => $status], $status);
     }
 }

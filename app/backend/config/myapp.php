@@ -23,7 +23,7 @@ return [
                 'staging'    => 'file/',
                 'production' => 's3',
             ],
-        ]
+        ],
     ],
     'slack' => [
         'channel' => env('APP_SLACK_CHANNEL', 'channel_title'),
