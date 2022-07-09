@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Config;
 
 class BaseRequest extends FormRequest
 {
-    private const AUTHORIZATION_ERROR_STATUS_CODE = 403;
-    private const AUTHORIZATION_ERROR_MESSAGE = 'Forbidden';
-    private const VALIDATION_ERROR_STATUS_CODE = 422;
-    private const VALIDATION_ERROR_MESSAGE= 'Unprocessable Entity';
+    protected const AUTHORIZATION_ERROR_STATUS_CODE = 403;
+    protected const AUTHORIZATION_ERROR_MESSAGE = 'Forbidden';
+    protected const VALIDATION_ERROR_STATUS_CODE = 422;
+    protected const VALIDATION_ERROR_MESSAGE= 'Unprocessable Entity';
 
     // error response key
     protected const ERROR_RESPONSE_KEY_STATUS = 'status';
@@ -31,6 +31,7 @@ class BaseRequest extends FormRequest
     protected const ATTRIBUTE_PASSWORD              = 'password';
     protected const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
     protected const ATTRIBUTE_TEL                   = 'tel';
+    protected const ATTRIBUTE_FILE                  = 'file';
     protected const ATTRIBUTE_IMAGE                 = 'image';
 
     // attribute name
@@ -41,6 +42,7 @@ class BaseRequest extends FormRequest
     protected const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
     protected const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
     protected const ATTRIBUTE_NAME_TEL                   = '電話番号';
+    protected const ATTRIBUTE_NAME_FILE                  = 'ファイル';
     protected const ATTRIBUTE_NAME_IMAGE                 = '画像';
 
     // rules
@@ -50,6 +52,8 @@ class BaseRequest extends FormRequest
     protected const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
     protected const RULE_PASSWORD_CONFIRMATION = 'same:password';
     protected const RULE_TEL = 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/';
+    // 例: Excelファイル
+    protected const RULE_FILE = 'file|max:1000|mimes:xlsx|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     // 最大512KB,指定された拡張子(jpg,png),最小縦横100px 最大縦横600px
     protected const RULE_IMAGE = 'nullable|file|image|max:512|mimes:jpg,png|dimensions:min_width=100,min_height=100,max_width=600,max_height=600';
 
@@ -62,9 +66,14 @@ class BaseRequest extends FormRequest
     protected const RULE_KEY_SAME = 'same';
     protected const RULE_KEY_EMAIL = 'email';
     protected const RULE_KEY_TEL_REGEX = 'tel.regex';
+    protected const RULE_KEY_FILE = 'file';
+    protected const RULE_KEY_FILE_MAX = 'file.max';
+    protected const RULE_KEY_FILE_MIMES = 'file.mimes';
+    protected const RULE_KEY_FILE_MIME_TYPES = 'file.mimetypes';
     protected const RULE_KEY_IMAGE = 'image';
-    protected const RULE_KEY_IMAGE_MIMES = 'image.mimes';
     protected const RULE_KEY_IMAGE_MAX = 'image.max';
+    protected const RULE_KEY_IMAGE_MIMES = 'image.mimes';
+    protected const RULE_KEY_IMAGE_MIME_TYPES = 'image.mimetypes';
     protected const RULE_KEY_IMAGE_DIMENTIONS = 'image.dimensions';
 
     // message
@@ -76,9 +85,14 @@ class BaseRequest extends FormRequest
     protected const RULE_KEY_MESSAGE_SAME = ':attributeは同一の値ではありません。';
     protected const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
     protected const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
+    protected const RULE_KEY_MESSAGE_FILE = ':attributeはファイルをアップロードしてください。';
+    protected const RULE_KEY_MESSAGE_FILE_MAX = 'ファイルの容量を超過しています。';
+    protected const RULE_KEY_MESSAGE_FILE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
+    protected const RULE_KEY_MESSAGE_FILE_MIME_TYPES = '許可されていない形式のファイルがアップロードされました。';
     protected const RULE_KEY_MESSAGE_IMAGE = ':attributeは画像ファイルをアップロードしてください。';
-    protected const RULE_KEY_MESSAGE_IMAGE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
     protected const RULE_KEY_MESSAGE_IMAGE_MAX = 'ファイルの容量を超過しています。';
+    protected const RULE_KEY_MESSAGE_IMAGE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
+    protected const RULE_KEY_MESSAGE_IMAGE_MIME_TYPES = '許可されていない形式のファイルがアップロードされました。';
     protected const RULE_KEY_MESSAGE_IMAGE_DIMENTIONS = ':attributeは指定された縦横のサイズの範囲でアップロードしてください。';
 
     // authority
@@ -129,6 +143,7 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_PASSWORD              => self::RULE_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::RULE_PASSWORD_CONFIRMATION,
             self::ATTRIBUTE_TEL                   => self::RULE_TEL,
+            self::ATTRIBUTE_FILE                  => self::RULE_FILE,
             self::ATTRIBUTE_IMAGE                 => self::RULE_IMAGE,
         ];
     }
@@ -148,9 +163,14 @@ class BaseRequest extends FormRequest
             self::RULE_KEY_CONFIRMED        => self::RULE_KEY_MESSAGE_CONFIRMED,
             self::RULE_KEY_SAME             => self::RULE_KEY_MESSAGE_SAME,
             self::RULE_KEY_TEL_REGEX        => self::RULE_KEY_MESSAGE_TEL_REGEX,
+            self::RULE_KEY_FILE             => self::RULE_KEY_MESSAGE_FILE,
+            self::RULE_KEY_FILE_MAX         => self::RULE_KEY_MESSAGE_FILE_MAX,
+            self::RULE_KEY_FILE_MIMES       => self::RULE_KEY_MESSAGE_FILE_MIMES,
+            self::RULE_KEY_FILE_MIME_TYPES  => self::RULE_KEY_MESSAGE_FILE_MIME_TYPES,
             self::RULE_KEY_IMAGE            => self::RULE_KEY_MESSAGE_IMAGE,
-            self::RULE_KEY_IMAGE_MIMES      => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
             self::RULE_KEY_IMAGE_MAX        => self::RULE_KEY_MESSAGE_IMAGE_MAX,
+            self::RULE_KEY_IMAGE_MIMES      => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
+            self::RULE_KEY_IMAGE_MIME_TYPES => self::RULE_KEY_MESSAGE_IMAGE_MIME_TYPES,
             self::RULE_KEY_IMAGE_DIMENTIONS => self::RULE_KEY_MESSAGE_IMAGE_DIMENTIONS,
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
@@ -172,6 +192,7 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_PASSWORD              => self::ATTRIBUTE_NAME_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::ATTRIBUTE_NAME_PASSWORD_CONFIRMATION,
             self::ATTRIBUTE_TEL                   => self::ATTRIBUTE_NAME_TEL,
+            self::ATTRIBUTE_FILE                  => self::ATTRIBUTE_NAME_FILE,
             self::ATTRIBUTE_IMAGE                 => self::ATTRIBUTE_NAME_IMAGE,
         ];
     }
