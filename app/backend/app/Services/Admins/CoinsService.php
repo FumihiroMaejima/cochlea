@@ -151,13 +151,16 @@ class CoinsService
     {
         DB::beginTransaction();
         try {
-            $coinIds = $request->roles;
+            $coinIds = $request->coins;
 
             $resource = CoinsResource::toArrayForDelete();
 
             $deleteRowCount = $this->coinsRepository->deleteCoin($resource, $coinIds);
 
             DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
             // 更新されていない場合は304
             $message = ($deleteRowCount > 0) ? 'success' : 'not deleted';
