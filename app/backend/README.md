@@ -1209,6 +1209,85 @@ Modelでの利用例
 
 ---
 
+
+# バッチ(Artisanコンソールコマンド)の作成
+
+### コマンド生成
+
+下記のコマンドで`App\Console\Commands`内にコマンド作成用のファイルが作成される。
+
+```shell-session
+php artisan make:command TestCommand
+```
+
+下記の様な形で`handle`メソッドで処理内容を記載する。(戻り値は何でも良い)
+
+```php
+class TestCommand extends Command
+{
+    /**
+     * The name and signature of the console command.(コンソールコマンドの名前と使い方)
+     *
+     * @var string
+     */
+    protected $signature = 'debug:test'; // if require parameter 'debug:test {param}';
+
+    /**
+     * The console command description.(コンソールコマンドの説明)
+     *
+     * @var string
+     */
+    protected $description = 'debug test command';
+
+
+    /**
+     * DebugTestCommandインスタンスの生成
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.(コマンドの実行)
+     *
+     * @return void
+     */
+    public function handle(): void
+    {
+        // 現在日時(タイムゾーン付き)
+        echo date('c') . "\n";
+    }
+}
+
+
+```
+
+`App\Console\Kernel.php`に登録する。
+
+
+```php
+
+class Kernel extends ConsoleKernel
+{
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
+        Commands\TestCommand::class,
+    ];
+
+    // 以下省略
+
+}
+```
+
+---
+
 # レプリケーション設定
 
 `database.php`の`connections`の、`mysql`の設定を下記の通り設定する。
