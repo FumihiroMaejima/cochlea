@@ -74,42 +74,4 @@ class RoleDeleteRequest extends BaseRequest
             'roles' => 'ロール'
         ];
     }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        $response = [
-            'status'  => 403,
-            'errors'  => [],
-            'message' => 'Forbidden'
-        ];
-
-        throw (new HttpResponseException(response()->json($response, 403)));
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = [
-            'status'  => 422,
-            'errors'  => [],
-            'message' => 'Unprocessable Entity'
-        ];
-
-        $response['errors'] = $validator->errors()->toArray();
-        throw (new HttpResponseException(response()->json($response, 422)));
-    }
 }

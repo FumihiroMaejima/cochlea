@@ -30,6 +30,7 @@ class BaseRequest extends FormRequest
     private const ATTRIBUTE_ROLE_ID               = 'roleId';
     private const ATTRIBUTE_PASSWORD              = 'password';
     private const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
+    private const ATTRIBUTE_TEL                   = 'tel';
 
     // attribute name
     private const ATTRIBUTE_NAME_ID                    = 'id';
@@ -38,6 +39,7 @@ class BaseRequest extends FormRequest
     private const ATTRIBUTE_NAME_ROLE_ID               = '権限';
     private const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
     private const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
+    private const ATTRIBUTE_NAME_TEL                   = '電話番号';
 
     // rules
     private const RULE_NAME = 'required|string|between:1,50';
@@ -45,6 +47,7 @@ class BaseRequest extends FormRequest
     private const RULE_ROLE_ID = 'required|integer|exists:'; // model のidカラムを指定(. $roleModel->getTable() . ',id')
     private const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
     private const RULE_PASSWORD_CONFIRMATION = 'same:password';
+    private const RULE_TEL = 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/';
 
     // rule key
     private const RULE_KEY_EMAIL_EMAIL = 'email.email';
@@ -69,7 +72,7 @@ class BaseRequest extends FormRequest
     // authority
     private const NO_AUTHORITIES_COUNT = 0;
 
-    /** @var array|null $requestAuthorities approved autorities in this requst */
+    /** @var array<int, string>|null $requestAuthorities approved autorities in this requst */
     protected array|null $requestAuthorities = null;
 
     /**
@@ -113,6 +116,7 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_ROLE_ID => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
             self::ATTRIBUTE_PASSWORD   => self::RULE_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION   => self::RULE_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_TEL   => self::RULE_TEL,
         ];
     }
 
@@ -128,8 +132,9 @@ class BaseRequest extends FormRequest
             self::RULE_KEY_REQUIRED    => self::RULE_KEY_MESSAGE_REQUIRED,
             self::RULE_KEY_STRING      => self::RULE_KEY_MESSAGE_STRING,
             self::RULE_KEY_BETWEEN     => self::RULE_KEY_MESSAGE_BETWEEN,
-            self::RULE_KEY_CONFIRMED     => self::RULE_KEY_MESSAGE_CONFIRMED,
-            self::RULE_KEY_SAME     => self::RULE_KEY_MESSAGE_SAME
+            self::RULE_KEY_CONFIRMED   => self::RULE_KEY_MESSAGE_CONFIRMED,
+            self::RULE_KEY_SAME        => self::RULE_KEY_MESSAGE_SAME,
+            self::RULE_KEY_TEL_REGEX   => self::RULE_KEY_TEL_REGEX,
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
         ];
@@ -149,6 +154,7 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_ROLE_ID               => self::ATTRIBUTE_NAME_ROLE_ID,
             self::ATTRIBUTE_PASSWORD              => self::ATTRIBUTE_NAME_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::ATTRIBUTE_NAME_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_TEL                   => self::ATTRIBUTE_NAME_TEL,
         ];
     }
 

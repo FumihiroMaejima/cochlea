@@ -131,6 +131,9 @@ class RolesService
 
             DB::commit();
 
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
+
             // 作成されている場合は304
             $message = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 201 : 401;
@@ -172,6 +175,9 @@ class RolesService
 
             DB::commit();
 
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
+
             // 更新されていない場合は304
             $message = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 'success' : 'not modified';
             $status = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 200 : 304;
@@ -206,6 +212,9 @@ class RolesService
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
             DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
             // 更新されていない場合は304
             $message = ($deleteRowCount > 0 && $deleteRolePermissionsRowCount > 0) ? 'success' : 'not deleted';
