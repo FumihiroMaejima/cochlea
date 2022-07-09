@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use Database\Seeders\BaseSeeder;
 

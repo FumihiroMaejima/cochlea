@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 
 class DebugTestCommand extends Command
 {

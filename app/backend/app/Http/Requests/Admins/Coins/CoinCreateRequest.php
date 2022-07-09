@@ -7,7 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 
 class CoinCreateRequest extends BaseRequest
 {

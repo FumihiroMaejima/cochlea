@@ -5,7 +5,7 @@ namespace App\Http\Resources\Admins;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 
 class AdminsRolesResource extends JsonResource
 {

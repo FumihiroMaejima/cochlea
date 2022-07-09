@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library;
+namespace App\Library\Time;
 
 use Illuminate\Http\Request;
 use App\Trait\CheckHeaderTrait;

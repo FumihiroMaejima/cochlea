@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;

@@ -4,7 +4,7 @@ namespace Tests\Unit\Service;
 
 // use PHPUnit\Framework\TestCase;
 
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;

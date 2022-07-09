@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Coins;
 
 class CoinsResource extends JsonResource

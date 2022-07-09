@@ -5,7 +5,7 @@ namespace Database\Seeders\Masters;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use App\Library\TimeLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\RolePermissions;
 use Database\Seeders\BaseSeeder;
 
