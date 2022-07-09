@@ -3,9 +3,7 @@
 namespace App\Library\Stripe;
 
 use Illuminate\Http\Request;
-use App\Trait\CheckHeaderTrait;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Stripe\StripeClient;
 use Stripe\Exception\ApiConnectionException;
@@ -22,17 +20,6 @@ class StripeLibrary
 
     // api key config name
     private const CONFIG_KEY_NAME_PRIVATE = 'stripe.apiKey.private';
-
-    /**
-     * get current date time.
-     *
-     * @param string $format datetime format
-     * @return string
-     */
-    public static function getCurrentDateTime(string $format = self::REQUEST_METHOD_GET): string
-    {
-        return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
-    }
 
     /**
      * get permissions data for frontend parts
