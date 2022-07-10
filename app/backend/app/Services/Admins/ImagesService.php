@@ -63,8 +63,19 @@ class ImagesService
 
         $directory = Config::get('myappFile.upload.storage.local.images.debug');
 
+        $imagePath = "{$directory}{$name}.{$extention}";
+
+        // storageの存在確認
+        $file = Storage::get($imagePath);
+
+        if (is_null($file)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_404,
+            );
+        }
+
         // return response()->file(Storage::path("{$directory}{$name}.{$extention}?ver={$version}"));
-        return response()->file(Storage::path("{$directory}{$name}.{$extention}"));
+        return response()->file(Storage::path($imagePath));
     }
 
     /**
