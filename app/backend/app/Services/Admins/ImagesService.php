@@ -5,6 +5,7 @@ namespace App\Services\Admins;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
@@ -12,22 +13,25 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Library\File\ImageLibrary;
-use App\Library\Stripe\StripeLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UnidLibrary;
 use App\Models\Masters\Images;
+use App\Repositories\Admins\Images\ImagesRepositoryInterface;
+use App\Http\Resources\Admins\ImagesResource;
 
 class ImagesService
 {
-    protected string $prop;
+    protected ImagesRepositoryInterface $imagesRepository;
 
     /**
-     * create PermissionsService instance
+     * create ImagesService instance
+     *
+     * ImagesRepositoryInterface $coinsRepository
      * @return void
      */
-    public function __construct()
+    public function __construct(ImagesRepositoryInterface $imagesRepository)
     {
-        $this->prop = 'debug propaty';
+        $this->imagesRepository = $imagesRepository;
     }
 
     /**
@@ -38,36 +42,57 @@ class ImagesService
      */
     public function uploadImage(DebugFileUploadRequest $request): JsonResponse
     {
-        try{
-            // アップロードするディレクトリ名を指定
-            // $uploadDirectory = '/images/debug/';
-            $uploadDirectory = Config::get('myappFile.upload.storage.local.images.debug');
+        // アップロードするディレクトリ名を指定
+        // $uploadDirectory = '/images/debug/';
+        $uploadDirectory = Config::get('myappFile.upload.storage.local.images.debug');
 
-            /** @var UploadedFile $file */
-            $file = $request->image;
+        /** @var UploadedFile $file */
+        $file = $request->image;
 
-            // ファイルが存在しない場合
-            if (is_null($file)) {
-                return response()->json(['message' => 'No file uploaded!', 'status' => 200], 200);
-            }
+        // ファイルが存在しない場合
+        if (is_null($file)) {
+            return response()->json(['message' => 'No file uploaded!', 'status' => 200], 200);
+        }
 
-            $resource = ImageLibrary::getFileResource($file);
+        $fileResource = ImageLibrary::getFileResource($file);
+
+        $resource = ImagesResource::toArrayForCreate($fileResource);
 
 
-            // TODO DBへの登録処理
+        // DBへの登録処理
+        $resource = ImagesResource::toArrayForCreate($fileResource);
+
+        DB::beginTransaction();
+
+        try {
+            $insertCount = $this->imagesRepository->createImage($resource);
 
             // ファイル名
-            $fileName = $resource[Images::UUID] . '.' . $resource[Images::EXTENTION];
+            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
+            // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
+            // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
+            // $request->file('image')->storeAs($uploadDirectory, $fileName);
+
+            $result = $file->storeAs($uploadDirectory, $fileName);
+
+            DB::commit();
+
+                        // ファイル名
+            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
             $result = $file->storeAs($uploadDirectory, $fileName);
+
+            // 作成されている場合は304
+            $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
+            $status = ($insertCount > 0 && $result) ? 201 : 401;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
             throw $e;
         }
-
-        $status = !$result ? 503 : 200;
-        return response()->json(['message' => $result, 'status' => $status], $status);
     }
 }
