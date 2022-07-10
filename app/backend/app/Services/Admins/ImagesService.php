@@ -17,7 +17,7 @@ use App\Library\Time\TimeLibrary;
 use App\Library\String\UnidLibrary;
 use App\Models\Masters\Images;
 
-class ImageService
+class ImagesService
 {
     protected string $prop;
 

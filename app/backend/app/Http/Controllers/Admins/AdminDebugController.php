@@ -8,26 +8,26 @@ use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Services\Admins\DebugService;
-use App\Services\Admins\ImageService;
+use App\Services\Admins\ImagesService;
 use App\Trait\CheckHeaderTrait;
 
 class AdminDebugController extends Controller
 {
     use CheckHeaderTrait;
     private DebugService $service;
-    private ImageService $imageService;
+    private ImagesService $imagesService;
 
     /**
      * Create a new AdminDebugController instance.
      *
      * @param DebugService $debugService
-     * @param ImageService $imageService
+     * @param ImagesService $imagesService
      * @return void
      */
-    public function __construct(DebugService $debugService, ImageService $imageService)
+    public function __construct(DebugService $debugService, ImagesService $imagesService)
     {
         $this->service = $debugService;
-        $this->imageService = $imageService;
+        $this->imagesService = $imagesService;
     }
 
     /**
@@ -76,7 +76,7 @@ class AdminDebugController extends Controller
         }
 
         // サービスの実行
-        return $this->imageService->uploadImage($request);
+        return $this->imagesService->uploadImage($request);
     }
 
     /**
