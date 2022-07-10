@@ -70,10 +70,10 @@ class AdminDebugController extends Controller
      * 画像ファイルイメージの表示
      *
      * @param DebugFileUploadRequest $request
-     * @return BinaryFileResponse
+     * @return BinaryFileResponse|JsonResponse
      * @throws MyApplicationHttpException
      */
-    public function getImage(Request $request): BinaryFileResponse
+    public function getImage(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
@@ -83,7 +83,8 @@ class AdminDebugController extends Controller
         // バリデーションチェック
         $validator = Validator::make($request->all(),
             [
-                'uuid' => ['required','uuid']
+                'uuid' => ['required','uuid'],
+                'ver' => ['required','int'], // タイムスタンプ
             ]
         );
 
@@ -95,7 +96,7 @@ class AdminDebugController extends Controller
         }
 
         // サービスの実行
-        return $this->imagesService->getImage($request->uuid);
+        return $this->imagesService->getImage($request->uuid, $request->ver);
     }
 
     /**

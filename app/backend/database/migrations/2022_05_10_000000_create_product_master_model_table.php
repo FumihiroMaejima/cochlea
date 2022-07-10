@@ -25,6 +25,7 @@ class CreateProductMasterModelTable extends Migration
             $table->string('extention', 255)->comment('拡張子');
             $table->string('mimeType', 255)->comment('mimeType');
             $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
+            $table->integer('version')->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
             $table->timestamps();
             $table->softDeletes();
 

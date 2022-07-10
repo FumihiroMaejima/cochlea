@@ -68,6 +68,7 @@ class ImagesResource extends JsonResource
                 Images::EXTENTION  => $item->{Images::EXTENTION},
                 Images::MIME_TYPE  => $item->{Images::MIME_TYPE},
                 Images::S3_KEY     => $item->{Images::S3_KEY},
+                Images::VERSION    => $item->{Images::VERSION},
                 Images::CREATED_AT =>  $item->{Images::CREATED_AT},
                 Images::UPDATED_AT =>  $item->{Images::UPDATED_AT},
             ];
@@ -92,6 +93,7 @@ class ImagesResource extends JsonResource
             Images::EXTENTION  => $fileReousrce[Images::EXTENTION],
             Images::MIME_TYPE  => $fileReousrce[Images::MIME_TYPE],
             Images::S3_KEY     => $fileReousrce[Images::S3_KEY],
+            Images::VERSION    => TimeLibrary::strToTimeStamp($dateTime),
             Images::CREATED_AT => $dateTime,
             Images::UPDATED_AT => $dateTime,
         ];
@@ -113,6 +115,7 @@ class ImagesResource extends JsonResource
             Images::EXTENTION  => $fileReousrce[Images::EXTENTION],
             Images::MIME_TYPE  => $fileReousrce[Images::MIME_TYPE],
             Images::S3_KEY     => $fileReousrce[Images::S3_KEY],
+            Images::VERSION    => TimeLibrary::strToTimeStamp($dateTime),
             Images::CREATED_AT => $dateTime,
             Images::UPDATED_AT => $dateTime,
         ];
@@ -128,6 +131,7 @@ class ImagesResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
+            Images::VERSION    => TimeLibrary::strToTimeStamp($dateTime),
             Images::UPDATED_AT => $dateTime,
             Images::DELETED_AT => $dateTime,
         ];

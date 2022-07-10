@@ -10,7 +10,7 @@ interface ImagesRepositoryInterface
 
     public function getImages(): Collection;
 
-    public function getByUuid(string $uuid): Collection|null;
+    public function getByUuid(string $uuid, int $version): Collection|null;
 
     public function getLatestImage(): object;
 

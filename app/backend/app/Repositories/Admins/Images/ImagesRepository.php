@@ -54,14 +54,16 @@ class ImagesRepository implements ImagesRepositoryInterface
      * get Image by uuid.
      *
      * @param string $uuid
+     * @param int $version
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUuid(string $uuid): Collection|null
+    public function getByUuid(string $uuid, int $version): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
             ->where(Images::UUID, '=', $uuid)
+            ->where(Images::VERSION, '=', $version)
             ->where(Images::DELETED_AT, '=', null)
             ->get();
 

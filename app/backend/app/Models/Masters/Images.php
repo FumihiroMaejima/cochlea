@@ -18,6 +18,7 @@ class Images extends Model
     public const EXTENTION   = 'extention';
     public const MIME_TYPE   = 'mimeType';
     public const S3_KEY      = 's3_key';
+    public const VERSION     = 'version';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT  = 'updated_at';
     public const DELETED_AT  = 'deleted_at';
@@ -65,6 +66,7 @@ class Images extends Model
         self::EXTENTION,
         self::MIME_TYPE,
         self::S3_KEY,
+        self::VERSION,
         self::CRREATED_AT,
         self::UPDATED_AT
     ];

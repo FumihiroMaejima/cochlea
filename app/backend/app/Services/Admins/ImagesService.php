@@ -38,15 +38,16 @@ class ImagesService
     }
 
     /**
-     * 画像ファイルのアップロード
+     * 画像ファイルのダウンロード
      *
      * @param string $uuid
+     * @param int $version
      * @return BinaryFileResponse
      * @throws MyApplicationHttpException
      */
-    public function getImage(string $uuid): BinaryFileResponse
+    public function getImage(string $uuid, int $version): BinaryFileResponse
     {
-        $collection = $this->imagesRepository->getByUuid($uuid);
+        $collection = $this->imagesRepository->getByUuid($uuid, $version);
 
         if (is_null($collection)) {
             throw new MyApplicationHttpException(
@@ -59,7 +60,6 @@ class ImagesService
 
         $name = $resource[IMAGES::UUID];
         $extention = $resource[IMAGES::EXTENTION];
-        $version = TimeLibrary::strToTimeStamp($resource[IMAGES::UPDATED_AT]);
 
         $directory = Config::get('myappFile.upload.storage.local.images.debug');
 
