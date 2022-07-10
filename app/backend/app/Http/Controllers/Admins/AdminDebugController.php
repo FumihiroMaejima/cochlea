@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Admins;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Services\Admins\DebugService;
 use App\Services\Admins\ImagesService;
 use App\Trait\CheckHeaderTrait;
+use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AdminDebugController extends Controller
 {
@@ -63,12 +67,44 @@ class AdminDebugController extends Controller
     }
 
     /**
+     * 画像ファイルイメージの表示
+     *
+     * @param DebugFileUploadRequest $request
+     * @return BinaryFileResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getImage(Request $request): BinaryFileResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // バリデーションチェック
+        $validator = Validator::make($request->all(),
+            [
+                'uuid' => ['required','uuid']
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_422,
+            );
+        }
+
+        // サービスの実行
+        return $this->imagesService->getImage($request->uuid);
+    }
+
+    /**
      * 画像ファイルイメージのアップロード
      *
      * @param DebugFileUploadRequest $request
      * @return JsonResponse
      */
-    public function image(DebugFileUploadRequest $request): JsonResponse
+    public function uploadImage(DebugFileUploadRequest $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {

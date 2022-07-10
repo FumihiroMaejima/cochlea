@@ -60,7 +60,8 @@ class ImagesRepository implements ImagesRepositoryInterface
     public function getByUuid(string $uuid): Collection|null
     {
         $collection = DB::table($this->getTable())
-            ->select([Images::ID, Images::NAME])
+            ->select(['*'])
+            ->where(Images::UUID, '=', $uuid)
             ->where(Images::DELETED_AT, '=', null)
             ->get();
 
@@ -71,8 +72,10 @@ class ImagesRepository implements ImagesRepositoryInterface
 
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
-            throw new MyApplicationHttpException(ExceptionStatusCodeMessages::MESSAGE_500, 'has deplicate collections,');
-            return null;
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'has deplicate collections,'
+            );
         }
 
         return $collection;

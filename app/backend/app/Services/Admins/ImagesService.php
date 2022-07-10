@@ -7,10 +7,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
@@ -18,6 +20,7 @@ use App\Library\String\UnidLibrary;
 use App\Models\Masters\Images;
 use App\Repositories\Admins\Images\ImagesRepositoryInterface;
 use App\Http\Resources\Admins\ImagesResource;
+use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ImagesService
 {
@@ -32,6 +35,36 @@ class ImagesService
     public function __construct(ImagesRepositoryInterface $imagesRepository)
     {
         $this->imagesRepository = $imagesRepository;
+    }
+
+    /**
+     * 画像ファイルのアップロード
+     *
+     * @param string $uuid
+     * @return BinaryFileResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getImage(string $uuid): BinaryFileResponse
+    {
+        $collection = $this->imagesRepository->getByUuid($uuid);
+
+        if (is_null($collection)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                'not found images.'
+            );
+        }
+
+        $resource = ImagesResource::toArrayForGetFirstByUuid($collection);
+
+        $name = $resource[IMAGES::UUID];
+        $extention = $resource[IMAGES::EXTENTION];
+        $version = TimeLibrary::strToTimeStamp($resource[IMAGES::UPDATED_AT]);
+
+        $directory = Config::get('myappFile.upload.storage.local.images.debug');
+
+        // return response()->file(Storage::path("{$directory}{$name}.{$extention}?ver={$version}"));
+        return response()->file(Storage::path("{$directory}{$name}.{$extention}"));
     }
 
     /**

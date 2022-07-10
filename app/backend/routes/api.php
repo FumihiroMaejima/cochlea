@@ -87,7 +87,8 @@ Route::group(['prefix' => 'v1/admin'], function () {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Admins\AdminDebugController::class, 'test'])->name('admin.debug.test.get');
             Route::get('list', [\App\Http\Controllers\Admins\AdminDebugController::class, 'list'])->name('admin.debug.list.get');
-            Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'image'])->name('admin.debug.image.post');
+            Route::get('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getImage'])->name('admin.debug.image.get');
+            Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'uploadImage'])->name('admin.debug.image.post');
         });
     }
 });

@@ -49,6 +49,34 @@ class ImagesResource extends JsonResource
     }
 
     /**
+     * Transform the resource into an array for get roles collection.
+     *
+     * @param Collection $collection
+     * @return array
+     */
+    public static function toArrayForGetFirstByUuid(Collection $collection)
+    {
+        // レスポンス
+        $response = [];
+
+        foreach ($collection as $item) {
+            // stdClass $item
+            $response = [
+                Images::ID         => $item->{Images::ID},
+                Images::UUID       => $item->{Images::UUID},
+                Images::NAME       => $item->{Images::NAME},
+                Images::EXTENTION  => $item->{Images::EXTENTION},
+                Images::MIME_TYPE  => $item->{Images::MIME_TYPE},
+                Images::S3_KEY     => $item->{Images::S3_KEY},
+                Images::CREATED_AT =>  $item->{Images::CREATED_AT},
+                Images::UPDATED_AT =>  $item->{Images::UPDATED_AT},
+            ];
+        }
+
+        return $response;
+    }
+
+    /**
      * Transform the resource into an array for create.
      *
      * @param array<string, string> $fileReousrce
