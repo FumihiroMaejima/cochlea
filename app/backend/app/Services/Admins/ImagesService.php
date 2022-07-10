@@ -100,9 +100,6 @@ class ImagesService
 
         $fileResource = ImageLibrary::getFileResource($file);
 
-        $resource = ImagesResource::toArrayForCreate($fileResource);
-
-
         // DBへの登録処理
         $resource = ImagesResource::toArrayForCreate($fileResource);
 
@@ -132,7 +129,18 @@ class ImagesService
             $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0 && $result) ? 201 : 401;
 
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return response()->json(
+                [
+                    'message' => $message,
+                    'status'  => $status,
+                    'data'    => [
+                        'uuid'    => $resource[IMAGES::UUID],
+                        'ver'     => $resource[IMAGES::VERSION],
+                        'query'   => '?uuid=' . $resource[IMAGES::UUID] . '?ver=' . $resource[IMAGES::VERSION],
+                    ],
+                ],
+                $status
+            );
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
