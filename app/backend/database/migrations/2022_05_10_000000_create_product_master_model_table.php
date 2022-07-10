@@ -13,6 +13,24 @@ class CreateProductMasterModelTable extends Migration
      */
     public function up()
     {
+
+        /**
+         * images table
+         */
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            // $table->uuid()->unique()->primary()->comment('uuid');
+            $table->uuid()->unique()->comment('uuid');
+            $table->string('name', 255)->comment('オリジナルファイル名');
+            $table->string('extention', 255)->comment('拡張子');
+            $table->string('mimeType', 255)->comment('mimeType');
+            $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->comment('images table');
+        });
+
         /**
          * products table
          */
@@ -89,6 +107,7 @@ class CreateProductMasterModelTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('images');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('manufactureres');
