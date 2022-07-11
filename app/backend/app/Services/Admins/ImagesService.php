@@ -118,7 +118,7 @@ class ImagesService
 
             DB::commit();
 
-                        // ファイル名
+            // ファイル名
             $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');

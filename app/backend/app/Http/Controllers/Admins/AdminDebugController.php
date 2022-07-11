@@ -81,7 +81,8 @@ class AdminDebugController extends Controller
         }
 
         // バリデーションチェック
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'uuid' => ['required','uuid'],
                 'ver' => ['required','int'], // タイムスタンプ

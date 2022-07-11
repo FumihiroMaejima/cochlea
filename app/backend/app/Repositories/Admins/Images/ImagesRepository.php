@@ -46,7 +46,7 @@ class ImagesRepository implements ImagesRepositoryInterface
         // collection
         return DB::table($this->getTable())
             ->select(['*'])
-            ->where(Images::DELETED_AT , '=', null)
+            ->where(Images::DELETED_AT, '=', null)
             ->get();
     }
 

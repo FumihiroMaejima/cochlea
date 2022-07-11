@@ -33,7 +33,7 @@ class UnidLibrary
     public static function uuidVersion4(): string
     {
         // パターンの配列化
-        $chars = str_split(self::PATTERN_V4);
+        $chars = mb_str_split(self::PATTERN_V4);
 
         foreach ($chars as $i => $char) {
             if ($char === self::CHAR_BIT) {

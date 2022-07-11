@@ -44,7 +44,7 @@ class CoinsRepository implements CoinsRepositoryInterface
         // collection
         return DB::table($coins)
             ->select(['*'])
-            ->where(Coins::DELETED_AT , '=', null)
+            ->where(Coins::DELETED_AT, '=', null)
             ->get();
     }
 

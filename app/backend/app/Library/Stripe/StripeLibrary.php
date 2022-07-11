@@ -77,8 +77,7 @@ class StripeLibrary
         string $path,
         array $params = [],
         array|RequestOptions $options = []
-    ): StripeObject
-    {
+    ): StripeObject {
         $stripe = self::getStripeClient();
 
         return $stripe->request(self::REQUEST_METHOD_GET, $path, $params, $options);
@@ -96,8 +95,7 @@ class StripeLibrary
         string $path,
         array $params = [],
         array|RequestOptions $options = []
-    ): StripeObject
-    {
+    ): StripeObject {
         $stripe = self::getStripeClient();
 
         return $stripe->request(self::REQUEST_METHOD_POST, $path, $params, $options);
@@ -115,8 +113,7 @@ class StripeLibrary
         string $path,
         array $params = [],
         array|RequestOptions $options = []
-    ): StripeObject
-    {
+    ): StripeObject {
         $stripe = self::getStripeClient();
 
         return $stripe->request(self::REQUEST_METHOD_DELETE, $path, $params, $options);
