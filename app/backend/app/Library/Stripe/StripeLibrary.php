@@ -91,7 +91,7 @@ class StripeLibrary
      * @param array|RequestOptions $options the special modifiers of the request
      * @return StripeObject
      */
-    public static function PostRequest(
+    public static function postRequest(
         string $path,
         array $params = [],
         array|RequestOptions $options = []
@@ -109,7 +109,7 @@ class StripeLibrary
      * @param array|RequestOptions $options the special modifiers of the request
      * @return StripeObject
      */
-    public static function DeleteRequest(
+    public static function deleteRequest(
         string $path,
         array $params = [],
         array|RequestOptions $options = []
