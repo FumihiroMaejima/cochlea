@@ -13,63 +13,92 @@ use Illuminate\Support\Facades\Config;
 
 class BaseRequest extends FormRequest
 {
-    private const AUTHORIZATION_ERROR_STATUS_CODE = 403;
-    private const AUTHORIZATION_ERROR_MESSAGE = 'Forbidden';
-    private const VALIDATION_ERROR_STATUS_CODE = 422;
-    private const VALIDATION_ERROR_MESSAGE= 'Unprocessable Entity';
+    protected const AUTHORIZATION_ERROR_STATUS_CODE = 403;
+    protected const AUTHORIZATION_ERROR_MESSAGE = 'Forbidden';
+    protected const VALIDATION_ERROR_STATUS_CODE = 422;
+    protected const VALIDATION_ERROR_MESSAGE= 'Unprocessable Entity';
 
     // error response key
-    private const ERROR_RESPONSE_KEY_STATUS = 'status';
-    private const ERROR_RESPONSE_KEY_ERRORS = 'errors';
-    private const ERROR_RESPONSE_KEY_MESSAGE = 'message';
+    protected const ERROR_RESPONSE_KEY_STATUS = 'status';
+    protected const ERROR_RESPONSE_KEY_ERRORS = 'errors';
+    protected const ERROR_RESPONSE_KEY_MESSAGE = 'message';
 
     // attribute keys
-    private const ATTRIBUTE_ID                    = 'id';
-    private const ATTRIBUTE_NAME                  = 'name';
-    private const ATTRIBUTE_EMAIL                 = 'email';
-    private const ATTRIBUTE_ROLE_ID               = 'roleId';
-    private const ATTRIBUTE_PASSWORD              = 'password';
-    private const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
+    protected const ATTRIBUTE_ID                    = 'id';
+    protected const ATTRIBUTE_NAME                  = 'name';
+    protected const ATTRIBUTE_EMAIL                 = 'email';
+    protected const ATTRIBUTE_ROLE_ID               = 'roleId';
+    protected const ATTRIBUTE_PASSWORD              = 'password';
+    protected const ATTRIBUTE_PASSWORD_CONFIRMATION = 'password_confirmation';
+    protected const ATTRIBUTE_TEL                   = 'tel';
+    protected const ATTRIBUTE_FILE                  = 'file';
+    protected const ATTRIBUTE_IMAGE                 = 'image';
 
     // attribute name
-    private const ATTRIBUTE_NAME_ID                    = 'id';
-    private const ATTRIBUTE_NAME_NAME                  = '氏名';
-    private const ATTRIBUTE_NAME_EMAIL                 = 'メールアドレス';
-    private const ATTRIBUTE_NAME_ROLE_ID               = '権限';
-    private const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
-    private const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
+    protected const ATTRIBUTE_NAME_ID                    = 'id';
+    protected const ATTRIBUTE_NAME_NAME                  = '氏名';
+    protected const ATTRIBUTE_NAME_EMAIL                 = 'メールアドレス';
+    protected const ATTRIBUTE_NAME_ROLE_ID               = '権限';
+    protected const ATTRIBUTE_NAME_PASSWORD              = 'パスワード';
+    protected const ATTRIBUTE_NAME_PASSWORD_CONFIRMATION = '確認用パスワード';
+    protected const ATTRIBUTE_NAME_TEL                   = '電話番号';
+    protected const ATTRIBUTE_NAME_FILE                  = 'ファイル';
+    protected const ATTRIBUTE_NAME_IMAGE                 = '画像';
 
     // rules
-    private const RULE_NAME = 'required|string|between:1,50';
-    private const RULE_EMAIL = 'required|string|email:rfc|between:1,50';
-    private const RULE_ROLE_ID = 'required|integer|exists:'; // model のidカラムを指定(. $roleModel->getTable() . ',id')
-    private const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
-    private const RULE_PASSWORD_CONFIRMATION = 'same:password';
+    protected const RULE_NAME = 'required|string|between:1,50';
+    protected const RULE_EMAIL = 'required|string|email:rfc|between:1,50';
+    protected const RULE_ROLE_ID = 'required|integer|exists:'; // model のidカラムを指定(. $roleModel->getTable() . ',id')
+    protected const RULE_PASSWORD = 'required|string|between:8,100|confirmed';
+    protected const RULE_PASSWORD_CONFIRMATION = 'same:password';
+    protected const RULE_TEL = 'required|regex:/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/';
+    // 例: Excelファイル
+    protected const RULE_FILE = 'file|max:1000|mimes:xlsx|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    // 最大512KB,指定された拡張子(jpg,png),最小縦横100px 最大縦横600px
+    protected const RULE_IMAGE = 'nullable|file|image|max:512|mimes:jpg,png|dimensions:min_width=100,min_height=100,max_width=600,max_height=600';
 
     // rule key
-    private const RULE_KEY_EMAIL_EMAIL = 'email.email';
-    private const RULE_KEY_REQUIRED = 'required';
-    private const RULE_KEY_STRING = 'string';
-    private const RULE_KEY_BETWEEN = 'between';
-    private const RULE_KEY_CONFIRMED = 'confirmed';
-    private const RULE_KEY_SAME = 'same';
-    private const RULE_KEY_EMAIL = 'email';
-    private const RULE_KEY_TEL_REGEX = 'tel.regex';
+    protected const RULE_KEY_EMAIL_EMAIL = 'email.email';
+    protected const RULE_KEY_REQUIRED = 'required';
+    protected const RULE_KEY_STRING = 'string';
+    protected const RULE_KEY_BETWEEN = 'between';
+    protected const RULE_KEY_CONFIRMED = 'confirmed';
+    protected const RULE_KEY_SAME = 'same';
+    protected const RULE_KEY_EMAIL = 'email';
+    protected const RULE_KEY_TEL_REGEX = 'tel.regex';
+    protected const RULE_KEY_FILE = 'file';
+    protected const RULE_KEY_FILE_MAX = 'file.max';
+    protected const RULE_KEY_FILE_MIMES = 'file.mimes';
+    protected const RULE_KEY_FILE_MIME_TYPES = 'file.mimetypes';
+    protected const RULE_KEY_IMAGE = 'image';
+    protected const RULE_KEY_IMAGE_MAX = 'image.max';
+    protected const RULE_KEY_IMAGE_MIMES = 'image.mimes';
+    protected const RULE_KEY_IMAGE_MIME_TYPES = 'image.mimetypes';
+    protected const RULE_KEY_IMAGE_DIMENTIONS = 'image.dimensions';
 
     // message
-    private const RULE_KEY_MESSAGE_EMAIL_EMAIL = ':attributeの形式が正しくありません。';
-    private const RULE_KEY_MESSAGE_REQUIRED = ':attributeは必須項目です。';
-    private const RULE_KEY_MESSAGE_STRING = ':attributeは文字列を入力してください。';
-    private const RULE_KEY_MESSAGE_BETWEEN = ':attributeは:min〜:max文字以内で入力してください。';
-    private const RULE_KEY_MESSAGE_CONFIRMED = ':attributeは確認用にもう一度入力してください。';
-    private const RULE_KEY_MESSAGE_SAME = ':attributeは同一の値ではありません。';
-    private const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
-    private const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
+    protected const RULE_KEY_MESSAGE_EMAIL_EMAIL = ':attributeの形式が正しくありません。';
+    protected const RULE_KEY_MESSAGE_REQUIRED = ':attributeは必須項目です。';
+    protected const RULE_KEY_MESSAGE_STRING = ':attributeは文字列を入力してください。';
+    protected const RULE_KEY_MESSAGE_BETWEEN = ':attributeは:min〜:max文字以内で入力してください。';
+    protected const RULE_KEY_MESSAGE_CONFIRMED = ':attributeは確認用にもう一度入力してください。';
+    protected const RULE_KEY_MESSAGE_SAME = ':attributeは同一の値ではありません。';
+    protected const RULE_KEY_MESSAGE_EMAIL = 'アルファベット半角で入力してください。';
+    protected const RULE_KEY_MESSAGE_TEL_REGEX = '「000-0000-0000」の形式で入力してください。';
+    protected const RULE_KEY_MESSAGE_FILE = ':attributeはファイルをアップロードしてください。';
+    protected const RULE_KEY_MESSAGE_FILE_MAX = 'ファイルの容量を超過しています。';
+    protected const RULE_KEY_MESSAGE_FILE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
+    protected const RULE_KEY_MESSAGE_FILE_MIME_TYPES = '許可されていない形式のファイルがアップロードされました。';
+    protected const RULE_KEY_MESSAGE_IMAGE = ':attributeは画像ファイルをアップロードしてください。';
+    protected const RULE_KEY_MESSAGE_IMAGE_MAX = 'ファイルの容量を超過しています。';
+    protected const RULE_KEY_MESSAGE_IMAGE_MIMES = '指定された拡張子のファイルをアップロードして下さい。';
+    protected const RULE_KEY_MESSAGE_IMAGE_MIME_TYPES = '許可されていない形式のファイルがアップロードされました。';
+    protected const RULE_KEY_MESSAGE_IMAGE_DIMENTIONS = ':attributeは指定された縦横のサイズの範囲でアップロードしてください。';
 
     // authority
-    private const NO_AUTHORITIES_COUNT = 0;
+    protected const NO_AUTHORITIES_COUNT = 0;
 
-    /** @var array|null $requestAuthorities approved autorities in this requst */
+    /** @var array<int, string>|null $requestAuthorities approved autorities in this requst */
     protected array|null $requestAuthorities = null;
 
     /**
@@ -107,12 +136,15 @@ class BaseRequest extends FormRequest
         $roleModel = app()->make(Roles::class);
 
         return [
-            self::ATTRIBUTE_NAME   => self::RULE_NAME,
-            self::ATTRIBUTE_EMAIL  => self::RULE_EMAIL,
+            self::ATTRIBUTE_NAME                  => self::RULE_NAME,
+            self::ATTRIBUTE_EMAIL                 => self::RULE_EMAIL,
             // 'email' => ['regex:/^.+@.+$/i']
-            self::ATTRIBUTE_ROLE_ID => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
-            self::ATTRIBUTE_PASSWORD   => self::RULE_PASSWORD,
-            self::ATTRIBUTE_PASSWORD_CONFIRMATION   => self::RULE_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_ROLE_ID               => self::RULE_ROLE_ID . $roleModel->getTable() . ',id',
+            self::ATTRIBUTE_PASSWORD              => self::RULE_PASSWORD,
+            self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::RULE_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_TEL                   => self::RULE_TEL,
+            self::ATTRIBUTE_FILE                  => self::RULE_FILE,
+            self::ATTRIBUTE_IMAGE                 => self::RULE_IMAGE,
         ];
     }
 
@@ -124,12 +156,22 @@ class BaseRequest extends FormRequest
     public function messages()
     {
         return [
-            self::RULE_KEY_EMAIL_EMAIL => self::RULE_KEY_MESSAGE_EMAIL_EMAIL,
-            self::RULE_KEY_REQUIRED    => self::RULE_KEY_MESSAGE_REQUIRED,
-            self::RULE_KEY_STRING      => self::RULE_KEY_MESSAGE_STRING,
-            self::RULE_KEY_BETWEEN     => self::RULE_KEY_MESSAGE_BETWEEN,
-            self::RULE_KEY_CONFIRMED     => self::RULE_KEY_MESSAGE_CONFIRMED,
-            self::RULE_KEY_SAME     => self::RULE_KEY_MESSAGE_SAME
+            self::RULE_KEY_EMAIL_EMAIL      => self::RULE_KEY_MESSAGE_EMAIL_EMAIL,
+            self::RULE_KEY_REQUIRED         => self::RULE_KEY_MESSAGE_REQUIRED,
+            self::RULE_KEY_STRING           => self::RULE_KEY_MESSAGE_STRING,
+            self::RULE_KEY_BETWEEN          => self::RULE_KEY_MESSAGE_BETWEEN,
+            self::RULE_KEY_CONFIRMED        => self::RULE_KEY_MESSAGE_CONFIRMED,
+            self::RULE_KEY_SAME             => self::RULE_KEY_MESSAGE_SAME,
+            self::RULE_KEY_TEL_REGEX        => self::RULE_KEY_MESSAGE_TEL_REGEX,
+            self::RULE_KEY_FILE             => self::RULE_KEY_MESSAGE_FILE,
+            self::RULE_KEY_FILE_MAX         => self::RULE_KEY_MESSAGE_FILE_MAX,
+            self::RULE_KEY_FILE_MIMES       => self::RULE_KEY_MESSAGE_FILE_MIMES,
+            self::RULE_KEY_FILE_MIME_TYPES  => self::RULE_KEY_MESSAGE_FILE_MIME_TYPES,
+            self::RULE_KEY_IMAGE            => self::RULE_KEY_MESSAGE_IMAGE,
+            self::RULE_KEY_IMAGE_MAX        => self::RULE_KEY_MESSAGE_IMAGE_MAX,
+            self::RULE_KEY_IMAGE_MIMES      => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
+            self::RULE_KEY_IMAGE_MIME_TYPES => self::RULE_KEY_MESSAGE_IMAGE_MIME_TYPES,
+            self::RULE_KEY_IMAGE_DIMENTIONS => self::RULE_KEY_MESSAGE_IMAGE_DIMENTIONS,
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
         ];
@@ -149,6 +191,9 @@ class BaseRequest extends FormRequest
             self::ATTRIBUTE_ROLE_ID               => self::ATTRIBUTE_NAME_ROLE_ID,
             self::ATTRIBUTE_PASSWORD              => self::ATTRIBUTE_NAME_PASSWORD,
             self::ATTRIBUTE_PASSWORD_CONFIRMATION => self::ATTRIBUTE_NAME_PASSWORD_CONFIRMATION,
+            self::ATTRIBUTE_TEL                   => self::ATTRIBUTE_NAME_TEL,
+            self::ATTRIBUTE_FILE                  => self::ATTRIBUTE_NAME_FILE,
+            self::ATTRIBUTE_IMAGE                 => self::ATTRIBUTE_NAME_IMAGE,
         ];
     }
 

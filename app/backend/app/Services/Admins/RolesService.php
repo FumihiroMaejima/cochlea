@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admins;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
@@ -10,17 +10,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Services\Notifications\RoleSlackNotificationService;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
-use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
+use App\Exports\Admins\RolesExport;
+use App\Http\Requests\Admins\Roles\RoleCreateRequest;
+use App\Http\Requests\Admins\Roles\RoleDeleteRequest;
+use App\Http\Requests\Admins\Roles\RoleUpdateRequest;
+use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
-use App\Http\Resources\Admins\RolePermissionsResource;
-use App\Http\Requests\Admins\RoleUpdateRequest;
-use App\Http\Requests\Admins\RoleDeleteRequest;
-use App\Http\Requests\Admins\RoleCreateRequest;
-use App\Exports\Admins\RolesExport;
 use App\Library\Cache\CacheLibrary;
+use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
+use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Services\Admins\Notifications\RoleSlackNotificationService;
 use Exception;
 
 class RolesService
@@ -131,6 +131,9 @@ class RolesService
 
             DB::commit();
 
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
+
             // 作成されている場合は304
             $message = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 201 : 401;
@@ -172,6 +175,9 @@ class RolesService
 
             DB::commit();
 
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
+
             // 更新されていない場合は304
             $message = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 'success' : 'not modified';
             $status = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 200 : 304;
@@ -206,6 +212,9 @@ class RolesService
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteRolePermissionsByIds($rolePermissionsResource, $roleIds);
 
             DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
             // 更新されていない場合は304
             $message = ($deleteRowCount > 0 && $deleteRolePermissionsRowCount > 0) ? 'success' : 'not deleted';

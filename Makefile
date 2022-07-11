@@ -69,6 +69,9 @@ seed:
 tinker:
 	docker-compose exec app php artisan tinker
 
+artisan-list:
+	docker-compose exec app php artisan list
+
 composer-install:
 	docker-compose exec app composer install
 

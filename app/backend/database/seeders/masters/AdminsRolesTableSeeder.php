@@ -3,9 +3,9 @@
 namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\AdminsRoles;
 use Database\Seeders\BaseSeeder;
 
@@ -27,7 +27,7 @@ class AdminsRolesTableSeeder extends BaseSeeder
     {
         $this->tableName = (new AdminsRoles())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
+        $now = TimeLibrary::getCurrentDateTime();
 
         $template = [
             'admin_id'   => 1,

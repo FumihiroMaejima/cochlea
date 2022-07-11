@@ -3,9 +3,9 @@
 namespace Database\Seeders\Masters;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Products;
 use Database\Seeders\BaseSeeder;
 
@@ -14,6 +14,9 @@ class ProductsTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 50;
+
+    // 終了日時として設定する加算月数
+    private const END_DATE_ADDITIONAL_MOUNTHS = 1;
 
     /**
      * Run the database seeds.
@@ -24,8 +27,8 @@ class ProductsTableSeeder extends BaseSeeder
     {
         $this->tableName = (new Products())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
-        $endDate = (new Carbon($now))->addMonth();
+        $now = TimeLibrary::getCurrentDateTime();
+        $endDate = TimeLibrary::addMounths($now, self::END_DATE_ADDITIONAL_MOUNTHS);
 
         $template = [
             Products::NAME              => '',

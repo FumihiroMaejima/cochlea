@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-use App\Services\PermissionsService;
-use App\Services\RolesService;
+use App\Services\Admins\PermissionsService;
 use App\Trait\CheckHeaderTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
