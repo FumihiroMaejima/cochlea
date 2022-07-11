@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins;
+namespace App\Http\Requests\Admins\Roles;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
@@ -73,43 +73,5 @@ class RoleDeleteRequest extends BaseRequest
         return [
             'roles' => 'ロール'
         ];
-    }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        $response = [
-            'status'  => 403,
-            'errors'  => [],
-            'message' => 'Forbidden'
-        ];
-
-        throw (new HttpResponseException(response()->json($response, 403)));
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = [
-            'status'  => 422,
-            'errors'  => [],
-            'message' => 'Unprocessable Entity'
-        ];
-
-        $response['errors'] = $validator->errors()->toArray();
-        throw (new HttpResponseException(response()->json($response, 422)));
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +71,26 @@ Route::group(['prefix' => 'v1/admin'], function () {
         Route::group(['prefix' => 'permissions'], function () {
             Route::get('/list', [\App\Http\Controllers\Admins\PermissionsController::class, 'list'])->name('admin.permissions.list');
         });
+
+        // coins
+        Route::group(['prefix' => 'coins'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\CoinsController::class, 'index'])->name('admin.coins.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\CoinsController::class, 'download'])->name('admin.coins.download');
+            Route::post('/coin', [\App\Http\Controllers\Admins\CoinsController::class, 'create'])->name('admin.coins.create');
+            Route::patch('/coin/{id}', [\App\Http\Controllers\Admins\CoinsController::class, 'update'])->name('admin.coins.update');
+            Route::delete('/coin', [\App\Http\Controllers\Admins\CoinsController::class, 'destroy'])->name('admin.coins.delete');
+        });
     });
+
+    // debug API
+    if (Config::get('app.env') !== 'production') {
+        Route::group(['prefix' => 'debug'], function () {
+            Route::get('test', [\App\Http\Controllers\Admins\AdminDebugController::class, 'test'])->name('admin.debug.test.get');
+            Route::get('list', [\App\Http\Controllers\Admins\AdminDebugController::class, 'list'])->name('admin.debug.list.get');
+            Route::get('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getImage'])->name('admin.debug.image.get');
+            Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'uploadImage'])->name('admin.debug.image.post');
+        });
+    }
 });
 
 /*

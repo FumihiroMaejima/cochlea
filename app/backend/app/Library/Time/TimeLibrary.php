@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library;
+namespace App\Library\Time;
 
 use Illuminate\Http\Request;
 use App\Trait\CheckHeaderTrait;
@@ -55,7 +55,19 @@ class TimeLibrary
     }
 
     /**
-     * get current date time.
+     * get formatted date time.
+     *
+     * @param string $dateTime 日時
+     * @param string $format datetime format
+     * @return array 曜日
+     */
+    public static function format(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT_SLASH): string
+    {
+        return (new Carbon($dateTime))->format($format);
+    }
+
+    /**
+     * get parameter days.
      *
      * @param string $dateTime 日時
      * @return array 曜日
@@ -66,14 +78,28 @@ class TimeLibrary
     }
 
     /**
+     * add a mounth to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 加算月数
+     * @param string $format datetime format
+     * @return string $dateTimeから$valueヶ月後の$dateTime
+     */
+    public static function addMounths(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->addMonths($value)->format($format);
+    }
+
+    /**
      * add mounth to dateTime parameter.
      *
      * @param string $dateTime 日時
+     * @param int $value 加算年数
      * @param string $format datetime format
-     * @return string 曜日
+     * @return string $dateTimeの$value年後のdateTime
      */
-    public static function addMounth(string $dateTime, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    public static function addYears(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
     {
-        return (new Carbon($dateTime))->addMonth()->format($format);
+        return (new Carbon($dateTime))->addYears($value)->format($format);
     }
 }

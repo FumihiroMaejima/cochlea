@@ -16,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "predis/predis": "^1.1",
         "psr/simple-cache": "^1.0",
+        "stripe/stripe-php": "^8.9",
         "tymon/jwt-auth": "^1.0.2"
     },
     "require-dev": {
@@ -37,6 +38,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
+            "Database\\Seeders\\Logs\\": "database/seeders/logs/",
             "Database\\Seeders\\Masters\\": "database/seeders/masters/"
         }
     },

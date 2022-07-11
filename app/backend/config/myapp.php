@@ -11,6 +11,8 @@ return [
             'admins'      => ['master', 'administrator', 'develop'],
             'permissions' => ['master', 'administrator', 'develop'],
             'roles'       => ['master', 'administrator', 'develop'],
+            'coins'       => ['master', 'administrator', 'develop'],
+            'debug'       => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [
@@ -21,7 +23,7 @@ return [
                 'staging'    => 'file/',
                 'production' => 's3',
             ],
-        ]
+        ],
     ],
     'slack' => [
         'channel' => env('APP_SLACK_CHANNEL', 'channel_title'),

@@ -13,6 +13,43 @@ class CreateProductMasterModelTable extends Migration
      */
     public function up()
     {
+
+        /**
+         * images table
+         */
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            // $table->uuid()->unique()->primary()->comment('uuid');
+            $table->uuid()->unique()->comment('uuid');
+            $table->string('name', 255)->comment('オリジナルファイル名');
+            $table->string('extention', 255)->comment('拡張子');
+            $table->string('mimeType', 255)->comment('mimeType');
+            $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
+            $table->integer('version')->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->comment('images table');
+        });
+
+        /**
+         * products table
+         */
+        Schema::create('coins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('コイン名');
+            $table->text('detail')->comment('詳細');
+            $table->integer('price')->comment('コインの購入価格');
+            $table->integer('cost')->comment('アプリケーション内のコインの価格');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->string('image', 255)->comment('イメージ');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->comment('coins table');
+        });
+
         /**
          * products table
          */
@@ -71,6 +108,7 @@ class CreateProductMasterModelTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('images');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('manufactureres');

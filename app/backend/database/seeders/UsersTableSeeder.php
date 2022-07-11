@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use Database\Seeders\BaseSeeder;
 
@@ -24,7 +24,8 @@ class UsersTableSeeder extends BaseSeeder
     {
         $this->tableName = (new User())->getTable();
 
-        $now = Carbon::now()->timezone(Config::get('app.timezone'));
+        // $now = Carbon::now()->timezone(Config::get('app.timezone'));
+        $now = TimeLibrary::getCurrentDateTime();
 
         $template = [
             User::NAME       => '',
