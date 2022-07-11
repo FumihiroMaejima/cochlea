@@ -1,0 +1,18 @@
+@startuml payment
+
+
+activate brower
+brower -> Server: 商品画面表示リクエスト
+activate Server
+Server ->> StripeServer: 決済フォームの構築のリクエスト
+activate StripeServer
+StripeServer -->> Server: 決済フォーム情報を返却
+Server --> brower: 商品画面表示(決済フォームへのリンクの埋め込み)
+deactivate Server
+brower -> brower: ユーザーが決済フォームへのリンクをクリック
+brower -> StripeServer: 決済フォーム表示&決済
+StripeServer -->> brower: 処理完了
+deactivate StripeServer
+
+
+@enduml
