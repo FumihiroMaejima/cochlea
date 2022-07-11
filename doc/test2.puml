@@ -1,0 +1,82 @@
+@startuml testName2
+
+
+' 1行コメント
+/'
+    複数行コメント1
+    複数行コメント2
+'/
+
+
+
+start
+    ' 処理
+stop
+
+
+start
+    ' 処理
+end
+
+start
+    ' 前判定
+    while (前判定) is (はい)
+        :処理;
+    endwhile
+stop
+
+
+start
+    ' 並列処理
+    fork
+        :並列処理1;
+    fork again
+        :並列処理2;
+    fork again
+        :並列処理3;
+    end fork
+stop
+
+
+start
+    ' コメント注釈
+    ' right/left
+    floating note left: 登録完了メッセージ
+    ' コメント 複数行
+    note right
+        複
+        数
+        行
+    end note
+stop
+
+start
+    ' 色設定
+    #AAAAAA:処理;
+    #YellowGreen:完了;
+stop
+
+
+
+
+start
+    ' 矢印&パーティション
+    partition パーティション {
+        :矢印に;
+        -> コメント付けられる;
+        :矢印に色;
+        -[#blue]->
+        :矢印を破線;
+        -[#green,dashed]->
+        :矢印を点線;
+        -[#black,dotted]->
+        :矢印を太くする;
+        -[#gray,bold]->
+    }
+stop
+
+
+
+
+
+@enduml

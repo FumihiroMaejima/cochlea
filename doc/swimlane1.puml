@@ -1,0 +1,16 @@
+@startuml swimlane1
+| 管理者 |
+    :矢印に;
+    -> コメント付けられる;
+    :矢印に色;
+    -[#blue]->
+    :矢印を破線;
+    -[#green,dashed]->
+|#AntiqueWhite| ウェブサーバ |
+    :矢印を点線;
+    -[#black,dotted]->
+|#AliceBlue| DB |
+    :矢印を太くする;
+    -[#gray,bold]->
+
+@enduml
