@@ -14,11 +14,12 @@ class RandomLibrary
      *
      * @param array<string|int, int> $entries ($key => $weight)
      * @return int random value
+     * @throws Exception
      */
     public static function getWeightedRandomValue(array $entries): int
     {
         // 配列の値($weight)を全て足す。
-        // objectやcollectionから算出する場合はarray_map()など別配列化する必要がある。
+        // objectやcollectionから算出する場合はarray_map()などで別配列化する必要がある。
         $sum  = array_sum($entries);
         $rand = rand(self::RANDOM_MIN_VALUE, $sum);
 
