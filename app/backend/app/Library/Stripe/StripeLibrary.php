@@ -124,7 +124,7 @@ class StripeLibrary
      *
      * @return StripeClient
      */
-    private static function getStripeClient(): StripeClient
+    protected static function getStripeClient(): StripeClient
     {
         return new StripeClient(Config::get(self::CONFIG_KEY_NAME_PRIVATE));
     }
