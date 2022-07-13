@@ -91,16 +91,9 @@ class CheckoutLibrary extends StripeLibrary
     /**
      * exec stripe api request for POST
      *
-     * @param string $path — the path of the request
-     * @param array $params — the parameters of the request
-     * @param array|RequestOptions $options the special modifiers of the request
      * @return Session
      */
-    public static function createSession(
-        string $path,
-        array $params = [],
-        array|RequestOptions $options = []
-    ): Session {
+    public static function createSession(): Session {
         $stripe = self::getStripeClient();
 
         return $stripe->checkout->sessions->create([

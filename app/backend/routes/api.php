@@ -107,12 +107,19 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     // user auth
-    Route::middleware(['middleware' => 'auth:api-users'])
-    ->group(function () {
+    Route::middleware(['middleware' => 'auth:api-users'])->group(function () {
         Route::group(['prefix' => 'auth'], function () {
             Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout']);
             Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh']);
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser']);
         });
     });
+
+    // debug API
+    if (Config::get('app.env') !== 'production') {
+        Route::group(['prefix' => 'debug'], function () {
+            Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
+            Route::post('list', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.post');
+        });
+    }
 });
