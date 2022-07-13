@@ -17,7 +17,7 @@ class CheckoutLibrary extends StripeLibrary
 {
 
     // mode
-    private const CHECKOUT_MODE_PAYMENT = 'mode'; // Accept one-time payments for cards, iDEAL, and more.
+    private const CHECKOUT_MODE_PAYMENT = 'payment'; // Accept one-time payments for cards, iDEAL, and more.
     private const CHECKOUT_MODE_SET_UP = 'setup'; // Save payment details to charge your customers later.
     private const CHECKOUT_MODE_SUBSCRIPTION = 'subscription'; // Use Stripe Billing to set up fixed-price subscriptions.
 
@@ -32,13 +32,28 @@ class CheckoutLibrary extends StripeLibrary
     private const PAYMENT_TYPE_US_BANK_ACCOUNT = 'us_bank_account';
     private const PAYMENT_TYPE_WECHAT_PAY = 'wechat_pay';
 
+    // 当サービスで利用する決済方法
+    private const SERVICE_PAYMENT_TYPES = [
+        self::PAYMENT_TYPE_CARD,
+        self::PAYMENT_TYPE_KONBINI,
+        self::PAYMENT_TYPE_PAYNOW,
+    ];
+
+    // currency types
+    private const CURRENCY_TYPE_JPY = 'jpy';
+
     // request param
-    private const REQUEST_KEY_SUCCESS_URL = 'success_url'; // require
-    private const REQUEST_KEY_CANCEL_URL = 'cancel_url'; // require
+    private const REQUEST_KEY_SUCCESS_URL = 'success_url'; // require 決済完了後のリダイレクト先URL
+    private const REQUEST_KEY_CANCEL_URL = 'cancel_url'; // require 失敗時や決済画面の「キャンセルボタン」押下時のリダイレクト先URL
     private const REQUEST_KEY_MODE = 'mode'; // require
     private const REQUEST_KEY_LINE_ITEMS = 'line_items';
-    private const REQUEST_KEY_LINE_ITEM_PRICE = 'price';
-    private const REQUEST_KEY_LINE_ITEM_QUANTITY = 'quantity';
+    private const REQUEST_KEY_LINE_ITEM_NAME = 'name'; // 商品名
+    private const REQUEST_KEY_LINE_ITEM_DESCRIPTION = 'description'; // 商品名
+    private const REQUEST_KEY_LINE_ITEM_IMAGES = 'images'; // 説明
+    private const REQUEST_KEY_LINE_ITEM_AMOUNT = 'amount'; // 画像URL
+    private const REQUEST_KEY_LINE_ITEM_CURRENCY = 'currency'; // 単位(ex: 'jpy')
+    private const REQUEST_KEY_LINE_ITEM_PRICE = 'price'; // 価格
+    private const REQUEST_KEY_LINE_ITEM_QUANTITY = 'quantity'; // 数量
     private const REQUEST_KEY_CUSTOMER = 'customer';
     private const REQUEST_KEY_CUSTOMER_EMAIL = 'customer_email';
     private const REQUEST_KEY_PAYMENT_METHOD_TYPES = 'payment_method_types';
@@ -71,7 +86,7 @@ class CheckoutLibrary extends StripeLibrary
     private const RESPONSE_KEY_PAYMENT_LINK = 'payment_link';
     private const RESPONSE_KEY_PAYMENT_METHOD_OPTIONS = 'payment_method_options';
     private const RESPONSE_KEY_PAYMENT_METHOD_TYPES = 'payment_method_types';
-    private const RESPONSE_KEY_PAYMENT_METHOD_TYPES_CARD = 'card';
+    private const RESPONSE_KEY_PAYMENT_METHOD_TYPE_CARD = 'card';
     private const RESPONSE_KEY_PAYMENT_STATUS = 'payment_status';
     private const RESPONSE_KEY_PHONE_NUMBER_COLLECTION = 'phone_number_collection';
     private const RESPONSE_KEY_PHONE_NUMBER_COLLECTION_ENABLED = 'enabled';
@@ -97,15 +112,19 @@ class CheckoutLibrary extends StripeLibrary
         $stripe = self::getStripeClient();
 
         return $stripe->checkout->sessions->create([
-            self::REQUEST_KEY_SUCCESS_URL => 'https://example.com/success',
-            self::REQUEST_KEY_CANCEL_URL => 'https://example.com/cancel',
+            self::REQUEST_KEY_SUCCESS_URL => 'https://example.com/success', // 決済完了後のリダイレクト先
+            self::REQUEST_KEY_CANCEL_URL => 'https://example.com/cancel', // 決済画面の「キャンセルボタン」押下時のリダイレクト先
+            self::REQUEST_KEY_PAYMENT_METHOD_TYPES => [self::PAYMENT_TYPE_CARD],
+            self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
             self::REQUEST_KEY_LINE_ITEMS => [
               [
-                self::REQUEST_KEY_LINE_ITEM_PRICE => 600,
+                self::REQUEST_KEY_LINE_ITEM_NAME => 'test product',
+                self::REQUEST_KEY_LINE_ITEM_DESCRIPTION => 'test description',
+                self::REQUEST_KEY_LINE_ITEM_AMOUNT => 600,
+                self::REQUEST_KEY_LINE_ITEM_CURRENCY => self::CURRENCY_TYPE_JPY,
                 self::REQUEST_KEY_LINE_ITEM_QUANTITY => 2,
               ],
             ],
-            self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
         ]);
     }
 }

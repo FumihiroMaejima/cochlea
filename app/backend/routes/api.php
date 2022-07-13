@@ -119,7 +119,7 @@ Route::group(['prefix' => 'v1'], function () {
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
-            Route::post('list', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.post');
+            Route::post('checkout', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.post');
         });
     }
 });
