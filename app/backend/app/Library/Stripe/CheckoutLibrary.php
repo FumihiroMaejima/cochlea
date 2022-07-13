@@ -60,8 +60,33 @@ class CheckoutLibrary extends StripeLibrary
     private const RESPONSE_KEY_CONSENT_COLLECTION = 'consent_collection';
     private const RESPONSE_KEY_CURRENCY = 'currency';
     private const RESPONSE_KEY_CUSTOMER = 'customer';
-
-    // TODO レスポンスのconstの追加
+    private const RESPONSE_KEY_CUSTOMER_CREATION = 'customer_creation';
+    private const RESPONSE_KEY_CUSTOMER_DETAILS = 'customer_details';
+    private const RESPONSE_KEY_CUSTOMER_EMAIL = 'customer_email';
+    private const RESPONSE_KEY_EXPIRES_AT = 'expires_at';
+    private const RESPONSE_KEY_LIVEMODE = 'livemode';
+    private const RESPONSE_KEY_LOCALE = 'locale';
+    private const RESPONSE_KEY_MODE = 'mode';
+    private const RESPONSE_KEY_PAYMENT_INTENT= 'payment_intent';
+    private const RESPONSE_KEY_PAYMENT_LINK = 'payment_link';
+    private const RESPONSE_KEY_PAYMENT_METHOD_OPTIONS = 'payment_method_options';
+    private const RESPONSE_KEY_PAYMENT_METHOD_TYPES = 'payment_method_types';
+    private const RESPONSE_KEY_PAYMENT_METHOD_TYPES_CARD = 'card';
+    private const RESPONSE_KEY_PAYMENT_STATUS = 'payment_status';
+    private const RESPONSE_KEY_PHONE_NUMBER_COLLECTION = 'phone_number_collection';
+    private const RESPONSE_KEY_PHONE_NUMBER_COLLECTION_ENABLED = 'enabled';
+    private const RESPONSE_KEY_RECOVERD_FROM= 'recovered_from';
+    private const RESPONSE_KEY_SETUP_INTENT = 'setup_intent';
+    private const RESPONSE_KEY_SNIPPING = 'shipping';
+    private const RESPONSE_KEY_SNIPPING_ADDRESS_COLLECTION = 'shipping_address_collection';
+    private const RESPONSE_KEY_SNIPPING_OPTIONS = 'shipping_options';
+    private const RESPONSE_KEY_SNIPPING_RATE = 'shipping_rate';
+    private const RESPONSE_KEY_STATUS_LOCAL = 'status'; // 重複を避ける為に`LOCAL`をつけている
+    private const RESPONSE_KEY_SUBMIT_TYPE = 'submit_type';
+    private const RESPONSE_KEY_SUBSCRIPTION = 'subscription';
+    private const RESPONSE_KEY_SUCCESS_URL = 'success_url';
+    private const RESPONSE_KEY_TOTAL_DETAILS = 'total_details';
+    private const RESPONSE_KEY_URL = 'url';
 
     /**
      * exec stripe api request for POST
