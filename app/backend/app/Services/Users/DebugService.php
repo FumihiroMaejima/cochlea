@@ -34,7 +34,16 @@ class DebugService
      */
     public function getCheckout(): JsonResponse
     {
-        $session = CheckoutLibrary::createSession();
+        $lineItems = [
+            [
+              CheckoutLibrary::REQUEST_KEY_LINE_ITEM_NAME => 'test product',
+              CheckoutLibrary::REQUEST_KEY_LINE_ITEM_DESCRIPTION => 'test description',
+              CheckoutLibrary::REQUEST_KEY_LINE_ITEM_AMOUNT => 600,
+              CheckoutLibrary::REQUEST_KEY_LINE_ITEM_CURRENCY => CheckoutLibrary::CURRENCY_TYPE_JPY,
+              CheckoutLibrary::REQUEST_KEY_LINE_ITEM_QUANTITY => 2,
+            ],
+        ];
+        $session = CheckoutLibrary::createSession($lineItems);
 
          return response()->json(
             [

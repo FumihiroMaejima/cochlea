@@ -40,23 +40,23 @@ class CheckoutLibrary extends StripeLibrary
     ];
 
     // currency types
-    private const CURRENCY_TYPE_JPY = 'jpy';
+    public const CURRENCY_TYPE_JPY = 'jpy';
 
     // request param
-    private const REQUEST_KEY_SUCCESS_URL = 'success_url'; // require 決済完了後のリダイレクト先URL
-    private const REQUEST_KEY_CANCEL_URL = 'cancel_url'; // require 失敗時や決済画面の「キャンセルボタン」押下時のリダイレクト先URL
-    private const REQUEST_KEY_MODE = 'mode'; // require
-    private const REQUEST_KEY_LINE_ITEMS = 'line_items';
-    private const REQUEST_KEY_LINE_ITEM_NAME = 'name'; // 商品名
-    private const REQUEST_KEY_LINE_ITEM_DESCRIPTION = 'description'; // 商品名
-    private const REQUEST_KEY_LINE_ITEM_IMAGES = 'images'; // 説明
-    private const REQUEST_KEY_LINE_ITEM_AMOUNT = 'amount'; // 画像URL
-    private const REQUEST_KEY_LINE_ITEM_CURRENCY = 'currency'; // 単位(ex: 'jpy')
-    private const REQUEST_KEY_LINE_ITEM_PRICE = 'price'; // 価格
-    private const REQUEST_KEY_LINE_ITEM_QUANTITY = 'quantity'; // 数量
-    private const REQUEST_KEY_CUSTOMER = 'customer';
-    private const REQUEST_KEY_CUSTOMER_EMAIL = 'customer_email';
-    private const REQUEST_KEY_PAYMENT_METHOD_TYPES = 'payment_method_types';
+    public const REQUEST_KEY_SUCCESS_URL = 'success_url'; // require 決済完了後のリダイレクト先URL
+    public const REQUEST_KEY_CANCEL_URL = 'cancel_url'; // require 失敗時や決済画面の「キャンセルボタン」押下時のリダイレクト先URL
+    public const REQUEST_KEY_MODE = 'mode'; // require
+    public const REQUEST_KEY_LINE_ITEMS = 'line_items';
+    public const REQUEST_KEY_LINE_ITEM_NAME = 'name'; // 商品名
+    public const REQUEST_KEY_LINE_ITEM_DESCRIPTION = 'description'; // 商品名
+    public const REQUEST_KEY_LINE_ITEM_IMAGES = 'images'; // 説明
+    public const REQUEST_KEY_LINE_ITEM_AMOUNT = 'amount'; // 画像URL
+    public const REQUEST_KEY_LINE_ITEM_CURRENCY = 'currency'; // 単位(ex: 'jpy')
+    public const REQUEST_KEY_LINE_ITEM_PRICE = 'price'; // 価格
+    public const REQUEST_KEY_LINE_ITEM_QUANTITY = 'quantity'; // 数量
+    public const REQUEST_KEY_CUSTOMER = 'customer';
+    public const REQUEST_KEY_CUSTOMER_EMAIL = 'customer_email';
+    public const REQUEST_KEY_PAYMENT_METHOD_TYPES = 'payment_method_types';
 
     // response param
     private const RESPONSE_KEY_ID_LOCAL = 'id'; // 重複を避ける為に`LOCAL`をつけている
@@ -106,9 +106,10 @@ class CheckoutLibrary extends StripeLibrary
     /**
      * exec stripe api request for POST
      *
+     * @param array $lineItems taget productions of payment.
      * @return Session
      */
-    public static function createSession(): Session {
+    public static function createSession(array $lineItems): Session {
         $stripe = self::getStripeClient();
 
         return $stripe->checkout->sessions->create([
@@ -116,15 +117,7 @@ class CheckoutLibrary extends StripeLibrary
             self::REQUEST_KEY_CANCEL_URL => 'https://example.com/cancel', // 決済画面の「キャンセルボタン」押下時のリダイレクト先
             self::REQUEST_KEY_PAYMENT_METHOD_TYPES => [self::PAYMENT_TYPE_CARD],
             self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
-            self::REQUEST_KEY_LINE_ITEMS => [
-              [
-                self::REQUEST_KEY_LINE_ITEM_NAME => 'test product',
-                self::REQUEST_KEY_LINE_ITEM_DESCRIPTION => 'test description',
-                self::REQUEST_KEY_LINE_ITEM_AMOUNT => 600,
-                self::REQUEST_KEY_LINE_ITEM_CURRENCY => self::CURRENCY_TYPE_JPY,
-                self::REQUEST_KEY_LINE_ITEM_QUANTITY => 2,
-              ],
-            ],
+            self::REQUEST_KEY_LINE_ITEMS => $lineItems,
         ]);
     }
 }
