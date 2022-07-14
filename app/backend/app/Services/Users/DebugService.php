@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Stripe\CheckoutLibrary;
+use App\Library\String\UnidLibrary;
 use App\Library\Time\TimeLibrary;
 
 class DebugService
@@ -50,6 +51,40 @@ class DebugService
                 'code' => 200,
                 'message' => 'Successfully Create Session',
                 'data' => $session->toArray(),
+            ]
+        );
+    }
+
+    /**
+     * get permissions data for frontend parts
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function cancelCheckout(): JsonResponse
+    {
+         return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Successfully Cancel Create Session',
+                'data' => [],
+            ]
+        );
+    }
+
+    /**
+     * get permissions data for frontend parts
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function completeCheckout(): JsonResponse
+    {
+         return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Successfully Payment!',
+                'data' => [],
             ]
         );
     }

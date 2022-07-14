@@ -12,6 +12,7 @@ use Stripe\Exception\ApiConnectionException;
 use Stripe\Exception\AuthenticationException;
 use Stripe\Util\RequestOptions;
 use Stripe\StripeObject;
+use Stripe\Exception\ApiErrorException;
 
 class CheckoutLibrary extends StripeLibrary
 {

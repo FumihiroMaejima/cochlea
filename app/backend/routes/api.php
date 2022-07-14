@@ -119,7 +119,13 @@ Route::group(['prefix' => 'v1'], function () {
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
-            Route::post('checkout', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.post');
+
+            // stipre決済
+            Route::group(['prefix' => 'checkout'], function () {
+                Route::get('/', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.index');
+                Route::get('cancel', [\App\Http\Controllers\Users\DebugController::class, 'cancelCheckout'])->name('user.debug.checkout.cancel');
+                Route::get('complete', [\App\Http\Controllers\Users\DebugController::class, 'completeCheckout'])->name('user.debug.checkout.complete');
+            });
         });
     }
 });
