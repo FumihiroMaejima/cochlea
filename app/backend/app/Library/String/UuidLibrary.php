@@ -2,7 +2,7 @@
 
 namespace App\Library\String;
 
-class UnidLibrary
+class UuidLibrary
 {
     // UUIDには数種類のバリアント(変種)がある。
     // 16進表記をした場合に「xxxxxxxx-xxxx-xxxx-Nxxx-xxxxxxxxxxxx」のNの桁の上位ビットがバリアントを示す。
