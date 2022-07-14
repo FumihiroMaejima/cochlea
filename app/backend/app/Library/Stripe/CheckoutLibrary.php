@@ -52,9 +52,9 @@ class CheckoutLibrary extends StripeLibrary
     public const REQUEST_KEY_MODE = 'mode'; // require
     public const REQUEST_KEY_LINE_ITEMS = 'line_items';
     public const REQUEST_KEY_LINE_ITEM_NAME = 'name'; // 商品名
-    public const REQUEST_KEY_LINE_ITEM_DESCRIPTION = 'description'; // 商品名
-    public const REQUEST_KEY_LINE_ITEM_IMAGES = 'images'; // 説明
-    public const REQUEST_KEY_LINE_ITEM_AMOUNT = 'amount'; // 画像URL
+    public const REQUEST_KEY_LINE_ITEM_DESCRIPTION = 'description'; // 説明
+    public const REQUEST_KEY_LINE_ITEM_IMAGES = 'images'; // 画像URL
+    public const REQUEST_KEY_LINE_ITEM_AMOUNT = 'amount'; // 金額
     public const REQUEST_KEY_LINE_ITEM_CURRENCY = 'currency'; // 単位(ex: 'jpy')
     public const REQUEST_KEY_LINE_ITEM_PRICE = 'price'; // 価格
     public const REQUEST_KEY_LINE_ITEM_QUANTITY = 'quantity'; // 数量
