@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Stripe\CheckoutLibrary;
-use App\Library\String\UnidLibrary;
+use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
 
 class DebugService
@@ -28,7 +28,7 @@ class DebugService
     }
 
     /**
-     * get permissions data for frontend parts
+     * get stripe chceckout session.
      *
      * @param  \Illuminate\Http\Request $request
      * @return JsonResponse
@@ -44,7 +44,8 @@ class DebugService
               CheckoutLibrary::REQUEST_KEY_LINE_ITEM_QUANTITY => 2,
             ],
         ];
-        $session = CheckoutLibrary::createSession($lineItems);
+
+        $session = CheckoutLibrary::createSession($lineItems, UuidLibrary::uuidVersion4());
 
          return response()->json(
             [
@@ -56,34 +57,34 @@ class DebugService
     }
 
     /**
-     * get permissions data for frontend parts
+     * cancel stripe chceckout session.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param string $orderId order id.
      * @return JsonResponse
      */
-    public function cancelCheckout(): JsonResponse
+    public function cancelCheckout(string $orderId): JsonResponse
     {
          return response()->json(
             [
                 'code' => 200,
-                'message' => 'Successfully Cancel Create Session',
+                'message' => 'Successfully Cancel Create Session. ' . $orderId,
                 'data' => [],
             ]
         );
     }
 
     /**
-     * get permissions data for frontend parts
+     * complete stripe chceckout session.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param string $orderId order id.
      * @return JsonResponse
      */
-    public function completeCheckout(): JsonResponse
+    public function completeCheckout(string $orderId): JsonResponse
     {
          return response()->json(
             [
                 'code' => 200,
-                'message' => 'Successfully Payment!',
+                'message' => 'Successfully Payment! ' . $orderId,
                 'data' => [],
             ]
         );

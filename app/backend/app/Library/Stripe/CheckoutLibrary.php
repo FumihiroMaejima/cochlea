@@ -17,6 +17,9 @@ use Stripe\Exception\ApiErrorException;
 class CheckoutLibrary extends StripeLibrary
 {
 
+    // query
+    private const QUERY_ORDER_ID = '?orderId=';
+
     // mode
     private const CHECKOUT_MODE_PAYMENT = 'payment'; // Accept one-time payments for cards, iDEAL, and more.
     private const CHECKOUT_MODE_SET_UP = 'setup'; // Save payment details to charge your customers later.
@@ -37,7 +40,7 @@ class CheckoutLibrary extends StripeLibrary
     private const SERVICE_PAYMENT_TYPES = [
         self::PAYMENT_TYPE_CARD,
         self::PAYMENT_TYPE_KONBINI,
-        self::PAYMENT_TYPE_PAYNOW,
+        // self::PAYMENT_TYPE_WECHAT_PAY,
     ];
 
     // currency types
@@ -108,15 +111,19 @@ class CheckoutLibrary extends StripeLibrary
      * exec stripe api request for POST
      *
      * @param array $lineItems taget productions of payment.
+     * @param string $orderId order id.
      * @return Session
      */
-    public static function createSession(array $lineItems): Session {
+    public static function createSession(array $lineItems, string $orderId): Session {
         $stripe = self::getStripeClient();
 
+        $query = self::QUERY_ORDER_ID . $orderId;
+
         return $stripe->checkout->sessions->create([
-            self::REQUEST_KEY_SUCCESS_URL => 'https://example.com/success', // 決済完了後のリダイレクト先
-            self::REQUEST_KEY_CANCEL_URL => 'https://example.com/cancel', // 決済画面の「キャンセルボタン」押下時のリダイレクト先
-            self::REQUEST_KEY_PAYMENT_METHOD_TYPES => [self::PAYMENT_TYPE_CARD],
+            self::REQUEST_KEY_SUCCESS_URL => route('user.debug.checkout.complete') . $query, // 'https://example.com/success', 決済完了後のリダイレクト先
+            self::REQUEST_KEY_CANCEL_URL => route('user.debug.checkout.cancel') . $query, // 'https://example.com/cancel' 決済画面の「キャンセルボタン」押下時のリダイレクト先
+            // self::REQUEST_KEY_PAYMENT_METHOD_TYPES => [self::PAYMENT_TYPE_CARD],
+            self::REQUEST_KEY_PAYMENT_METHOD_TYPES => self::SERVICE_PAYMENT_TYPES,
             self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
             self::REQUEST_KEY_LINE_ITEMS => $lineItems,
         ]);

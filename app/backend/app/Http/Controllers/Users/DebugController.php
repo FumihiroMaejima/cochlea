@@ -65,6 +65,60 @@ class DebugController extends Controller
     }
 
     /**
+     * Cancel Stipe Checkout Session.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function cancelCheckout(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'orderId' => ['required','uuid'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_422,
+            );
+        }
+
+        // サービスの実行
+        return $this->service->cancelCheckout($request->orderId);
+    }
+
+    /**
+     * Complete Stipe Checkout Session.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function completeCheckout(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'orderId' => ['required','uuid'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_422,
+            );
+        }
+
+        // サービスの実行
+        return $this->service->completeCheckout($request->orderId);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
