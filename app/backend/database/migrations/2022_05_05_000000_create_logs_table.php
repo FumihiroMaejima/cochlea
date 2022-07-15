@@ -24,7 +24,7 @@ class CreateLogsTable extends Migration
             // $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID'); // DBを変える為指定出来ない
             $table->integer('admin_id')->comment('管理者ID');
             $table->string('function', 255)->comment('実行ファンクション');
-            $table->string('status', 255)->comment('ステータス');
+            $table->tinyInteger('status')->comment('ステータス');
             $table->timestamp('action_time')->comment('実行日時');
             $table->timestamps();
             $table->softDeletes();

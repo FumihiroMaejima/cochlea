@@ -36,16 +36,14 @@ Route::group(['prefix' => 'v1/admin'], function () {
     });
     // \App\Http\Controllers\Admins\AdminsController
 
-
     // admin auth
     Route::middleware(['middleware' => 'auth:api-admins'])
     ->group(function () {
         Route::group(['prefix' => 'auth'], function () {
-            Route::post('logout', [\App\Http\Controllers\Admins\AuthController::class, 'logout']);
-            Route::post('refresh', [\App\Http\Controllers\Admins\AuthController::class, 'refresh']);
-            Route::post('self', [\App\Http\Controllers\Admins\AuthController::class, 'getAuthUser']);
+            Route::post('logout', [\App\Http\Controllers\Admins\AuthController::class, 'logout'])->name('auth.admin.logout');
+            Route::post('refresh', [\App\Http\Controllers\Admins\AuthController::class, 'refresh'])->name('auth.admin.refresh');
+            Route::post('self', [\App\Http\Controllers\Admins\AuthController::class, 'getAuthUser'])->name('auth.admin.self');
         });
-
 
         // admins
         Route::group(['prefix' => 'admins'], function () {
@@ -55,7 +53,6 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
             Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
         });
-
 
         // roles
         Route::group(['prefix' => 'roles'], function () {
@@ -102,16 +99,15 @@ Route::group(['prefix' => 'v1/admin'], function () {
 Route::group(['prefix' => 'v1'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', [AuthController::class, 'login'])->name('user.auth.login');
+        Route::post('login', [AuthController::class, 'login'])->name('auth.user.login');
     });
-
 
     // user auth
     Route::middleware(['middleware' => 'auth:api-users'])->group(function () {
         Route::group(['prefix' => 'auth'], function () {
-            Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout']);
-            Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh']);
-            Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser']);
+            Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout'])->name('auth.user.logout');
+            Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh'])->name('auth.user.refresh');
+            Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
         });
     });
 
