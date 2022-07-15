@@ -99,7 +99,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
 Route::group(['prefix' => 'v1'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', [AuthController::class, 'login'])->name('auth.user.login');
+        Route::post('login', [\App\Http\Controllers\Users\AuthController::class, 'login'])->name('auth.user.login');
     });
 
     // user auth

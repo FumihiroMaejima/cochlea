@@ -21,6 +21,9 @@ class AuthController extends Controller
     private const ADMIN_RESOURCE_KEY_NAME = 'name';
     private const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
 
+    // token prefix
+    private const TOKEN_PREFIX = 'bearer';
+
     /**
      * Create a new AuthController instance.
      *
@@ -114,7 +117,7 @@ class AuthController extends Controller
         // ユーザー情報を返す。
         return response()->json([
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
-            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => 'bearer',
+            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => self::TOKEN_PREFIX,
             self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth('api-admins')->factory()->getTTL() * 60,
             self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
         ]);

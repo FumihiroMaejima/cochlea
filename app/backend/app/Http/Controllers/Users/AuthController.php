@@ -17,6 +17,9 @@ class AuthController extends Controller
     private const USER_RESOURCE_KEY_ID = 'id';
     private const USER_RESOURCE_KEY_NAME = 'name';
 
+    // token prefix
+    private const TOKEN_PREFIX = 'bearer';
+
     /**
      * Create a new AuthController instance.
      *
@@ -38,7 +41,7 @@ class AuthController extends Controller
         // $credentials = request(['email', 'password']);
         $credentials = request(['name', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
+        if (!$token = auth('api-users')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -91,16 +94,17 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth('api-users')->user();
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
         // ユーザー情報を返す。
         return response()->json([
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
-            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE   => 'bearer',
-            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN   => auth()->factory()->getTTL() * 60,
+            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE   => self::TOKEN_PREFIX,
+            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN   => auth('api-users')->factory()->getTTL() * 60,
             self::LOGIN_RESEPONSE_KEY_USER         => [
-                self::USER_RESOURCE_KEY_ID   => auth('api-users')->user()->id,
-                self::USER_RESOURCE_KEY_NAME => auth('api-users')->user()->name
+                self::USER_RESOURCE_KEY_ID   => $user->id,
+                self::USER_RESOURCE_KEY_NAME => $user->name
             ]
         ]);
     }
