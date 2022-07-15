@@ -109,6 +109,18 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh'])->name('auth.user.refresh');
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
         });
+
+        // coin
+        Route::group(['prefix' => 'coins'], function () {
+            // Route::get('/', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'checkout'])->name('user.coins.index');
+
+            // coin payment
+            Route::group(['prefix' => 'payment'], function () {
+                Route::get('/', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'checkout'])->name('user.coins.payment.index');
+                Route::get('/cancel', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'cancel'])->name('user.coins.payment.cancel');
+                Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
+            });
+        });
     });
 
     // debug API
