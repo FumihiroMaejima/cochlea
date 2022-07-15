@@ -98,6 +98,7 @@ class ImagesRepository implements ImagesRepositoryInterface
     /**
      * create Image data.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createImage(array $resource): int
@@ -108,6 +109,8 @@ class ImagesRepository implements ImagesRepositoryInterface
     /**
      * update Image data.
      *
+     * @param array $resource update data
+     * @param array $id id of record.
      * @return int
      */
     public function updateImage(array $resource, int $id): int
@@ -122,8 +125,9 @@ class ImagesRepository implements ImagesRepositoryInterface
 
     /**
      * delete Images data.
-     * @param array $resource
-     * @param array $ids
+     *
+     * @param array $resource update data
+     * @param array $ids id of records.
      * @return int
      */
     public function deleteImage(array $resource, array $ids): int

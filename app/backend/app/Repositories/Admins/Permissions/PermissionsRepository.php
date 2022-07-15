@@ -32,7 +32,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * get All Role Data.
+     * get All Permissions Data.
      *
      * @return Collection
      */
@@ -42,7 +42,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * get Roles as List.
+     * get Permissions as List.
      *
      * @return Collection
      */
@@ -58,8 +58,9 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * create Admin data.
+     * create Permission data.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createPermission(array $resource): int
@@ -68,8 +69,10 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * update Role data.
+     * update Permission data.
      *
+     * @param array $resource update data
+     * @param array $id id of record.
      * @return int
      */
     public function updatePermissionData(array $resource, int $id): int
@@ -86,9 +89,10 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * delete Role data.
-     * @param array $resource
-     * @param int $id
+     * delete Permission data.
+     *
+     * @param array $resource update data
+     * @param int $id id of record.
      * @return int
      */
     public function deletePermissionsData(array $resource, int $id): int

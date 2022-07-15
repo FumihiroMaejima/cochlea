@@ -41,6 +41,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     /**
      * update Admins Role.
      *
+     * @param int $adminId admin id
      * @return Collection
      */
     public function getByAdminId(int $adminId): Collection
@@ -59,8 +60,9 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     }
 
     /**
-     * update Admins Role.
+     * create Admins Role.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createAdminsRole(array $resource): int
@@ -71,8 +73,8 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     /**
      * update Admins Role.
      *
-     * @param array $resource
-     * @param int $adminId
+     * @param array $resource update data
+     * @param int $adminId id of admin
      * @return int
      */
     public function updateAdminsRoleData(array $resource, int $adminId): int
@@ -91,7 +93,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     /**
      * delete Admins Role.
      *
-     * @param array $resource
+     * @param array $resource update data
      * @return int
      */
     public function deleteAdminsRoleData(array $resource): int

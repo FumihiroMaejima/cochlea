@@ -80,6 +80,7 @@ class CoinsRepository implements CoinsRepositoryInterface
     /**
      * create Coin data.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createCoin(array $resource): int
@@ -90,6 +91,8 @@ class CoinsRepository implements CoinsRepositoryInterface
     /**
      * update Coin data.
      *
+     * @param array $resource update data
+     * @param array $id id of record
      * @return int
      */
     public function updateCoin(array $resource, int $id): int
@@ -104,8 +107,9 @@ class CoinsRepository implements CoinsRepositoryInterface
 
     /**
      * delete Coins data.
-     * @param array $resource
-     * @param array $ids
+     *
+     * @param array $resource update data
+     * @param array $ids id of records
      * @return int
      */
     public function deleteCoin(array $resource, array $ids): int

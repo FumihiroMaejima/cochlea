@@ -18,6 +18,8 @@ use App\Repositories\Admins\RolePermissions\RolePermissionsRepository;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Admins\Roles\RolesRepository;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepository;
+use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);
         $this->app->bind(RolePermissionsRepositoryInterface::class, RolePermissionsRepository::class);
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
+        $this->app->bind(UserCoinPaymentStatusRepository::class, UserCoinPaymentStatusRepositoryInterface::class);
     }
 
     /**
