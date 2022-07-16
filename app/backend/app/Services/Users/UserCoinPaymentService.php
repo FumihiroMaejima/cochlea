@@ -74,14 +74,27 @@ class UserCoinPaymentService
 
         $lineItems = [$item];
 
-        $session = CheckoutLibrary::createSession(UuidLibrary::uuidVersion4(), $lineItems);
+        $orderId = UuidLibrary::uuidVersion4();
 
-        // ステータス
-        $status = $this->getPaymentStatusFromStripeResponse($session->status);
-        // $stateResource = UserCoinPaymentStatusResource::toArrayForCreate();
+        $session = CheckoutLibrary::createSession($orderId, $lineItems);
 
-        // $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus();
-        // $this->userCoinsRepository->createUserCoins();
+        // DB 登録
+        DB::beginTransaction();
+        try {
+            // ステータス
+            $status = $this->getPaymentStatusFromStripeResponse($session->status);
+            $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status);
+            $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
+
+            // TODO create user coin;
+            // $this->userCoinsRepository->createUserCoins();
+
+            DB::commit();
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            throw $e;
+        }
 
          return response()->json(
             [

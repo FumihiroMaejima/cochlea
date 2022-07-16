@@ -47,18 +47,21 @@ class UserCoinPaymentStatusResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param Request $request
+     * @param int $userId
+     * @param string $orderId
+     * @param int $coinId
+     * @param int $status
      * @return array
      */
-    public static function toArrayForCreate(Request $request): array
+    public static function toArrayForCreate(int $userId, string $orderId, int $coinId, int $status): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            UserCoinPaymentStatus::USER_ID => $request->{UserCoinPaymentStatus::USER_ID},
-            UserCoinPaymentStatus::ORDER_ID => $request->{UserCoinPaymentStatus::ORDER_ID},
-            UserCoinPaymentStatus::COIN_ID => $request->{UserCoinPaymentStatus::COIN_ID},
-            UserCoinPaymentStatus::STATUS => $request->{UserCoinPaymentStatus::STATUS},
+            UserCoinPaymentStatus::USER_ID => $userId,
+            UserCoinPaymentStatus::ORDER_ID => $orderId,
+            UserCoinPaymentStatus::COIN_ID => $coinId,
+            UserCoinPaymentStatus::STATUS => $status,
             UserCoinPaymentStatus::CRREATED_AT => $dateTime,
             UserCoinPaymentStatus::UPDATED_AT => $dateTime,
         ];

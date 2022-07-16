@@ -29,11 +29,12 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * get Model Table Name in This Repository.
      *
+     * @param int $userId user id.
      * @return string
      */
-    public function getTable(): string
+    public function getTable(int $userId): string
     {
-        return $this->model->getTable();
+        return $this->model->getTable() . UserCoinPaymentStatus::getShardId($userId);
     }
 
     /**
@@ -46,7 +47,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     public function getByUserId(int $userId): Collection|null
     {
         $collection = DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)
@@ -79,7 +80,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null
     {
         $collection = DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
@@ -111,7 +112,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function createUserCoinPaymentStatus(int $userId, array $resource): int
     {
-        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable())->insert($resource);
+        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable($userId))->insert($resource);
     }
 
     /**
@@ -126,7 +127,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     {
         // Query Builderのupdate
         return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             // ->whereIn('id', [$id])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
@@ -146,7 +147,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     {
         // Query Builderのupdate
         return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
             ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)

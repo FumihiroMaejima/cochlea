@@ -29,11 +29,12 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * get Model Table Name in This Repository.
      *
+     * @param int $userId user id.
      * @return string
      */
-    public function getTable(): string
+    public function getTable(int $userId): string
     {
-        return $this->model->getTable();
+        return $this->model->getTable() . UserCoins::getShardId($userId);
     }
 
     /**
@@ -46,7 +47,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     public function getByUserId(int $userId): Collection|null
     {
         $collection = DB::connection(UserCoins::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             ->select(['*'])
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
@@ -77,7 +78,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function createUserCoins(int $userId, array $resource): int
     {
-        return DB::connection(UserCoins::setConnectionName($userId))->table($this->getTable())->insert($resource);
+        return DB::connection(UserCoins::setConnectionName($userId))->table($this->getTable($userId))->insert($resource);
     }
 
     /**
@@ -91,7 +92,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     {
         // Query Builderのupdate
         return DB::connection(UserCoins::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             // ->whereIn('id', [$id])
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
@@ -109,7 +110,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     {
         // Query Builderのupdate
         return DB::connection(UserCoins::setConnectionName($userId))
-            ->table($this->getTable())
+            ->table($this->getTable($userId))
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
             ->update($resource);

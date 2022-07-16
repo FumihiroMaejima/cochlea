@@ -36,7 +36,8 @@ class BaseUserDataModel extends Model
     public static function setConnectionName(int $userId): string
     {
         $connectionName = self::getConnectionNameByUserId($userId);
-        return parent::setConnection($connectionName);
+        return $connectionName;
+        // return parent::setConnection($connectionName);
     }
 
     /**

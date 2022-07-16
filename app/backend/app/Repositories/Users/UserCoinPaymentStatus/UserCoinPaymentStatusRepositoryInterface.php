@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 interface UserCoinPaymentStatusRepositoryInterface
 {
-    public function getTable(): string;
+    public function getTable(int $userId): string;
 
     public function getByUserId(int $userId): Collection|null;
 
