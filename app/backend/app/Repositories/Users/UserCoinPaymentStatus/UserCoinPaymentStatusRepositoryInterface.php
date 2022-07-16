@@ -3,10 +3,13 @@
 namespace App\Repositories\Users\UserCoinPaymentStatus;
 
 use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
 
 interface UserCoinPaymentStatusRepositoryInterface
 {
     public function getTable(int $userId): string;
+
+    public function getQueryBuilder(int $userId): Builder;
 
     public function getByUserId(int $userId): Collection|null;
 

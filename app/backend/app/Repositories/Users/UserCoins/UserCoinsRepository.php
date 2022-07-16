@@ -7,6 +7,7 @@ use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Users\UserCoins;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
 
 class UserCoinsRepository implements UserCoinsRepositoryInterface
 {
@@ -29,7 +30,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * get Model Table Name in This Repository.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @return string
      */
     public function getTable(int $userId): string
@@ -38,9 +39,20 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     }
 
     /**
+     * get query builder by user id.
+     *
+     * @param int $userId user id
+     * @return Builder
+     */
+    public function getQueryBuilder(int $userId): Builder
+    {
+        return DB::connection(UserCoins::setConnectionName($userId))->table($this->getTable($userId));
+    }
+
+    /**
      * get by user id.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
@@ -72,7 +84,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * create UserCoins data.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
@@ -84,7 +96,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * update UserCoins data.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @param array $resource update data
      * @return int
      */
@@ -102,7 +114,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * delete UserCoins data.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @param array $resource update data
      * @return int
      */

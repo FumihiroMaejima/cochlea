@@ -7,6 +7,7 @@ use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Users\UserCoinPaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
 
 class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepositoryInterface
 {
@@ -29,7 +30,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * get Model Table Name in This Repository.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @return string
      */
     public function getTable(int $userId): string
@@ -38,9 +39,20 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     }
 
     /**
+     * get query builder by user id
+     *
+     * @param int $userId user id
+     * @return Builder
+     */
+    public function getQueryBuilder(int $userId): Builder
+    {
+        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable($userId));
+    }
+
+    /**
      * get by user id.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
@@ -72,8 +84,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * get by user id & order id.
      *
-     * @param int $userId user id.
-     * @param string $orderId order id.
+     * @param int $userId user id
+     * @param string $orderId order id
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
@@ -106,7 +118,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * create UserCoinPaymentStatus data.
      *
-     * @param int $userId user id.
+     * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
@@ -118,8 +130,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * update UserCoinPaymentStatus data.
      *
-     * @param int $userId user id.
-     * @param string $orderId order id.
+     * @param int $userId user id
+     * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
@@ -138,8 +150,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * delete UserCoinPaymentStatus data.
      *
-     * @param int $userId user id.
-     * @param string $orderId order id.
+     * @param int $userId user id
+     * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
