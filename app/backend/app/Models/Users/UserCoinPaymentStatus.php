@@ -16,12 +16,14 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     public const PAYMENT_STATUS_START = 1; // 決済開始
     public const PAYMENT_STATUS_WAITING_FOR_DEPOSIT = 2; // 決済中(入金待ち)
     public const PAYMENT_STATUS_COMPLETE = 3; // 決済完了
+    public const PAYMENT_STATUS_EXPIRED = 98; // 期限切れ
     public const PAYMENT_STATUS_CANCEL = 99; // キャンセル
 
     public const PAYMENT_STATUS_LIST = [
         self::PAYMENT_STATUS_START => '決済開始',
         self::PAYMENT_STATUS_WAITING_FOR_DEPOSIT => '決済中(入金待ち)',
         self::PAYMENT_STATUS_COMPLETE => '決済完了',
+        self::PAYMENT_STATUS_EXPIRED => '期限切れ',
         self::PAYMENT_STATUS_CANCEL => 'キャンセル',
     ];
 

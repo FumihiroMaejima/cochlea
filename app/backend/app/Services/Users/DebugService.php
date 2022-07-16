@@ -45,7 +45,7 @@ class DebugService
             ],
         ];
 
-        $session = CheckoutLibrary::createSession($lineItems, UuidLibrary::uuidVersion4());
+        $session = CheckoutLibrary::debugCreateSession(UuidLibrary::uuidVersion4(), $lineItems);
 
          return response()->json(
             [

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\JsonResponse;
 use App\Library\Stripe\StripeLibrary;
+use App\Models\Users\UserCoinPaymentStatus;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\Exception\ApiConnectionException;
@@ -41,6 +42,19 @@ class CheckoutLibrary extends StripeLibrary
         self::PAYMENT_TYPE_CARD,
         self::PAYMENT_TYPE_KONBINI,
         // self::PAYMENT_TYPE_WECHAT_PAY,
+    ];
+
+    // status (open, complete, expired,)
+    private const CHECKOUT_STATUS_OPEN = 'open';
+    private const CHECKOUT_STATUS_COMPLETE = 'complete';
+    private const CHECKOUT_STATUS_EXPIRED = 'expired';
+
+    // 当サービスで利用する決済方法
+    /** @var array<string, int> CHECKOUT_STATUS_VALUE_LIST */
+    public const CHECKOUT_STATUS_VALUE_LIST = [
+        self::CHECKOUT_STATUS_OPEN => UserCoinPaymentStatus::PAYMENT_STATUS_START,
+        self::CHECKOUT_STATUS_COMPLETE => UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE,
+        self::CHECKOUT_STATUS_EXPIRED => UserCoinPaymentStatus::PAYMENT_STATUS_EXPIRED,
     ];
 
     // currency types
@@ -110,11 +124,33 @@ class CheckoutLibrary extends StripeLibrary
     /**
      * exec stripe api request for POST
      *
-     * @param array $lineItems taget productions of payment.
      * @param string $orderId order id.
+     * @param array $lineItems taget productions of payment.
      * @return Session
      */
-    public static function createSession(array $lineItems, string $orderId): Session {
+    public static function createSession(string $orderId, array $lineItems): Session {
+        $stripe = self::getStripeClient();
+
+        $query = self::QUERY_ORDER_ID . $orderId;
+
+        return $stripe->checkout->sessions->create([
+            self::REQUEST_KEY_SUCCESS_URL => route('user.coins.payment.complete') . $query, // 決済完了後のリダイレクト先
+            self::REQUEST_KEY_CANCEL_URL => route('user.coins.payment.cancel') . $query, // 決済画面の「キャンセルボタン」押下時のリダイレクト先
+            // self::REQUEST_KEY_PAYMENT_METHOD_TYPES => [self::PAYMENT_TYPE_CARD],
+            self::REQUEST_KEY_PAYMENT_METHOD_TYPES => self::SERVICE_PAYMENT_TYPES,
+            self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
+            self::REQUEST_KEY_LINE_ITEMS => $lineItems,
+        ]);
+    }
+
+    /**
+     * exec stripe api request for POST
+     *
+     * @param string $orderId order id.
+     * @param array $lineItems taget productions of payment.
+     * @return Session
+     */
+    public static function debugCreateSession(string $orderId, array $lineItems): Session {
         $stripe = self::getStripeClient();
 
         $query = self::QUERY_ORDER_ID . $orderId;

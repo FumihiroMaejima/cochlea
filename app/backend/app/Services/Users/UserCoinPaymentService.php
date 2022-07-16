@@ -14,6 +14,7 @@ use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
+use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
@@ -72,9 +73,11 @@ class UserCoinPaymentService
 
         $lineItems = [$item];
 
-        $session = CheckoutLibrary::createSession($lineItems, UuidLibrary::uuidVersion4());
+        $session = CheckoutLibrary::createSession(UuidLibrary::uuidVersion4(), $lineItems);
+
         // ステータス
-        $status = $session->status; // open, complete, expired,
+        $status = $this->getPaymentStatusFromStripeResponse($session->status);
+        // $stateResource = UserCoinPaymentStatusResource::toArrayForCreate();
 
         // $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus();
         // $this->userCoinsRepository->createUserCoins();
@@ -168,5 +171,24 @@ class UserCoinPaymentService
         /** @var array $coin */
         $coin = json_decode(json_encode($coins->toArray()[0]), true);
         return $coin;
+    }
+
+    /**
+     * get payment status value from stripe session status.
+     *
+     * @param string $status checkout session status
+     * @return int
+     */
+    private function getPaymentStatusFromStripeResponse(string $status): int
+    {
+        if (empty(CheckoutLibrary::CHECKOUT_STATUS_VALUE_LIST[$status])) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'invalide status value.'
+            );
+        }
+
+        return CheckoutLibrary::CHECKOUT_STATUS_VALUE_LIST[$status];
     }
 }
