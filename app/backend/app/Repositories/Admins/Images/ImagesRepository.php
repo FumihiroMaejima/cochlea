@@ -109,11 +109,11 @@ class ImagesRepository implements ImagesRepositoryInterface
     /**
      * update Image data.
      *
+     * @param array $id id of record
      * @param array $resource update data
-     * @param array $id id of record.
      * @return int
      */
-    public function updateImage(array $resource, int $id): int
+    public function updateImage(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -126,11 +126,11 @@ class ImagesRepository implements ImagesRepositoryInterface
     /**
      * delete Images data.
      *
+     * @param array $ids id of records
      * @param array $resource update data
-     * @param array $ids id of records.
      * @return int
      */
-    public function deleteImage(array $resource, array $ids): int
+    public function deleteImage(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

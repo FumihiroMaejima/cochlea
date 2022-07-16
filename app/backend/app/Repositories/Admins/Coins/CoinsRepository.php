@@ -91,11 +91,11 @@ class CoinsRepository implements CoinsRepositoryInterface
     /**
      * update Coin data.
      *
-     * @param array $resource update data
      * @param array $id id of record
+     * @param array $resource update data
      * @return int
      */
-    public function updateCoin(array $resource, int $id): int
+    public function updateCoin(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -108,11 +108,11 @@ class CoinsRepository implements CoinsRepositoryInterface
     /**
      * delete Coins data.
      *
-     * @param array $resource update data
      * @param array $ids id of records
+     * @param array $resource update data
      * @return int
      */
-    public function deleteCoin(array $resource, array $ids): int
+    public function deleteCoin(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
