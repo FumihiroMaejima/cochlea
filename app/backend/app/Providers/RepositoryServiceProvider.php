@@ -39,8 +39,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);
         $this->app->bind(RolePermissionsRepositoryInterface::class, RolePermissionsRepository::class);
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
-        $this->app->bind(UserCoinPaymentStatusRepository::class, UserCoinPaymentStatusRepositoryInterface::class);
-        $this->app->bind(UserCoinsRepository::class, UserCoinsRepositoryInterface::class);
+        $this->app->bind(UserCoinPaymentStatusRepositoryInterface::class, UserCoinPaymentStatusRepository::class);
+        $this->app->bind(UserCoinsRepositoryInterface::class, UserCoinsRepository::class);
     }
 
     /**

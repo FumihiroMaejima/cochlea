@@ -116,7 +116,7 @@ Route::group(['prefix' => 'v1'], function () {
 
             // coin payment
             Route::group(['prefix' => 'payment'], function () {
-                Route::get('/', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'checkout'])->name('user.coins.payment.index');
+                Route::get('/checkout', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'checkout'])->name('user.coins.payment.checkout');
                 Route::get('/cancel', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'cancel'])->name('user.coins.payment.cancel');
                 Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
             });

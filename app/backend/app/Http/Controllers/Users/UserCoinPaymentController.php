@@ -38,8 +38,26 @@ class UserCoinPaymentController extends Controller
      */
     public function checkout(Request $request): JsonResponse
     {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'coinId' => ['required','integer'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_422,
+            );
+        }
+
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
+
         // サービスの実行
-        return $this->service->getCheckout($request);
+        return $this->service->getCheckout($userId, $request->coinId);
     }
 
     /**
@@ -64,6 +82,9 @@ class UserCoinPaymentController extends Controller
                 ExceptionStatusCodeMessages::STATUS_CODE_422,
             );
         }
+
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
 
         // サービスの実行
         return $this->service->cancelCheckout($request->orderId);
@@ -91,6 +112,9 @@ class UserCoinPaymentController extends Controller
                 ExceptionStatusCodeMessages::STATUS_CODE_422,
             );
         }
+
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
 
         // サービスの実行
         return $this->service->completeCheckout($request->orderId);
