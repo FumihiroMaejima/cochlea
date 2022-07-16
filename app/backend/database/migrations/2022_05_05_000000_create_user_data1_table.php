@@ -49,6 +49,23 @@ class CreateUserData1Table extends Migration
                 });
 
                 /**
+                 * user_coins table
+                 */
+                Schema::connection($connectionName)->create('user_coins'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->comment('ユーザーID');
+                    $table->integer('free_coins')->comment('無料コイン数');
+                    $table->integer('paid_coins')->comment('有料コイン数');
+                    $table->integer('limited_time_coins')->comment('期間限定コイン数');
+                    $table->timestamps();
+                    $table->softDeletes();
+
+                    // プライマリキー設定
+                    $table->primary(['user_id']);
+
+                    $table->comment('about user coins table');
+                });
+
+                /**
                  * user_payments table
                  */
                 Schema::connection($connectionName)->create('user_payments'.$shardId, function (Blueprint $table) {
@@ -90,6 +107,7 @@ class CreateUserData1Table extends Migration
 
             foreach ($shardIds as $shardId) {
                 Schema::connection($connectionName)->dropIfExists('user_coin_payment_status'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_coins'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
             }

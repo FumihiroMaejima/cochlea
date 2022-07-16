@@ -110,7 +110,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
         });
 
-        // coin
+        // coins
         Route::group(['prefix' => 'coins'], function () {
             // Route::get('/', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'checkout'])->name('user.coins.index');
 
@@ -128,7 +128,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
 
-            // stipre決済
+            // stripe決済
             Route::group(['prefix' => 'checkout'], function () {
                 Route::get('/', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.index');
                 Route::get('cancel', [\App\Http\Controllers\Users\DebugController::class, 'cancelCheckout'])->name('user.debug.checkout.cancel');

@@ -7,36 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\BaseUserDataModel;
 
-class UserCoinPaymentStatus extends BaseUserDataModel
+class UserCoins extends BaseUserDataModel
 {
     use HasFactory;
     use SoftDeletes;
 
-    // 決済のステータス
-    public const PAYMENT_STATUS_START = 1; // 決済開始
-    public const PAYMENT_STATUS_WAITING_FOR_DEPOSIT = 2; // 決済中(入金待ち)
-    public const PAYMENT_STATUS_COMPLETE = 3; // 決済完了
-    public const PAYMENT_STATUS_CANCEL = 99; // キャンセル
-
-    public const PAYMENT_STATUS_LIST = [
-        self::PAYMENT_STATUS_START => '決済開始',
-        self::PAYMENT_STATUS_WAITING_FOR_DEPOSIT => '決済中(入金待ち)',
-        self::PAYMENT_STATUS_COMPLETE => '決済完了',
-        self::PAYMENT_STATUS_CANCEL => 'キャンセル',
-    ];
-
     // カラム一覧
     public const USER_ID = 'user_id';
-    public const ORDER_ID = 'order_id';
-    public const COIN_ID = 'coin_id';
-    public const STATUS = 'status';
-    // public const STRIPE_SESSION_ID = 'stripe_session_id';
+    public const FREE_COINS = 'free_coins';
+    public const PAID_COINS = 'paid_coins';
+    public const LIMITED_TIME_COINS = 'limited_time_coins';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'user_coin_payment_status';
+    protected $table = 'user_coins';
 
     // カラムの自動更新をEloquentに許可
     public $timestamps = true;
@@ -49,10 +35,7 @@ class UserCoinPaymentStatus extends BaseUserDataModel
      *
      * @var string
      */
-    protected $primaryKey = [
-        self::USER_ID,
-        self::ORDER_ID,
-    ];
+    protected $primaryKey = self::USER_ID;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -65,9 +48,9 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     // 更新可能なカラムリスト
     protected $fillable = [
         self::USER_ID,
-        self::ORDER_ID,
-        self::COIN_ID,
-        self::STATUS,
+        self::FREE_COINS,
+        self::PAID_COINS,
+        self::LIMITED_TIME_COINS,
         self::UPDATED_AT,
     ];
 
