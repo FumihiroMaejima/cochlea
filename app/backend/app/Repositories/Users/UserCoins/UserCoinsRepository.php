@@ -45,7 +45,8 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function getByUserId(int $userId): Collection|null
     {
-        $collection = DB::table($this->getTable())
+        $collection = DB::connection(UserCoins::setConnectionName($userId))
+            ->table($this->getTable())
             ->select(['*'])
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
@@ -76,7 +77,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function createUserCoins(int $userId, array $resource): int
     {
-        return DB::table($this->getTable())->insert($resource);
+        return DB::connection(UserCoins::setConnectionName($userId))->table($this->getTable())->insert($resource);
     }
 
     /**
@@ -89,7 +90,8 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     public function updateUserCoins(int $userId, array $resource): int
     {
         // Query Builderのupdate
-        return DB::table($this->getTable())
+        return DB::connection(UserCoins::setConnectionName($userId))
+            ->table($this->getTable())
             // ->whereIn('id', [$id])
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
@@ -106,7 +108,8 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     public function deleteUserCoins(int $userId, array $resource): int
     {
         // Query Builderのupdate
-        return DB::table($this->getTable())
+        return DB::connection(UserCoins::setConnectionName($userId))
+            ->table($this->getTable())
             ->where(UserCoins::USER_ID, '=', $userId)
             ->where(UserCoins::DELETED_AT, '=', null)
             ->update($resource);

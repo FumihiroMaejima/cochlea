@@ -45,7 +45,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function getByUserId(int $userId): Collection|null
     {
-        $collection = DB::table($this->getTable())
+        $collection = DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
+            ->table($this->getTable())
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)
@@ -77,7 +78,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null
     {
-        $collection = DB::table($this->getTable())
+        $collection = DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
+            ->table($this->getTable())
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
@@ -109,7 +111,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function createUserCoinPaymentStatus(int $userId, array $resource): int
     {
-        return DB::table($this->getTable())->insert($resource);
+        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable())->insert($resource);
     }
 
     /**
@@ -123,7 +125,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
-        return DB::table($this->getTable())
+        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
+            ->table($this->getTable())
             // ->whereIn('id', [$id])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
@@ -142,7 +145,8 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
-        return DB::table($this->getTable())
+        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))
+            ->table($this->getTable())
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
             ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)
