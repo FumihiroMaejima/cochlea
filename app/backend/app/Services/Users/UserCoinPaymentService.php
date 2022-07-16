@@ -18,6 +18,7 @@ use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
@@ -168,8 +169,8 @@ class UserCoinPaymentService
         }
 
         // 複数チェックはrepository側で実施済み
-        /** @var array $coin */
-        $coin = json_decode(json_encode($coins->toArray()[0]), true);
+        // $coin = json_decode(json_encode($coins->toArray()[0]), true);
+        $coin = ArrayLibrary::toArray($coins->toArray()[0]);
         return $coin;
     }
 
