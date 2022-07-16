@@ -10,9 +10,9 @@ interface UserCoinsRepositoryInterface
 
     public function getByUserId(int $userId): Collection|null;
 
-    public function createUserCoins(array $resource): int;
+    public function createUserCoins(int $userId, array $resource): int;
 
-    public function updateUserCoins(array $resource, int $userId): int;
+    public function updateUserCoins(int $userId, array $resource): int;
 
-    public function deleteUserCoins(array $resource, int $userId): int;
+    public function deleteUserCoins(int $userId, array $resource): int;
 }

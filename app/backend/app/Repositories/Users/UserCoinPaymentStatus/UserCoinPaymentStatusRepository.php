@@ -103,10 +103,11 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * create UserCoinPaymentStatus data.
      *
+     * @param int $userId user id.
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoinPaymentStatus(array $resource): int
+    public function createUserCoinPaymentStatus(int $userId, array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
@@ -114,12 +115,12 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * update UserCoinPaymentStatus data.
      *
-     * @param array $resource update data
      * @param int $userId user id.
      * @param string $orderId order id.
+     * @param array $resource update data
      * @return int
      */
-    public function updateUserCoinPaymentStatus(array $resource, int $userId, string $orderId): int
+    public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -133,12 +134,12 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     /**
      * delete UserCoinPaymentStatus data.
      *
-     * @param array $resource update data
      * @param int $userId user id.
      * @param string $orderId order id.
+     * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoinPaymentStatus(array $resource, int $userId, string $orderId): int
+    public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

@@ -53,9 +53,9 @@ class CreateUserData1Table extends Migration
                  */
                 Schema::connection($connectionName)->create('user_coins'.$shardId, function (Blueprint $table) {
                     $table->integer('user_id')->comment('ユーザーID');
-                    $table->integer('free_coins')->comment('無料コイン数');
-                    $table->integer('paid_coins')->comment('有料コイン数');
-                    $table->integer('limited_time_coins')->comment('期間限定コイン数');
+                    $table->integer('free_coins')->default(0)->comment('無料コイン数');
+                    $table->integer('paid_coins')->default(0)->comment('有料コイン数');
+                    $table->integer('limited_time_coins')->default(0)->comment('期間限定コイン数');
                     $table->timestamps();
                     $table->softDeletes();
 

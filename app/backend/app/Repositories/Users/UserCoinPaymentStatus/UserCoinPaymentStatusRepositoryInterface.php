@@ -12,9 +12,9 @@ interface UserCoinPaymentStatusRepositoryInterface
 
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null;
 
-    public function createUserCoinPaymentStatus(array $resource): int;
+    public function createUserCoinPaymentStatus(int $userId, array $resource): int;
 
-    public function updateUserCoinPaymentStatus(array $resource, int $userId, string $orderId): int;
+    public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int;
 
-    public function deleteUserCoinPaymentStatus(array $resource, int $userId, string $orderId): int;
+    public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int;
 }

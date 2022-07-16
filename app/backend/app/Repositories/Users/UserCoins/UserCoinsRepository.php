@@ -70,10 +70,11 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * create UserCoins data.
      *
+     * @param int $userId user id.
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoins(array $resource): int
+    public function createUserCoins(int $userId, array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
@@ -81,11 +82,11 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * update UserCoins data.
      *
-     * @param array $resource update data
      * @param int $userId user id.
+     * @param array $resource update data
      * @return int
      */
-    public function updateUserCoins(array $resource, int $userId): int
+    public function updateUserCoins(int $userId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -98,11 +99,11 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     /**
      * delete UserCoins data.
      *
-     * @param array $resource update data
      * @param int $userId user id.
+     * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoins(array $resource, int $userId): int
+    public function deleteUserCoins(int $userId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
