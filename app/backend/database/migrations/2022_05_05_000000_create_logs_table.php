@@ -16,6 +16,7 @@ class CreateLogsTable extends Migration
     {
         $connectionName = Config::get('myapp.database.logs.baseConnectionName');
 
+        // 管理者系
         /**
          * admins_log table
          */
@@ -31,6 +32,24 @@ class CreateLogsTable extends Migration
 
             $table->comment('admin action table');
         });
+
+        // ユーザー系
+        /**
+         * user_coin_payment_log table
+         */
+        Schema::connection($connectionName)->create('user_coin_payment_log', function (Blueprint $table) {
+            $table->integer('user_id')->comment('ユーザーID');
+            $table->uuid('order_id')->comment('注文ID');
+            $table->integer('coin_id')->comment('コインID');
+            $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
+            $table->timestamps();
+            $table->softDeletes();
+
+            // プライマリキー設定
+            $table->primary(['user_id', 'order_id']);
+
+            $table->comment('user coin payment log table');
+        });
     }
 
     /**
@@ -43,5 +62,6 @@ class CreateLogsTable extends Migration
         $connectionName = Config::get('myapp.database.logs.baseConnectionName');
 
         Schema::connection($connectionName)->dropIfExists('admins_log');
+        Schema::connection($connectionName)->dropIfExists('user_coin_payment_log');
     }
 }

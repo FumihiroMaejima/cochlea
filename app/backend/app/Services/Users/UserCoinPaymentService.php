@@ -81,11 +81,12 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
-            // ステータス
+            // ステータスの設定
             $status = $this->getPaymentStatusFromStripeResponse($session->status);
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status);
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
+            // ユーザーの所持しているコインの更新
             // TODO create user coin;
             // $this->userCoinsRepository->createUserCoins();
 
