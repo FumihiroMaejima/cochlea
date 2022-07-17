@@ -12,6 +12,9 @@ class UserCoins extends BaseUserDataModel
     use HasFactory;
     use SoftDeletes;
 
+    // デフォルトコイン数
+    public const DEFAULT_COIN_COUNT = 0;
+
     // カラム一覧
     public const USER_ID = 'user_id';
     public const FREE_COINS = 'free_coins';

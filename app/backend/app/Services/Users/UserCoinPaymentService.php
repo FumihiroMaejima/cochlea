@@ -14,8 +14,11 @@ use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
+use App\Http\Resources\Logs\UserCoinPaymentLogResource;
 use App\Http\Resources\Users\UserCoinPaymentStatusResource;
+use App\Http\Resources\Users\UserCoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
@@ -23,6 +26,7 @@ use App\Library\Cache\CacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
+use App\Models\Users\UserCoins;
 use Exception;
 
 class UserCoinPaymentService
@@ -33,6 +37,7 @@ class UserCoinPaymentService
     protected CoinsRepositoryInterface $coinsRepository;
     protected UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository;
     protected UserCoinsRepositoryInterface $userCoinsRepository;
+    protected UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository;
 
     /**
      * create instance
@@ -40,17 +45,20 @@ class UserCoinPaymentService
      * @param CoinsRepositoryInterface $coinsRepository
      * @param UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository
      * @param UserCoinsRepositoryInterface $userCoinsRepository
+     * @param UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
      * @return void
      */
     public function __construct(
         CoinsRepositoryInterface $coinsRepository,
         UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
-        UserCoinsRepositoryInterface $userCoinsRepository
+        UserCoinsRepositoryInterface $userCoinsRepository,
+        UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
     )
     {
         $this->coinsRepository = $coinsRepository;
         $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
+        $this->userCoinPaymentLogRepository = $userCoinPaymentLogRepository;
     }
 
     /**
@@ -67,7 +75,7 @@ class UserCoinPaymentService
         $item = [
             CheckoutLibrary::REQUEST_KEY_LINE_ITEM_NAME => $coin[Coins::NAME],
             CheckoutLibrary::REQUEST_KEY_LINE_ITEM_DESCRIPTION => $coin[Coins::DETAIL],
-            CheckoutLibrary::REQUEST_KEY_LINE_ITEM_AMOUNT => $coin[Coins::PRICE],
+            CheckoutLibrary::REQUEST_KEY_LINE_ITEM_AMOUNT => $coin[Coins::COST],
             CheckoutLibrary::REQUEST_KEY_LINE_ITEM_CURRENCY => CheckoutLibrary::CURRENCY_TYPE_JPY,
             CheckoutLibrary::REQUEST_KEY_LINE_ITEM_QUANTITY => 1,
         ];
@@ -76,6 +84,7 @@ class UserCoinPaymentService
 
         $orderId = UuidLibrary::uuidVersion4();
 
+        // stripeへのAPIリクエスト&セッションの作成
         $session = CheckoutLibrary::createSession($orderId, $lineItems);
 
         // DB 登録
@@ -87,8 +96,36 @@ class UserCoinPaymentService
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
             // ユーザーの所持しているコインの更新
-            // TODO create user coin;
-            // $this->userCoinsRepository->createUserCoins();
+            $userCoin = $this->userCoinsRepository->getByUserId($userId);
+
+            if (is_null($userCoin)) {
+                // 登録されていない場合は新規登録
+                $userCoinResource = UserCoinsResource::toArrayForCreate(
+                    $userId,
+                    UserCoins::DEFAULT_COIN_COUNT,
+                    $coin[Coins::PRICE],
+                    UserCoins::DEFAULT_COIN_COUNT
+                );
+                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+
+            } else {
+                // 更新
+                $userCoin = ArrayLibrary::toArray($userCoin->toArray()[0]);
+                $userCoinResource = UserCoinsResource::toArrayForCreate(
+                    $userId,
+                    $userCoin[UserCoins::FREE_COINS],
+                    $$userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
+                    $$userCoin[UserCoins::LIMITED_TIME_COINS]
+                );
+                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+
+            }
+            $userCoinResource = UserCoinsResource::toArrayForCreate($userId, $orderId, $coinId, $status);
+            $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+
+            // ログの設定
+            $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
+            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
