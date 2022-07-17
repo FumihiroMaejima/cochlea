@@ -96,7 +96,7 @@ class UserCoinPaymentService
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
             // ユーザーの所持しているコインの更新
-            $userCoin = $this->userCoinsRepository->getByUserId($userId);
+            $userCoin = $this->getUserCoinByUserId($userId);
 
             if (is_null($userCoin)) {
                 // 登録されていない場合は新規登録
@@ -109,19 +109,16 @@ class UserCoinPaymentService
                 $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
 
             } else {
-                // 更新
-                $userCoin = ArrayLibrary::toArray($userCoin->toArray()[0]);
-                $userCoinResource = UserCoinsResource::toArrayForCreate(
+                // 更新の場合
+                $userCoinResource = UserCoinsResource::toArrayForUpdate(
                     $userId,
                     $userCoin[UserCoins::FREE_COINS],
-                    $$userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
-                    $$userCoin[UserCoins::LIMITED_TIME_COINS]
+                    $userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
+                    $userCoin[UserCoins::LIMITED_TIME_COINS]
                 );
-                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+                $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
 
             }
-            $userCoinResource = UserCoinsResource::toArrayForCreate($userId, $orderId, $coinId, $status);
-            $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
@@ -223,6 +220,24 @@ class UserCoinPaymentService
         // $coin = json_decode(json_encode($coins->toArray()[0]), true);
         $coin = ArrayLibrary::toArray($coins->toArray()[0]);
         return $coin;
+    }
+
+    /**
+     * get user coins by user id.
+     *
+     * @param int $userId user id
+     * @return array|null
+     */
+    private function getUserCoinByUserId(int $userId): array|null
+    {
+        $userCoin = $this->userCoinsRepository->getByUserId($userId);
+
+        if (is_null($userCoin)) {
+            return $userCoin;
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($userCoin->toArray()[0]);
     }
 
     /**

@@ -45,7 +45,7 @@ class UserCoinsResource extends JsonResource
      * Transform the resource into an array for create.
      *
      * @param int $userId ユーザーID
-     * @param string $freeCoins 無料コイン数
+     * @param int $freeCoins 無料コイン数
      * @param int $paidCoins 無料コイン数
      * @param int $limitedTimeCoins 期限付きコイン数
      * @return array
@@ -68,7 +68,7 @@ class UserCoinsResource extends JsonResource
      * Transform the resource into an array for update.
      *
      * @param int $userId ユーザーID
-     * @param string $freeCoins 無料コイン数
+     * @param int $freeCoins 無料コイン数
      * @param int $paidCoins 無料コイン数
      * @param int $limitedTimeCoins 期限付きコイン数
      * @return array
