@@ -120,7 +120,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoinPaymentStatus(int $userId, array $resource): int
+    public function createUserCoinPaymentLog(int $userId, array $resource): int
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }
@@ -133,7 +133,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      * @param array $resource update data
      * @return int
      */
-    public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function updateUserCoinPaymentLog(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
@@ -152,7 +152,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function deleteUserCoinPaymentLog(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
