@@ -96,31 +96,6 @@ class UserCoinPaymentService
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status);
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
-            // create sessionでは不要
-            // ユーザーの所持しているコインの更新
-            /* $userCoin = $this->getUserCoinByUserId($userId);
-
-            if (is_null($userCoin)) {
-                // 登録されていない場合は新規登録
-                $userCoinResource = UserCoinsResource::toArrayForCreate(
-                    $userId,
-                    UserCoins::DEFAULT_COIN_COUNT,
-                    $coin[Coins::PRICE],
-                    UserCoins::DEFAULT_COIN_COUNT
-                );
-                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
-
-            } else {
-                // 更新の場合
-                $userCoinResource = UserCoinsResource::toArrayForUpdate(
-                    $userId,
-                    $userCoin[UserCoins::FREE_COINS],
-                    $userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
-                    $userCoin[UserCoins::LIMITED_TIME_COINS]
-                );
-                $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
-            } */
-
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
             $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
@@ -150,7 +125,40 @@ class UserCoinPaymentService
      */
     public function cancelCheckout(int $userId, string $orderId): JsonResponse
     {
+        // TODO $orderIdからstripeIdの取得
+        // TODO 要デバッグ
         $session = CheckoutLibrary::cancelSession($orderId);
+
+        // DB 登録
+        DB::beginTransaction();
+        try {
+            // ユーザーの決済情報の取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId);
+
+            // ステータスの更新(キャンセル)
+            $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
+                $userId,
+                $orderId,
+                $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
+                UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL
+            );
+            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+
+            // ログの設定
+            $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate(
+                $userId,
+                $orderId,
+                $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
+                UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL
+            );
+            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+
+            DB::commit();
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            throw $e;
+        }
 
          return response()->json(
             [
@@ -170,6 +178,7 @@ class UserCoinPaymentService
      */
     public function completeCheckout(int $userId, string $orderId): JsonResponse
     {
+        // TODO $orderIdからstripeIdの取得
         // TODO 要デバッグ
         $session = CheckoutLibrary::completeSession($orderId);
 
@@ -205,7 +214,7 @@ class UserCoinPaymentService
                 $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
 
             } else {
-                // 更新の場合
+                // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
                     $userId,
                     $userCoin[UserCoins::FREE_COINS],
@@ -230,14 +239,6 @@ class UserCoinPaymentService
             DB::rollback();
             throw $e;
         }
-
-         return response()->json(
-            [
-                'code' => 200,
-                'message' => 'Successfully Create Session: ',
-                'data' => $session->toArray(),
-            ]
-        );
 
          return response()->json(
             [

@@ -164,7 +164,7 @@ class CheckoutLibrary extends StripeLibrary
             $session = $stripe->checkout->sessions->retrieve($orderId);
 
             // セッションの削除
-            // $exipiredSession = $stripe->checkout->sessions->expire($orderId);
+            $exipiredSession = $stripe->checkout->sessions->expire($orderId);
 
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
@@ -176,7 +176,7 @@ class CheckoutLibrary extends StripeLibrary
             ); */
         }
 
-        return $session;
+        return $exipiredSession;
     }
 
     /**
