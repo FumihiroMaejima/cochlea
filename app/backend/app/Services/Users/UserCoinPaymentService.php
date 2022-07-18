@@ -26,6 +26,7 @@ use App\Library\Cache\CacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
+use App\Models\Users\UserCoinPaymentStatus;
 use App\Models\Users\UserCoins;
 use Exception;
 
@@ -95,8 +96,9 @@ class UserCoinPaymentService
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status);
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
+            // create sessionでは不要
             // ユーザーの所持しているコインの更新
-            $userCoin = $this->getUserCoinByUserId($userId);
+            /* $userCoin = $this->getUserCoinByUserId($userId);
 
             if (is_null($userCoin)) {
                 // 登録されていない場合は新規登録
@@ -117,8 +119,7 @@ class UserCoinPaymentService
                     $userCoin[UserCoins::LIMITED_TIME_COINS]
                 );
                 $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
-
-            }
+            } */
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
@@ -169,7 +170,74 @@ class UserCoinPaymentService
      */
     public function completeCheckout(int $userId, string $orderId): JsonResponse
     {
+        // TODO 要デバッグ
         $session = CheckoutLibrary::completeSession($orderId);
+
+        // DB 登録
+        DB::beginTransaction();
+        try {
+            // ユーザーの決済情報の取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId);
+
+            // ステータスの更新(完了)
+            $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
+                $userId,
+                $orderId,
+                $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
+                UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE
+            );
+            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+
+            // コイン情報の取得
+            $coin = $this->getCoinByCoinId($userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID]);
+
+            // ユーザーの所持しているコインの更新
+            $userCoin = $this->getUserCoinByUserId($userId);
+
+            if (is_null($userCoin)) {
+                // 登録されていない場合は新規登録
+                $userCoinResource = UserCoinsResource::toArrayForCreate(
+                    $userId,
+                    UserCoins::DEFAULT_COIN_COUNT,
+                    $coin[Coins::PRICE],
+                    UserCoins::DEFAULT_COIN_COUNT
+                );
+                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+
+            } else {
+                // 更新の場合
+                $userCoinResource = UserCoinsResource::toArrayForUpdate(
+                    $userId,
+                    $userCoin[UserCoins::FREE_COINS],
+                    $userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
+                    $userCoin[UserCoins::LIMITED_TIME_COINS]
+                );
+                $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
+            }
+
+            // ログの設定
+            $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate(
+                $userId,
+                $orderId,
+                $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
+                UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE
+            );
+            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+
+            DB::commit();
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            throw $e;
+        }
+
+         return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Successfully Create Session: ',
+                'data' => $session->toArray(),
+            ]
+        );
 
          return response()->json(
             [
@@ -244,6 +312,27 @@ class UserCoinPaymentService
 
         // 複数チェックはrepository側で実施済み
         return ArrayLibrary::toArray($userCoin->toArray()[0]);
+    }
+
+    /**
+     * get user coin payment status by user id.
+     *
+     * @param int $userId user id
+     * @return array
+     */
+    private function getUserCoinPaymentStatusByUserId(int $userId): array
+    {
+        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserId($userId);
+
+        if (empty($userCoinPaymentStatus)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist userCoinPaymentStatus.'
+            );;
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($userCoinPaymentStatus->toArray()[0]);
     }
 
     /**

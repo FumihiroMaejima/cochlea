@@ -139,6 +139,7 @@ class CheckoutLibrary extends StripeLibrary
 
         $query = self::QUERY_ORDER_ID . $orderId;
 
+        // リダイレクト先はヘッダー等をつけられない都合でフロントエンドにリダイレクトしてからリクエストして貰う必要がある。
         return $stripe->checkout->sessions->create([
             self::REQUEST_KEY_SUCCESS_URL => route('user.coins.payment.complete') . $query, // 決済完了後のリダイレクト先
             self::REQUEST_KEY_CANCEL_URL => route('user.coins.payment.cancel') . $query, // 決済画面の「キャンセルボタン」押下時のリダイレクト先
