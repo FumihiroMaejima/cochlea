@@ -5,7 +5,6 @@ namespace App\Repositories\Logs\UserCoinPaymentLog;
 use App\Exceptions\MyApplicationHttpException;
 use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Logs\UserCoinPaymentLog;
-use App\Models\Users\UserCoinPaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
