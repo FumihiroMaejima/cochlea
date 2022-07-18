@@ -143,16 +143,19 @@ class UserCoinPaymentService
     /**
      * cancel stripe chceckout session.
      *
+     * @param int $userId user id
      * @param string $orderId order id.
      * @return JsonResponse
      */
-    public function cancelCheckout(string $orderId): JsonResponse
+    public function cancelCheckout(int $userId, string $orderId): JsonResponse
     {
+        $session = CheckoutLibrary::cancelSession($orderId);
+
          return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Cancel Create Session. ' . $orderId,
-                'data' => [],
+                'data' => $session->toArray(),
             ]
         );
     }
@@ -160,16 +163,19 @@ class UserCoinPaymentService
     /**
      * complete stripe chceckout session.
      *
+     * @param int $userId user id
      * @param string $orderId order id.
      * @return JsonResponse
      */
-    public function completeCheckout(string $orderId): JsonResponse
+    public function completeCheckout(int $userId, string $orderId): JsonResponse
     {
+        $session = CheckoutLibrary::completeSession($orderId);
+
          return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Payment! ' . $orderId,
-                'data' => [],
+                'data' => $session->toArray(),
             ]
         );
     }

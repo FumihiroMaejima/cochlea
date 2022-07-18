@@ -2,9 +2,15 @@
 
 namespace App\Library\Stripe;
 
+
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Library\Stripe\StripeLibrary;
 use App\Models\Users\UserCoinPaymentStatus;
 use Stripe\Checkout\Session;
@@ -122,7 +128,7 @@ class CheckoutLibrary extends StripeLibrary
     private const RESPONSE_KEY_URL = 'url';
 
     /**
-     * exec stripe api request for POST
+     * create Stripe session.
      *
      * @param string $orderId order id.
      * @param array $lineItems taget productions of payment.
@@ -141,6 +147,63 @@ class CheckoutLibrary extends StripeLibrary
             self::REQUEST_KEY_MODE => self::CHECKOUT_MODE_PAYMENT,
             self::REQUEST_KEY_LINE_ITEMS => $lineItems,
         ]);
+    }
+
+    /**
+     * cancel Stripe session.
+     *
+     * @param string $orderId order id.
+     * @return Session
+     */
+    public static function cancelSession(string $orderId): Session {
+        $stripe = self::getStripeClient();
+
+        try {
+            // セッションの取得(取得出来ない場合はエラーが発生)
+            $session = $stripe->checkout->sessions->retrieve($orderId);
+
+            // セッションの削除
+            // $exipiredSession = $stripe->checkout->sessions->expire($orderId);
+
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            throw $e;
+            // TODO パラメーターの設定とエラー内容によってメッセージの制御
+            /* throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'stripe api error.'
+            ); */
+        }
+
+        return $session;
+    }
+
+    /**
+     * complete Stripe session.
+     *
+     * @param string $orderId order id.
+     * @return Session
+     */
+    public static function completeSession(string $orderId): Session {
+        $stripe = self::getStripeClient();
+
+        try {
+            // セッションの取得(取得出来ない場合はエラーが発生)
+            $session = $stripe->checkout->sessions->retrieve($orderId);
+
+             // $exipiredSession = $stripe->checkout->sessions->expire($orderId);
+
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            throw $e;
+            // TODO パラメーターの設定とエラー内容によってメッセージの制御
+            /* throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'stripe api error.'
+            ); */
+        }
+
+        return $session;
     }
 
     /**

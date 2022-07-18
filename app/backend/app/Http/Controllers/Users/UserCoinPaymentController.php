@@ -72,7 +72,8 @@ class UserCoinPaymentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'orderId' => ['required','uuid'],
+                // 'orderId' => ['required','uuid'], TODO こちらに変更
+                'orderId' => ['required','string'],
             ]
         );
 
@@ -87,7 +88,7 @@ class UserCoinPaymentController extends Controller
         $userId = $this->getUserId($request);
 
         // サービスの実行
-        return $this->service->cancelCheckout($request->orderId);
+        return $this->service->cancelCheckout($userId, $request->orderId);
     }
 
     /**
@@ -102,7 +103,8 @@ class UserCoinPaymentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'orderId' => ['required','uuid'],
+                'orderId' => ['required','uuid'], // TODO こちらに変更
+                'orderId' => ['required','string'],
             ]
         );
 
@@ -117,6 +119,6 @@ class UserCoinPaymentController extends Controller
         $userId = $this->getUserId($request);
 
         // サービスの実行
-        return $this->service->completeCheckout($request->orderId);
+        return $this->service->completeCheckout($userId, $request->orderId);
     }
 }
