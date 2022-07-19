@@ -18,7 +18,7 @@ class ErrorLog
     private int|false $pid;
     private string $memory;
     private string $stackTrace;
-    private string $parameter;
+    private array $parameter;
 
     /**
      * constructer.
