@@ -47,7 +47,7 @@ class DebugService
 
         $session = CheckoutLibrary::debugCreateSession(UuidLibrary::uuidVersion4(), $lineItems);
 
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Create Session',
@@ -64,7 +64,7 @@ class DebugService
      */
     public function cancelCheckout(string $orderId): JsonResponse
     {
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Cancel Create Session. ' . $orderId,
@@ -81,7 +81,7 @@ class DebugService
      */
     public function completeCheckout(string $orderId): JsonResponse
     {
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Payment! ' . $orderId,

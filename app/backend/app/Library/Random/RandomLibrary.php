@@ -23,9 +23,11 @@ class RandomLibrary
         $sum  = array_sum($entries);
         $rand = rand(self::RANDOM_MIN_VALUE, $sum);
 
-        foreach($entries as $key => $weight){
+        foreach ($entries as $key => $weight) {
             // ($a = $a - $b)と同様(減算)
-            if (($sum -= $weight) < $rand) return $key;
+            if (($sum -= $weight) < $rand) {
+                return $key;
+            }
         }
 
         throw new Exception('failed getting random value,', ExceptionStatusCodeMessages::STATUS_CODE_500);

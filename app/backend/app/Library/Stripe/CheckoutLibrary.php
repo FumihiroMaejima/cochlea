@@ -2,7 +2,6 @@
 
 namespace App\Library\Stripe;
 
-
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -134,7 +133,8 @@ class CheckoutLibrary extends StripeLibrary
      * @param array $lineItems taget productions of payment.
      * @return Session
      */
-    public static function createSession(string $orderId, array $lineItems): Session {
+    public static function createSession(string $orderId, array $lineItems): Session
+    {
         $stripe = self::getStripeClient();
 
         $query = self::QUERY_ORDER_ID . $orderId;
@@ -156,7 +156,8 @@ class CheckoutLibrary extends StripeLibrary
      * @param string $serviceId payment service id
      * @return Session
      */
-    public static function cancelSession(string $serviceId): Session {
+    public static function cancelSession(string $serviceId): Session
+    {
         $stripe = self::getStripeClient();
 
         try {
@@ -172,7 +173,6 @@ class CheckoutLibrary extends StripeLibrary
                     'stripe api error. service id'
                 );
             }
-
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             throw $e;
@@ -192,7 +192,8 @@ class CheckoutLibrary extends StripeLibrary
      * @param string $serviceId payment service id
      * @return Session
      */
-    public static function completeSession(string $serviceId): Session {
+    public static function completeSession(string $serviceId): Session
+    {
         $stripe = self::getStripeClient();
 
         try {
@@ -205,7 +206,6 @@ class CheckoutLibrary extends StripeLibrary
                     'stripe api error. service id'
                 );
             }
-
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             throw $e;
@@ -226,7 +226,8 @@ class CheckoutLibrary extends StripeLibrary
      * @param array $lineItems taget productions of payment.
      * @return Session
      */
-    public static function debugCreateSession(string $orderId, array $lineItems): Session {
+    public static function debugCreateSession(string $orderId, array $lineItems): Session
+    {
         $stripe = self::getStripeClient();
 
         $query = self::QUERY_ORDER_ID . $orderId;

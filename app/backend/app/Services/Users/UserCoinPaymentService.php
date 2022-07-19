@@ -55,8 +55,7 @@ class UserCoinPaymentService
         UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
         UserCoinsRepositoryInterface $userCoinsRepository,
         UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
-    )
-    {
+    ) {
         $this->coinsRepository = $coinsRepository;
         $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
@@ -108,7 +107,7 @@ class UserCoinPaymentService
             throw $e;
         }
 
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Create Session: ' . $status,
@@ -161,7 +160,7 @@ class UserCoinPaymentService
             throw $e;
         }
 
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Cancel Create Session. ' . $orderId,
@@ -213,7 +212,6 @@ class UserCoinPaymentService
                     UserCoins::DEFAULT_COIN_COUNT
                 );
                 $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
-
             } else {
                 // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
@@ -241,7 +239,7 @@ class UserCoinPaymentService
             throw $e;
         }
 
-         return response()->json(
+        return response()->json(
             [
                 'code' => 200,
                 'message' => 'Successfully Payment! ' . $orderId,
@@ -331,7 +329,7 @@ class UserCoinPaymentService
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'not exist userCoinPaymentStatus.'
-            );;
+            );
         }
 
         // 複数チェックはrepository側で実施済み
