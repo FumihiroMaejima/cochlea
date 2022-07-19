@@ -32,7 +32,7 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     public const ORDER_ID = 'order_id';
     public const COIN_ID = 'coin_id';
     public const STATUS = 'status';
-    // public const STRIPE_SESSION_ID = 'stripe_session_id';
+    public const PAYMENT_SERVICE_ID = 'payment_service_id';
     public const CRREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';

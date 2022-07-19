@@ -72,8 +72,7 @@ class UserCoinPaymentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                // 'orderId' => ['required','uuid'], TODO こちらに変更
-                'orderId' => ['required','string'],
+                'orderId' => ['required','uuid'],
             ]
         );
 
@@ -103,8 +102,7 @@ class UserCoinPaymentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'orderId' => ['required','uuid'], // TODO こちらに変更
-                'orderId' => ['required','string'],
+                'orderId' => ['required','uuid'],
             ]
         );
 

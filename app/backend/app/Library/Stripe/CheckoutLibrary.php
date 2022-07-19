@@ -153,18 +153,25 @@ class CheckoutLibrary extends StripeLibrary
     /**
      * cancel Stripe session.
      *
-     * @param string $orderId order id.
+     * @param string $serviceId payment service id
      * @return Session
      */
-    public static function cancelSession(string $orderId): Session {
+    public static function cancelSession(string $serviceId): Session {
         $stripe = self::getStripeClient();
 
         try {
             // セッションの取得(取得出来ない場合はエラーが発生)
-            $session = $stripe->checkout->sessions->retrieve($orderId);
+            $session = $stripe->checkout->sessions->retrieve($serviceId);
 
-            // セッションの削除
-            $exipiredSession = $stripe->checkout->sessions->expire($orderId);
+            if ($serviceId === $session->id) {
+                // セッションの削除
+                $exipiredSession = $stripe->checkout->sessions->expire($session->id);
+            } else {
+                throw new MyApplicationHttpException(
+                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    'stripe api error. service id'
+                );
+            }
 
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
@@ -182,17 +189,22 @@ class CheckoutLibrary extends StripeLibrary
     /**
      * complete Stripe session.
      *
-     * @param string $orderId order id.
+     * @param string $serviceId payment service id
      * @return Session
      */
-    public static function completeSession(string $orderId): Session {
+    public static function completeSession(string $serviceId): Session {
         $stripe = self::getStripeClient();
 
         try {
             // セッションの取得(取得出来ない場合はエラーが発生)
-            $session = $stripe->checkout->sessions->retrieve($orderId);
+            $session = $stripe->checkout->sessions->retrieve($serviceId);
 
-             // $exipiredSession = $stripe->checkout->sessions->expire($orderId);
+            if ($serviceId !== $session->id) {
+                throw new MyApplicationHttpException(
+                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    'stripe api error. service id'
+                );
+            }
 
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));

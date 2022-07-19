@@ -28,6 +28,7 @@ use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinPaymentStatus;
 use App\Models\Users\UserCoins;
+use App\Repositories\Users\UserCoins\UserCoinsRepository;
 use Exception;
 
 class UserCoinPaymentService
@@ -93,7 +94,7 @@ class UserCoinPaymentService
         try {
             // ステータスの設定
             $status = $this->getPaymentStatusFromStripeResponse($session->status);
-            $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status);
+            $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status, $session->id);
             $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
 
             // ログの設定
@@ -125,22 +126,22 @@ class UserCoinPaymentService
      */
     public function cancelCheckout(int $userId, string $orderId): JsonResponse
     {
-        // TODO $orderIdからstripeIdの取得
+        // ユーザーの決済情報の取得
+        $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId);
+
         // TODO 要デバッグ
-        $session = CheckoutLibrary::cancelSession($orderId);
+        $session = CheckoutLibrary::cancelSession($userCoinPaymentStatus[UserCoinPaymentStatus::PAYMENT_SERVICE_ID]);
 
         // DB 登録
         DB::beginTransaction();
         try {
-            // ユーザーの決済情報の取得
-            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId);
-
             // ステータスの更新(キャンセル)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
                 $orderId,
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
-                UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL
+                UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL,
+                $session->id
             );
             $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
 
@@ -178,22 +179,22 @@ class UserCoinPaymentService
      */
     public function completeCheckout(int $userId, string $orderId): JsonResponse
     {
-        // TODO $orderIdからstripeIdの取得
+        // ユーザーの決済情報の取得
+        $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId);
+
         // TODO 要デバッグ
-        $session = CheckoutLibrary::completeSession($orderId);
+        $session = CheckoutLibrary::completeSession($userCoinPaymentStatus[UserCoinPaymentStatus::PAYMENT_SERVICE_ID]);
 
         // DB 登録
         DB::beginTransaction();
         try {
-            // ユーザーの決済情報の取得
-            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId);
-
             // ステータスの更新(完了)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
                 $orderId,
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
-                UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE
+                UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE,
+                $session->id
             );
             $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
 
@@ -319,11 +320,12 @@ class UserCoinPaymentService
      * get user coin payment status by user id.
      *
      * @param int $userId user id
+     * @param string $orderId order id
      * @return array
      */
-    private function getUserCoinPaymentStatusByUserId(int $userId): array
+    private function getUserCoinPaymentStatusByUserId(int $userId, string $orderId): array
     {
-        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserId($userId);
+        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserIdAndOrderId($userId, $orderId);
 
         if (empty($userCoinPaymentStatus)) {
             throw new MyApplicationHttpException(

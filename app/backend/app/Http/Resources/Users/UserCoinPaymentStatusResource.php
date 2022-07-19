@@ -47,13 +47,14 @@ class UserCoinPaymentStatusResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param int $userId
-     * @param string $orderId
-     * @param int $coinId
-     * @param int $status
+     * @param int $userId ユーザーID
+     * @param string $orderId 注文ID
+     * @param int $coinId コインID
+     * @param int $status ステータス値
+     * @param string $serviceId 決済サービスの決済ID
      * @return array
      */
-    public static function toArrayForCreate(int $userId, string $orderId, int $coinId, int $status): array
+    public static function toArrayForCreate(int $userId, string $orderId, int $coinId, int $status, string $serviceId): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
@@ -62,6 +63,7 @@ class UserCoinPaymentStatusResource extends JsonResource
             UserCoinPaymentStatus::ORDER_ID => $orderId,
             UserCoinPaymentStatus::COIN_ID => $coinId,
             UserCoinPaymentStatus::STATUS => $status,
+            UserCoinPaymentStatus::PAYMENT_SERVICE_ID => $serviceId,
             UserCoinPaymentStatus::CRREATED_AT => $dateTime,
             UserCoinPaymentStatus::UPDATED_AT => $dateTime,
         ];
@@ -70,13 +72,14 @@ class UserCoinPaymentStatusResource extends JsonResource
     /**
      * Transform the resource into an array for update.
      *
-     * @param int $userId
-     * @param string $orderId
-     * @param int $coinId
-     * @param int $status
+     * @param int $userId ユーザーID
+     * @param string $orderId 注文ID
+     * @param int $coinId コインID
+     * @param int $status ステータス値
+     * @param string $serviceId 決済サービスの決済ID
      * @return array
      */
-    public static function toArrayForUpdate(int $userId, string $orderId, int $coinId, int $status): array
+    public static function toArrayForUpdate(int $userId, string $orderId, int $coinId, int $status, string $serviceId): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
@@ -85,6 +88,7 @@ class UserCoinPaymentStatusResource extends JsonResource
             UserCoinPaymentStatus::ORDER_ID => $orderId,
             UserCoinPaymentStatus::COIN_ID => $coinId,
             UserCoinPaymentStatus::STATUS => $status,
+            UserCoinPaymentStatus::PAYMENT_SERVICE_ID => $serviceId,
             UserCoinPaymentStatus::CRREATED_AT => $dateTime,
             UserCoinPaymentStatus::UPDATED_AT => $dateTime,
         ];

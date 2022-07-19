@@ -37,7 +37,7 @@ class CreateUserData1Table extends Migration
                     $table->uuid('order_id')->comment('注文ID');
                     $table->integer('coin_id')->comment('コインID');
                     $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
-                    // $table->string('stripe_session_id', 255)->comment('stripeのセッションID');
+                    $table->string('payment_service_id', 255)->comment('決済サービスの決済id(stripeのセッションidなど)');
                     $table->timestamps();
                     $table->softDeletes();
 
