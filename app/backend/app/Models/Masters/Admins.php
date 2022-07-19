@@ -4,12 +4,14 @@ namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Library\Random\RandomStringLibrary;
 
 class Admins extends Authenticatable implements JWTSubject
 {
@@ -133,5 +135,16 @@ class Admins extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * sent password reset mail.
+     *
+     * @return void
+     */
+    public function sentPasswordResetMail(): void
+    {
+        $token = RandomStringLibrary::getRandomStringValue();
+        $this->sendPasswordResetNotification($token);
     }
 }
