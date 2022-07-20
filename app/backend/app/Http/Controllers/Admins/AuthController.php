@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Models\Masters\Admins;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -20,6 +21,9 @@ class AuthController extends Controller
     private const ADMIN_RESOURCE_KEY_ID = 'id';
     private const ADMIN_RESOURCE_KEY_NAME = 'name';
     private const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
+
+    // token prefix
+    private const TOKEN_PREFIX = 'bearer';
 
     /**
      * Create a new AuthController instance.
@@ -107,6 +111,7 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        /** @var Admins $user authenticated admin model */
         $user = auth('api-admins')->user();
 
         // Tymon\JWTAuth\factory
@@ -114,7 +119,7 @@ class AuthController extends Controller
         // ユーザー情報を返す。
         return response()->json([
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
-            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => 'bearer',
+            self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => self::TOKEN_PREFIX,
             self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth('api-admins')->factory()->getTTL() * 60,
             self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
         ]);

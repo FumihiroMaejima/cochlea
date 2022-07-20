@@ -108,6 +108,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     /**
      * create Admin data.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createAdmin(array $resource): int
@@ -118,6 +119,8 @@ class AdminsRepository implements AdminsRepositoryInterface
     /**
      * update Admin data.
      *
+     * @param array $resource update data
+     * @param array $id of record
      * @return int
      */
     public function updateAdminData(array $resource, int $id): int
@@ -153,8 +156,9 @@ class AdminsRepository implements AdminsRepositoryInterface
 
     /**
      * delete Admin data (set deleted date & flag).
-     * @param array $resource
-     * @param int $id
+     *
+     * @param array $resource update data
+     * @param int $id id of record
      * @return int
      */
     public function deleteAdminData(array $resource, int $id): int

@@ -21,6 +21,7 @@ class MyApplicationHttpException extends HttpException
      *
      * @param int $statusCode status code
      * @param string $message message
+     * @param array $parameter error data exmple: request parameter
      * @param bool $isResponseMessage if true, $message is output to response, false, output to log.
      * @param Throwable|null previous throwable
      * @param array $headers headers
@@ -30,6 +31,7 @@ class MyApplicationHttpException extends HttpException
     public function __construct(
         int $statusCode,
         string $message = '',
+        array $parameter = [],
         bool $isResponseMessage = false,
         Throwable $previous = null,
         array $headers = [],
@@ -43,7 +45,7 @@ class MyApplicationHttpException extends HttpException
         // メッセージをレスポンスとして返さない場合
         if (!$isResponseMessage) {
             // ログに出力
-            $this->setErrorLog();
+            $this->setErrorLog($parameter);
             // ログ出力後にメッセージを初期化(Handlerクラスでエラーメッセージを設定する)
             $this->message = '';
         }
@@ -83,13 +85,14 @@ class MyApplicationHttpException extends HttpException
     /**
      * set message to error log.
      *
+     * @param array $parameter error data exmple: request parameter
      * @return void
      */
-    private function setErrorLog(): void
+    private function setErrorLog(array $parameter): void
     {
         if (config('app.env') !== 'testing') {
             // エラーログの出力
-            new ErrorLog($this);
+            new ErrorLog($this, $parameter);
         }
     }
 }

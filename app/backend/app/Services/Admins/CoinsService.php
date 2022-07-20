@@ -121,7 +121,7 @@ class CoinsService
 
         DB::beginTransaction();
         try {
-            $updatedRowCount = $this->coinsRepository->updateCoin($resource, $id);
+            $updatedRowCount = $this->coinsRepository->updateCoin($id, $resource);
 
             DB::commit();
 
@@ -155,7 +155,7 @@ class CoinsService
 
             $resource = CoinsResource::toArrayForDelete();
 
-            $deleteRowCount = $this->coinsRepository->deleteCoin($resource, $coinIds);
+            $deleteRowCount = $this->coinsRepository->deleteCoin($coinIds, $resource);
 
             DB::commit();
 

@@ -14,9 +14,11 @@ interface CoinsRepositoryInterface
 
     public function getLatestCoin(): object;
 
+    public function getById(int $id): Collection|null;
+
     public function createCoin(array $resource): int;
 
-    public function updateCoin(array $resource, int $id): int;
+    public function updateCoin(int $id, array $resource): int;
 
-    public function deleteCoin(array $resource, array $ids): int;
+    public function deleteCoin(array $ids, array $resource): int;
 }
