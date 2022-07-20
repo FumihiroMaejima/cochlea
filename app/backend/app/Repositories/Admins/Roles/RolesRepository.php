@@ -86,8 +86,9 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * create Admin data.
+     * create Role data.
      *
+     * @param array $resource create data
      * @return int
      */
     public function createRole(array $resource): int
@@ -98,6 +99,8 @@ class RolesRepository implements RolesRepositoryInterface
     /**
      * update Role data.
      *
+     * @param array $resource update data
+     * @param array $id id of record
      * @return int
      */
     public function updateRoleData(array $resource, int $id): int
@@ -112,8 +115,9 @@ class RolesRepository implements RolesRepositoryInterface
 
     /**
      * delete Role data.
-     * @param array $resource
-     * @param array $ids
+     *
+     * @param array $resource update data
+     * @param array $ids id of records
      * @return int
      */
     public function deleteRoleData(array $resource, array $ids): int

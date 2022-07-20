@@ -1,0 +1,14 @@
+@startuml sequence1
+
+activate A
+A -> B: 起動
+activate B
+B ->> C: 起動
+activate C
+C -->> B: 起動完了
+B --> A: Cの起動完了
+deactivate B
+C -->> A: 処理完了
+deactivate C
+
+@enduml

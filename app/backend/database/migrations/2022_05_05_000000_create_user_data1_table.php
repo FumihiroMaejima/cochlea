@@ -30,6 +30,42 @@ class CreateUserData1Table extends Migration
 
             foreach ($shardIds as $shardId) {
                 /**
+                 * user_coin_payment_status table
+                 */
+                Schema::connection($connectionName)->create('user_coin_payment_status'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->comment('ユーザーID');
+                    $table->uuid('order_id')->comment('注文ID');
+                    $table->integer('coin_id')->comment('コインID');
+                    $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
+                    $table->string('payment_service_id', 255)->comment('決済サービスの決済id(stripeのセッションidなど)');
+                    $table->timestamps();
+                    $table->softDeletes();
+
+                    // プライマリキー設定
+                    // $table->unique(['user_id', 'order_id']); // UNIQUE KEY `user_coin_payment_status*_user_id_order_id_unique` (`user_id`,`order_id`)
+                    $table->primary(['user_id', 'order_id']); // PRIMARY KEY (`user_id`,`order_id`)
+
+                    $table->comment('about user coin payment status table');
+                });
+
+                /**
+                 * user_coins table
+                 */
+                Schema::connection($connectionName)->create('user_coins'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->comment('ユーザーID');
+                    $table->integer('free_coins')->default(0)->comment('無料コイン数');
+                    $table->integer('paid_coins')->default(0)->comment('有料コイン数');
+                    $table->integer('limited_time_coins')->default(0)->comment('期間限定コイン数');
+                    $table->timestamps();
+                    $table->softDeletes();
+
+                    // プライマリキー設定
+                    $table->primary(['user_id']);
+
+                    $table->comment('about user coins table');
+                });
+
+                /**
                  * user_payments table
                  */
                 Schema::connection($connectionName)->create('user_payments'.$shardId, function (Blueprint $table) {
@@ -70,6 +106,8 @@ class CreateUserData1Table extends Migration
             $connectionName = self::getConnectionName($node);
 
             foreach ($shardIds as $shardId) {
+                Schema::connection($connectionName)->dropIfExists('user_coin_payment_status'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_coins'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
             }

@@ -18,21 +18,25 @@ class ErrorLog
     private int|false $pid;
     private string $memory;
     private string $stackTrace;
+    private array $parameter;
 
     /**
      * constructer.
      *
      * @param Throwable|HttpExceptionInterface $error error
+     * @param array $parameter error data exmple: request parameter
      * @return void
      */
     public function __construct(
         Throwable|HttpExceptionInterface $error,
+        array $parameter = []
     ) {
         $this->requestDateTime = TimeLibrary::getCurrentDateTime();
         $this->message         = $error->getMessage();
         $this->pid             = getmypid();
         $this->memory = (string)memory_get_peak_usage();
         $this->stackTrace      = $error->getTraceAsString();
+        $this->parameter       = $parameter;
 
         $this->outputLog();
     }
@@ -44,11 +48,12 @@ class ErrorLog
     private function outputLog(): void
     {
         $context = [
-            'request_datetime' => $this->requestDateTime,
-            'message'          => $this->message,
-            'process_id'       => $this->pid,
-            'peak_memory'      => $this->memory,
-            'stackTrace'       => $this->stackTrace,
+            'request_datetime'  => $this->requestDateTime,
+            'message'           => $this->message,
+            'process_id'        => $this->pid,
+            'peak_memory'       => $this->memory,
+            'stackTrace'        => $this->stackTrace,
+            'request_parameter' => $this->parameter,
         ];
 
         Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $context);

@@ -40,8 +40,9 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * get All Role Data.
-     * @param int $roleId
+     * get All Role Permissions Data.
+     *
+     * @param int $roleId id of role
      * @return Collection
      */
     public function getByRoleId(int $roleId): Collection
@@ -57,8 +58,9 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
             ->get();
     }
     /**
-     * create Admin data.
-     * @param array $resource
+     * create Role Permissions data.
+     *
+     * @param array $resource create data
      * @return int
      */
     public function createRolePermission(array $resource): int
@@ -67,9 +69,10 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * update Role data.
-     * @param array $resource
-     * @param int $roleId
+     * update Role Permissions data.
+     *
+     * @param array $resource update data
+     * @param int $roleId id of role
      * @return int
      */
     public function updateRolePermissionsData(array $resource, int $roleId): int
@@ -86,9 +89,10 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * delete Role data.
-     * @param array $resource
-     * @param int $id
+     * delete Role Permissions data.
+     *
+     * @param array $resource update data
+     * @param int $roleId $id id of role
      * @return int
      */
     public function deleteRolePermissionsData(array $resource, int $roleId): int
@@ -102,9 +106,10 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * delete Role data by array data.
-     * @param array $resource
-     * @param array $ids
+     * delete Role Permissions data by array data.
+     *
+     * @param array $resource update data
+     * @param array $ids $ids id of records
      * @return int
      */
     public function deleteRolePermissionsByIds(array $resource, array $ids): int
