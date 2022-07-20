@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Admins;
 
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Masters\Admins;
 use App\Models\Masters\AdminsRoles;
 use Illuminate\Http\Request;
@@ -13,6 +15,9 @@ class AdminsRepository implements AdminsRepositoryInterface
 {
     protected Admins $model;
     protected AdminsRoles $adminsRolesModel;
+
+    private const NO_DATA_COUNT = 0;
+    private const FIRST_DATA_COUNT = 1;
 
     /**
      * create a new AdminsRepository instance.
@@ -106,6 +111,37 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
+     * get by admin id.
+     *
+     * @param int $adminId admin id
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getById(int $id): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Admins::ID, '=', $id)
+            ->where(Admins::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'has deplicate collections,'
+            );
+        }
+
+        return $collection;
+    }
+
+    /**
      * create Admin data.
      *
      * @param array $resource create data
@@ -169,6 +205,21 @@ class AdminsRepository implements AdminsRepositoryInterface
         // Query Builderのupdate
         return DB::table($admins)
             // ->whereIn('id', [$id])
+            ->where(Admins::ID, '=', $id)
+            ->where(Admins::DELETED_AT, '=', null)
+            ->update($resource);
+    }
+
+    /**
+     * update Admin password.
+     *
+     * @param array $id of admin
+     * @param array $resource update data
+     * @return int
+     */
+    public function updatePassword(int $id, array $resource): int
+    {
+        return DB::table($$this->getTable())
             ->where(Admins::ID, '=', $id)
             ->where(Admins::DELETED_AT, '=', null)
             ->update($resource);
