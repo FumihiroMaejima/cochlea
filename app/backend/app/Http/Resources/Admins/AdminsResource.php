@@ -102,7 +102,7 @@ class AdminsResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            Admins::PASSWORD   => $request->newPassword,
+            Admins::PASSWORD   => bcrypt($request->newPassword),
             Admins::UPDATED_AT => $dateTime
         ];
     }
