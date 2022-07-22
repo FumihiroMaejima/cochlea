@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,6 +24,8 @@ use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
+use App\Library\Array\ArrayLibrary;
+use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\AdminsSlackNotificationService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -213,6 +216,17 @@ class AdminsService
      */
     public function updateAdminPassword(int $id, AdminUpdatePasswordRequest $request): JsonResponse
     {
+
+        $admin = $this->getAdminById($id);
+
+        // 現在のパスワードのチェック
+        if (!Hash::check($request->currentPassword, $admin[Admins::PASSWORD])) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                'hash check failed.'
+            );
+        }
+
         DB::beginTransaction();
         try {
             $resource = AdminsResource::toArrayForUpdatePassword($request);
@@ -237,5 +251,26 @@ class AdminsService
             throw $e;
             // abort(500);
         }
+    }
+
+    /**
+     * get admin by admin id.
+     *
+     * @param int $adminId admin id
+     * @return array|null
+     */
+    private function getAdminById(int $adminId): array|null
+    {
+        $admins = $this->adminsRepository->getById($adminId);
+
+        if (empty($admins)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist admin.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($admins->toArray()[0]);
     }
 }

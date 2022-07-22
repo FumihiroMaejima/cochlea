@@ -47,7 +47,7 @@ class AdminUpdatePasswordRequest extends BaseRequest
 
         return [
             'currentPassword'      => 'required|string|between:8,100',
-            'newPassword'          => 'required|string|between:8,100|confirmed',
+            'newPassword'          => 'required|string|between:8,100',
             'passwordConfirmation' => 'same:newPassword',
         ];
     }
@@ -62,9 +62,9 @@ class AdminUpdatePasswordRequest extends BaseRequest
         return [
             'required'    => ':attributeは必須項目です。',
             'string'      => ':attributeは文字列を入力してください。',
-            'between'     => ':attributeは:min〜:max文字以内で入力してください。',
-            'confirmed'     => ':attributeは確認用にもう一度入力してください。',
-            'same'     => ':attributeは同一の値ではありません。'
+            'between'     => ':attributeは:min文字以上で入力してください。',
+            'confirmed'   => ':attributeは確認用にもう一度入力してください。',
+            'same'        => ':attributeは同一の値ではありません。'
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
         ];

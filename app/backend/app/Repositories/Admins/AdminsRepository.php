@@ -219,7 +219,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      */
     public function updatePassword(int $id, array $resource): int
     {
-        return DB::table($$this->getTable())
+        return DB::table($this->getTable())
             ->where(Admins::ID, '=', $id)
             ->where(Admins::DELETED_AT, '=', null)
             ->update($resource);
