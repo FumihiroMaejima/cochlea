@@ -18,6 +18,7 @@ use App\Repositories\Admins\AdminsRepositoryInterface;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
 use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
@@ -198,6 +199,42 @@ class AdminsService
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 $e->getMessage(),
             );
+            // abort(500);
+        }
+    }
+
+    /**
+     * update admin data service
+     *
+     * @param int  $id
+     * @param AdminUpdatePasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function updateAdminPassword(int $id, AdminUpdatePasswordRequest $request): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $resource = AdminsResource::toArrayForUpdatePassword($request);
+
+            $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
+
+            // slack通知
+            $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Admin Password \n"])->toArray($request);
+            app()->make(AdminsSlackNotificationService::class)->send('update admin password.', $attachmentResource);
+
+            DB::commit();
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+
+            throw $e;
             // abort(500);
         }
     }

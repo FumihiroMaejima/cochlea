@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
+use App\Models\Masters\Admins;
 use App\Library\Time\TimeLibrary;
 
 class AdminsResource extends JsonResource
@@ -86,6 +88,22 @@ class AdminsResource extends JsonResource
         return [
             self::RESOURCE_KEY_UPDATED_AT => $dateTime,
             self::RESOURCE_KEY_DELETED_AT => $dateTime
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for update.
+     *
+     * @param AdminUpdatePasswordRequest $request
+     * @return array
+     */
+    public static function toArrayForUpdatePassword(AdminUpdatePasswordRequest $request): array
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        return [
+            Admins::PASSWORD   => $request->newPassword,
+            Admins::UPDATED_AT => $dateTime
         ];
     }
 }

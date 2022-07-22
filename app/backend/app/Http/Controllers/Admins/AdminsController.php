@@ -12,6 +12,7 @@ use App\Services\Admins\AdminsService;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
 use App\Trait\CheckHeaderTrait;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -132,5 +133,18 @@ class AdminsController extends Controller
     {
         // サービスの実行
         return $response = $this->service->deleteAdmin($request);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  AdminUpdatePasswordRequest $request
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePassword(AdminUpdatePasswordRequest $request, int $id): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->updateAdminPassword($id, $request);
     }
 }
