@@ -146,6 +146,7 @@ class Admins extends Authenticatable implements JWTSubject
     public function sentPasswordResetMail(): void
     {
         $token = RandomStringLibrary::getRandomStringValue();
+        $this->getEmailForPasswordReset();
         $this->sendPasswordResetNotification($token);
     }
 

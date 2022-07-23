@@ -26,6 +26,8 @@ use App\Http\Resources\Admins\AdminUpdateNotificationResource;
 use App\Library\Array\ArrayLibrary;
 use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\AdminsSlackNotificationService;
+use App\Services\Admins\Notifications\PasswordForgotNotificationService;
+use App\Library\Random\RandomStringLibrary;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
@@ -263,18 +265,13 @@ class AdminsService
     {
         $admin = $this->getAdminByEmail($email);
 
-        $adminsModel = new Admins();
-        /** @var \App\Models\Masters\Admins $adminModelTest */
-        $adminModelTest = $adminsModel->find($admin[Admins::ID]);
-
         try {
+            // メール送信
+            (new PasswordForgotNotificationService($admin[Admins::EMAIL]))
+                ->send(RandomStringLibrary::getRandomStringValue());
 
-
-            $updatedRowCount = 1;
-
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
+            $message = 'success';
+            $status = 200;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {

@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
+use App\Models\Masters\Admins;
+use App\Services\Admins\Notifications\PasswordForgotNotificationService;
 
 // vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.phpをコピーして作成
 class ResetPasswordNotification extends Notification
@@ -92,10 +94,10 @@ class ResetPasswordNotification extends Notification
     /**
      * Get the reset URL for the given notifiable.
      *
-     * @param  mixed  $notifiable
+     * @param Admins|PasswordForgotNotificationService $notifiable
      * @return string
      */
-    protected function resetUrl($notifiable)
+    protected function resetUrl(Admins|PasswordForgotNotificationService $notifiable)
     {
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
