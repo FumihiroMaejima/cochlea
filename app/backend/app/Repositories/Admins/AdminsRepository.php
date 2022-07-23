@@ -145,7 +145,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      * create Admin data.
      *
      * @param array $resource create data
-     * @return int
+     * @return int create row count
      */
     public function createAdmin(array $resource): int
     {
@@ -157,7 +157,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      *
      * @param array $resource update data
      * @param array $id of record
-     * @return int
+     * @return int update row count
      */
     public function updateAdminData(array $resource, int $id): int
     {
@@ -195,7 +195,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      *
      * @param array $resource update data
      * @param int $id id of record
-     * @return int
+     * @return int update row count
      */
     public function deleteAdminData(array $resource, int $id): int
     {
@@ -215,7 +215,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      *
      * @param array $id of admin
      * @param array $resource update data
-     * @return int
+     * @return int update row count
      */
     public function updatePassword(int $id, array $resource): int
     {

@@ -7,7 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
-use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
 use App\Models\Masters\Admins;
 use App\Library\Time\TimeLibrary;
 
@@ -94,15 +93,15 @@ class AdminsResource extends JsonResource
     /**
      * Transform the resource into an array for update.
      *
-     * @param AdminUpdatePasswordRequest $request
+     * @param string $newPassword new password
      * @return array
      */
-    public static function toArrayForUpdatePassword(AdminUpdatePasswordRequest $request): array
+    public static function toArrayForUpdatePassword(string $newPassword): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            Admins::PASSWORD   => bcrypt($request->newPassword),
+            Admins::PASSWORD   => bcrypt($newPassword),
             Admins::UPDATED_AT => $dateTime
         ];
     }

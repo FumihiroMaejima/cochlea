@@ -19,7 +19,6 @@ use App\Repositories\Admins\AdminsRepositoryInterface;
 use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
-use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
 use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
@@ -209,18 +208,18 @@ class AdminsService
     /**
      * update admin data service
      *
-     * @param int  $id
-     * @param AdminUpdatePasswordRequest $request
+     * @param int $id admin id
+     * @param string $currentPassword current password
+     * @param string $newPassword new password
      * @return \Illuminate\Http\JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function updateAdminPassword(int $id, AdminUpdatePasswordRequest $request): JsonResponse
+    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): JsonResponse
     {
-
         $admin = $this->getAdminById($id);
 
         // 現在のパスワードのチェック
-        if (!Hash::check($request->currentPassword, $admin[Admins::PASSWORD])) {
+        if (!Hash::check($currentPassword, $admin[Admins::PASSWORD])) {
             throw new MyApplicationHttpException(
                 ExceptionStatusCodeMessages::STATUS_CODE_404,
                 'hash check failed.'
@@ -229,12 +228,12 @@ class AdminsService
 
         DB::beginTransaction();
         try {
-            $resource = AdminsResource::toArrayForUpdatePassword($request);
+            $resource = AdminsResource::toArrayForUpdatePassword($newPassword);
 
             $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
 
             // slack通知
-            $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Admin Password \n"])->toArray($request);
+            $attachmentResource = AdminUpdateNotificationResource::toArrayForCreate($admin[Admins::ID], $admin[Admins::NAME], ":tada: Update Admin Password \n");
             app()->make(AdminsSlackNotificationService::class)->send('update admin password.', $attachmentResource);
 
             DB::commit();

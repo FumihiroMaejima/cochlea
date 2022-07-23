@@ -2,15 +2,9 @@
 
 namespace App\Http\Requests\Admins;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 
 class AdminUpdatePasswordRequest extends BaseRequest
 {

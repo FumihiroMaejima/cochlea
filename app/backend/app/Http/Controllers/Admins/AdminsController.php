@@ -145,6 +145,6 @@ class AdminsController extends Controller
     public function updatePassword(AdminUpdatePasswordRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdminPassword($id, $request);
+        return $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
     }
 }
