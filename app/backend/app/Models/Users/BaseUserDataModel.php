@@ -62,6 +62,10 @@ class BaseUserDataModel extends Model
     {
         $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
+        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+            return $baseConnectionName;
+        }
+
         // 3で割り切れる場合はnode3
         if (($shardId % Config::get('myapp.database.users.modBaseNumber')) === 0) {
             // user database3

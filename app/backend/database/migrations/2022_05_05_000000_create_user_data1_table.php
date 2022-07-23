@@ -14,9 +14,6 @@ class CreateUserData1Table extends Migration
         3 => [3, 6, 9, 12]
     ];
 
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-
     /**
      * Run the migrations.
      *
@@ -123,12 +120,12 @@ class CreateUserData1Table extends Migration
      */
     public static function getConnectionName(int $nodeNumber): string
     {
-        $connectionName = Config::get('myapp.database.users.baseConnectionName');
+        $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        if ($connectionName === self::CONNECTION_NAME_FOR_CI) {
-            return $connectionName;
+        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+            return $baseConnectionName;
         }
 
-        return $connectionName . (string)$nodeNumber;
+        return $baseConnectionName . (string)$nodeNumber;
     }
 }

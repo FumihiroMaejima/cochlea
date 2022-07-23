@@ -48,4 +48,10 @@ return [
             'node3ShardIds'      => [3, 6, 9, 12],
         ]
     ],
+    // CIなどで使う場合のコネクション名。単一のコネクションに接続させる。
+    'ci' => [
+        'database' => [
+            'baseConnectionName' => 'sqlite',
+        ],
+    ],
 ];
