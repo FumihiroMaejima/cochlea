@@ -111,9 +111,9 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * get by admin id.
+     * get by id.
      *
-     * @param int $adminId admin id
+     * @param int $adminId rocord id
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
@@ -122,6 +122,37 @@ class AdminsRepository implements AdminsRepositoryInterface
         $collection = DB::table($this->getTable())
             ->select(['*'])
             ->where(Admins::ID, '=', $id)
+            ->where(Admins::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'has deplicate collections,'
+            );
+        }
+
+        return $collection;
+    }
+
+    /**
+     * get by mail address.
+     *
+     * @param int $email mail address
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByEmail(string $email): ?Collection
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Admins::EMAIL, '=', $email)
             ->where(Admins::DELETED_AT, '=', null)
             ->get();
 

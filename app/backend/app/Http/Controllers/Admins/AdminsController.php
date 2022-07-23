@@ -13,6 +13,7 @@ use App\Http\Requests\Admins\AdminCreateRequest;
 use App\Http\Requests\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
 use App\Http\Requests\Admins\AdminUpdatePasswordRequest;
+use App\Http\Requests\Admins\AdminForgotPasswordRequest;
 use App\Trait\CheckHeaderTrait;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -29,7 +30,7 @@ class AdminsController extends Controller
      */
     public function __construct(AdminsService $adminsService)
     {
-        $this->middleware('auth:api-admins');
+        $this->middleware('auth:api-admins', ['except' => ['passwordForgot']]);
         $this->service = $adminsService;
     }
 
@@ -146,5 +147,18 @@ class AdminsController extends Controller
     {
         // サービスの実行
         return $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
+    }
+
+    /**
+     * forgot password recover request.
+     *
+     * @param  AdminForgotPasswordRequest $request
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function passwordForgot(AdminForgotPasswordRequest $request): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->forgotAdminPassword($request->email);
     }
 }

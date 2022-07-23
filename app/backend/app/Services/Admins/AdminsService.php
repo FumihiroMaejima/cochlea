@@ -253,6 +253,38 @@ class AdminsService
     }
 
     /**
+     * update admin data service
+     *
+     * @param string $email mail address
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function forgotAdminPassword(string $email): JsonResponse
+    {
+        $admin = $this->getAdminByEmail($email);
+
+        $adminsModel = new Admins();
+        /** @var \App\Models\Masters\Admins $adminModelTest */
+        $adminModelTest = $adminsModel->find($admin[Admins::ID]);
+
+        try {
+
+
+            $updatedRowCount = 1;
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+
+            throw $e;
+        }
+    }
+
+    /**
      * get admin by admin id.
      *
      * @param int $adminId admin id
@@ -261,6 +293,27 @@ class AdminsService
     private function getAdminById(int $adminId): array|null
     {
         $admins = $this->adminsRepository->getById($adminId);
+
+        if (empty($admins)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist admin.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($admins->toArray()[0]);
+    }
+
+    /**
+     * get admin by mail address.
+     *
+     * @param string $email mail address
+     * @return array|null
+     */
+    private function getAdminByEmail(string $email): array|null
+    {
+        $admins = $this->adminsRepository->getByEmail($email);
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(

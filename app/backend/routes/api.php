@@ -34,6 +34,11 @@ Route::group(['prefix' => 'v1/admin'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [\App\Http\Controllers\Admins\AuthController::class, 'login'])->name('auth.admin.login');
     });
+
+    // forgot password
+    Route::group(['prefix' => 'admins'], function () {
+        Route::get('/password/forgot', [\App\Http\Controllers\Admins\AdminsController::class, 'passwordForgot'])->name('admin.admins.password.forgot');
+    });
     // \App\Http\Controllers\Admins\AdminsController
 
     // admin auth

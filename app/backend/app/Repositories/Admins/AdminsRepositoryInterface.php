@@ -17,6 +17,8 @@ interface AdminsRepositoryInterface
 
     public function getById(int $id): Collection|null;
 
+    public function getByEmail(string $email): Collection|null;
+
     public function createAdmin(array $resource): int;
 
     public function updateAdminData(array $resource, int $id): int;
