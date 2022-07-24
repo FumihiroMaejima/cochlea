@@ -36,7 +36,15 @@ class CacheLibrary
 
         $cache = Redis::get($key);
 
-        return is_null($cache) ? $cache : json_decode($cache, true);
+        if (is_null($cache)) {
+            return $cache;
+        }
+
+        if (is_string($cache) || is_integer($cache)) {
+            return $cache;
+        }
+
+        return json_decode($cache, true);
     }
 
     /**

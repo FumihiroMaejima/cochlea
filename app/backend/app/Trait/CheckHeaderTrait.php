@@ -40,4 +40,23 @@ trait CheckHeaderTrait
         }
         return $userId;
     }
+
+    /**
+     * get password session id from header
+     *
+     * @param Illuminate\Http\Request $request
+     * @return string
+     */
+    public function getPasswordResetSessionId(Request $request): string
+    {
+        $sessionId = $request->header(Config::get('myapp.headers.passwordReset'));
+
+        if (empty($sessionId)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_401,
+                'Invalid header data.'
+            );
+        }
+        return $sessionId;
+    }
 }

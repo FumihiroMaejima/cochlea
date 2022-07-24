@@ -262,7 +262,7 @@ class AdminsService
     }
 
     /**
-     * update admin data service
+     * forgot password service
      *
      * @param string $email mail address
      * @return \Illuminate\Http\JsonResponse
@@ -273,12 +273,13 @@ class AdminsService
         $admin = $this->getAdminByEmail($email);
 
         try {
+            $sessionId = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
             $token = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
 
             // キャッシュに保存
             CacheLibrary::setCache(
-                self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION.$admin[Admins::ID],
-                $token,
+                self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId,
+                $token . '_' . $admin[Admins::ID],
                 self::PASSWORD_RESET_SESSION_EXPIRE
             );
 
@@ -291,6 +292,63 @@ class AdminsService
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+
+            throw $e;
+        }
+    }
+
+    /**
+     * reset password service
+     *
+     * @param string $sessionId session id
+     * @param string $password password
+     * @param string $token reset password token
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function resetAdminPassword(string $sessionId, string $password, $token): JsonResponse
+    {
+        $cache = CacheLibrary::getByKey(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
+
+        if (empty($cache)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_401,
+                'failed password update. maybe session expired.'
+            );
+        }
+
+        // adminIdとトークンの配列化
+        $session = explode('_', $cache);
+
+        $admin = $this->getAdminById((int)$session[1]);
+
+        // token check
+        if ($token !== $session[0]) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'failed password update.'
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            $resource = AdminsResource::toArrayForUpdatePassword($password);
+
+            $updatedRowCount = $this->adminsRepository->updatePassword($admin[Admins::ID], $resource);
+
+            DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
 
             throw $e;
         }

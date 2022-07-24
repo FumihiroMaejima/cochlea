@@ -5,6 +5,7 @@ return [
         'id'            => 'X-Auth-ID',
         'authority'     => 'X-Auth-Authority',
         'authorization' => 'Authorization',
+        'passwordReset' => 'X-Auth-Reset-Session-ID',
     ],
     'executionRole' => [
         'services' => [
