@@ -25,5 +25,5 @@ interface AdminsRepositoryInterface
 
     public function deleteAdminData(array $resource, int $id): int;
 
-    public function updatePassword(int $id, array $resource, ): int;
+    public function updatePassword(int $id, array $resource): int;
 }

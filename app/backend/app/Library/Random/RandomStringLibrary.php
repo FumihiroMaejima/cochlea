@@ -41,7 +41,7 @@ class RandomStringLibrary
     public static function getRandomShuffleString(int $length = self::DEFAULT_RANDOM_STRING_LENGTH): string
     {
         // 同じ文字は2回出ない
-        return substr(str_shuffle(self::RANDOM_STRINGS), 0, $length);
+        return mb_substr(str_shuffle(self::RANDOM_STRINGS), 0, $length);
     }
 
     /**
@@ -66,7 +66,7 @@ class RandomStringLibrary
      */
     public static function getByMd5RandomString(int $length = self::DEFAULT_RANDOM_STRING_LENGTH): string
     {
-        return substr(base_convert(md5(uniqid()), 16, 36), 0, $length);
+        return mb_substr(base_convert(md5(uniqid()), 16, 36), 0, $length);
     }
 
     /**
@@ -77,6 +77,6 @@ class RandomStringLibrary
      */
     public static function getByHashRandomString(int $length = self::DEFAULT_RANDOM_STRING_LENGTH): string
     {
-        return substr(base_convert(hash(self::HASH_ALGORITHM_256, uniqid()), 16, 36), 0, $length);
+        return mb_substr(base_convert(hash(self::HASH_ALGORITHM_256, uniqid()), 16, 36), 0, $length);
     }
 }
