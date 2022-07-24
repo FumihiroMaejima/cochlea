@@ -27,6 +27,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\AdminsSlackNotificationService;
 use App\Services\Admins\Notifications\PasswordForgotNotificationService;
+use App\Library\Cache\CacheLibrary;
 use App\Library\Random\RandomStringLibrary;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -34,6 +35,12 @@ use Exception;
 
 class AdminsService
 {
+    // cache keys
+    private const CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION = 'admin_password_reset_session_id_';
+
+    private const PASSWORD_RESET_TOKEN_LENGTH = 20;
+    private const PASSWORD_RESET_SESSION_EXPIRE = 900; // パスワードリセット有効期限(900秒=15分)
+
     protected AdminsRepositoryInterface $adminsRepository;
     protected AdminsRolesRepositoryInterface $adminsRolesRepository;
 
@@ -266,9 +273,17 @@ class AdminsService
         $admin = $this->getAdminByEmail($email);
 
         try {
+            $token = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
+
+            // キャッシュに保存
+            CacheLibrary::setCache(
+                self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION.$admin[Admins::ID],
+                $token,
+                self::PASSWORD_RESET_SESSION_EXPIRE
+            );
+
             // メール送信
-            (new PasswordForgotNotificationService($admin[Admins::EMAIL]))
-                ->send(RandomStringLibrary::getRandomShuffleString());
+            (new PasswordForgotNotificationService($admin[Admins::EMAIL]))->send($token);
 
             $message = 'success';
             $status = 200;

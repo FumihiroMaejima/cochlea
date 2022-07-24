@@ -14,7 +14,7 @@ class CacheLibrary
 {
     use CheckHeaderTrait;
 
-    private const DEFAULT_CACHEE_EXPIRE = 86400; // (1日=86400秒)
+    private const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
 
     private const SET_CACHE_RESULT_VALUE = 'OK';
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
@@ -47,7 +47,7 @@ class CacheLibrary
      * @param int $expire
      * @return void
      */
-    public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHEE_EXPIRE): void
+    public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHE_EXPIRE): void
     {
         // test時は時効しない
         if (Config::get('app.env') !== 'testing') {
