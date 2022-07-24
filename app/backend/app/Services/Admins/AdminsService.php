@@ -268,7 +268,7 @@ class AdminsService
         try {
             // メール送信
             (new PasswordForgotNotificationService($admin[Admins::EMAIL]))
-                ->send(RandomStringLibrary::getRandomStringValue());
+                ->send(RandomStringLibrary::getRandomShuffleString());
 
             $message = 'success';
             $status = 200;

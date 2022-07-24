@@ -35,9 +35,46 @@ networkは`gateway`と`subnet`を必ず指定する。(値は任意。)
 ```shell
 docker volume create ${PROJECT_NAME}-db-store
 docker volume create ${PROJECT_NAME}-redis-store
+docker volume create ${PROJECT_NAME}-mail-store
 docker network create --gateway=172.19.0.1 --subnet=172.19.0.0/16 ${PROJECT_NAME}-net
 ```
 
+
+---
+
+## メールサーバーについて
+
+[mailhog](https://github.com/mailhog/MailHog)を利用する。
+
+データの永続化の為に専用のvolumeを新規で作成する。
+
+最低限下記の形でdocker-compose.ymlに記載すれば良い。
+
+コンテナ起動後は`http://localhost:8025/`でブラウザ上からメール情報を確認出来る。
+
+```yaml
+  mail:
+    image: mailhog/mailhog
+    container_name: container_name
+    volumes:
+      - volumeName:/tmp
+    ports:
+      - "8025:8025"
+    environment:
+      MH_MAILDIR_PATH: /tmp
+```
+
+`app/backend/.env`のメール設定を下記の通りに設定すること。
+
+`MAIL_HOST`はデフォルトの値が`mailhog`になっているがDockerコンテナ名を設定する必要がある。
+
+* 実際のSMTPでは、port:1025で受け付けている為8025ではなく1025にする必要がある。
+
+```shell
+MAIL_MAILER=smtp
+MAIL_HOST=mail
+MAIL_PORT=1025
+```
 
 ---
 
