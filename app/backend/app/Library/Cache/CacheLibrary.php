@@ -40,10 +40,6 @@ class CacheLibrary
             return $cache;
         }
 
-        if (is_string($cache) || is_integer($cache)) {
-            return $cache;
-        }
-
         return json_decode($cache, true);
     }
 
