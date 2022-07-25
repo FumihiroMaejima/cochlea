@@ -1,0 +1,42 @@
+# Roles:
+  type: array
+  items:
+    type: object
+    required:
+      - id
+      - name
+      - code
+      - detail
+      - permissions
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      code:
+        type: string
+      detail:
+        type: string
+      permissions:
+        type: integer
+        format: int64
+        description: Role`s permission ids
+  example:
+  - id: 1
+    name: 'test enemy1'
+    code: 'test code1'
+    detail: 'test detail1'
+    permissions: 1
+  - id: 2
+    name: 'test enemy2'
+    code: 'test code2'
+    detail: 'test detail2'
+    permissions: 2
+  - id: 3
+    name: 'test enemy3'
+    code: 'test code3'
+    detail: 'test detail3'
+    permissions: 3
+  xml:
+    name: Roles

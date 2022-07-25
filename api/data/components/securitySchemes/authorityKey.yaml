@@ -1,0 +1,5 @@
+# authority_key:
+  description: test authority_key description.
+  type: apiKey
+  name: X-Auth-Authority
+  in: header

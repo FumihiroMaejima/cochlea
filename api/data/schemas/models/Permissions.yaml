@@ -1,0 +1,22 @@
+# Permissions:
+  type: array
+  items:
+    type: object
+    required:
+      - value
+      - text
+    properties:
+      value:
+        type: integer
+        format: int64
+      text:
+        type: string
+  example:
+  - value: 1
+    text: 'test perssin1'
+  - value: 2
+    text: 'test perssin2'
+  - value: 3
+    text: 'test perssin3'
+  xml:
+    name: Permissions

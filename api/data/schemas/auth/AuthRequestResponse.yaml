@@ -1,0 +1,30 @@
+# AuthRequestResponse:
+  type: object
+  required:
+    - access_token
+    - token_type
+    - expires_in
+    - user
+  properties:
+    access_token:
+      type: string
+    token_type:
+      type: string
+    expires_in:
+      type: integer
+      format: int64
+    user:
+      description: AuthenticatedUser shcema.
+      # $ref: "#/components/schemas/AuthenticatedUser.yaml"
+      $ref: "./AuthenticatedUser.yaml"
+  example:
+    access_token: 'testTokenxxxxxxxxxxx'
+    token_type: 'bearer'
+    expires_in: 3600
+    user:
+      # $ref: "./AuthenticatedUser.yaml" 参照不可
+      id: 1
+      name: 'test username'
+      authority: ['master']
+  xml:
+    name: AuthRequestResponse
