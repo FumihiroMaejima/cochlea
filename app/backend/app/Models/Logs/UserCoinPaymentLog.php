@@ -53,6 +53,7 @@ class UserCoinPaymentLog extends BaseLogDataModel
     protected $primaryKey = [
         self::USER_ID,
         self::ORDER_ID,
+        self::CREATED_AT,
     ];
 
     /**

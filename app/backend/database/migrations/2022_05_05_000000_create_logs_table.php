@@ -48,7 +48,7 @@ class CreateLogsTable extends Migration
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // プライマリキー設定
-            $table->primary(['user_id', 'order_id']);
+            $table->primary(['user_id', 'order_id', 'created_at']);
 
             $table->comment('user coin payment log table');
         });
