@@ -61,6 +61,7 @@ class UserCoinsResource extends JsonResource
             UserCoins::LIMITED_TIME_COINS => $limitedTimeCoins,
             UserCoins::CRREATED_AT => $dateTime,
             UserCoins::UPDATED_AT => $dateTime,
+            UserCoins::DELETED_AT => null,
         ];
     }
 

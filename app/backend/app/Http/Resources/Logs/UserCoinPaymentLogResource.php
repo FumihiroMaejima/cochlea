@@ -65,6 +65,7 @@ class UserCoinPaymentLogResource extends JsonResource
             UserCoinPaymentLog::STATUS => $status,
             UserCoinPaymentLog::CRREATED_AT => $dateTime,
             UserCoinPaymentLog::UPDATED_AT => $dateTime,
+            UserCoinPaymentLog::DELETED_AT => null,
         ];
     }
 
