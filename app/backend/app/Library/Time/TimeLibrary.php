@@ -78,7 +78,20 @@ class TimeLibrary
     }
 
     /**
-     * add a mounth to dateTime parameter.
+     * add days to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 加算日数
+     * @param string $format datetime format
+     * @return string $dateTimeから$value日後の$dateTime
+     */
+    public static function addDays(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->addDays($value)->format($format);
+    }
+
+    /**
+     * add mounth to dateTime parameter.
      *
      * @param string $dateTime 日時
      * @param int $value 加算月数
