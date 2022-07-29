@@ -40,12 +40,38 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
     /**
      * get query builder by user id
      *
-     * @param int $userId user id
      * @return Builder
      */
-    public function getQueryBuilder(int $userId): Builder
+    public function getQueryBuilder(): Builder
     {
-        return DB::connection(UserCoinPaymentLog::setConnectionName($userId))->table($this->getTable());
+        return DB::connection(UserCoinPaymentLog::setConnectionName())->table($this->getTable());
+    }
+
+    /**
+     * create partition.
+     *
+     * @return bool
+     * @throws MyApplicationHttpException
+     */
+    public function createPartition(): bool
+    {
+        $connection = UserCoinPaymentLog::setConnectionName();
+        $table = $this->getTable();
+
+        $date = '2022-04-01 00:00:00';
+
+        $this->getQueryBuilder()->raw('
+            ALTER TABLE "${connection}"."${table}"
+            PARTITION BY RANGE COLUMNS(created_at) (
+                PARTITION p202203 VALUES LESS THAN ($date),
+                PARTITION p202204 VALUES LESS THAN ($date),
+                PARTITION p202205 VALUES LESS THAN ($date),
+                PARTITION p202206 VALUES LESS THAN ($date),
+                PARTITION p202207 VALUES LESS THAN ($date)
+            );
+        ')->getValue();
+
+        return true;
     }
 
     /**
@@ -57,7 +83,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      */
     public function getByUserId(int $userId): Collection|null
     {
-        $collection = $this->getQueryBuilder($userId)
+        $collection = $this->getQueryBuilder()
             ->select(['*'])
             ->where(UserCoinPaymentLog::USER_ID, '=', $userId)
             ->where(UserCoinPaymentLog::DELETED_AT, '=', null)
@@ -89,7 +115,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      */
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null
     {
-        $collection = $this->getQueryBuilder($userId)
+        $collection = $this->getQueryBuilder()
             ->select(['*'])
             ->where(UserCoinPaymentLog::USER_ID, '=', $userId)
             ->where(UserCoinPaymentLog::ORDER_ID, '=', $orderId)
@@ -121,7 +147,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      */
     public function createUserCoinPaymentLog(int $userId, array $resource): int
     {
-        return $this->getQueryBuilder($userId)->insert($resource);
+        return $this->getQueryBuilder()->insert($resource);
     }
 
     /**
@@ -135,7 +161,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
     public function updateUserCoinPaymentLog(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
-        return $this->getQueryBuilder($userId)
+        return $this->getQueryBuilder()
             // ->whereIn('id', [$id])
             ->where(UserCoinPaymentLog::USER_ID, '=', $userId)
             ->where(UserCoinPaymentLog::ORDER_ID, '=', $orderId)
@@ -154,7 +180,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
     public function deleteUserCoinPaymentLog(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
-        return $this->getQueryBuilder($userId)
+        return $this->getQueryBuilder()
             ->where(UserCoinPaymentLog::USER_ID, '=', $userId)
             ->where(UserCoinPaymentLog::ORDER_ID, '=', $orderId)
             ->where(UserCoinPaymentLog::DELETED_AT, '=', null)
