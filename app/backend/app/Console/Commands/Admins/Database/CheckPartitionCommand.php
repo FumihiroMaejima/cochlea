@@ -39,7 +39,7 @@ class CheckPartitionCommand extends Command
 
 
     /**
-     * DebugTestCommandインスタンスの生成
+     * インスタンスの生成
      *
      * @return void
      */
@@ -59,6 +59,8 @@ class CheckPartitionCommand extends Command
         echo date('c') . "\n";
 
         echo TimeLibrary::getCurrentDateTime() . "\n";
+
+        echo TimeLibrary::addMounths(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY) . "\n";
         $this->check();
     }
 
@@ -73,6 +75,8 @@ class CheckPartitionCommand extends Command
         $value = $this->checkPartition();
 
         echo var_dump($value);
+
+        $this->addPartition();
 
         return $value;
     }
@@ -137,5 +141,55 @@ class CheckPartitionCommand extends Command
                     ;
                 ")->get();
             */
+    }
+
+    /**
+     * add partition.
+     *
+     * @return array
+     */
+    public function addPartition(): void
+    {
+        $table = (new UserCoinPaymentLog())->getTable();
+
+        $currentDate = TimeLibrary::getCurrentDateTime();
+
+        $fortmat =  TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY;
+
+        $targetDate = TimeLibrary::addMounths($currentDate, 3, $fortmat);
+
+        $basePartition = "PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00')";
+
+        $days = TimeLibrary::diffDays($currentDate, $targetDate);
+
+        echo $days . '日';
+
+        $partitions = '';
+
+        foreach (range(0, $days) as $i) {
+            $target = TimeLibrary::addDays($currentDate, $i, TimeLibrary::DATE_TIME_FORMAT_YMD);
+            $next = TimeLibrary::addDays($currentDate, $i + 1, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY);
+            $test[] = "PARTITION p${target} VALUES LESS THAN ('${next} 00:00:00')";
+
+            $v = "PARTITION p${target} VALUES LESS THAN ('${next} 00:00:00')" . ($i <= ($days - 1) ? ',' : '');
+            $partitions .= $v;
+        }
+
+        // echo var_dump($test);
+        echo var_dump($partitions);
+
+
+        // パーティションの情報の取得(最新の1件)
+        /* DB::statement(
+            "
+                ALTER TABLE cochlea_logs.${table}
+                PARTITION BY RANGE COLUMNS(created_at) (
+                    -- PARTITION p20220731 VALUES LESS THAN ('2022-08-01 00:00:00')
+                    PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00'),
+                    PARTITION p20220802 VALUES LESS THAN ('2022-08-03 00:00:00')
+                )
+            "
+        ); */
+
     }
 }
