@@ -154,42 +154,37 @@ class CheckPartitionCommand extends Command
 
         $currentDate = TimeLibrary::getCurrentDateTime();
 
-        $fortmat =  TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY;
+        $targetDate = TimeLibrary::addMounths($currentDate, 3);
 
-        $targetDate = TimeLibrary::addMounths($currentDate, 3, $fortmat);
-
-        $basePartition = "PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00')";
-
+        // パーティションの追加日数の算出
         $days = TimeLibrary::diffDays($currentDate, $targetDate);
-
-        echo $days . '日';
 
         $partitions = '';
 
+        // 追加する分のパーティション設定を作成
         foreach (range(0, $days) as $i) {
             $target = TimeLibrary::addDays($currentDate, $i, TimeLibrary::DATE_TIME_FORMAT_YMD);
             $next = TimeLibrary::addDays($currentDate, $i + 1, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY);
-            $test[] = "PARTITION p${target} VALUES LESS THAN ('${next} 00:00:00')";
 
-            $v = "PARTITION p${target} VALUES LESS THAN ('${next} 00:00:00')" . ($i <= ($days - 1) ? ',' : '');
-            $partitions .= $v;
+            $partitionSetting = "PARTITION p${target} VALUES LESS THAN ('${next} 00:00:00')" . ($i <= ($days - 1) ? ', ' : '');
+            $partitions .= $partitionSetting;
         }
 
-        // echo var_dump($test);
         echo var_dump($partitions);
 
 
         // パーティションの情報の取得(最新の1件)
-        /* DB::statement(
+        DB::statement(
             "
                 ALTER TABLE cochlea_logs.${table}
                 PARTITION BY RANGE COLUMNS(created_at) (
                     -- PARTITION p20220731 VALUES LESS THAN ('2022-08-01 00:00:00')
-                    PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00'),
-                    PARTITION p20220802 VALUES LESS THAN ('2022-08-03 00:00:00')
+                    -- PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00'),
+                    -- PARTITION p20220802 VALUES LESS THAN ('2022-08-03 00:00:00')
+                    ${partitions}
                 )
             "
-        ); */
+        );
 
     }
 }
