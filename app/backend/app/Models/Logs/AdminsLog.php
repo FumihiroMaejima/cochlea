@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
+use App\Models\Logs\BaseLogDataModel;
 
-class AdminsLog extends Model
+class AdminsLog extends BaseLogDataModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -71,15 +72,4 @@ class AdminsLog extends Model
      * @var array
      */
     protected $hidden = [];
-
-    /**
-     * constructer.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
-        parent::setConnection($connectionName);
-    }
 }
