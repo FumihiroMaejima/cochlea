@@ -78,7 +78,9 @@ class CheckLogDatabasePartitionCommand extends Command
 
         echo var_dump($value);
 
-        $this->addPartition();
+        $this->addPartitionById();
+
+        $this->addPartitionByDate();
 
         return $value;
     }
@@ -146,11 +148,57 @@ class CheckLogDatabasePartitionCommand extends Command
     }
 
     /**
-     * add partition.
+     * add partition by id.
      *
      * @return array
      */
-    public function addPartition(): void
+    public function addPartitionById(): void
+    {
+        $table = (new AdminsLog())->getTable();
+
+        // 10万ずつパーティションを分ける
+        $baseNumber = 100000;
+        $count = 10;
+
+        $currentDate = TimeLibrary::getCurrentDateTime();
+
+        $targetDate = TimeLibrary::addMounths($currentDate, 3);
+
+        // パーティションの追加日数の算出
+        $days = TimeLibrary::diffDays($currentDate, $targetDate);
+
+        $partitions = '';
+
+        // 追加する分のパーティション設定を作成
+        foreach (range(1, $count) as $i) {
+            $target = $i;
+            $next = $baseNumber * $i + 1;
+
+            $partitionSetting = "PARTITION p${target} VALUES LESS THAN ${next}" . ($i <= ($count - 1) ? ', ' : '');
+            $partitions .= $partitionSetting;
+        }
+
+        echo var_dump($partitions);
+
+
+        // パーティションの情報の取得(最新の1件)
+        DB::statement(
+            "
+                ALTER TABLE cochlea_logs.${table}
+                PARTITION BY RANGE COLUMNS(id) (
+                    ${partitions}
+                )
+            "
+        );
+
+    }
+
+    /**
+     * add partition by datetime.
+     *
+     * @return array
+     */
+    public function addPartitionByDate(): void
     {
         $table = (new UserCoinPaymentLog())->getTable();
 
@@ -187,6 +235,5 @@ class CheckLogDatabasePartitionCommand extends Command
                 )
             "
         );
-
     }
 }

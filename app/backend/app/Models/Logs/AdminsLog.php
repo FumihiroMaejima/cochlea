@@ -14,6 +14,7 @@ class AdminsLog extends BaseLogDataModel
     use SoftDeletes;
 
     // カラム一覧
+    public const ID = 'id';
     public const ADMIN_ID = 'admin_id';
     public const FUNCTION_NAME = 'function';
     public const STATUS = 'status';
@@ -43,21 +44,11 @@ class AdminsLog extends BaseLogDataModel
      *
      * @var string
      */
-    protected $primaryKey = [
-        self::ADMIN_ID,
-        self::CREATED_AT,
-    ];
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     * (primary keyが複数(配列)の場合はfalseを指定する。)
-     *
-     * @var bool
-     */
-    public $incrementing = false;
+    protected $primaryKey = self::ID;
 
     // 更新可能なカラムリスト
     protected $fillable = [
+        self::ID,
         self::ADMIN_ID,
         self::FUNCTION_NAME,
         self::STATUS,

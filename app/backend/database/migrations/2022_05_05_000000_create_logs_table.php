@@ -21,7 +21,7 @@ class CreateLogsTable extends Migration
          * admins_log table
          */
         Schema::connection($connectionName)->create('admins_log', function (Blueprint $table) {
-            // $table->id();
+            $table->id();
             // $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID'); // DBを変える為指定出来ない
             $table->integer('admin_id')->comment('管理者ID');
             $table->string('function', 255)->comment('実行ファンクション');
@@ -30,9 +30,6 @@ class CreateLogsTable extends Migration
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
-
-            // プライマリキー設定
-            $table->primary(['admin_id', 'created_at']);
 
             $table->comment('admin action table');
         });
