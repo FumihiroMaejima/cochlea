@@ -25,6 +25,19 @@ class CheckLogDatabasePartitionCommand extends Command
     // record offset (1 record)
     private const PRTITION_OFFSET_VALUE = 1;
 
+    // partition setting key
+    private const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
+    private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
+
+    // partition type
+    private const PARTITION_TYPE_ID = 1;
+    private const PARTITION_TYPE_DATE = 2;
+
+    private const PARTITION_TYPES = [
+        self:: PARTITION_TYPE_ID,
+        self::PARTITION_TYPE_DATE
+    ];
+
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
      *
@@ -74,25 +87,34 @@ class CheckLogDatabasePartitionCommand extends Command
      */
     public function check(): mixed
     {
+        // テーブルごとのパーティション設定
+        $partitionSettings = [
+            [
+                self::PRTITION_SETTING_KEY_TABLE_NAME => (new AdminsLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_ID,
+            ],
+            [
+                self::PRTITION_SETTING_KEY_TABLE_NAME => (new UserCoinPaymentLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_DATE,
+            ],
+        ];
+
         $value = $this->checkPartition();
 
-        echo var_dump($value);
+        // echo var_dump($value);
 
-        $this->addPartitionById();
-
-        $this->addPartitionByDate();
+        foreach($partitionSettings as $setting) {
+            if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
+                // idでパーティションを貼る場合
+                $this->addPartitionById();
+            } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
+                $this->addPartitionByDate();
+            } else {
+                continue;
+            }
+        }
 
         return $value;
-    }
-
-    /**
-     * get query builder by user id
-     *
-     * @return Builder
-     */
-    public function getQueryBuilder(): Builder
-    {
-        return DB::connection(UserCoinPaymentLog::setConnectionName())->table((new UserCoinPaymentLog())->getTable());
     }
 
     /**
@@ -129,22 +151,6 @@ class CheckLogDatabasePartitionCommand extends Command
         ->toArray();
 
         return json_decode(json_encode($collection), true);
-
-            /* $collection = $this->getQueryBuilder()
-                ->selectRaw("
-                    SELECT
-                        TABLE_SCHEMA,
-                        TABLE_NAME,
-                        PARTITION_NAME,
-                        PARTITION_ORDINAL_POSITION,
-                        TABLE_ROWS
-                    FROM INFORMATION_SCHEMA.PARTITIONS
-                    WHERE TABLE_NAME='user_coin_payment_log'
-                    ORDER BY PARTITION_NAME DESC
-                    LIMIT 1
-                    ;
-                ")->get();
-            */
     }
 
     /**
