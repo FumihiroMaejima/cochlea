@@ -26,6 +26,7 @@ class CheckLogDatabasePartitionCommand extends Command
     private const PRTITION_OFFSET_VALUE = 1;
 
     // partition setting key
+    private const PRTITION_SETTING_KEY_DATABASE_NAME = 'databaseName';
     private const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
     private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
 
@@ -80,6 +81,16 @@ class CheckLogDatabasePartitionCommand extends Command
     }
 
     /**
+     * get query builder by user id
+     *
+     * @return Builder
+     */
+    public function getQueryBuilderForInformantionSchema(): Builder
+    {
+        return DB::connection(BaseLogDataModel::setConnectionName())->table(self::INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME);
+    }
+
+    /**
      * check
      *
      * @return mixed
@@ -87,13 +98,18 @@ class CheckLogDatabasePartitionCommand extends Command
      */
     public function check(): mixed
     {
+        $connection = BaseLogDataModel::setConnectionName();
+        $database = Config::get("database.connections.${connection}.database");
+
         // テーブルごとのパーティション設定
         $partitionSettings = [
             [
+                self::PRTITION_SETTING_KEY_DATABASE_NAME => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME => (new AdminsLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_ID,
             ],
             [
+                self::PRTITION_SETTING_KEY_DATABASE_NAME => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME => (new UserCoinPaymentLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_DATE,
             ],
@@ -106,25 +122,16 @@ class CheckLogDatabasePartitionCommand extends Command
         foreach($partitionSettings as $setting) {
             if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
                 // idでパーティションを貼る場合
-                $this->addPartitionById();
+                $this->addPartitionById($setting[self::PRTITION_SETTING_KEY_DATABASE_NAME], $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]);
             } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
-                $this->addPartitionByDate();
+                // 作成日時でパーティションを貼る場合
+                $this->addPartitionByDate($setting[self::PRTITION_SETTING_KEY_DATABASE_NAME], $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]);
             } else {
                 continue;
             }
         }
 
         return $value;
-    }
-
-    /**
-     * get query builder by user id
-     *
-     * @return Builder
-     */
-    public function getQueryBuilderForInformantionSchema(): Builder
-    {
-        return DB::connection(BaseLogDataModel::setConnectionName())->table(self::INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME);
     }
 
     /**
@@ -156,12 +163,12 @@ class CheckLogDatabasePartitionCommand extends Command
     /**
      * add partition by id.
      *
+     * @param string $databaseName database name
+     * @param string $tableName table name
      * @return array
      */
-    public function addPartitionById(): void
+    public function addPartitionById(string $databaseName, string $tableName): void
     {
-        $table = (new AdminsLog())->getTable();
-
         // 10万ずつパーティションを分ける
         $baseNumber = 100000;
         $count = 10;
@@ -182,7 +189,7 @@ class CheckLogDatabasePartitionCommand extends Command
         // パーティションの情報の取得(最新の1件)
         DB::statement(
             "
-                ALTER TABLE cochlea_logs.${table}
+                ALTER TABLE ${databaseName}.${tableName}
                 PARTITION BY RANGE COLUMNS(id) (
                     ${partitions}
                 )
@@ -193,12 +200,12 @@ class CheckLogDatabasePartitionCommand extends Command
     /**
      * add partition by datetime.
      *
+     * @param string $databaseName database name
+     * @param string $tableName table name
      * @return array
      */
-    public function addPartitionByDate(): void
+    public function addPartitionByDate(string $databaseName, string $tableName): void
     {
-        $table = (new UserCoinPaymentLog())->getTable();
-
         $currentDate = TimeLibrary::getCurrentDateTime();
 
         $targetDate = TimeLibrary::addMounths($currentDate, 3);
@@ -223,11 +230,8 @@ class CheckLogDatabasePartitionCommand extends Command
         // パーティションの情報の取得(最新の1件)
         DB::statement(
             "
-                ALTER TABLE cochlea_logs.${table}
+                ALTER TABLE ${databaseName}.${tableName}
                 PARTITION BY RANGE COLUMNS(created_at) (
-                    -- PARTITION p20220731 VALUES LESS THAN ('2022-08-01 00:00:00')
-                    -- PARTITION p20220801 VALUES LESS THAN ('2022-08-02 00:00:00'),
-                    -- PARTITION p20220802 VALUES LESS THAN ('2022-08-03 00:00:00')
                     ${partitions}
                 )
             "
