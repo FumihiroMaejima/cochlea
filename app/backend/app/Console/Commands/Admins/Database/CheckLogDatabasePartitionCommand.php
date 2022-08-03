@@ -30,6 +30,12 @@ class CheckLogDatabasePartitionCommand extends Command
     private const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
     private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
 
+    // パーティションタイプごとの詳細な設定
+    private const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
+    private const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
+    private const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
+    private const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'mounthCount'; // パーティション数(1パーティション=1日を月数で設定)
+
     // partition type
     private const PARTITION_TYPE_ID = 1;
     private const PARTITION_TYPE_DATE = 2;
@@ -107,11 +113,19 @@ class CheckLogDatabasePartitionCommand extends Command
                 self::PRTITION_SETTING_KEY_DATABASE_NAME => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME => (new AdminsLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_ID,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER => 100000,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT => 10,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE => null,
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
             ],
             [
                 self::PRTITION_SETTING_KEY_DATABASE_NAME => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME => (new UserCoinPaymentLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE => self::PARTITION_TYPE_DATE,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER => null,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT => null,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE => TimeLibrary::getCurrentDateTime(),
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
             ],
         ];
 
