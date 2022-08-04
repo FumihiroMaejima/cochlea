@@ -97,12 +97,12 @@ class CheckLogDatabasePartitionCommand extends Command
     }
 
     /**
-     * check
+     * check partition.
      *
-     * @return mixed
+     * @return void
      * @throws MyApplicationHttpException
      */
-    public function check(): mixed
+    public function check(): void
     {
         $connection = BaseLogDataModel::setConnectionName();
         $database = Config::get("database.connections.${connection}.database");
@@ -129,11 +129,20 @@ class CheckLogDatabasePartitionCommand extends Command
             ],
         ];
 
-        $value = $this->checkPartition();
+        // $value = $this->checkPartition((new UserCoinPaymentLog())->getTable());
 
         // echo var_dump($value);
 
         foreach($partitionSettings as $setting) {
+
+            $latestPartition = $this->checkPartition($setting[self::PRTITION_SETTING_KEY_TABLE_NAME]);
+            echo var_dump($latestPartition['PARTITION_NAME']);
+            echo var_dump($latestPartition['PARTITION_ORDINAL_POSITION']);
+            echo var_dump($latestPartition['TABLE_ROWS']);
+
+            echo var_dump($latestPartition);
+
+
             if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
                 // idでパーティションを貼る場合
                 $this->addPartitionById(
@@ -154,16 +163,15 @@ class CheckLogDatabasePartitionCommand extends Command
                 continue;
             }
         }
-
-        return $value;
     }
 
     /**
      * check current partiion record
      *
+     * @param string $tableName table name
      * @return array
      */
-    public function checkPartition(): array
+    public function checkPartition(string $tableName): array
     {
         // パーティションの情報の取得(最新の1件)
         $collection = $this->getQueryBuilderForInformantionSchema()
@@ -175,13 +183,13 @@ class CheckLogDatabasePartitionCommand extends Command
             PARTITION_ORDINAL_POSITION,
             TABLE_ROWS
         "))
-        ->where('TABLE_NAME', '=', (new UserCoinPaymentLog())->getTable())
+        ->where('TABLE_NAME', '=', $tableName)
         ->orderBy('PARTITION_NAME', 'desc')
         ->limit(self::PRTITION_OFFSET_VALUE)
         ->get()
         ->toArray();
 
-        return json_decode(json_encode($collection), true);
+        return json_decode(json_encode($collection), true)[0];
     }
 
     /**
