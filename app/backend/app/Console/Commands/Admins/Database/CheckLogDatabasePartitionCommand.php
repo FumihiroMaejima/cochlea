@@ -141,32 +141,37 @@ class CheckLogDatabasePartitionCommand extends Command
             echo var_dump($latestPartition['PARTITION_NAME']);
             echo var_dump($latestPartition['PARTITION_ORDINAL_POSITION']);
             echo var_dump($latestPartition['TABLE_ROWS']);
-
             echo var_dump($latestPartition);
 
 
             if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
                 // idでパーティションを貼る場合
 
-                // パーティションが既に貼られている場合は次の範囲のIDを設定する。
+                // パーティションが既に貼られている場合は次の範囲のIDでパーティションを設定する。
                 if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
-                    echo mb_substr($latestPartition['PARTITION_NAME'], 1) . "\n";
                     // パーティション名から「p」の文字を切り取りIDを取得
                     $latestPartitionStartId = (int)mb_substr($latestPartition['PARTITION_NAME'], 1);
-                    $nextPartitionStartId = $latestPartitionStartId + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - 1;
+                    $nextPartitionStartId = $latestPartitionStartId + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER];
                     $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $nextPartitionStartId;
-                    // echo ($latestPartitionStartId + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - 1) . "\n";
-                    // $nextId = $$setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] * ($setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] + $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID]);
-                    // $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $latestPartition['PARTITION_ORDINAL_POSITION'];
-                }
+                    echo mb_substr($latestPartition['PARTITION_NAME'], 1) . "\n";
+                    echo $nextPartitionStartId . "\n";
 
-                $this->createPartitionById(
-                    $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
-                    $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
-                    $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID],
-                    $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
-                    $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]
-                );
+                    $this->addPartitionById(
+                        $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
+                        $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
+                        $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID],
+                        $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
+                        $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]
+                    );
+                } else {
+                    $this->createPartitionById(
+                        $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
+                        $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
+                        $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID],
+                        $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
+                        $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]
+                    );
+                }
             } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
                 // 作成日時でパーティションを貼る場合
                 $this->createPartitionByDate(
@@ -241,11 +246,52 @@ class CheckLogDatabasePartitionCommand extends Command
 
         // echo var_dump($partitions);
 
-        // パーティションの情報の取得(最新の1件)
+        // パーティションの情報の作成
         DB::statement(
             "
                 ALTER TABLE ${databaseName}.${tableName}
                 PARTITION BY RANGE COLUMNS(id) (
+                    ${partitions}
+                )
+            "
+        );
+    }
+
+    /**
+     * add partition by id.
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @param string $id partition start id
+     * @param string $baseNumber data count in 1 partition
+     * @param string $count partition count
+     * @return array
+     */
+    public function addPartitionById(
+        string $databaseName,
+        string $tableName,
+        int $id = 1,
+        int $baseNumber = 100000,
+        int $count = 10
+    ): void {
+        // デフォルトは10万件ずつパーティションを分ける
+
+        $partitions = '';
+
+        // 追加する分のパーティション設定を作成
+        foreach (range(0, $count) as $i) {
+            $target = ($i * $baseNumber) + $id;
+            $next = $target + $baseNumber;
+
+            $partitionSetting = "PARTITION p${target} VALUES LESS THAN (${next})" . ($i <= ($count - 1) ? ', ' : '');
+            $partitions .= $partitionSetting;
+        }
+
+        // パーティションの情報の追加
+        DB::statement(
+            "
+                ALTER TABLE ${databaseName}.${tableName}
+                ADD PARTITION (
                     ${partitions}
                 )
             "
@@ -282,7 +328,7 @@ class CheckLogDatabasePartitionCommand extends Command
         // echo var_dump($partitions);
 
 
-        // パーティションの情報の取得(最新の1件)
+        // パーティションの情報の作成
         DB::statement(
             "
                 ALTER TABLE ${databaseName}.${tableName}
