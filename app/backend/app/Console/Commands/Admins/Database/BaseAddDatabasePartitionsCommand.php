@@ -10,7 +10,6 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 
-
 class BaseAddDatabasePartitionsCommand extends Command
 {
     // information schema table name.
@@ -118,7 +117,6 @@ class BaseAddDatabasePartitionsCommand extends Command
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
             ],
         ];
-
     }
 
     /**
@@ -143,8 +141,7 @@ class BaseAddDatabasePartitionsCommand extends Command
         // パーティションを設定する対象のテーブル情報の取得
         $partitionSettings = $this->getPartitionSettings();
 
-        foreach($partitionSettings as $setting) {
-
+        foreach ($partitionSettings as $setting) {
             $latestPartition = $this->checkLatestPartition(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
@@ -172,7 +169,7 @@ class BaseAddDatabasePartitionsCommand extends Command
                     $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT],
                     $alterTableType
                 );
-            } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
+            } elseif ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
                 // 作成日時でパーティションを貼る場合
 
                 // パーティションが既に貼られている場合は最新の日付の翌日の日付でパーティションを設定する。
@@ -245,7 +242,7 @@ class BaseAddDatabasePartitionsCommand extends Command
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
             self::createPartitions($databaseName, $tableName, $columnName, $partitions);
-        } else{
+        } else {
             // 追加
             self::addPartitions($databaseName, $tableName, $partitions);
         }
@@ -269,8 +266,7 @@ class BaseAddDatabasePartitionsCommand extends Command
         string $currentDate,
         int $mounthCount = 3,
         string $type = self::ALTER_TABLE_TYPE_CREATE
-    ): void
-    {
+    ): void {
         // typeの値の確認
         if (!in_array($type, self::ALTER_TABLE_TYPES)) {
             return;
@@ -294,11 +290,11 @@ class BaseAddDatabasePartitionsCommand extends Command
 
         $databaseName = Config::get("database.connections.${connection}.database");
 
-         // パーティションの情報の追加
-         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
+        // パーティションの情報の追加
+        if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
             self::createPartitions($databaseName, $tableName, $columnName, $partitions);
-        } else{
+        } else {
             // 追加
             self::addPartitions($databaseName, $tableName, $partitions);
         }

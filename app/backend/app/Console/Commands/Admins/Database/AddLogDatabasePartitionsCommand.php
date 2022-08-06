@@ -12,7 +12,6 @@ use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;
 use App\Library\Time\TimeLibrary;
 
-
 class AddLogDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
 {
     /**
