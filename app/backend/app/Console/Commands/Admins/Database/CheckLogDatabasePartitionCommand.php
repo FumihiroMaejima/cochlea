@@ -183,6 +183,7 @@ class CheckLogDatabasePartitionCommand extends Command
                      $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                      $setting[self::NAME_PRTITION_SETTING_KEY_TARGET_DATE],
                      $setting[self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT],
+                     $type
                     );
             } else {
                 continue;
@@ -239,6 +240,9 @@ class CheckLogDatabasePartitionCommand extends Command
     ): void {
         // デフォルトは10万件ずつパーティションを分ける
 
+        // TODO IDの最大値の確認
+
+        // typeの値の確認
         if (!in_array($type, self::ALTER_TABLE_TYPES)) {
             return;
         }
@@ -283,10 +287,22 @@ class CheckLogDatabasePartitionCommand extends Command
      * @param string $tableName table name
      * @param string $currentDate partition start date time
      * @param int $mounthCount add partition count as month
+     * @param string $type alter table type
      * @return array
      */
-    public function addPartitionByDate(string $databaseName, string $tableName, string $currentDate, int $mounthCount = 3): void
+    public function addPartitionByDate(
+        string $databaseName,
+        string $tableName,
+        string $currentDate,
+        int $mounthCount = 3,
+        string $type = self::ALTER_TABLE_TYPE_CREATE
+    ): void
     {
+        // typeの値の確認
+        if (!in_array($type, self::ALTER_TABLE_TYPES)) {
+            return;
+        }
+
         $targetDate = TimeLibrary::addMounths($currentDate, $mounthCount);
 
         // パーティションの追加日数の算出
@@ -305,16 +321,26 @@ class CheckLogDatabasePartitionCommand extends Command
 
         // echo var_dump($partitions);
 
-
-        // パーティションの情報の作成
-        DB::statement(
-            "
+         // パーティションの情報の追加
+         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
+            // 新規作成(上書き)
+            $statement = "
                 ALTER TABLE ${databaseName}.${tableName}
                 PARTITION BY RANGE COLUMNS(created_at) (
                     ${partitions}
                 )
-            "
-        );
+            ";
+        } else{
+            // 追加
+            $statement = "
+                ALTER TABLE ${databaseName}.${tableName}
+                ADD PARTITION (
+                    ${partitions}
+                )
+            ";
+        }
+
+        DB::statement($statement);
     }
 
     /**
