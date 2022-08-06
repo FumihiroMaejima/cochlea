@@ -67,22 +67,22 @@ paths:
           type: integer
           format: int64
     $ref: "./data/paths/admin/roles/role/id.yaml"
-  /admin/game/enemies:
-    $ref: "./data/paths/admin/game/enemies/index.yaml"
-  /admin/game/enemies/file/csv:
-    $ref: "./data/paths/admin/game/enemies/file/csv.yaml"
-  /admin/game/enemies/file/template:
-    $ref: "./data/paths/admin/game/enemies/file/template.yaml"
-  "/admin/game/enemies/enemy/{id}":
-    parameters:
-      - name: id
-        in: path
-        description: ID of role
-        required: true
-        schema:
-          type: integer
-          format: int64
-    $ref: "./data/paths/admin/game/enemies/enemy/id.yaml"
+#   /admin/game/enemies:
+#     $ref: "./data/paths/admin/game/enemies/index.yaml"
+#   /admin/game/enemies/file/csv:
+#     $ref: "./data/paths/admin/game/enemies/file/csv.yaml"
+#   /admin/game/enemies/file/template:
+#     $ref: "./data/paths/admin/game/enemies/file/template.yaml"
+#   "/admin/game/enemies/enemy/{id}":
+#     parameters:
+#       - name: id
+#         in: path
+#         description: ID of role
+#         required: true
+#         schema:
+#           type: integer
+#           format: int64
+#     $ref: "./data/paths/admin/game/enemies/enemy/id.yaml"
   /admin/game/enemies/enemy:
     $ref: "./data/paths/admin/game/enemies/enemy/index.yaml"
   /admin/auth/login:
