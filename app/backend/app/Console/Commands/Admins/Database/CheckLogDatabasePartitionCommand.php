@@ -31,6 +31,7 @@ class CheckLogDatabasePartitionCommand extends Command
     private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
 
     // パーティションタイプごとの詳細な設定
+    private const ID_PRTITION_SETTING_KEY_TARGET_ID = 'targetId'; // パーティション数の起算ID
     private const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
     private const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
     private const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
@@ -79,10 +80,9 @@ class CheckLogDatabasePartitionCommand extends Command
     {
         // 現在日時(タイムゾーン付き)
         echo date('c') . "\n";
-
         echo TimeLibrary::getCurrentDateTime() . "\n";
-
         echo TimeLibrary::addMounths(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY) . "\n";
+
         $this->check();
     }
 
@@ -113,6 +113,7 @@ class CheckLogDatabasePartitionCommand extends Command
                 self::PRTITION_SETTING_KEY_DATABASE_NAME              => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new AdminsLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_ID,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => 1,
                 self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 100000,
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10,
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
@@ -122,6 +123,7 @@ class CheckLogDatabasePartitionCommand extends Command
                 self::PRTITION_SETTING_KEY_DATABASE_NAME              => $database,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
                 self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
@@ -145,15 +147,29 @@ class CheckLogDatabasePartitionCommand extends Command
 
             if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
                 // idでパーティションを貼る場合
-                $this->addPartitionById(
+
+                // パーティションが既に貼られている場合は次の範囲のIDを設定する。
+                if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
+                    echo mb_substr($latestPartition['PARTITION_NAME'], 1) . "\n";
+                    // パーティション名から「p」の文字を切り取りIDを取得
+                    $latestPartitionStartId = (int)mb_substr($latestPartition['PARTITION_NAME'], 1);
+                    $nextPartitionStartId = $latestPartitionStartId + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - 1;
+                    $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $nextPartitionStartId;
+                    // echo ($latestPartitionStartId + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - 1) . "\n";
+                    // $nextId = $$setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] * ($setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] + $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID]);
+                    // $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $latestPartition['PARTITION_ORDINAL_POSITION'];
+                }
+
+                $this->createPartitionById(
                     $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
+                    $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID],
                     $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
                     $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]
                 );
             } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
                 // 作成日時でパーティションを貼る場合
-                $this->addPartitionByDate(
+                $this->createPartitionByDate(
                     $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
                      $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                      $setting[self::NAME_PRTITION_SETTING_KEY_TARGET_DATE],
@@ -184,7 +200,8 @@ class CheckLogDatabasePartitionCommand extends Command
             TABLE_ROWS
         "))
         ->where('TABLE_NAME', '=', $tableName)
-        ->orderBy('PARTITION_NAME', 'desc')
+        // ->orderBy('PARTITION_NAME', 'desc') // 正しく最新のレコードを取れない
+        ->orderBy('PARTITION_ORDINAL_POSITION', 'desc')
         ->limit(self::PRTITION_OFFSET_VALUE)
         ->get()
         ->toArray();
@@ -193,30 +210,36 @@ class CheckLogDatabasePartitionCommand extends Command
     }
 
     /**
-     * add partition by id.
+     * create partition by id.
      *
      * @param string $databaseName database name
      * @param string $tableName table name
+     * @param string $id partition start id
      * @param string $baseNumber data count in 1 partition
      * @param string $count partition count
      * @return array
      */
-    public function addPartitionById(string $databaseName, string $tableName, int $baseNumber = 100000, int $count = 10): void
-    {
+    public function createPartitionById(
+        string $databaseName,
+        string $tableName,
+        int $id = 1,
+        int $baseNumber = 100000,
+        int $count = 10
+    ): void {
         // デフォルトは10万件ずつパーティションを分ける
 
         $partitions = '';
 
         // 追加する分のパーティション設定を作成
         foreach (range(0, $count) as $i) {
-            $target = ($i * $baseNumber) + 1;
-            $next = $baseNumber * ($i + 1);
+            $target = ($i * $baseNumber) + $id;
+            $next = $baseNumber * ($i + $id);
 
             $partitionSetting = "PARTITION p${target} VALUES LESS THAN (${next})" . ($i <= ($count - 1) ? ', ' : '');
             $partitions .= $partitionSetting;
         }
 
-        echo var_dump($partitions);
+        // echo var_dump($partitions);
 
         // パーティションの情報の取得(最新の1件)
         DB::statement(
@@ -230,7 +253,7 @@ class CheckLogDatabasePartitionCommand extends Command
     }
 
     /**
-     * add partition by datetime.
+     * create partition by datetime.
      *
      * @param string $databaseName database name
      * @param string $tableName table name
@@ -238,7 +261,7 @@ class CheckLogDatabasePartitionCommand extends Command
      * @param int $mounthCount add partition count as month
      * @return array
      */
-    public function addPartitionByDate(string $databaseName, string $tableName, string $currentDate, int $mounthCount = 3): void
+    public function createPartitionByDate(string $databaseName, string $tableName, string $currentDate, int $mounthCount = 3): void
     {
         $targetDate = TimeLibrary::addMounths($currentDate, $mounthCount);
 
@@ -256,7 +279,7 @@ class CheckLogDatabasePartitionCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        echo var_dump($partitions);
+        // echo var_dump($partitions);
 
 
         // パーティションの情報の取得(最新の1件)
@@ -266,6 +289,24 @@ class CheckLogDatabasePartitionCommand extends Command
                 PARTITION BY RANGE COLUMNS(created_at) (
                     ${partitions}
                 )
+            "
+        );
+    }
+
+    /**
+     * delete partiion.
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @param string $partitionName partition name
+     * @param int $mounthCount add partition count as month
+     * @return array
+     */
+    public function deletePartition(string $databaseName, string $tableName, string $partitionName): void
+    {
+        DB::statement(
+            "
+                ALTER TABLE ${databaseName}.${tableName} DROP PARTITION ${partitionName};
             "
         );
     }
