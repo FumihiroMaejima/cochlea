@@ -1,8 +1,8 @@
 #!/bin/sh
 
-SEPARATOPION='---------------------------'
+DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='check container status.'
-echo ${SEPARATOPION}
+echo ${DELIMITER_LINE}
 echo ${START_MESSAGE}
 
 # プロセスチェック結果を変数に格納
@@ -22,30 +22,30 @@ done
 # 配列の長さを取得
 LINES_LENGTH=`echo ${#LINES[@]}`
 
-echo ${SEPARATOPION}
+echo ${DELIMITER_LINE}
 
 # チェック結果の長さごとに実行するコマンドの制御を行う
 if [ ${LINES_LENGTH} -eq 5 ]; then
   # コンテナが立ち上がっていない状態の時
   echo 'Up Docker Container!'
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   docker-compose up -d
 elif [ ${LINES_LENGTH} -eq 22 ]; then
   # コンテナが立ち上がっている状態の時
   # Exitなどのエラー状態の判別が出来ればより便利
   echo 'Down Docker Container!'
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   docker-compose down
 else
 　# コンテナが立ち上がっている状態の時
   echo 'Down Docker Container!'
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   docker-compose down
 fi
 
 # 現在のDocker コンテナの状態を出力
-echo ${SEPARATOPION}
+echo ${DELIMITER_LINE}
 echo 'Current Docker Status.'
-echo ${SEPARATOPION}
+echo ${DELIMITER_LINE}
 docker-compose ps
 
