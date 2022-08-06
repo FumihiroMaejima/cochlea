@@ -58,7 +58,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/admin', [\App\Http\Controllers\Admins\AdminsController::class, 'create'])->name('admin.admins.create');
             Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
             Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
-            Route::patch('/admin/{id}/password', [\App\Http\Controllers\Admins\AdminsController::class, 'updatePassword'])->name('admin.admins.update');
+            Route::patch('/admin/{id}/password', [\App\Http\Controllers\Admins\AdminsController::class, 'updatePassword'])->name('admin.admins.password.update');
         });
 
         // roles
