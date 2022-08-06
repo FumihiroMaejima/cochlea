@@ -36,4 +36,27 @@ class AdminUpdateNotificationResource extends JsonResource
             self::RESOURCE_KEY_DETAIL     => '```'. $this->resource . PHP_EOL . '```'
         ];
     }
+
+    /**
+     * Transform the resource into an array for create.
+     *
+     * @param int $id id
+     * @param string $name name
+     * @param string $message message
+     * @return array
+     */
+    public static function toArrayForCreate(int $id, string $name, string $message): array
+    {
+        return [
+            self::RESOURCE_KEY_PRETEXT    => PHP_EOL,
+            self::RESOURCE_KEY_TITLE      => 'Update Member Notification',
+            self::RESOURCE_KEY_TITLE_LINK => '',
+            self::RESOURCE_KEY_CONTENT    => 'content text' . PHP_EOL,
+            self::RESOURCE_KEY_COLOR      => 'good',
+            self::RESOURCE_KEY_ID         => $id,
+            self::RESOURCE_KEY_NAME       => $name,
+            self::RESOURCE_KEY_STATUS     => ':ok:',
+            self::RESOURCE_KEY_DETAIL     => '```'. $message . PHP_EOL . '```'
+        ];
+    }
 }

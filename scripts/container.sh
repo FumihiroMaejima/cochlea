@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
-SEPARATOPION='---------------------------'
+DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='check container status.'
 DOCKER_COMPOSE_FILE='./docker-compose.yml'
 
 # @param {string} message
 showMessage() {
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   echo $1
 }
 

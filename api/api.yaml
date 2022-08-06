@@ -1,0 +1,137 @@
+openapi: 3.0.1
+info:
+  description: "Test 12345 You can find out more about     Swagger at
+    [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
+    #swagger](http://swagger.io/irc/).      For this sample, you can use the api
+    key `special-key` to test the authorization     filters."
+  version: 1.0.0
+  title: Test My Service
+  termsOfService: https://github.com/user-name/repository-name
+  contact:
+    email: test@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: members
+    description: Administrators infomation
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: roles
+    description: Roles infomation
+  - name: gameEnemies
+    description: GameEnemies infomation
+  - name: auth
+    description: Operations about authentication
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+  - name: user
+    description: Operations about user
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+paths:
+  /admin/members:
+    $ref: "./data/paths/admin/members/index.yaml"
+  /admin/members/csv:
+    $ref: "./data/paths/admin/members/csv.yaml"
+  /admin/members/member:
+    $ref: "./data/paths/admin/members/member/index.yaml"
+  "/admin/members/member/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of member
+        required: true
+        schema:
+          type: integer
+          format: int64
+    $ref: "./data/paths/admin/members/member/id.yaml"
+  /admin/roles:
+    $ref: "./data/paths/admin/roles/index.yaml"
+  /admin/roles/list:
+    $ref: "./data/paths/admin/roles/list.yaml"
+  /admin/roles/csv:
+    $ref: "./data/paths/admin/roles/csv.yaml"
+  /admin/roles/role:
+    $ref: "./data/paths/admin/roles/role/index.yaml"
+  "/admin/roles/role/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of role
+        required: true
+        schema:
+          type: integer
+          format: int64
+    $ref: "./data/paths/admin/roles/role/id.yaml"
+#   /admin/game/enemies:
+#     $ref: "./data/paths/admin/game/enemies/index.yaml"
+#   /admin/game/enemies/file/csv:
+#     $ref: "./data/paths/admin/game/enemies/file/csv.yaml"
+#   /admin/game/enemies/file/template:
+#     $ref: "./data/paths/admin/game/enemies/file/template.yaml"
+#   "/admin/game/enemies/enemy/{id}":
+#     parameters:
+#       - name: id
+#         in: path
+#         description: ID of role
+#         required: true
+#         schema:
+#           type: integer
+#           format: int64
+#     $ref: "./data/paths/admin/game/enemies/enemy/id.yaml"
+#   /admin/game/enemies/enemy:
+#     $ref: "./data/paths/admin/game/enemies/enemy/index.yaml"
+  /admin/auth/login:
+    $ref: "./data/paths/admin/auth/login.yaml"
+  /admin/auth/logout:
+    $ref: "./data/paths/admin/auth/logout.yaml"
+  /admin/auth/refresh:
+    $ref: "./data/paths/admin/auth/refresh.yaml"
+  /admin/auth/self:
+    $ref: "./data/paths/admin/auth/self.yaml"
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  # - url: https://localhost:3200/api/v1
+  - url: http://localhost:3200/api/v1
+components:
+  requestBodies:
+    createRoleWithForm:
+      $ref: "./data/components/requestBodies/createRoleWithForm.yaml"
+  securitySchemes:
+    # members_auth:
+    #   $ref: "./data/components/securitySchemes/membersAuth.yaml"
+    authenticaion_key:
+      $ref: "./data/components/securitySchemes/authenticaionKey.yaml"
+    authority_key:
+      $ref: "./data/components/securitySchemes/authorityKey.yaml"
+    auth_id:
+      $ref: "./data/components/securitySchemes/authId.yaml"
+  schemas:
+    AuthRequestResponse:
+      $ref: "./data/schemas/auth/AuthRequestResponse.yaml"
+    AuthenticatedUser:
+      $ref: "./data/schemas/auth/AuthenticatedUser.yaml"
+    Member:
+      $ref: "./data/schemas/models/Member.yaml"
+    Permissions:
+      $ref: "./data/schemas/models/Permissions.yaml"
+    Roles:
+      $ref: "./data/schemas/models/Roles.yaml"
+    RolesList:
+      $ref: "./data/schemas/models/RolesList.yaml"
+    GameEnemies:
+      $ref: "./data/schemas/models/GameEnemies.yaml"
+    FileData:
+      $ref: "./data/schemas/files/FileData.yaml"
+    ApiSuccessResponse:
+      $ref: "./data/schemas/request/ApiSuccessResponse.yaml"
+    ApiErrorResponse:
+      $ref: "./data/schemas/request/ApiErrorResponse.yaml"
+    ApiResponse:
+      $ref: "./data/schemas/request/ApiResponse.yaml"

@@ -24,7 +24,7 @@ class BaseUserDataModel extends Model
      */
     public static function getConnectionNameByUserId(int $userId): string
     {
-        return self::getNodeName(self::getShardId($userId));
+        return self::getDataBaseConnection(self::getShardId($userId));
     }
 
     /**
@@ -53,14 +53,18 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * get node name by shard id.
+     * get connection name by shard id.
      *
      * @param int $shardId shard id.
      * @return int node name
      */
-    public static function getNodeName(int $shardId): string
+    public static function getDataBaseConnection(int $shardId): string
     {
         $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
+
+        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+            return $baseConnectionName;
+        }
 
         // 3で割り切れる場合はnode3
         if (($shardId % Config::get('myapp.database.users.modBaseNumber')) === 0) {

@@ -1,0 +1,36 @@
+# Member:
+  type: array
+  items:
+    type: object
+    required:
+      - id
+      - name
+      - email
+      - password
+      - phone
+      - roleId
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      roleId:
+        type: integer
+        format: int64
+        description: Admin`s role id
+    example:
+      id: 1
+      name: 'test member1'
+      email: 'test1@example.com'
+      password: 'test password'
+      phone: '000-0000-0000'
+      roleId: 1
+  xml:
+    name: Member

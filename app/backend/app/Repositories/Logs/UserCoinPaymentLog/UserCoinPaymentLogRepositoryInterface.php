@@ -9,7 +9,7 @@ interface UserCoinPaymentLogRepositoryInterface
 {
     public function getTable(): string;
 
-    public function getQueryBuilder(int $userId): Builder;
+    public function getQueryBuilder(): Builder;
 
     public function getByUserId(int $userId): Collection|null;
 

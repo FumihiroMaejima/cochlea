@@ -1,0 +1,27 @@
+# createRoleWithForm:
+  description: test createRoleWithForm description.
+  content:
+    # application/x-www-form-urlencoded:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: name of Role
+            type: string
+          code:
+            description: code of Role
+            type: string
+          detail:
+            description: detail of Role
+            type: string
+          permissions:
+            description: id of Permission
+            type: array
+            items:
+              type: integer
+        required:
+          - name
+          - code
+          - detail
+          - permissions

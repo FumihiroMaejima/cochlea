@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
-SEPARATOPION='---------------------------'
+DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='start restore database dump.'
 
 # dateコマンド結果を指定のフォーマットで出力
@@ -18,7 +18,7 @@ OUTPUT_FILE=sample/dump/dump.sql
 
 # @param {string} message
 showMessage() {
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   echo $1
 }
 
@@ -26,8 +26,9 @@ showMessage() {
 showMessage ${START_MESSAGE}
 
 # dump command.
-docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+# docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
 
-# 現在のDocker コンテナの状態を出力
+# メッセージ出力
 showMessage 'restore data base dump.'
 

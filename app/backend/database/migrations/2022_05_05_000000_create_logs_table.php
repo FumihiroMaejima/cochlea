@@ -27,8 +27,9 @@ class CreateLogsTable extends Migration
             $table->string('function', 255)->comment('実行ファンクション');
             $table->tinyInteger('status')->comment('ステータス');
             $table->timestamp('action_time')->comment('実行日時');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('admin action table');
         });
@@ -42,11 +43,12 @@ class CreateLogsTable extends Migration
             $table->uuid('order_id')->comment('注文ID');
             $table->integer('coin_id')->comment('コインID');
             $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // プライマリキー設定
-            $table->primary(['user_id', 'order_id']);
+            $table->primary(['user_id', 'order_id', 'created_at']);
 
             $table->comment('user coin payment log table');
         });

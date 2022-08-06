@@ -1,0 +1,12 @@
+# ApiErrorResponse:
+  type: object
+  properties:
+    status:
+      type: integer
+      format: int32
+    errors:
+      type: array
+      items:
+        type: string
+    message:
+      type: string

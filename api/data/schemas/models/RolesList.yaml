@@ -1,0 +1,22 @@
+# RolesList:
+  type: array
+  items:
+    type: object
+    required:
+      - value
+      - text
+    properties:
+      value:
+        type: integer
+        format: int64
+      text:
+        type: string
+  example:
+  - value: 1
+    text: 'test role1'
+  - value: 2
+    text: 'test role2'
+  - value: 3
+    text: 'test role3'
+  xml:
+    name: RolesList

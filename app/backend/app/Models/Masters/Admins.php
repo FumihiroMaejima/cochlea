@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\Admins\ResetPasswordNotification;
 use App\Library\Random\RandomStringLibrary;
 
 class Admins extends Authenticatable implements JWTSubject
@@ -145,6 +146,18 @@ class Admins extends Authenticatable implements JWTSubject
     public function sentPasswordResetMail(): void
     {
         $token = RandomStringLibrary::getRandomStringValue();
+        $this->getEmailForPasswordReset();
         $this->sendPasswordResetNotification($token);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

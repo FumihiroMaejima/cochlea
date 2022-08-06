@@ -12,6 +12,7 @@ class TimeLibrary
     // デフォルトのフォーマット
     public const DEFAULT_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; // ex: 2022-01-01 00:00:00
     public const DEFAULT_DATE_TIME_FORMAT_SLASH = 'Y/m/d H:i:s'; // ex: 2022/01/01 00:00:00
+    public const DEFAULT_DATE_TIME_FORMAT_DATE_ONLY = 'Y-m-d'; // ex: 2022-01-01
 
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 000000
@@ -78,7 +79,20 @@ class TimeLibrary
     }
 
     /**
-     * add a mounth to dateTime parameter.
+     * add days to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 加算日数
+     * @param string $format datetime format
+     * @return string $dateTimeから$value日後の$dateTime
+     */
+    public static function addDays(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->addDays($value)->format($format);
+    }
+
+    /**
+     * add mounth to dateTime parameter.
      *
      * @param string $dateTime 日時
      * @param int $value 加算月数
@@ -101,5 +115,18 @@ class TimeLibrary
     public static function addYears(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
     {
         return (new Carbon($dateTime))->addYears($value)->format($format);
+    }
+
+    /**
+     * add mounth to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param string $targetDateTime 比較対象の日付
+     * @param string $format datetime format
+     * @return int 日数
+     */
+    public static function diffDays(string $dateTime, string $targetDateTime): int
+    {
+        return (new Carbon($dateTime))->diffInDays($targetDateTime);
     }
 }

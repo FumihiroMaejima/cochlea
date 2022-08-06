@@ -1,0 +1,96 @@
+# /admin/game/enemies/enemy/{id}:
+  patch:
+    tags:
+      - gameEnemies
+    summary: Update Enemy
+    description: ""
+    operationId: UpdateEnemyWithForm
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of Enemy
+        required: true
+        schema:
+          type: integer
+          format: int64
+    requestBody:
+      content:
+        # application/x-www-form-urlencoded:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                description: name of Role
+                type: string
+              level:
+                description: level of Enemy
+                type: integer
+              hp:
+                description: hp of Enemy
+                type: integer
+              mp:
+                description: mp of Enemy
+                type: integer
+              offence:
+                description: offence of Enemy
+                type: integer
+              defense:
+                description: defense of Enemy
+                type: integer
+              speed:
+                description: speed of Enemy
+                type: integer
+              magic:
+                description: magic of Enemy
+                type: integer
+            required:
+              - name
+              - level
+              - hp
+              - mp
+              - offence
+              - defense
+              - speed
+              - magic
+    responses:
+      "200":
+        description: successful UPdate
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []
