@@ -181,6 +181,16 @@ class CheckLogDatabasePartitionCommand extends Command
                 );
             } else if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_DATE) {
                 // 作成日時でパーティションを貼る場合
+
+                // パーティションが既に貼られている場合は最新の日付の翌日の日付でパーティションを設定する。
+                if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
+                    // パーティション名から「p」の文字を切り取り日付を取得
+                    $latestPartitionDate = mb_substr($latestPartition['PARTITION_NAME'], 1);
+                    $nextPartitionDate = TimeLibrary::addDays($latestPartitionDate, 1);
+                    $setting[self::NAME_PRTITION_SETTING_KEY_TARGET_DATE] = $nextPartitionDate;
+                    $type = self::ALTER_TABLE_TYPE_ADD;
+                }
+
                 $this->addPartitionByDate(
                     $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
