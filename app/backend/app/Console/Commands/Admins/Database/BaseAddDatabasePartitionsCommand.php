@@ -20,31 +20,31 @@ class BaseAddDatabasePartitionsCommand extends Command
     private const PRTITION_OFFSET_VALUE = 1;
 
     // partition setting key
-    private const PRTITION_SETTING_KEY_CONNECTION_NAME = 'databaseName';
-    private const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
-    private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
-    private const PRTITION_SETTING_KEY_COLUMN_NAME = 'columnName';
+    protected const PRTITION_SETTING_KEY_CONNECTION_NAME = 'databaseName';
+    protected const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
+    protected const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
+    protected const PRTITION_SETTING_KEY_COLUMN_NAME = 'columnName';
 
     // パーティションタイプごとの詳細な設定
-    private const ID_PRTITION_SETTING_KEY_TARGET_ID = 'targetId'; // パーティション数の起算ID
-    private const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
-    private const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
-    private const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
-    private const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'mounthCount'; // パーティション数(1パーティション=1日を月数で設定)
+    protected const ID_PRTITION_SETTING_KEY_TARGET_ID = 'targetId'; // パーティション数の起算ID
+    protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
+    protected const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
+    protected const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
+    protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'mounthCount'; // パーティション数(1パーティション=1日を月数で設定)
 
     // partition type
-    private const PARTITION_TYPE_ID = 1;
-    private const PARTITION_TYPE_DATE = 2;
+    protected const PARTITION_TYPE_ID = 1;
+    protected const PARTITION_TYPE_DATE = 2;
 
-    private const PARTITION_TYPES = [
+    public const PARTITION_TYPES = [
         self::PARTITION_TYPE_ID,
         self::PARTITION_TYPE_DATE
     ];
 
-    private const ALTER_TABLE_TYPE_CREATE = 'create';
-    private const ALTER_TABLE_TYPE_ADD = 'add';
+    protected const ALTER_TABLE_TYPE_CREATE = 'create';
+    protected const ALTER_TABLE_TYPE_ADD = 'add';
 
-    private const ALTER_TABLE_TYPES = [
+    protected const ALTER_TABLE_TYPES = [
         self::ALTER_TABLE_TYPE_CREATE,
         self::ALTER_TABLE_TYPE_ADD
     ];
@@ -81,12 +81,7 @@ class BaseAddDatabasePartitionsCommand extends Command
      */
     public function handle(): void
     {
-        echo 'Setting Partitions.' . "\n";
-        echo 'Date: ' . TimeLibrary::getCurrentDateTime() . "\n";
-
         $this->setPartitions();
-
-        echo 'Finish.' . "\n";
     }
 
     /**
@@ -94,7 +89,7 @@ class BaseAddDatabasePartitionsCommand extends Command
      *
      * @return array
      */
-    public function getPartitionSettings(): array
+    protected function getPartitionSettings(): array
     {
         $connection = 'testconnection';
 
