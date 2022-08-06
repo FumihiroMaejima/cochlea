@@ -17,7 +17,7 @@ use App\Models\Logs\UserCoinPaymentLog;
 use App\Library\Time\TimeLibrary;
 
 
-class CheckLogDatabasePartitionCommand extends Command
+class AddLogDatabasePartitionsCommand extends Command
 {
     // information schema table name.
     private const INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME = 'INFORMATION_SCHEMA.PARTITIONS';
