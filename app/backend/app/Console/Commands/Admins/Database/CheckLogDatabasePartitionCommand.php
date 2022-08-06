@@ -258,26 +258,14 @@ class CheckLogDatabasePartitionCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-         // パーティションの情報の追加
+        // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            $statement = "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY RANGE COLUMNS(id) (
-                    ${partitions}
-                )
-            ";
+            self::createPartitions($databaseName, $tableName, 'id', $partitions);
         } else{
             // 追加
-            $statement = "
-                ALTER TABLE ${databaseName}.${tableName}
-                ADD PARTITION (
-                    ${partitions}
-                )
-            ";
+            self::addPartitions($databaseName, $tableName, $partitions);
         }
-
-        DB::statement($statement);
     }
 
     /**
@@ -324,23 +312,52 @@ class CheckLogDatabasePartitionCommand extends Command
          // パーティションの情報の追加
          if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            $statement = "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY RANGE COLUMNS(created_at) (
-                    ${partitions}
-                )
-            ";
+            self::createPartitions($databaseName, $tableName, 'created_at', $partitions);
         } else{
             // 追加
-            $statement = "
+            self::addPartitions($databaseName, $tableName, $partitions);
+        }
+    }
+
+    /**
+     * create partiions
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @param string $columnName column name
+     * @param string $$partitions partition setting statemetns
+     * @return void
+     */
+    private static function createPartitions(string $databaseName, string $tableName, string $columnName, string $partitions): void
+    {
+        DB::statement(
+            "
+                ALTER TABLE ${databaseName}.${tableName}
+                PARTITION BY RANGE COLUMNS(${columnName}) (
+                    ${partitions}
+                )
+            "
+        );
+    }
+
+    /**
+     * add partiions
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @param string $$partitions partition setting statemetns
+     * @return void
+     */
+    private static function addPartitions(string $databaseName, string $tableName, string $partitions): void
+    {
+        DB::statement(
+            "
                 ALTER TABLE ${databaseName}.${tableName}
                 ADD PARTITION (
                     ${partitions}
                 )
-            ";
-        }
-
-        DB::statement($statement);
+            "
+        );
     }
 
     /**
@@ -350,9 +367,9 @@ class CheckLogDatabasePartitionCommand extends Command
      * @param string $tableName table name
      * @param string $partitionName partition name
      * @param int $mounthCount add partition count as month
-     * @return array
+     * @return void
      */
-    public function deletePartition(string $databaseName, string $tableName, string $partitionName): void
+    private static function deletePartition(string $databaseName, string $tableName, string $partitionName): void
     {
         DB::statement(
             "
