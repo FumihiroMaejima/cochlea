@@ -11,8 +11,6 @@ interface UserCoinPaymentLogRepositoryInterface
 
     public function getQueryBuilder(): Builder;
 
-    public function createPartition(): bool;
-
     public function getByUserId(int $userId): Collection|null;
 
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null;

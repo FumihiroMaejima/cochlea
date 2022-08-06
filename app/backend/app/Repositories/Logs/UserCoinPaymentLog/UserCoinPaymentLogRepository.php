@@ -48,33 +48,6 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
     }
 
     /**
-     * create partition.
-     *
-     * @return bool
-     * @throws MyApplicationHttpException
-     */
-    public function createPartition(): bool
-    {
-        $connection = UserCoinPaymentLog::setConnectionName();
-        $table = $this->getTable();
-
-        $date = '2022-04-01 00:00:00';
-
-        $this->getQueryBuilder()->raw('
-            ALTER TABLE "${connection}"."${table}"
-            PARTITION BY RANGE COLUMNS(created_at) (
-                PARTITION p202203 VALUES LESS THAN ($date),
-                PARTITION p202204 VALUES LESS THAN ($date),
-                PARTITION p202205 VALUES LESS THAN ($date),
-                PARTITION p202206 VALUES LESS THAN ($date),
-                PARTITION p202207 VALUES LESS THAN ($date)
-            );
-        ')->getValue();
-
-        return true;
-    }
-
-    /**
      * get by user id.
      *
      * @param int $userId user id
