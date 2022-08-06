@@ -26,7 +26,7 @@ class CheckLogDatabasePartitionCommand extends Command
     private const PRTITION_OFFSET_VALUE = 1;
 
     // partition setting key
-    private const PRTITION_SETTING_KEY_DATABASE_NAME = 'databaseName';
+    private const PRTITION_SETTING_KEY_CONNECTION_NAME = 'databaseName';
     private const PRTITION_SETTING_KEY_TABLE_NAME = 'tableName';
     private const PRTITION_SETTING_KEY_PARTITION_TYPE = 'partitionYype';
     private const PRTITION_SETTING_KEY_COLUMN_NAME = 'columnName';
@@ -115,12 +115,11 @@ class CheckLogDatabasePartitionCommand extends Command
     public function getPartitionSettings(): array
     {
         $connection = BaseLogDataModel::setConnectionName();
-        $database = Config::get("database.connections.${connection}.database");
 
         // テーブルごとのパーティション設定
         return [
             [
-                self::PRTITION_SETTING_KEY_DATABASE_NAME              => $database,
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new AdminsLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_ID,
                 self::PRTITION_SETTING_KEY_COLUMN_NAME                => AdminsLog::ID,
@@ -131,7 +130,7 @@ class CheckLogDatabasePartitionCommand extends Command
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
             ],
             [
-                self::PRTITION_SETTING_KEY_DATABASE_NAME              => $database,
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
                 self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentLog::CREATED_AT,
@@ -156,12 +155,10 @@ class CheckLogDatabasePartitionCommand extends Command
         // パーティションを設定する対象のテーブル情報の取得
         $partitionSettings = $this->getPartitionSettings();
 
-        $connection = BaseLogDataModel::setConnectionName();
-
         foreach($partitionSettings as $setting) {
 
             $latestPartition = $this->checkLatestPartition(
-                $connection,
+                $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
             $alterTableType = self::ALTER_TABLE_TYPE_CREATE;
@@ -179,7 +176,7 @@ class CheckLogDatabasePartitionCommand extends Command
                 }
 
                 $this->addPartitionById(
-                    $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
                     $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID],
@@ -200,7 +197,7 @@ class CheckLogDatabasePartitionCommand extends Command
                 }
 
                 $this->addPartitionByDate(
-                    $setting[self::PRTITION_SETTING_KEY_DATABASE_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
                     $setting[self::NAME_PRTITION_SETTING_KEY_TARGET_DATE],
@@ -216,7 +213,7 @@ class CheckLogDatabasePartitionCommand extends Command
     /**
      * add partition by id.
      *
-     * @param string $databaseName database name
+     * @param string $connection connection name
      * @param string $tableName table name
      * @param string $columnName column name
      * @param string $id partition start id
@@ -226,7 +223,7 @@ class CheckLogDatabasePartitionCommand extends Command
      * @return array
      */
     public function addPartitionById(
-        string $databaseName,
+        string $connection,
         string $tableName,
         string $columnName,
         int $id = 1,
@@ -254,6 +251,9 @@ class CheckLogDatabasePartitionCommand extends Command
             $partitions .= $partitionSetting;
         }
 
+        $connection = BaseLogDataModel::setConnectionName();
+        $databaseName = Config::get("database.connections.${connection}.database");
+
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
@@ -267,7 +267,7 @@ class CheckLogDatabasePartitionCommand extends Command
     /**
      * add partition by datetime.
      *
-     * @param string $databaseName database name
+     * @param string $connection connection name
      * @param string $tableName table name
      * @param string $columnName column name
      * @param string $currentDate partition start date time
@@ -276,7 +276,7 @@ class CheckLogDatabasePartitionCommand extends Command
      * @return array
      */
     public function addPartitionByDate(
-        string $databaseName,
+        string $connection,
         string $tableName,
         string $columnName,
         string $currentDate,
@@ -306,6 +306,8 @@ class CheckLogDatabasePartitionCommand extends Command
         }
 
         // echo var_dump($partitions);
+        $connection = BaseLogDataModel::setConnectionName();
+        $databaseName = Config::get("database.connections.${connection}.database");
 
          // パーティションの情報の追加
          if ($type === self::ALTER_TABLE_TYPE_CREATE) {
