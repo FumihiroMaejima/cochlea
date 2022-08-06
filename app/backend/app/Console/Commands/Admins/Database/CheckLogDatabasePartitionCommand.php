@@ -280,8 +280,8 @@ class CheckLogDatabasePartitionCommand extends Command
 
         // 追加する分のパーティション設定を作成
         foreach (range(0, $count) as $i) {
-            $target = ($i * $baseNumber) + $id;
-            $next = $target + $baseNumber;
+            $target = $i !== 0 ? (($i * $baseNumber) + $id) : $id;
+            $next = ($target + $baseNumber - 1);
 
             $partitionSetting = "PARTITION p${target} VALUES LESS THAN (${next})" . ($i <= ($count - 1) ? ', ' : '');
             $partitions .= $partitionSetting;
