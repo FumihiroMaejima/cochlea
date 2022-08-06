@@ -60,14 +60,14 @@ class CheckLogDatabasePartitionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'admins:db-check-partition'; // if require parameter 'debug:test {param}';
+    protected $signature = 'admins:add-logs-partitions'; // if require parameter 'debug:test {param}';
 
     /**
      * The console command description.(コンソールコマンドの説明)
      *
      * @var string
      */
-    protected $description = 'check database paprtition';
+    protected $description = 'add log database paprtitions';
 
 
     /**
@@ -88,7 +88,7 @@ class CheckLogDatabasePartitionCommand extends Command
     public function handle(): void
     {
         echo 'Setting Partitions.' . "\n";
-        echo TimeLibrary::getCurrentDateTime() . "\n";
+        echo 'Date: ' . TimeLibrary::getCurrentDateTime() . "\n";
 
         $this->setPartitions();
 
@@ -98,11 +98,13 @@ class CheckLogDatabasePartitionCommand extends Command
     /**
      * get query builder by user id
      *
+     * @param string $connection connection name
      * @return Builder
      */
-    public function getQueryBuilderForInformantionSchema(): Builder
+    public function getQueryBuilderForInformantionSchema(string $connection): Builder
     {
-        return DB::connection(BaseLogDataModel::setConnectionName())->table(self::INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME);
+        // return DB::connection(BaseLogDataModel::setConnectionName())->table(self::INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME);
+        return DB::connection($connection)->table(self::INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME);
     }
 
     /**
@@ -154,9 +156,14 @@ class CheckLogDatabasePartitionCommand extends Command
         // パーティションを設定する対象のテーブル情報の取得
         $partitionSettings = $this->getPartitionSettings();
 
+        $connection = BaseLogDataModel::setConnectionName();
+
         foreach($partitionSettings as $setting) {
 
-            $latestPartition = $this->checkLatestPartition($setting[self::PRTITION_SETTING_KEY_TABLE_NAME]);
+            $latestPartition = $this->checkLatestPartition(
+                $connection,
+                $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
+            );
             $alterTableType = self::ALTER_TABLE_TYPE_CREATE;
 
             if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
@@ -204,33 +211,6 @@ class CheckLogDatabasePartitionCommand extends Command
                 continue;
             }
         }
-    }
-
-    /**
-     * check current partiion record
-     *
-     * @param string $tableName table name
-     * @return array
-     */
-    public function checkLatestPartition(string $tableName): array
-    {
-        // パーティションの情報の取得(最新の1件)
-        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
-        $collection = $this->getQueryBuilderForInformantionSchema()
-            ->select(DB::raw("
-                TABLE_SCHEMA,
-                TABLE_NAME,
-                PARTITION_NAME,
-                PARTITION_ORDINAL_POSITION,
-                TABLE_ROWS
-            "))
-            ->where('TABLE_NAME', '=', $tableName)
-            ->orderBy('PARTITION_ORDINAL_POSITION', 'desc')
-            ->limit(self::PRTITION_OFFSET_VALUE)
-            ->get()
-            ->toArray();
-
-        return json_decode(json_encode($collection), true)[0];
     }
 
     /**
@@ -335,6 +315,34 @@ class CheckLogDatabasePartitionCommand extends Command
             // 追加
             self::addPartitions($databaseName, $tableName, $partitions);
         }
+    }
+
+    /**
+     * check current partiion record
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @return array
+     */
+    public function checkLatestPartition(string $connection, string $tableName): array
+    {
+        // パーティションの情報の取得(最新の1件)
+        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
+        $collection = $this->getQueryBuilderForInformantionSchema($connection)
+            ->select(DB::raw("
+                TABLE_SCHEMA,
+                TABLE_NAME,
+                PARTITION_NAME,
+                PARTITION_ORDINAL_POSITION,
+                TABLE_ROWS
+            "))
+            ->where('TABLE_NAME', '=', $tableName)
+            ->orderBy('PARTITION_ORDINAL_POSITION', 'desc')
+            ->limit(self::PRTITION_OFFSET_VALUE)
+            ->get()
+            ->toArray();
+
+        return json_decode(json_encode($collection), true)[0];
     }
 
     /**
