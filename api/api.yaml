@@ -83,8 +83,8 @@ paths:
 #           type: integer
 #           format: int64
 #     $ref: "./data/paths/admin/game/enemies/enemy/id.yaml"
-  /admin/game/enemies/enemy:
-    $ref: "./data/paths/admin/game/enemies/enemy/index.yaml"
+#   /admin/game/enemies/enemy:
+#     $ref: "./data/paths/admin/game/enemies/enemy/index.yaml"
   /admin/auth/login:
     $ref: "./data/paths/admin/auth/login.yaml"
   /admin/auth/logout:
