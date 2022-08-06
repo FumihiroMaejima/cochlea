@@ -14,9 +14,6 @@ class CreateUserData1Table extends Migration
         3 => [3, 6, 9, 12]
     ];
 
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-
     /**
      * Run the migrations.
      *
@@ -38,8 +35,9 @@ class CreateUserData1Table extends Migration
                     $table->integer('coin_id')->comment('コインID');
                     $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
                     $table->string('payment_service_id', 255)->comment('決済サービスの決済id(stripeのセッションidなど)');
-                    $table->timestamps();
-                    $table->softDeletes();
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
                     // プライマリキー設定
                     // $table->unique(['user_id', 'order_id']); // UNIQUE KEY `user_coin_payment_status*_user_id_order_id_unique` (`user_id`,`order_id`)
@@ -56,8 +54,9 @@ class CreateUserData1Table extends Migration
                     $table->integer('free_coins')->default(0)->comment('無料コイン数');
                     $table->integer('paid_coins')->default(0)->comment('有料コイン数');
                     $table->integer('limited_time_coins')->default(0)->comment('期間限定コイン数');
-                    $table->timestamps();
-                    $table->softDeletes();
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
                     // プライマリキー設定
                     $table->primary(['user_id']);
@@ -73,8 +72,9 @@ class CreateUserData1Table extends Migration
                     $table->integer('user_id')->comment('ユーザーID');
                     $table->integer('product_id')->comment('製品ID');
                     $table->integer('price')->comment('価格');
-                    $table->timestamps();
-                    $table->softDeletes();
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
                     $table->comment('about user payment table');
                 });
@@ -86,8 +86,9 @@ class CreateUserData1Table extends Migration
                     $table->id();
                     $table->integer('user_id')->comment('ユーザーID');
                     $table->text('comment')->comment('コメント文');
-                    $table->timestamps();
-                    $table->softDeletes();
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
                     $table->comment('about user comment table');
                 });
@@ -123,12 +124,12 @@ class CreateUserData1Table extends Migration
      */
     public static function getConnectionName(int $nodeNumber): string
     {
-        $connectionName = Config::get('myapp.database.users.baseConnectionName');
+        $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        if ($connectionName === self::CONNECTION_NAME_FOR_CI) {
-            return $connectionName;
+        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+            return $baseConnectionName;
         }
 
-        return $connectionName . (string)$nodeNumber;
+        return $baseConnectionName . (string)$nodeNumber;
     }
 }

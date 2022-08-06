@@ -1,0 +1,22 @@
+# ApiResponse:
+  type: object
+  properties:
+    code:
+      type: integer
+      format: int32
+    type:
+      type: string
+    message:
+      type: string
+
+# モデル名まで指定すると$refとして利用出来ない
+# ApiResponse:
+#   type: object
+#   properties:
+#     code:
+#       type: integer
+#       format: int32
+#     type:
+#       type: string
+#     message:
+#       type: string

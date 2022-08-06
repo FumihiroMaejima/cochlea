@@ -1,0 +1,5 @@
+# authenticaion_key:
+  description: test authenticaion_key description.
+  type: apiKey
+  name: Authorization
+  in: header

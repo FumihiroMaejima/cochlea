@@ -34,6 +34,12 @@ Route::group(['prefix' => 'v1/admin'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [\App\Http\Controllers\Admins\AuthController::class, 'login'])->name('auth.admin.login');
     });
+
+    // forgot password
+    Route::group(['prefix' => 'admins'], function () {
+        Route::post('/password/forgot', [\App\Http\Controllers\Admins\AdminsController::class, 'forgotPassword'])->name('admin.admins.password.forgot');
+        Route::post('/password/reset', [\App\Http\Controllers\Admins\AdminsController::class, 'resetPassword'])->name('admin.admins.password.reset');
+    });
     // \App\Http\Controllers\Admins\AdminsController
 
     // admin auth
@@ -52,6 +58,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/admin', [\App\Http\Controllers\Admins\AdminsController::class, 'create'])->name('admin.admins.create');
             Route::patch('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'update'])->name('admin.admins.update');
             Route::delete('/admin/{id}', [\App\Http\Controllers\Admins\AdminsController::class, 'destroy'])->name('admin.admins.delete');
+            Route::patch('/admin/{id}/password', [\App\Http\Controllers\Admins\AdminsController::class, 'updatePassword'])->name('admin.admins.password.update');
         });
 
         // roles

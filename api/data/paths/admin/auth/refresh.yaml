@@ -1,0 +1,47 @@
+# /admin/auth/refresh:
+  post:
+    tags:
+      - auth
+    summary: Refresh authenticated token
+    description: Refresh Authenticated token Function
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Authenticated
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/auth/AuthRequestResponse.yaml"
+              # $ref: "#/components/schemas/AuthRequestResponse"
+      "401":
+        description: Unahthorithed
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+              # $ref: "#/components/schemas/ApiErrorResponse"
+      default:
+        description: unsuccessful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+              # $ref: "#/components/schemas/ApiErrorResponse"

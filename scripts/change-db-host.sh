@@ -1,7 +1,7 @@
 #!/bin/sh
 
 CURRENT_DIR=$(cd $(dirname $0); pwd)
-SEPARATOPION='---------------------------'
+DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='check database host.'
 FILE_NAME='.env'
 
@@ -10,7 +10,7 @@ FILE_NAME='.env'
 
 # @param {string} message
 showMessage() {
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   echo $1
 }
 

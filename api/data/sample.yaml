@@ -1,0 +1,29 @@
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+
+# type: array
+# items:
+#   type: object
+#   properties:
+#     id:
+#       type: integer
+#       format: int64
+#     name:
+#       type: string
+#     email:
+#       type: string
+#     password:
+#       type: string
+#     phone:
+#       type: string
+#     subItemId:
+#       type: integer
+#       format: int64
+#       description: sub item id
+# xml:
+#   name: TestItem
+

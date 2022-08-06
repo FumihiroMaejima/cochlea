@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
-SEPARATOPION='---------------------------'
+DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='start getting database dump.'
 
 # dateコマンド結果を指定のフォーマットで出力
@@ -16,7 +16,7 @@ OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
 
 # @param {string} message
 showMessage() {
-  echo ${SEPARATOPION}
+  echo ${DELIMITER_LINE}
   echo $1
 }
 

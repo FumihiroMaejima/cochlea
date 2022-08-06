@@ -5,6 +5,7 @@ return [
         'id'            => 'X-Auth-ID',
         'authority'     => 'X-Auth-Authority',
         'authorization' => 'Authorization',
+        'passwordReset' => 'X-Auth-Reset-Session-ID',
     ],
     'executionRole' => [
         'services' => [
@@ -47,5 +48,11 @@ return [
             'node2ShardIds'      => [2, 5, 8, 11],
             'node3ShardIds'      => [3, 6, 9, 12],
         ]
+    ],
+    // CIなどで使う場合のコネクション名。単一のコネクションに接続させる。
+    'ci' => [
+        'database' => [
+            'baseConnectionName' => 'sqlite',
+        ],
     ],
 ];

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,13 +23,24 @@ use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
+use App\Library\Array\ArrayLibrary;
+use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\AdminsSlackNotificationService;
+use App\Services\Admins\Notifications\PasswordForgotNotificationService;
+use App\Library\Cache\CacheLibrary;
+use App\Library\Random\RandomStringLibrary;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
 
 class AdminsService
 {
+    // cache keys
+    private const CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION = 'admin_password_reset_session_id_';
+
+    private const PASSWORD_RESET_TOKEN_LENGTH = 20;
+    private const PASSWORD_RESET_SESSION_EXPIRE = 900; // パスワードリセット有効期限(900秒=15分)
+
     protected AdminsRepositoryInterface $adminsRepository;
     protected AdminsRolesRepositoryInterface $adminsRolesRepository;
 
@@ -200,5 +212,187 @@ class AdminsService
             );
             // abort(500);
         }
+    }
+
+    /**
+     * update admin data service
+     *
+     * @param int $id admin id
+     * @param string $currentPassword current password
+     * @param string $newPassword new password
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): JsonResponse
+    {
+        $admin = $this->getAdminById($id);
+
+        // 現在のパスワードのチェック
+        if (!Hash::check($currentPassword, $admin[Admins::PASSWORD])) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                'hash check failed.'
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            $resource = AdminsResource::toArrayForUpdatePassword($newPassword);
+
+            $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
+
+            // slack通知
+            $attachmentResource = AdminUpdateNotificationResource::toArrayForCreate($admin[Admins::ID], $admin[Admins::NAME], ":tada: Update Admin Password \n");
+            app()->make(AdminsSlackNotificationService::class)->send('update admin password.', $attachmentResource);
+
+            DB::commit();
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+
+            throw $e;
+            // abort(500);
+        }
+    }
+
+    /**
+     * forgot password service
+     *
+     * @param string $email mail address
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function forgotAdminPassword(string $email): JsonResponse
+    {
+        $admin = $this->getAdminByEmail($email);
+
+        try {
+            $sessionId = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
+            $token = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
+
+            // キャッシュに保存
+            CacheLibrary::setCache(
+                self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId,
+                $token . '_' . $admin[Admins::ID],
+                self::PASSWORD_RESET_SESSION_EXPIRE
+            );
+
+            // メール送信
+            (new PasswordForgotNotificationService($admin[Admins::EMAIL]))->send($token);
+
+            $message = 'success';
+            $status = 200;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+
+            throw $e;
+        }
+    }
+
+    /**
+     * reset password service
+     *
+     * @param string $sessionId session id
+     * @param string $password password
+     * @param string $token reset password token
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function resetAdminPassword(string $sessionId, string $password, $token): JsonResponse
+    {
+        $cache = CacheLibrary::getByKey(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
+
+        if (empty($cache)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_401,
+                'failed password update. maybe session expired.'
+            );
+        }
+
+        // adminIdとトークンの配列化
+        $session = explode('_', $cache);
+
+        $admin = $this->getAdminById((int)$session[1]);
+
+        // token check
+        if ($token !== $session[0]) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'failed password update.'
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            $resource = AdminsResource::toArrayForUpdatePassword($password);
+
+            $updatedRowCount = $this->adminsRepository->updatePassword($admin[Admins::ID], $resource);
+
+            DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+
+    /**
+     * get admin by admin id.
+     *
+     * @param int $adminId admin id
+     * @return array|null
+     */
+    private function getAdminById(int $adminId): array|null
+    {
+        $admins = $this->adminsRepository->getById($adminId);
+
+        if (empty($admins)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist admin.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($admins->toArray()[0]);
+    }
+
+    /**
+     * get admin by mail address.
+     *
+     * @param string $email mail address
+     * @return array|null
+     */
+    private function getAdminByEmail(string $email): array|null
+    {
+        $admins = $this->adminsRepository->getByEmail($email);
+
+        if (empty($admins)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist admin.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($admins->toArray()[0]);
     }
 }

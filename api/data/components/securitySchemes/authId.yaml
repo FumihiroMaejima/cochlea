@@ -1,0 +1,5 @@
+# auth_id:
+  description: authenticated user id.
+  type: apiKey
+  name: X-Auth-ID
+  in: header

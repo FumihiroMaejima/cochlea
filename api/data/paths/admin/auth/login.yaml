@@ -1,0 +1,41 @@
+# /admin/auth/login:
+  post:
+    tags:
+      - auth
+    summary: Logs user into the system
+    description: Login Function
+    requestBody:
+      content:
+        # application/x-www-form-urlencoded:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                description: email of administrator
+                type: string
+              password:
+                description: password of administrator
+                type: string
+            required:
+              - email
+              - password
+    responses:
+      "200":
+        description: successful Login
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/auth/AuthRequestResponse.yaml"
+      "400":
+        description: Invalid username/password supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"

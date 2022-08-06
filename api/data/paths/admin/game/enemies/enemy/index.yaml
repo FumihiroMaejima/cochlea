@@ -1,0 +1,76 @@
+# /admin/game/enemies/enemy:
+  delete:
+    tags:
+      - gameEnemies
+    summary: Deletes some enemies
+    description: ""
+    operationId: deleteEnemies
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+      - name: enemies
+        in: query
+        description: ID of Enemies
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+    # requestBody:
+    #   content:
+    #     application/x-www-form-urlencoded:
+    #       schema:
+    #         type: object
+    #         properties:
+    #           enemies:
+    #             description: ID of role
+    #             type: array
+    #             items:
+    #               type: integer
+    #         required:
+    #           - enemies
+    responses:
+      "200":
+        description: successful Delete
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiSuccessResponse.yaml"
+      "400":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiErrorResponse.yaml"
+      "404":
+        description: Membeer not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []
