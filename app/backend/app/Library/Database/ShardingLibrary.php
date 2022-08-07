@@ -39,6 +39,18 @@ class ShardingLibrary
     }
 
     /**
+     * get shard id by user id.
+     *
+     * @param int $userId user id.
+     * @return int shard id
+     */
+    public static function getShardIdByUserId(int $userId): int
+    {
+        // 除算の余り
+        return $userId % Config::get('myapp.database.users.shardCount');
+    }
+
+    /**
      * get user database connection name by shard id.
      *
      * @param int $shardId shard id.
