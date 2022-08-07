@@ -37,4 +37,31 @@ class ShardingLibrary
 
         return $baseConnectionName . (string)$nodeNumber;
     }
+
+    /**
+     * get user database connection name by shard id.
+     *
+     * @param int $shardId shard id.
+     * @return int node name
+     */
+    public static function getUserDataBaseConnection(int $shardId): string
+    {
+        $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
+
+        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+            return $baseConnectionName;
+        }
+
+        // 3で割り切れる場合はnode3
+        if (($shardId % Config::get('myapp.database.users.modBaseNumber')) === 0) {
+            // user database3
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber3');
+        } elseif (in_array($shardId, Config::get('myapp.database.users.node1ShardIds'), true)) {
+            // user database1
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber1');
+        } else {
+            // user database2
+            return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber2');
+        }
+    }
 }

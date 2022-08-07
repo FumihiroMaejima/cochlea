@@ -46,7 +46,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function getQueryBuilder(int $userId): Builder
     {
-        return DB::connection(UserCoins::setConnectionName($userId))->table($this->getTable($userId));
+        return DB::connection(UserCoins::getConnectionNameByUserId($userId))->table($this->getTable($userId));
     }
 
     /**

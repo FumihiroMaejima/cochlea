@@ -4,6 +4,7 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use App\Library\Database\ShardingLibrary;
 
 class BaseUserDataModel extends Model
 {
@@ -24,7 +25,7 @@ class BaseUserDataModel extends Model
      */
     public static function getConnectionNameByUserId(int $userId): string
     {
-        return self::getDataBaseConnection(self::getShardId($userId));
+        return ShardingLibrary::getUserDataBaseConnection(self::getShardId($userId));
     }
 
     /**
@@ -33,12 +34,12 @@ class BaseUserDataModel extends Model
      * @param int $userId user id.
      * @return string
      */
-    public static function setConnectionName(int $userId): string
+    /* public static function setConnectionName(int $userId): string
     {
         $connectionName = self::getConnectionNameByUserId($userId);
         return $connectionName;
         // return parent::setConnection($connectionName);
-    }
+    } */
 
     /**
      * get shard id by user id.
@@ -58,7 +59,7 @@ class BaseUserDataModel extends Model
      * @param int $shardId shard id.
      * @return int node name
      */
-    public static function getDataBaseConnection(int $shardId): string
+    /* public static function getDataBaseConnection(int $shardId): string
     {
         $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
@@ -77,5 +78,5 @@ class BaseUserDataModel extends Model
             // user database2
             return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber2');
         }
-    }
+    } */
 }

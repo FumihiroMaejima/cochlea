@@ -46,7 +46,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function getQueryBuilder(int $userId): Builder
     {
-        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable($userId));
+        return DB::connection(UserCoinPaymentStatus::getConnectionNameByUserId($userId))->table($this->getTable($userId));
     }
 
     /**
