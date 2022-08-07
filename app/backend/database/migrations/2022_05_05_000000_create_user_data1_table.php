@@ -7,13 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserData1Table extends Migration
 {
-    /** @var array<int, array<int, int>> NODE_NUMBERS ユーザー用DBのノード数(番号) */
-    private const NODE_NUMBERS = [
-        1 => [1, 4, 7, 10],
-        2 => [2, 5, 8, 11],
-        3 => [3, 6, 9, 12]
-    ];
-
     /**
      * Run the migrations.
      *
@@ -21,7 +14,7 @@ class CreateUserData1Table extends Migration
      */
     public function up()
     {
-        foreach (self::NODE_NUMBERS as $node => $shardIds) {
+        foreach (self::getShardingSetting() as $node => $shardIds) {
             // ex: mysql_user1 ..etc.
             $connectionName = self::getConnectionName($node);
 
@@ -103,7 +96,7 @@ class CreateUserData1Table extends Migration
      */
     public function down()
     {
-        foreach (self::NODE_NUMBERS as $node => $shardIds) {
+        foreach (self::getShardingSetting() as $node => $shardIds) {
             $connectionName = self::getConnectionName($node);
 
             foreach ($shardIds as $shardId) {
@@ -115,6 +108,20 @@ class CreateUserData1Table extends Migration
         }
     }
 
+    /**
+     * get database node number & shard ids setting.
+     *
+     * @param int $nodeNumber node number
+     * @return array<int, array<int, int>> ユーザー用DBのノード数(番号)とシャードid
+     */
+    public static function getShardingSetting(): array
+    {
+        return [
+            Config::get('myapp.database.users.nodeNumber1') => Config::get('myapp.database.users.node1ShardIds'),
+            Config::get('myapp.database.users.nodeNumber2') => Config::get('myapp.database.users.node2ShardIds'),
+            Config::get('myapp.database.users.nodeNumber3') => Config::get('myapp.database.users.node3ShardIds'),
+        ];
+    }
 
     /**
      * get connection name by node number.
