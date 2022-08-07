@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Library\Database\ShardingLibrary;
 
 class CreateUserData1Table extends Migration
 {
@@ -14,9 +15,9 @@ class CreateUserData1Table extends Migration
      */
     public function up()
     {
-        foreach (self::getShardingSetting() as $node => $shardIds) {
+        foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
             // ex: mysql_user1 ..etc.
-            $connectionName = self::getConnectionName($node);
+            $connectionName = ShardingLibrary::getConnectionByNodeNumber($node);
 
             foreach ($shardIds as $shardId) {
                 /**
@@ -96,8 +97,8 @@ class CreateUserData1Table extends Migration
      */
     public function down()
     {
-        foreach (self::getShardingSetting() as $node => $shardIds) {
-            $connectionName = self::getConnectionName($node);
+        foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
+            $connectionName = ShardingLibrary::getConnectionByNodeNumber($node);
 
             foreach ($shardIds as $shardId) {
                 Schema::connection($connectionName)->dropIfExists('user_coin_payment_status'.$shardId);
@@ -106,37 +107,5 @@ class CreateUserData1Table extends Migration
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
             }
         }
-    }
-
-    /**
-     * get database node number & shard ids setting.
-     *
-     * @param int $nodeNumber node number
-     * @return array<int, array<int, int>> ユーザー用DBのノード数(番号)とシャードid
-     */
-    public static function getShardingSetting(): array
-    {
-        return [
-            Config::get('myapp.database.users.nodeNumber1') => Config::get('myapp.database.users.node1ShardIds'),
-            Config::get('myapp.database.users.nodeNumber2') => Config::get('myapp.database.users.node2ShardIds'),
-            Config::get('myapp.database.users.nodeNumber3') => Config::get('myapp.database.users.node3ShardIds'),
-        ];
-    }
-
-    /**
-     * get connection name by node number.
-     *
-     * @param int $nodeNumber node number
-     * @return string
-     */
-    public static function getConnectionName(int $nodeNumber): string
-    {
-        $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
-
-        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
-            return $baseConnectionName;
-        }
-
-        return $baseConnectionName . (string)$nodeNumber;
     }
 }
