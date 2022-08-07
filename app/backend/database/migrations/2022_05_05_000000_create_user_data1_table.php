@@ -41,7 +41,7 @@ class CreateUserData1Table extends Migration
 
                     // プライマリキー設定
                     // $table->unique(['user_id', 'order_id']); // UNIQUE KEY `user_coin_payment_status*_user_id_order_id_unique` (`user_id`,`order_id`)
-                    $table->primary(['user_id', 'order_id']); // PRIMARY KEY (`user_id`,`order_id`)
+                    $table->primary(['user_id', 'order_id', 'created_at']); // PRIMARY KEY (`user_id`,`order_id`)
 
                     $table->comment('about user coin payment status table');
                 });

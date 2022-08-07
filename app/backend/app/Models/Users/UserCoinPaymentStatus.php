@@ -54,6 +54,7 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     protected $primaryKey = [
         self::USER_ID,
         self::ORDER_ID,
+        self::CREATED_AT,
     ];
 
     /**
