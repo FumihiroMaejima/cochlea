@@ -44,7 +44,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      */
     public function getQueryBuilder(): Builder
     {
-        return DB::connection(UserCoinPaymentLog::setConnectionName())->table($this->getTable());
+        return DB::connection(UserCoinPaymentLog::getLogDatabaseConnection())->table($this->getTable());
     }
 
     /**

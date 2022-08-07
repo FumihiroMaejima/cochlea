@@ -8,12 +8,11 @@ use Illuminate\Support\Facades\Config;
 class BaseLogDataModel extends Model
 {
     /**
-     * get connection name by node number.
+     * get log databse connection name.
      *
-     * @param int $userId user id.
      * @return string
      */
-    public static function setConnectionName(): string
+    public static function getLogDatabaseConnection(): string
     {
         return Config::get('myapp.database.logs.baseConnectionName');
     }
