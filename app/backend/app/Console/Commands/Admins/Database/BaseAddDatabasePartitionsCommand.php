@@ -325,6 +325,10 @@ class BaseAddDatabasePartitionsCommand extends Command
             ->get()
             ->toArray();
 
+        if (empty($collection)) {
+            return [];
+        }
+
         return json_decode(json_encode($collection), true)[0];
     }
 
