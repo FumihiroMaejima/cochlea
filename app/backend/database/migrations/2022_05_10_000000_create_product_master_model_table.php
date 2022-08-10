@@ -25,7 +25,7 @@ class CreateProductMasterModelTable extends Migration
             $table->string('extention', 255)->comment('拡張子');
             $table->string('mimeType', 255)->comment('mimeType');
             $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
-            $table->integer('version')->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
+            $table->integer('version')->unsigned()->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
             $table->timestamps();
             $table->softDeletes();
 
@@ -39,8 +39,8 @@ class CreateProductMasterModelTable extends Migration
             $table->id();
             $table->string('name', 255)->comment('コイン名');
             $table->text('detail')->comment('詳細');
-            $table->integer('price')->comment('コインの購入価格');
-            $table->integer('cost')->comment('アプリケーション内のコインの価格');
+            $table->integer('price')->unsigned()->comment('コインの購入価格');
+            $table->integer('cost')->unsigned()->comment('アプリケーション内のコインの価格');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
             $table->string('image', 255)->comment('イメージ');
@@ -57,8 +57,8 @@ class CreateProductMasterModelTable extends Migration
             $table->id();
             $table->string('name', 255)->comment('商品名');
             $table->text('detail')->comment('詳細');
-            $table->tinyInteger('type')->comment('商品の種類');
-            $table->integer('price')->comment('価格');
+            $table->tinyInteger('type')->unsigned()->comment('商品の種類');
+            $table->integer('price')->unsigned()->comment('価格');
             $table->string('unit', 255)->comment('単位');
             $table->string('manufacturer', 255)->comment('製造元');
             $table->dateTime('notice_start_at')->comment('予告開始日時');
