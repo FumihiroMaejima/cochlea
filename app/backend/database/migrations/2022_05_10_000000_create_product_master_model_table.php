@@ -30,6 +30,9 @@ class CreateProductMasterModelTable extends Migration
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
+            // index設定
+            $table->index('s3_key');
+
             $table->comment('images table');
         });
 
