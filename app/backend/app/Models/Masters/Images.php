@@ -16,7 +16,7 @@ class Images extends Model
     public const UUID        = 'uuid';
     public const NAME        = 'name';
     public const EXTENTION   = 'extention';
-    public const MIME_TYPE   = 'mimeType';
+    public const MIME_TYPE   = 'mime_type';
     public const S3_KEY      = 's3_key';
     public const VERSION     = 'version';
     public const CRREATED_AT = 'created_at';

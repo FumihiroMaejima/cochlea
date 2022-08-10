@@ -23,7 +23,7 @@ class CreateProductMasterModelTable extends Migration
             $table->uuid()->unique()->comment('uuid');
             $table->string('name', 255)->comment('オリジナルファイル名');
             $table->string('extention', 255)->comment('拡張子');
-            $table->string('mimeType', 255)->comment('mimeType');
+            $table->string('mime_type', 255)->comment('mimeType');
             $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
             $table->integer('version')->unsigned()->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
             $table->dateTime('created_at')->comment('登録日時');
