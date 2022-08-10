@@ -14,7 +14,7 @@ use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Models\Masters\Images;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\Time\TimeLibrary;
-use App\Library\String\UnidLibrary;
+use App\Library\String\UuidLibrary;
 
 class ImageLibrary
 {
@@ -27,7 +27,7 @@ class ImageLibrary
      */
     public static function getFileResource(UploadedFile $file): array
     {
-        $uuid = UnidLibrary::uuidVersion4();
+        $uuid = UuidLibrary::uuidVersion4();
 
         // オリジナルファイル名
         $originalName = $file->getClientOriginalName();
