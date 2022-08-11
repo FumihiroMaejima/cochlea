@@ -98,7 +98,7 @@ class UserCoinPaymentService
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
@@ -151,7 +151,7 @@ class UserCoinPaymentService
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
                 UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL
             );
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
@@ -230,7 +230,7 @@ class UserCoinPaymentService
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
                 UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE
             );
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {

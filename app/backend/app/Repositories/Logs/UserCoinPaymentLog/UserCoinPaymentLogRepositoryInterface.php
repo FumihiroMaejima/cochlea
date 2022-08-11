@@ -15,9 +15,9 @@ interface UserCoinPaymentLogRepositoryInterface
 
     public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null;
 
-    public function createUserCoinPaymentLog(int $userId, array $resource): int;
+    public function create(int $userId, array $resource): int;
 
-    public function updateUserCoinPaymentLog(int $userId, string $orderId, array $resource): int;
+    public function update(int $userId, string $orderId, array $resource): int;
 
-    public function deleteUserCoinPaymentLog(int $userId, string $orderId, array $resource): int;
+    public function delete(int $userId, string $orderId, array $resource): int;
 }
