@@ -89,7 +89,7 @@ class CoinsService
 
         DB::beginTransaction();
         try {
-            $insertCount = $this->coinsRepository->createCoin($resource);
+            $insertCount = $this->coinsRepository->create($resource);
 
             DB::commit();
 
@@ -121,7 +121,7 @@ class CoinsService
 
         DB::beginTransaction();
         try {
-            $updatedRowCount = $this->coinsRepository->updateCoin($id, $resource);
+            $updatedRowCount = $this->coinsRepository->update($id, $resource);
 
             DB::commit();
 
@@ -155,7 +155,7 @@ class CoinsService
 
             $resource = CoinsResource::toArrayForDelete();
 
-            $deleteRowCount = $this->coinsRepository->deleteCoin($coinIds, $resource);
+            $deleteRowCount = $this->coinsRepository->delete($coinIds, $resource);
 
             DB::commit();
 

@@ -16,7 +16,7 @@ class CoinsRepository implements CoinsRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new CoinsRepository instance.
+     * create instance.
      *
      * @param \App\Models\Masters\Coins $model
      * @return void
@@ -114,24 +114,24 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * create Coin data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createCoin(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Coin data.
+     * update recode.
      *
      * @param array $id id of record
      * @param array $resource update data
      * @return int
      */
-    public function updateCoin(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -142,13 +142,13 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * delete Coins data.
+     * delete recode.
      *
      * @param array $ids id of records
      * @param array $resource update data
      * @return int
      */
-    public function deleteCoin(array $ids, array $resource): int
+    public function delete(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
