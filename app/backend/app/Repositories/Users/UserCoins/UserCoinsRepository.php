@@ -81,25 +81,25 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     }
 
     /**
-     * create UserCoins data.
+     * create recode.
      *
      * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoins(int $userId, array $resource): int
+    public function create(int $userId, array $resource): int
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }
 
     /**
-     * update UserCoins data.
+     * update record.
      *
      * @param int $userId user id
      * @param array $resource update data
      * @return int
      */
-    public function updateUserCoins(int $userId, array $resource): int
+    public function update(int $userId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
@@ -110,13 +110,13 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     }
 
     /**
-     * delete UserCoins data.
+     * delete record.
      *
      * @param int $userId user id
      * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoins(int $userId, array $resource): int
+    public function delete(int $userId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)

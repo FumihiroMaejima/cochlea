@@ -211,7 +211,7 @@ class UserCoinPaymentService
                     $coin[Coins::PRICE],
                     UserCoins::DEFAULT_COIN_COUNT
                 );
-                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+                $this->userCoinsRepository->create($userId, $userCoinResource);
             } else {
                 // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
@@ -220,7 +220,7 @@ class UserCoinPaymentService
                     $userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
                     $userCoin[UserCoins::LIMITED_TIME_COINS]
                 );
-                $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
+                $this->userCoinsRepository->update($userId, $userCoinResource);
             }
 
             // ログの設定
