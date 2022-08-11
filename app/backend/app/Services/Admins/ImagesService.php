@@ -106,7 +106,7 @@ class ImagesService
         DB::beginTransaction();
 
         try {
-            $insertCount = $this->imagesRepository->createImage($resource);
+            $insertCount = $this->imagesRepository->create($resource);
 
             // ファイル名
             $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];

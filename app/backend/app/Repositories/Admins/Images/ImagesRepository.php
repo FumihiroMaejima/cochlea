@@ -16,7 +16,7 @@ class ImagesRepository implements ImagesRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new ImagesRepository instance.
+     * create instance.
      *
      * @param Images $model
      * @return void
@@ -96,24 +96,24 @@ class ImagesRepository implements ImagesRepositoryInterface
     }
 
     /**
-     * create Image data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createImage(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Image data.
+     * update recode.
      *
      * @param array $id id of record
      * @param array $resource update data
      * @return int
      */
-    public function updateImage(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -124,13 +124,13 @@ class ImagesRepository implements ImagesRepositoryInterface
     }
 
     /**
-     * delete Images data.
+     * delete recode.
      *
      * @param array $ids id of records
      * @param array $resource update data
      * @return int
      */
-    public function deleteImage(array $ids, array $resource): int
+    public function delete(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

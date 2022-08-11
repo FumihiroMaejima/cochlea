@@ -14,9 +14,9 @@ interface ImagesRepositoryInterface
 
     public function getLatestImage(): object;
 
-    public function createImage(array $resource): int;
+    public function create(array $resource): int;
 
-    public function updateImage(int $id, array $resource): int;
+    public function update(int $id, array $resource): int;
 
-    public function deleteImage(array $ids, array $resource): int;
+    public function delete(array $ids, array $resource): int;
 }
