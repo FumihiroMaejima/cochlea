@@ -21,26 +21,6 @@ class CreateUserData1Table extends Migration
 
             foreach ($shardIds as $shardId) {
                 /**
-                 * user_coin_payment_status table
-                 */
-                Schema::connection($connectionName)->create('user_coin_payment_status'.$shardId, function (Blueprint $table) {
-                    $table->integer('user_id')->unsigned()->comment('ユーザーID');
-                    $table->uuid('order_id')->unique()->comment('注文ID(UUID)');
-                    $table->integer('coin_id')->unsigned()->comment('コインID');
-                    $table->integer('status')->unsigned()->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
-                    $table->string('payment_service_id', 255)->comment('決済サービスの決済id(stripeのセッションidなど)');
-                    $table->dateTime('created_at')->comment('登録日時');
-                    $table->dateTime('updated_at')->comment('更新日時');
-                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
-
-                    // プライマリキー設定
-                    // $table->unique(['user_id', 'order_id']); // UNIQUE KEY `user_coin_payment_status*_user_id_order_id_unique` (`user_id`,`order_id`)
-                    $table->primary(['user_id', 'order_id', 'created_at']); // PRIMARY KEY (`user_id`,`order_id`)
-
-                    $table->comment('about user coin payment status table');
-                });
-
-                /**
                  * user_coin_histories table
                  */
                 Schema::connection($connectionName)->create('user_coin_histories'.$shardId, function (Blueprint $table) {
@@ -64,6 +44,26 @@ class CreateUserData1Table extends Migration
                     $table->primary(['user_id', 'created_at']);
 
                     $table->comment('about user coins history table');
+                });
+
+                /**
+                 * user_coin_payment_status table
+                 */
+                Schema::connection($connectionName)->create('user_coin_payment_status'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->unsigned()->comment('ユーザーID');
+                    $table->uuid('order_id')->comment('注文ID(UUID)');
+                    $table->integer('coin_id')->unsigned()->comment('コインID');
+                    $table->integer('status')->unsigned()->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
+                    $table->string('payment_service_id', 255)->comment('決済サービスの決済id(stripeのセッションidなど)');
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+                    // プライマリキー設定
+                    // $table->unique(['user_id', 'order_id']); // UNIQUE KEY `user_coin_payment_status*_user_id_order_id_unique` (`user_id`,`order_id`)
+                    $table->primary(['user_id', 'order_id', 'created_at']); // PRIMARY KEY (`user_id`,`order_id`)
+
+                    $table->comment('about user coin payment status table');
                 });
 
                 /**

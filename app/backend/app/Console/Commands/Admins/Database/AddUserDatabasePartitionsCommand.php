@@ -8,6 +8,7 @@ use App\Console\Commands\Admins\Database\BaseAddDatabasePartitionsCommand;
 use App\Exceptions\MyApplicationHttpException;
 use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Users\BaseUserDataModel;
+use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoinPaymentStatus;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
@@ -62,6 +63,7 @@ class AddUserDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
     protected function getPartitionSettings(): array
     {
         $partitionSettings = [];
+        $dateTime = TimeLibrary::getCurrentDateTime();
 
         // テーブルごとのパーティション設定
         foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
@@ -70,13 +72,24 @@ class AddUserDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
             foreach ($shardIds as $shardId) {
                 $partitionSettings[] = [
                     self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                    self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinHistories())->getTable().$shardId,
+                    self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                    self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinHistories::CREATED_AT,
+                    self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                    self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                    self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                    self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
+                    self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                ];
+                $partitionSettings[] = [
+                    self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
                     self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentStatus())->getTable().$shardId,
                     self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
                     self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentStatus::CREATED_AT,
                     self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
                     self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
                     self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
-                    self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
+                    self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
                     self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
                 ];
             }
