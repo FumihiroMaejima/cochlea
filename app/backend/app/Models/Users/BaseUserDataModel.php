@@ -25,7 +25,7 @@ class BaseUserDataModel extends Model
      */
     public static function getConnectionNameByUserId(int $userId): string
     {
-        return ShardingLibrary::getUserDataBaseConnection(ShardingLibrary::getShardIdByUserId($userId));
+        return ShardingLibrary::getUserDataBaseConnection(self::getShardId($userId));
     }
 
     /**
@@ -47,11 +47,11 @@ class BaseUserDataModel extends Model
      * @param int $userId user id.
      * @return int shard id
      */
-    /* public static function getShardId(int $userId): int
+    public static function getShardId(int $userId): int
     {
         // 除算の余り
-        return $userId % Config::get('myapp.database.users.shardCount');
-    } */
+        return ShardingLibrary::getShardIdByUserId($userId);
+    }
 
     /**
      * get connection name by shard id.
