@@ -17,7 +17,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new UserCoinsRepository instance.
+     * create instance.
      *
      * @param UserCoins $model
      * @return void

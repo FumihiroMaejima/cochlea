@@ -17,7 +17,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new UserCoinPaymentStatusRepository instance.
+     * create instance.
      *
      * @param UserCoinPaymentStatus $model
      * @return void
@@ -114,26 +114,26 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     }
 
     /**
-     * create UserCoinPaymentStatus data.
+     * create recode.
      *
      * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoinPaymentStatus(int $userId, array $resource): int
+    public function create(int $userId, array $resource): int
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }
 
     /**
-     * update UserCoinPaymentStatus data.
+     * update recode.
      *
      * @param int $userId user id
      * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
-    public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function update(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
@@ -145,14 +145,14 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     }
 
     /**
-     * delete UserCoinPaymentStatus data.
+     * delete recode.
      *
      * @param int $userId user id
      * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function delete(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)

@@ -94,7 +94,7 @@ class UserCoinPaymentService
             // ステータスの設定
             $status = $this->getPaymentStatusFromStripeResponse($session->status);
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status, $session->id);
-            $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
+            $this->userCoinPaymentStatusRepository->create($userId, $stateResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
@@ -142,7 +142,7 @@ class UserCoinPaymentService
                 UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL,
                 $session->id
             );
-            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+            $this->userCoinPaymentStatusRepository->update($userId, $orderId, $stateResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate(
@@ -195,7 +195,7 @@ class UserCoinPaymentService
                 UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE,
                 $session->id
             );
-            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+            $this->userCoinPaymentStatusRepository->update($userId, $orderId, $stateResource);
 
             // コイン情報の取得
             $coin = $this->getCoinByCoinId($userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID]);
