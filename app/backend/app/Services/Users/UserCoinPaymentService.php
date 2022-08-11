@@ -19,6 +19,7 @@ use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
+use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
@@ -37,6 +38,7 @@ class UserCoinPaymentService
     private const CACHE_KEY_USER_COIN_COLLECTION_LIST = 'user_coin_collection_list';
 
     protected CoinsRepositoryInterface $coinsRepository;
+    protected UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface;
     protected UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository;
     protected UserCoinsRepositoryInterface $userCoinsRepository;
     protected UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository;
@@ -45,6 +47,7 @@ class UserCoinPaymentService
      * create instance
      *
      * @param CoinsRepositoryInterface $coinsRepository
+     * @param UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface
      * @param UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository
      * @param UserCoinsRepositoryInterface $userCoinsRepository
      * @param UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
@@ -52,11 +55,13 @@ class UserCoinPaymentService
      */
     public function __construct(
         CoinsRepositoryInterface $coinsRepository,
+        UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface,
         UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
         UserCoinsRepositoryInterface $userCoinsRepository,
         UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
     ) {
         $this->coinsRepository = $coinsRepository;
+        $this->userCoinHistoriesRepositoryInterface = $userCoinHistoriesRepositoryInterface;
         $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
         $this->userCoinPaymentLogRepository = $userCoinPaymentLogRepository;
