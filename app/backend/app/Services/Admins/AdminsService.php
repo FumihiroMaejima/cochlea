@@ -364,9 +364,9 @@ class AdminsService
      * get admin by admin id.
      *
      * @param int $adminId admin id
-     * @return array|null
+     * @return array
      */
-    private function getAdminById(int $adminId): array|null
+    private function getAdminById(int $adminId): array
     {
         // 更新用途で使う為lockをかける
         $admins = $this->adminsRepository->getById($adminId, true);
