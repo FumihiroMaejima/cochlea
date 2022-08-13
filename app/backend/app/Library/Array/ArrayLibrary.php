@@ -27,4 +27,15 @@ class ArrayLibrary
 
         return $value;
     }
+
+    /**
+     * get array item first index value.
+     *
+     * @param array $items
+     * @return array first index value
+     */
+    public static function getFirst(array $items): array
+    {
+        return $items[0];
+    }
 }
