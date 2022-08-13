@@ -137,13 +137,13 @@ class AdminsService
      * @return \Illuminate\Http\JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function updateAdminData(AdminUpdateRequest $request, int $id): JsonResponse
+    public function updateAdmin(AdminUpdateRequest $request, int $id): JsonResponse
     {
         DB::beginTransaction();
         try {
             $resource = AdminsResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->adminsRepository->updateAdminData($resource, $id);
+            $updatedRowCount = $this->adminsRepository->updateAdminData($id, $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
@@ -188,7 +188,7 @@ class AdminsService
 
             $resource = AdminsResource::toArrayForDelete();
 
-            $deleteRowCount = $this->adminsRepository->deleteAdminData($resource, $request->id);
+            $deleteRowCount = $this->adminsRepository->deleteAdminData($request->id, $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);

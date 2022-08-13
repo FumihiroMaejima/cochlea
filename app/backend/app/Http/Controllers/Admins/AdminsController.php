@@ -122,7 +122,7 @@ class AdminsController extends Controller
     public function update(AdminUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdminData($request, $id);
+        return $this->service->updateAdmin($request, $id);
     }
 
     /**
@@ -134,7 +134,7 @@ class AdminsController extends Controller
     public function destroy(AdminDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $response = $this->service->deleteAdmin($request);
+        return $this->service->deleteAdmin($request);
     }
 
     /**
