@@ -379,7 +379,7 @@ class AdminsService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($admins->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($admins->toArray()));
     }
 
     /**
@@ -400,6 +400,6 @@ class AdminsService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($admins->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($admins->toArray()));
     }
 }

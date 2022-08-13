@@ -32,9 +32,9 @@ class ArrayLibrary
      * get array item first index value.
      *
      * @param array $items
-     * @return array first index value
+     * @return array<int|string, mixed>|stdClass first index value
      */
-    public static function getFirst(array $items): array
+    public static function getFirst(array $items): array|stdClass
     {
         return $items[0];
     }
