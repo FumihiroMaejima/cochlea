@@ -62,7 +62,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function createPermission(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
@@ -74,7 +74,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
      * @param array $resource update data
      * @return int
      */
-    public function updatePermissionData(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();
@@ -94,7 +94,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
      * @param array $resource update data
      * @return int
      */
-    public function deletePermissionsData(int $id, array $resource): int
+    public function delete(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();
