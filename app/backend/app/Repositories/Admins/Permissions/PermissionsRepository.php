@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Admins\Permissions;
 
-use App\Models\Masters\Roles;
 use App\Models\Masters\Permissions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -12,7 +11,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     protected Permissions $model;
 
     /**
-     * create a new PermissionsRepository instance.
+     * create instance.
      * @param \App\Models\Permissions $model
      * @return void
      */
@@ -32,7 +31,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * get All Permissions Data.
+     * get All recodes.
      *
      * @return Collection
      */
@@ -58,7 +57,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * create Permission data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
@@ -69,13 +68,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * update Permission data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param array $id id of record.
+     * @param array $resource update data
      * @return int
      */
-    public function updatePermissionData(array $resource, int $id): int
+    public function updatePermissionData(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();
@@ -89,13 +88,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * delete Permission data.
+     * delete recode.
      *
-     * @param array $resource update data
      * @param int $id id of record.
+     * @param array $resource update data
      * @return int
      */
-    public function deletePermissionsData(array $resource, int $id): int
+    public function deletePermissionsData(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();

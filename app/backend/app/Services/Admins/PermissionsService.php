@@ -28,7 +28,7 @@ class PermissionsService
      * @param  \Illuminate\Http\Request $request
      * @return JsonResponse
      */
-    public function getPermissionsList(Request $request): JsonResponse
+    public function getPermissionsAsList(Request $request): JsonResponse
     {
         $collection = $this->permissionsRepository->getPermissionsList();
         $resource = PermissionsResource::toArrayForGetTextAndValueList($collection);

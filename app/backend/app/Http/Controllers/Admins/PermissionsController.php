@@ -49,7 +49,7 @@ class PermissionsController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getPermissionsList($request);
+        return $this->service->getPermissionsAsList($request);
     }
 
     /**
