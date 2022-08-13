@@ -13,7 +13,7 @@ interface AdminsRolesRepositoryInterface
 
     public function create(array $resource): int;
 
-    public function update(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
 
     public function delete(array $resource): int;
 }

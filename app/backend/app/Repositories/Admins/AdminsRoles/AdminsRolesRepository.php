@@ -73,11 +73,11 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     /**
      * update recode.
      *
-     * @param array $resource update data
      * @param int $adminId id of admin
+     * @param array $resource update data
      * @return int
      */
-    public function update(array $resource, int $adminId): int
+    public function update(int $adminId, array $resource): int
     {
 
        /*  $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');

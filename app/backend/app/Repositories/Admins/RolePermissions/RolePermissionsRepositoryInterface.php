@@ -12,9 +12,9 @@ interface RolePermissionsRepositoryInterface
 
     public function create(array $resource): int;
 
-    public function update(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
 
-    public function delete(array $resource, int $id): int;
+    public function delete(int $id, array $resource): int;
 
-    public function deleteRolePermissionsByIds(array $resource, array $ids): int;
+    public function deleteByIds(array $ids, array $resource): int;
 }
