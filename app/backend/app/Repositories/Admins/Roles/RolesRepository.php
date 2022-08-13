@@ -13,7 +13,7 @@ class RolesRepository implements RolesRepositoryInterface
     protected RolePermissions $rolePermissionsModel;
 
     /**
-     * create a new RolesRepository instance.
+     * create instance.
      * @param \App\Models\Roles $model
      * @param \App\Models\RolePermissions $rolePermissions
      * @return void
@@ -35,7 +35,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get All Role Data.
+     * get All recodes.
      *
      * @return Collection
      */
@@ -57,7 +57,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get Roles as List.
+     * get recodes as List.
      *
      * @return Collection
      */
@@ -74,7 +74,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get Latest Role data.
+     * get Latest record.
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
@@ -86,7 +86,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * create Role data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
@@ -97,13 +97,13 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * update Role data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param array $id id of record
+     * @param array $resource update data
      * @return int
      */
-    public function updateRoleData(array $resource, int $id): int
+    public function updateRoleData(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -114,13 +114,13 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * delete Role data.
+     * delete recode by ids.
      *
-     * @param array $resource update data
      * @param array $ids id of records
+     * @param array $resource update data
      * @return int
      */
-    public function deleteRoleData(array $resource, array $ids): int
+    public function deleteRoleData(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

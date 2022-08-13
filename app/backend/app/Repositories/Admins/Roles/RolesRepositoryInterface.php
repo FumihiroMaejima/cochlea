@@ -16,7 +16,7 @@ interface RolesRepositoryInterface
 
     public function createRole(array $resource): int;
 
-    public function updateRoleData(array $resource, int $id): int;
+    public function updateRoleData(int $id, array $resource): int;
 
-    public function deleteRoleData(array $resource, array $ids): int;
+    public function deleteRoleData(array $ids, array $resource): int;
 }

@@ -149,17 +149,17 @@ class RolesService
     /**
      * update role data service
      *
-     * @param  RoleUpdateRequest  $request
-     * @param  int  $id
+     * @param int $id role id
+     * @param RoleUpdateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function updateRoleData(RoleUpdateRequest $request, int $id)
+    public function updateRole(int $id, RoleUpdateRequest $request)
     {
         DB::beginTransaction();
         try {
             $resource = RolesResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->rolesRepository->updateRoleData($resource, $id);
+            $updatedRowCount = $this->rolesRepository->updateRoleData($id, $resource);
 
             // 権限情報の更新
             $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
@@ -193,8 +193,8 @@ class RolesService
     /**
      * delete role data service
      *
-     * @param  RoleDeleteRequest  $request
-     * @param  int  $id
+     * @param RoleDeleteRequest $request
+     * @param int $id role id
      * @return \Illuminate\Http\Response
      */
     public function deleteRole(RoleDeleteRequest $request)
@@ -205,7 +205,7 @@ class RolesService
 
             $resource = RolesResource::toArrayForDelete();
 
-            $deleteRowCount = $this->rolesRepository->deleteRoleData($resource, $roleIds);
+            $deleteRowCount = $this->rolesRepository->deleteRoleData($roleIds, $resource);
 
             // 権限情報の更新
             $rolePermissionsResource = RolePermissionsResource::toArrayForDelete();
