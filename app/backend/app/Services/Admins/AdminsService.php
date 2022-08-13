@@ -108,7 +108,7 @@ class AdminsService
 
             // 権限情報の作成
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
-            $insertAdminsRolesCount = $this->adminsRolesRepository->createAdminsRole($adminsRolesResource);
+            $insertAdminsRolesCount = $this->adminsRolesRepository->create($adminsRolesResource);
 
             DB::commit();
 
@@ -147,7 +147,7 @@ class AdminsService
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
-            $updatedAdminsRolesRowCount = $this->adminsRolesRepository->updateAdminsRoleData($roleIdResource, $id);
+            $updatedAdminsRolesRowCount = $this->adminsRolesRepository->update($roleIdResource, $id);
 
             // slack通知
             $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
@@ -192,7 +192,7 @@ class AdminsService
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
-            $deleteAdminsRolesRowCount = $this->adminsRolesRepository->deleteAdminsRoleData($roleIdResource, $id);
+            $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($roleIdResource, $id);
 
             DB::commit();
 

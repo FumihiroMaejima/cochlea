@@ -127,7 +127,7 @@ class RolesService
             // 権限情報の作成
             $permissonsResource = RolePermissionsResource::toArrayForCreate($request, $latestRoles);
 
-            $insertRolePermissionsCount = $this->rolePermissionsRepository->createRolePermission($permissonsResource);
+            $insertRolePermissionsCount = $this->rolePermissionsRepository->create($permissonsResource);
 
             DB::commit();
 
@@ -164,10 +164,10 @@ class RolesService
             // 権限情報の更新
             $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
 
-            $this->rolePermissionsRepository->deleteRolePermissionsData($removeResource, $id);
+            $this->rolePermissionsRepository->delete($removeResource, $id);
 
             $updateResource = RolePermissionsResource::toArrayForUpdate($request);
-            $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->createRolePermission($updateResource, $id);
+            $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->create($updateResource, $id);
 
             // slack通知
             $attachmentResource = app()->make(RoleUpdateNotificationResource::class, ['resource' => ":tada: Update Role Data \n"])->toArray($request);

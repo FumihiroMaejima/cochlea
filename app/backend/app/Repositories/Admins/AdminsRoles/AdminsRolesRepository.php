@@ -17,7 +17,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     protected $rolesModel;
 
     /**
-     * create a new AuthInfoController instance.
+     * create instance.
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     }
 
     /**
-     * update Admins Role.
+     * get by Admin id.
      *
      * @param int $adminId admin id
      * @return Collection
@@ -60,24 +60,24 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     }
 
     /**
-     * create Admins Role.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createAdminsRole(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Admins Role.
+     * update recode.
      *
      * @param array $resource update data
      * @param int $adminId id of admin
      * @return int
      */
-    public function updateAdminsRoleData(array $resource, int $adminId): int
+    public function update(array $resource, int $adminId): int
     {
 
        /*  $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
@@ -91,12 +91,12 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     }
 
     /**
-     * delete Admins Role.
+     * delete recode.
      *
      * @param array $resource update data
      * @return int
      */
-    public function deleteAdminsRoleData(array $resource): int
+    public function delete(array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
