@@ -91,7 +91,7 @@ class RolesRepository implements RolesRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function createRole(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
@@ -103,7 +103,7 @@ class RolesRepository implements RolesRepositoryInterface
      * @param array $resource update data
      * @return int
      */
-    public function updateRoleData(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -120,7 +120,7 @@ class RolesRepository implements RolesRepositoryInterface
      * @param array $resource update data
      * @return int
      */
-    public function deleteRoleData(array $ids, array $resource): int
+    public function deleteByIds(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

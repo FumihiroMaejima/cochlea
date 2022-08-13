@@ -121,7 +121,7 @@ class RolesService
             $resource = RolesResource::toArrayForCreate($request);
 
 
-            $insertCount = $this->rolesRepository->createRole($resource); // if created => count is 1
+            $insertCount = $this->rolesRepository->create($resource); // if created => count is 1
             $latestRoles = $this->rolesRepository->getLatestRole();
 
             // 権限情報の作成
@@ -159,7 +159,7 @@ class RolesService
         try {
             $resource = RolesResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->rolesRepository->updateRoleData($id, $resource);
+            $updatedRowCount = $this->rolesRepository->update($id, $resource);
 
             // 権限情報の更新
             $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
@@ -205,7 +205,7 @@ class RolesService
 
             $resource = RolesResource::toArrayForDelete();
 
-            $deleteRowCount = $this->rolesRepository->deleteRoleData($roleIds, $resource);
+            $deleteRowCount = $this->rolesRepository->deleteByIds($roleIds, $resource);
 
             // 権限情報の更新
             $rolePermissionsResource = RolePermissionsResource::toArrayForDelete();
