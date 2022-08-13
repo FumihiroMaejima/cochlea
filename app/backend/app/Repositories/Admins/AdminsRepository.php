@@ -114,10 +114,11 @@ class AdminsRepository implements AdminsRepositoryInterface
      * get by id.
      *
      * @param int $adminId rocord id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getById(int $id): Collection|null
+    public function getById(int $id, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -136,6 +137,16 @@ class AdminsRepository implements AdminsRepositoryInterface
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->where(Admins::ID, '=', $id)
+            ->where(Admins::DELETED_AT, '=', null)
+            ->get();
         }
 
         return $collection;

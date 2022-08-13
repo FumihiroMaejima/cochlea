@@ -141,9 +141,12 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
+            // ロックをかける為transaction内で実行
+            $admin = $this->getAdminById($id);
+
             $resource = AdminsResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->adminsRepository->update($id, $resource);
+            $updatedRowCount = $this->adminsRepository->update($admin[Admins::ID], $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
@@ -184,11 +187,12 @@ class AdminsService
     {
         DB::beginTransaction();
         try {
-            $id = $request->id;
+            // ロックをかける為transaction内で実行
+            $admin = $this->getAdminById($request->id);
 
             $resource = AdminsResource::toArrayForDelete();
 
-            $deleteRowCount = $this->adminsRepository->delete($request->id, $resource);
+            $deleteRowCount = $this->adminsRepository->delete($admin[Admins::ID], $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
@@ -225,18 +229,19 @@ class AdminsService
      */
     public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): JsonResponse
     {
-        $admin = $this->getAdminById($id);
-
-        // 現在のパスワードのチェック
-        if (!Hash::check($currentPassword, $admin[Admins::PASSWORD])) {
-            throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_404,
-                'hash check failed.'
-            );
-        }
-
         DB::beginTransaction();
         try {
+            // ロックをかける為transaction内で実行
+            $admin = $this->getAdminById($id);
+
+            // 現在のパスワードのチェック
+            if (!Hash::check($currentPassword, $admin[Admins::PASSWORD])) {
+                throw new MyApplicationHttpException(
+                    ExceptionStatusCodeMessages::STATUS_CODE_404,
+                    'hash check failed.'
+                );
+            }
+
             $resource = AdminsResource::toArrayForUpdatePassword($newPassword);
 
             $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
@@ -270,9 +275,10 @@ class AdminsService
      */
     public function forgotAdminPassword(string $email): JsonResponse
     {
-        $admin = $this->getAdminByEmail($email);
-
         try {
+            // ロックをかける為transaction内で実行
+            $admin = $this->getAdminByEmail($email);
+
             $sessionId = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
             $token = RandomStringLibrary::getRandomShuffleString(self::PASSWORD_RESET_TOKEN_LENGTH);
 
@@ -362,7 +368,8 @@ class AdminsService
      */
     private function getAdminById(int $adminId): array|null
     {
-        $admins = $this->adminsRepository->getById($adminId);
+        // 更新用途で使う為lockをかける
+        $admins = $this->adminsRepository->getById($adminId, true);
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(
