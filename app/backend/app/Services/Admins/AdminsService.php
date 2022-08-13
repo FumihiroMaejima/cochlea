@@ -103,7 +103,7 @@ class AdminsService
         try {
             $resource = AdminsResource::toArrayForCreate($request);
 
-            $insertCount = $this->adminsRepository->createAdmin($resource); // if created => count is 1
+            $insertCount = $this->adminsRepository->create($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
 
             // 権限情報の作成
@@ -143,7 +143,7 @@ class AdminsService
         try {
             $resource = AdminsResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->adminsRepository->updateAdminData($id, $resource);
+            $updatedRowCount = $this->adminsRepository->update($id, $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
@@ -188,7 +188,7 @@ class AdminsService
 
             $resource = AdminsResource::toArrayForDelete();
 
-            $deleteRowCount = $this->adminsRepository->deleteAdminData($request->id, $resource);
+            $deleteRowCount = $this->adminsRepository->delete($request->id, $resource);
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);

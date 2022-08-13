@@ -19,11 +19,11 @@ interface AdminsRepositoryInterface
 
     public function getByEmail(string $email): Collection|null;
 
-    public function createAdmin(array $resource): int;
+    public function create(array $resource): int;
 
-    public function updateAdminData(int $id, array $resource): int;
+    public function update(int $id, array $resource): int;
 
-    public function deleteAdminData(int $id, array $resource): int;
+    public function delete(int $id, array $resource): int;
 
     public function updatePassword(int $id, array $resource): int;
 }

@@ -178,7 +178,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      * @param array $resource create data
      * @return int create row count
      */
-    public function createAdmin(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
@@ -190,7 +190,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      * @param array $resource update data
      * @return int update row count
      */
-    public function updateAdminData(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // admins
         $admins = $this->getTable();
@@ -228,7 +228,7 @@ class AdminsRepository implements AdminsRepositoryInterface
      * @param array $resource update data
      * @return int update row count
      */
-    public function deleteAdminData(int $id, array $resource): int
+    public function delete(int $id, array $resource): int
     {
         // admins
         $admins = $this->getTable();
