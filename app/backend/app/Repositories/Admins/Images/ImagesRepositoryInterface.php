@@ -10,13 +10,15 @@ interface ImagesRepositoryInterface
 
     public function getImages(): Collection;
 
-    public function getByUuid(string $uuid, int $version): Collection|null;
-
     public function getLatestImage(): object;
+
+    public function getByUuid(string $uuid, int $version, $isLock = false): Collection|null;
+
+    public function getByIds(array $ids, bool $isLock = false): Collection|null;
 
     public function create(array $resource): int;
 
     public function update(int $id, array $resource): int;
 
-    public function delete(array $ids, array $resource): int;
+    public function delete(int $id, array $resource): int;
 }
