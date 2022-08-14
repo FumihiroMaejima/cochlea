@@ -85,7 +85,7 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
 
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->where(AdminsRoles::ADMIN_ID, '=', [$adminId])
+            ->where(AdminsRoles::ADMIN_ID, '=', $adminId)
             ->where(AdminsRoles::DELETED_AT, '=', null)
             ->update($resource);
     }
@@ -93,14 +93,15 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
     /**
      * delete recode.
      *
+     * @param int $adminId id of admin
      * @param array $resource update data
      * @return int
      */
-    public function delete(array $resource): int
+    public function delete(int $adminId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->where(AdminsRoles::ADMIN_ID, '=', [$resource['admin_id']])
+            ->where(AdminsRoles::ADMIN_ID, '=', $adminId)
             ->where(AdminsRoles::DELETED_AT, '=', null)
             ->update($resource);
     }

@@ -196,7 +196,7 @@ class AdminsService
 
             // 権限情報の更新
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
-            $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($roleIdResource);
+            $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($admin[Admins::ID], $roleIdResource);
 
             DB::commit();
 

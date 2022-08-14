@@ -15,5 +15,5 @@ interface AdminsRolesRepositoryInterface
 
     public function update(int $id, array $resource): int;
 
-    public function delete(array $resource): int;
+    public function delete(int $id, array $resource): int;
 }
