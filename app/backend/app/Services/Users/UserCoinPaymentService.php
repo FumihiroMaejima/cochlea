@@ -297,8 +297,7 @@ class UserCoinPaymentService
 
         // 複数チェックはrepository側で実施済み
         // $coin = json_decode(json_encode($coins->toArray()[0]), true);
-        $coin = ArrayLibrary::toArray($coins->toArray()[0]);
-        return $coin;
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
     }
 
     /**
@@ -316,7 +315,7 @@ class UserCoinPaymentService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($userCoin->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoin->toArray()));
     }
 
     /**
@@ -338,7 +337,7 @@ class UserCoinPaymentService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($userCoinPaymentStatus->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoinPaymentStatus->toArray()));
     }
 
     /**
