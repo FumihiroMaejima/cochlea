@@ -211,6 +211,9 @@ class RolesService
 
             $resource = RolesResource::toArrayForDelete();
 
+            // ロックをかける為transaction内で実行
+            $roles = $this->getRolesByIds($roleIds);
+
             $deleteRowCount = $this->rolesRepository->deleteByIds($roleIds, $resource);
 
             // 権限情報の更新
@@ -254,5 +257,27 @@ class RolesService
 
         // 複数チェックはrepository側で実施済み
         return ArrayLibrary::toArray(ArrayLibrary::getFirst($roles->toArray()));
+    }
+
+    /**
+     * get roles by role ids.
+     *
+     * @param array $roleIds role id
+     * @return array
+     */
+    private function getRolesByIds(array $roleIds): array
+    {
+        // 更新用途で使う為lockをかける
+        $roles = $this->rolesRepository->getByIds($roleIds, true);
+
+        if (empty($roles)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist roles.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($roles->toArray());
     }
 }
