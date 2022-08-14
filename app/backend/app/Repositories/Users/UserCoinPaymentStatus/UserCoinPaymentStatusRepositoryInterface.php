@@ -13,7 +13,7 @@ interface UserCoinPaymentStatusRepositoryInterface
 
     public function getByUserId(int $userId): Collection|null;
 
-    public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null;
+    public function getByUserIdAndOrderId(int $userId, string $orderId, bool $isLock = false): Collection|null;
 
     public function create(int $userId, array $resource): int;
 

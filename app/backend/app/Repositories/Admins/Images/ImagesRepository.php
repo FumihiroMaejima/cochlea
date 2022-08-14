@@ -96,12 +96,12 @@ class ImagesRepository implements ImagesRepositoryInterface
         if ($isLock) {
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
-            ->lockForUpdate()
-            ->select(['*'])
-            ->where(Images::UUID, '=', $uuid)
-            ->where(Images::VERSION, '=', $version)
-            ->where(Images::DELETED_AT, '=', null)
-            ->get();
+                ->select(['*'])
+                ->where(Images::UUID, '=', $uuid)
+                ->where(Images::VERSION, '=', $version)
+                ->where(Images::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
         }
 
         return $collection;

@@ -11,7 +11,7 @@ interface UserCoinHistoriesRepositoryInterface
 
     public function getQueryBuilder(int $userId): Builder;
 
-    public function getByUserId(int $userId): Collection|null;
+    public function getByUserId(int $userId, bool $isLock = false): Collection|null;
 
     public function create(int $userId, array $resource): int;
 

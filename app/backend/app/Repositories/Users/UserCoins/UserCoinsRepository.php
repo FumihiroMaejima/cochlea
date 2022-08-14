@@ -53,16 +53,23 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      * get by user id.
      *
      * @param int $userId user id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUserId(int $userId): Collection|null
+    public function getByUserId(int $userId, bool $isLock = false): Collection|null
     {
-        $collection = $this->getQueryBuilder($userId)
+        $query = $this->getQueryBuilder($userId)
             ->select(['*'])
             ->where(UserCoins::USER_ID, '=', $userId)
-            ->where(UserCoins::DELETED_AT, '=', null)
-            ->get();
+            ->where(UserCoins::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $query = $query->lockForUpdate();
+        }
+
+        $collection = $query->get();
 
         // 存在しない場合
         if ($collection->count() === self::NO_DATA_COUNT) {

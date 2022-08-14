@@ -85,17 +85,24 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      *
      * @param int $userId user id
      * @param string $orderId order id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null
+    public function getByUserIdAndOrderId(int $userId, string $orderId, bool $isLock = false): Collection|null
     {
-        $collection = $this->getQueryBuilder($userId)
+        $query = $this->getQueryBuilder($userId)
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
-            ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)
-            ->get();
+            ->where(UserCoinPaymentStatus::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $query = $query->lockForUpdate();
+        }
+
+        $collection = $query->get();
 
         // 存在しない場合
         if ($collection->count() === self::NO_DATA_COUNT) {
