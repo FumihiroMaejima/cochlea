@@ -139,6 +139,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックをかけて再取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
+
             // ステータスの更新(キャンセル)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
@@ -192,6 +195,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックをかけて再取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
+
             // ステータスの更新(完了)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
@@ -218,6 +224,9 @@ class UserCoinPaymentService
                 );
                 $this->userCoinsRepository->create($userId, $userCoinResource);
             } else {
+                // ロックをかけて再取得
+                 $userCoin = $this->getUserCoinByUserId($userId, true);
+
                 // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
                     $userId,
@@ -304,11 +313,12 @@ class UserCoinPaymentService
      * get user coins by user id.
      *
      * @param int $userId user id
+     * @param bool $isLock exec lock For Update
      * @return array|null
      */
-    private function getUserCoinByUserId(int $userId): array|null
+    private function getUserCoinByUserId(int $userId, bool $isLock = false): array|null
     {
-        $userCoin = $this->userCoinsRepository->getByUserId($userId);
+        $userCoin = $this->userCoinsRepository->getByUserId($userId, $isLock);
 
         if (is_null($userCoin)) {
             return $userCoin;
@@ -323,11 +333,12 @@ class UserCoinPaymentService
      *
      * @param int $userId user id
      * @param string $orderId order id
+     * @param bool $isLock exec lock For Update
      * @return array
      */
-    private function getUserCoinPaymentStatusByUserId(int $userId, string $orderId): array
+    private function getUserCoinPaymentStatusByUserId(int $userId, string $orderId, bool $isLock = false): array
     {
-        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserIdAndOrderId($userId, $orderId);
+        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserIdAndOrderId($userId, $orderId, $isLock);
 
         if (empty($userCoinPaymentStatus)) {
             throw new MyApplicationHttpException(
