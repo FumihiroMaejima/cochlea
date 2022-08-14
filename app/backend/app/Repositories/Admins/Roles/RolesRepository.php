@@ -122,10 +122,10 @@ class RolesRepository implements RolesRepositoryInterface
         if ($isLock) {
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
-            ->lockForUpdate()
             ->select(['*'])
             ->where(Roles::ID, '=', $id)
             ->where(Roles::DELETED_AT, '=', null)
+            ->lockForUpdate()
             ->get();
         }
 

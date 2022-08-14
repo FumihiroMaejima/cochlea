@@ -142,10 +142,10 @@ class AdminsRepository implements AdminsRepositoryInterface
         if ($isLock) {
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
-            ->lockForUpdate()
             ->select(['*'])
             ->where(Admins::ID, '=', $id)
             ->where(Admins::DELETED_AT, '=', null)
+            ->lockForUpdate()
             ->get();
         }
 

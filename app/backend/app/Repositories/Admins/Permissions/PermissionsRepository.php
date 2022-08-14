@@ -93,10 +93,10 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         if ($isLock) {
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
-            ->lockForUpdate()
             ->select(['*'])
             ->where(Permissions::ID, '=', $id)
             ->where(Permissions::DELETED_AT, '=', null)
+            ->lockForUpdate()
             ->get();
         }
 
