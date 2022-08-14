@@ -41,7 +41,7 @@ class UserCoinHistories extends BaseUserDataModel
     public const EXPIRED_AT = 'exipired_at';
     public const OEDER_ID = 'order_id';
     public const PRODUCT_ID = 'product_id';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
@@ -61,7 +61,7 @@ class UserCoinHistories extends BaseUserDataModel
      */
     protected $primaryKey = [
         self::USER_ID,
-        self::CRREATED_AT,
+        self::CREATED_AT,
     ];
 
     /**

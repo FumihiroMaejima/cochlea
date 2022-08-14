@@ -92,7 +92,7 @@ class UserCoinHistoriesResource extends JsonResource
             UserCoinHistories::EXPIRED_AT => $exipiredAt,
             UserCoinHistories::OEDER_ID => $orderId,
             UserCoinHistories::PRODUCT_ID => $productId,
-            UserCoinHistories::CRREATED_AT => $dateTime,
+            UserCoinHistories::CREATED_AT => $dateTime,
             UserCoinHistories::UPDATED_AT => $dateTime,
             UserCoinHistories::DELETED_AT => null,
         ];

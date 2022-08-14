@@ -19,7 +19,7 @@ class AdminsLog extends BaseLogDataModel
     public const FUNCTION_NAME = 'function';
     public const STATUS = 'status';
     public const ACTION_TIME = 'action_time';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
@@ -52,7 +52,7 @@ class AdminsLog extends BaseLogDataModel
         self::ADMIN_ID,
         self::FUNCTION_NAME,
         self::STATUS,
-        self::CRREATED_AT,
+        self::CREATED_AT,
         self::UPDATED_AT,
         self::DELETED_AT,
     ];

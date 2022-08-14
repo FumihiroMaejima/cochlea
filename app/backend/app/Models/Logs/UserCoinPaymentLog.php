@@ -32,7 +32,7 @@ class UserCoinPaymentLog extends BaseLogDataModel
     public const ORDER_ID = 'order_id';
     public const COIN_ID = 'coin_id';
     public const STATUS = 'status';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
