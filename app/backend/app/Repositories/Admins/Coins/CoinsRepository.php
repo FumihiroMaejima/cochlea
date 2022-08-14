@@ -125,6 +125,40 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
+     * get by ids.
+     *
+     * @param array $ids rocord ids
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByIds(array $ids, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(Coins::ID, $ids)
+            ->where(Coins::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->whereIn(Coins::ID, $ids)
+            ->where(Coins::DELETED_AT, '=', null)
+            ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
      * create recode.
      *
      * @param array $resource create data

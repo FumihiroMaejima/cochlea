@@ -161,6 +161,9 @@ class CoinsService
 
             $resource = CoinsResource::toArrayForDelete();
 
+            // ロックをかける為transaction内で実行
+            $coins = $this->getCoinsByIds($coinIds);
+
             $deleteRowCount = $this->coinsRepository->delete($coinIds, $resource);
 
             DB::commit();
@@ -200,5 +203,27 @@ class CoinsService
 
         // 複数チェックはrepository側で実施済み
         return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
+    }
+
+    /**
+     * get coins by role ids.
+     *
+     * @param array $coinIds role id
+     * @return array
+     */
+    private function getCoinsByIds(array $coinIds): array
+    {
+        // 更新用途で使う為lockをかける
+        $roles = $this->coinsRepository->getByIds($coinIds, true);
+
+        if (empty($roles)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist roles.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($roles->toArray());
     }
 }

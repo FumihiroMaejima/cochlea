@@ -189,7 +189,7 @@ class RolesRepository implements RolesRepositoryInterface
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where(Roles::ID, '=', [$id])
+            ->where(Roles::ID, '=', $id)
             ->where(Roles::DELETED_AT, '=', null)
             ->update($resource);
     }
