@@ -83,13 +83,14 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * get by table id.
+     * get by record id.
      *
-     * @param int $id table id.
+     * @param int $id coin id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getById(int $id): Collection|null
+    public function getById(int $id, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -108,6 +109,16 @@ class CoinsRepository implements CoinsRepositoryInterface
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->where(Coins::ID, '=', $id)
+            ->where(Coins::DELETED_AT, '=', null)
+            ->get();
         }
 
         return $collection;

@@ -83,7 +83,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($rolePermissions)
             // ->whereIn('id', [$id])
-            ->where(RolePermissions::ROLE_ID, '=', [$roleId])
+            ->where(RolePermissions::ROLE_ID, '=', $roleId)
             ->where(RolePermissions::DELETED_AT, '=', null)
             ->update($resource);
     }

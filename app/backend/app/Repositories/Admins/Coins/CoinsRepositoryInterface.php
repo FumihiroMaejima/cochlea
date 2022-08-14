@@ -14,7 +14,7 @@ interface CoinsRepositoryInterface
 
     public function getLatestCoin(): object;
 
-    public function getById(int $id): Collection|null;
+    public function getById(int $id, bool $isLock = false): Collection|null;
 
     public function create(array $resource): int;
 
