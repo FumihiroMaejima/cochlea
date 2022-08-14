@@ -10,6 +10,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Exports\Admins\RolesExport;
 use App\Http\Requests\Admins\Roles\RoleCreateRequest;
 use App\Http\Requests\Admins\Roles\RoleDeleteRequest;
@@ -17,7 +19,9 @@ use App\Http\Requests\Admins\Roles\RoleUpdateRequest;
 use App\Http\Resources\Admins\RolePermissionsResource;
 use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Models\Masters\Roles;
 use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Services\Admins\Notifications\RoleSlackNotificationService;
@@ -157,14 +161,16 @@ class RolesService
     {
         DB::beginTransaction();
         try {
+            // ロックをかける為transaction内で実行
+            $role = $this->getRoleById($id);
             $resource = RolesResource::toArrayForUpdate($request);
 
-            $updatedRowCount = $this->rolesRepository->update($id, $resource);
+            $updatedRowCount = $this->rolesRepository->update($role[Roles::ID], $resource);
 
             // 権限情報の更新
             $removeResource = RolePermissionsResource::toArrayForDeleteByUpdateResource($request);
 
-            $this->rolePermissionsRepository->delete($id, $removeResource);
+            $this->rolePermissionsRepository->delete($role[Roles::ID], $removeResource);
 
             $updateResource = RolePermissionsResource::toArrayForUpdate($request);
             $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->create($updateResource);
@@ -226,5 +232,27 @@ class RolesService
             DB::rollback();
             abort(500);
         }
+    }
+
+    /**
+     * get role by role id.
+     *
+     * @param int $roleId role id
+     * @return array
+     */
+    private function getRoleById(int $roleId): array
+    {
+        // 更新用途で使う為lockをかける
+        $roles = $this->rolesRepository->getById($roleId, true);
+
+        if (empty($roles)) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'not exist role.'
+            );
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($roles->toArray()));
     }
 }

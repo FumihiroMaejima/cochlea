@@ -113,7 +113,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     /**
      * get by id.
      *
-     * @param int $adminId rocord id
+     * @param int $id rocord id
      * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException

@@ -14,6 +14,8 @@ interface RolesRepositoryInterface
 
     public function getLatestRole(): object;
 
+    public function getById(int $id, bool $isLock = false): Collection|null;
+
     public function create(array $resource): int;
 
     public function update(int $id, array $resource): int;
