@@ -15,6 +15,19 @@ class UserCoinHistories extends BaseUserDataModel
     // デフォルトコイン数
     public const DEFAULT_COIN_COUNT = 0;
 
+    // 履歴の種類
+    public const USER_COINS_HISTORY_TYPE_PURCHASED = 1; // 購入
+    public const USER_COINS_HISTORY_TYPE_GAIN = 2; // 獲得
+    public const USER_COINS_HISTORY_TYPE_CONSUME = 3; // 消費
+    public const USER_COINS_HISTORY_TYPE_EXPIRED = 4; // 期限切れ
+
+    public const USER_COINS_HISTORY_TYPE_VALUES = [
+        self::USER_COINS_HISTORY_TYPE_PURCHASED,
+        self::USER_COINS_HISTORY_TYPE_GAIN,
+        self::USER_COINS_HISTORY_TYPE_CONSUME,
+        self::USER_COINS_HISTORY_TYPE_EXPIRED,
+    ];
+
     // カラム一覧
     public const USER_ID = 'user_id';
     public const TYPE = 'type';

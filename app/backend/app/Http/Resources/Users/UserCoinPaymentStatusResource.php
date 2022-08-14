@@ -90,7 +90,6 @@ class UserCoinPaymentStatusResource extends JsonResource
             UserCoinPaymentStatus::COIN_ID => $coinId,
             UserCoinPaymentStatus::STATUS => $status,
             UserCoinPaymentStatus::PAYMENT_SERVICE_ID => $serviceId,
-            UserCoinPaymentStatus::CRREATED_AT => $dateTime,
             UserCoinPaymentStatus::UPDATED_AT => $dateTime,
         ];
     }
