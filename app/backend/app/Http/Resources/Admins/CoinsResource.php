@@ -133,7 +133,6 @@ class CoinsResource extends JsonResource
             self::RESOURCE_KEY_START_AT   => $request->{Coins::START_AT},
             self::RESOURCE_KEY_END_AT     => $request->{Coins::END_AT},
             self::RESOURCE_KEY_IMAGE      => $request->{Coins::IMAGE} ?? '',
-            self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime
         ];
     }

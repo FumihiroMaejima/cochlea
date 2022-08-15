@@ -15,7 +15,7 @@ class TimeLibrary
     public const DEFAULT_DATE_TIME_FORMAT_DATE_ONLY = 'Y-m-d'; // ex: 2022-01-01
 
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
-    public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 000000
+    public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
     public const DATE_TIME_FORMAT_YMDHIS = 'YmdHis'; // ex: 20220101125959
 
     /**

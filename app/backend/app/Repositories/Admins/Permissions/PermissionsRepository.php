@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Admins\Permissions;
 
-use App\Models\Masters\Roles;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Masters\Permissions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -11,8 +12,11 @@ class PermissionsRepository implements PermissionsRepositoryInterface
 {
     protected Permissions $model;
 
+    private const NO_DATA_COUNT = 0;
+    private const FIRST_DATA_COUNT = 1;
+
     /**
-     * create a new PermissionsRepository instance.
+     * create instance.
      * @param \App\Models\Permissions $model
      * @return void
      */
@@ -32,7 +36,7 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * get All Permissions Data.
+     * get All recodes.
      *
      * @return Collection
      */
@@ -58,24 +62,66 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * create Permission data.
+     * get by id.
+     *
+     * @param int $id rocord id
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getById(int $id, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Permissions::ID, '=', $id)
+            ->where(Permissions::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'has deplicate collections,'
+            );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Permissions::ID, '=', $id)
+            ->where(Permissions::DELETED_AT, '=', null)
+            ->lockForUpdate()
+            ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createPermission(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Permission data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param array $id id of record.
+     * @param array $resource update data
      * @return int
      */
-    public function updatePermissionData(array $resource, int $id): int
+    public function update(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();
@@ -89,13 +135,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     }
 
     /**
-     * delete Permission data.
+     * delete recode.
      *
-     * @param array $resource update data
      * @param int $id id of record.
+     * @param array $resource update data
      * @return int
      */
-    public function deletePermissionsData(array $resource, int $id): int
+    public function delete(int $id, array $resource): int
     {
         // permissions
         $permissions = $this->getTable();

@@ -1,26 +1,26 @@
-# /admin/members/csv:
+# /admin/admins:
   get:
     tags:
-      - members
-    summary: Find members as CSV data
-    description: Returns administrators data by csv file
+      - admins
+    summary: Find admins
+    description: Returns administrators data
     responses:
       "200":
         description: successful operation
         content:
-          application/csv:
+          application/json:
             schema:
-              $ref: "../../../schemas/files/FileData.yaml"
+              $ref: "../../../schemas/models/Admins.yaml"
       "400":
         description: Invalid ID supplied
         content:
-          application/csv:
+          application/json:
             schema:
               $ref: "../../../schemas/request/ApiErrorResponse.yaml"
       "404":
-        description: Members not found
+        description: Admins not found
         content:
-          application/csv:
+          application/json:
             schema:
               $ref: "../../../schemas/request/ApiErrorResponse.yaml"
     security:

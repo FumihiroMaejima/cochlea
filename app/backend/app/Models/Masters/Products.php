@@ -24,7 +24,7 @@ class Products extends Model
     public const PURCHASE_START_AT = 'purchase_start_at';
     public const PURCHASE_END_AT   = 'purchase_end_at';
     public const IMAGE             = 'image';
-    public const CRREATED_AT       = 'created_at';
+    public const CREATED_AT       = 'created_at';
     public const UPDATED_AT        = 'updated_at';
     public const DELETED_AT        = 'deleted_at';
 
@@ -69,7 +69,7 @@ class Products extends Model
         self::PURCHASE_START_AT,
         self::PURCHASE_END_AT,
         self::IMAGE,
-        self::CRREATED_AT,
+        self::CREATED_AT,
         self::UPDATED_AT
     ];
 

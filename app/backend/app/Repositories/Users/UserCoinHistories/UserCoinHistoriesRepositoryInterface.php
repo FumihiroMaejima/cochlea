@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\Users\UserCoins;
+namespace App\Repositories\Users\UserCoinHistories;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 
-interface UserCoinsRepositoryInterface
+interface UserCoinHistoriesRepositoryInterface
 {
     public function getTable(int $userId): string;
 
@@ -15,7 +15,7 @@ interface UserCoinsRepositoryInterface
 
     public function create(int $userId, array $resource): int;
 
-    public function update(int $userId, array $resource): int;
+    public function update(int $userId, string $createdAt, array $resource): int;
 
-    public function delete(int $userId, array $resource): int;
+    public function delete(int $userId, string $createdAt, array $resource): int;
 }

@@ -19,6 +19,7 @@ use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
+use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
@@ -37,6 +38,7 @@ class UserCoinPaymentService
     private const CACHE_KEY_USER_COIN_COLLECTION_LIST = 'user_coin_collection_list';
 
     protected CoinsRepositoryInterface $coinsRepository;
+    protected UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface;
     protected UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository;
     protected UserCoinsRepositoryInterface $userCoinsRepository;
     protected UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository;
@@ -45,6 +47,7 @@ class UserCoinPaymentService
      * create instance
      *
      * @param CoinsRepositoryInterface $coinsRepository
+     * @param UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface
      * @param UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository
      * @param UserCoinsRepositoryInterface $userCoinsRepository
      * @param UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
@@ -52,11 +55,13 @@ class UserCoinPaymentService
      */
     public function __construct(
         CoinsRepositoryInterface $coinsRepository,
+        UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface,
         UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
         UserCoinsRepositoryInterface $userCoinsRepository,
         UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
     ) {
         $this->coinsRepository = $coinsRepository;
+        $this->userCoinHistoriesRepositoryInterface = $userCoinHistoriesRepositoryInterface;
         $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
         $this->userCoinPaymentLogRepository = $userCoinPaymentLogRepository;
@@ -94,11 +99,11 @@ class UserCoinPaymentService
             // ステータスの設定
             $status = $this->getPaymentStatusFromStripeResponse($session->status);
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status, $session->id);
-            $this->userCoinPaymentStatusRepository->createUserCoinPaymentStatus($userId, $stateResource);
+            $this->userCoinPaymentStatusRepository->create($userId, $stateResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate($userId, $orderId, $coinId, $status);
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
@@ -134,6 +139,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックをかけて再取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
+
             // ステータスの更新(キャンセル)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
@@ -142,7 +150,7 @@ class UserCoinPaymentService
                 UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL,
                 $session->id
             );
-            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+            $this->userCoinPaymentStatusRepository->update($userId, $orderId, $stateResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate(
@@ -151,7 +159,7 @@ class UserCoinPaymentService
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
                 UserCoinPaymentStatus::PAYMENT_STATUS_CANCEL
             );
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
@@ -187,6 +195,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックをかけて再取得
+            $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
+
             // ステータスの更新(完了)
             $stateResource = UserCoinPaymentStatusResource::toArrayForUpdate(
                 $userId,
@@ -195,7 +206,7 @@ class UserCoinPaymentService
                 UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE,
                 $session->id
             );
-            $this->userCoinPaymentStatusRepository->updateUserCoinPaymentStatus($userId, $orderId, $stateResource);
+            $this->userCoinPaymentStatusRepository->update($userId, $orderId, $stateResource);
 
             // コイン情報の取得
             $coin = $this->getCoinByCoinId($userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID]);
@@ -211,8 +222,11 @@ class UserCoinPaymentService
                     $coin[Coins::PRICE],
                     UserCoins::DEFAULT_COIN_COUNT
                 );
-                $this->userCoinsRepository->createUserCoins($userId, $userCoinResource);
+                $this->userCoinsRepository->create($userId, $userCoinResource);
             } else {
+                // ロックをかけて再取得
+                $userCoin = $this->getUserCoinByUserId($userId, true);
+
                 // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
                     $userId,
@@ -220,7 +234,7 @@ class UserCoinPaymentService
                     $userCoin[UserCoins::PAID_COINS] + $coin[Coins::PRICE],
                     $userCoin[UserCoins::LIMITED_TIME_COINS]
                 );
-                $this->userCoinsRepository->updateUserCoins($userId, $userCoinResource);
+                $this->userCoinsRepository->update($userId, $userCoinResource);
             }
 
             // ログの設定
@@ -230,7 +244,7 @@ class UserCoinPaymentService
                 $userCoinPaymentStatus[UserCoinPaymentStatus::COIN_ID],
                 UserCoinPaymentStatus::PAYMENT_STATUS_COMPLETE
             );
-            $this->userCoinPaymentLogRepository->createUserCoinPaymentLog($userId, $userCoinPaymentLogResource);
+            $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource);
 
             DB::commit();
         } catch (Exception $e) {
@@ -292,26 +306,26 @@ class UserCoinPaymentService
 
         // 複数チェックはrepository側で実施済み
         // $coin = json_decode(json_encode($coins->toArray()[0]), true);
-        $coin = ArrayLibrary::toArray($coins->toArray()[0]);
-        return $coin;
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
     }
 
     /**
      * get user coins by user id.
      *
      * @param int $userId user id
+     * @param bool $isLock exec lock For Update
      * @return array|null
      */
-    private function getUserCoinByUserId(int $userId): array|null
+    private function getUserCoinByUserId(int $userId, bool $isLock = false): array|null
     {
-        $userCoin = $this->userCoinsRepository->getByUserId($userId);
+        $userCoin = $this->userCoinsRepository->getByUserId($userId, $isLock);
 
         if (is_null($userCoin)) {
             return $userCoin;
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($userCoin->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoin->toArray()));
     }
 
     /**
@@ -319,11 +333,12 @@ class UserCoinPaymentService
      *
      * @param int $userId user id
      * @param string $orderId order id
+     * @param bool $isLock exec lock For Update
      * @return array
      */
-    private function getUserCoinPaymentStatusByUserId(int $userId, string $orderId): array
+    private function getUserCoinPaymentStatusByUserId(int $userId, string $orderId, bool $isLock = false): array
     {
-        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserIdAndOrderId($userId, $orderId);
+        $userCoinPaymentStatus = $this->userCoinPaymentStatusRepository->getByUserIdAndOrderId($userId, $orderId, $isLock);
 
         if (empty($userCoinPaymentStatus)) {
             throw new MyApplicationHttpException(
@@ -333,7 +348,7 @@ class UserCoinPaymentService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($userCoinPaymentStatus->toArray()[0]);
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoinPaymentStatus->toArray()));
     }
 
     /**

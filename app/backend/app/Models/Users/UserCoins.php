@@ -20,7 +20,7 @@ class UserCoins extends BaseUserDataModel
     public const FREE_COINS = 'free_coins';
     public const PAID_COINS = 'paid_coins';
     public const LIMITED_TIME_COINS = 'limited_time_coins';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 

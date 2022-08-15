@@ -1,0 +1,8 @@
+# admins_auth:
+  type: oauth2
+  flows:
+    implicit:
+      authorizationUrl: http://example.com
+      scopes:
+        write:admins: modify admins in your account
+        read:admins: read your admins

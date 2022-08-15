@@ -17,7 +17,7 @@ class Manufacturers extends Model
     public const DETAIL            = 'detail';
     public const ADDRESS           = 'address';
     public const TEL               = 'tel';
-    public const CRREATED_AT       = 'created_at';
+    public const CREATED_AT       = 'created_at';
     public const UPDATED_AT        = 'updated_at';
     public const DELETED_AT        = 'deleted_at';
 
@@ -55,7 +55,7 @@ class Manufacturers extends Model
         self::DETAIL,
         self::ADDRESS,
         self::TEL,
-        self::CRREATED_AT,
+        self::CREATED_AT,
         self::UPDATED_AT
     ];
 

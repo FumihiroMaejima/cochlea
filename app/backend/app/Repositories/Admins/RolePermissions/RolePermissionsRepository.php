@@ -15,7 +15,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     protected Roles $rolesModel;
 
     /**
-     * create a new AuthInfoController instance.
+     * create instance.
      *
      * @param RolePermissions $model
      * @param Permissions $permissionsModel
@@ -40,7 +40,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * get All Role Permissions Data.
+     * get By role id.
      *
      * @param int $roleId id of role
      * @return Collection
@@ -58,24 +58,24 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
             ->get();
     }
     /**
-     * create Role Permissions data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createRolePermission(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Role Permissions data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param int $roleId id of role
+     * @param array $resource update data
      * @return int
      */
-    public function updateRolePermissionsData(array $resource, int $roleId): int
+    public function update(int $roleId, array $resource): int
     {
         // role_permissions
         $rolePermissions = $this->model->getTable();
@@ -83,19 +83,19 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
         // Query Builderのupdate
         return DB::table($rolePermissions)
             // ->whereIn('id', [$id])
-            ->where(RolePermissions::ROLE_ID, '=', [$roleId])
+            ->where(RolePermissions::ROLE_ID, '=', $roleId)
             ->where(RolePermissions::DELETED_AT, '=', null)
             ->update($resource);
     }
 
     /**
-     * delete Role Permissions data.
+     * delete recode.
      *
+     * @param int $roleId id of role
      * @param array $resource update data
-     * @param int $roleId $id id of role
      * @return int
      */
-    public function deleteRolePermissionsData(array $resource, int $roleId): int
+    public function delete(int $roleId, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -106,13 +106,13 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
     }
 
     /**
-     * delete Role Permissions data by array data.
+     * delete recode by recode ids.
      *
-     * @param array $resource update data
      * @param array $ids $ids id of records
+     * @param array $resource update data
      * @return int
      */
-    public function deleteRolePermissionsByIds(array $resource, array $ids): int
+    public function deleteByIds(array $ids, array $resource): int
     {
         return DB::table($this->getTable())
             ->whereIn(RolePermissions::ROLE_ID, $ids)

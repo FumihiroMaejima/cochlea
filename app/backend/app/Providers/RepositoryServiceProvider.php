@@ -22,6 +22,8 @@ use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepository;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepository;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
+use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepository;
+use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepository;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
         $this->app->bind(UserCoinPaymentLogRepositoryInterface::class, UserCoinPaymentLogRepository::class);
         $this->app->bind(UserCoinPaymentStatusRepositoryInterface::class, UserCoinPaymentStatusRepository::class);
+        $this->app->bind(UserCoinHistoriesRepositoryInterface::class, UserCoinHistoriesRepository::class);
         $this->app->bind(UserCoinsRepositoryInterface::class, UserCoinsRepository::class);
     }
 

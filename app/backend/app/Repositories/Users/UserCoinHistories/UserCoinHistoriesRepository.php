@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Repositories\Users\UserCoins;
+namespace App\Repositories\Users\UserCoinHistories;
 
 use App\Exceptions\MyApplicationHttpException;
 use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 
-class UserCoinsRepository implements UserCoinsRepositoryInterface
+class UserCoinHistoriesRepository implements UserCoinHistoriesRepositoryInterface
 {
     protected UserCoins $model;
 
@@ -22,7 +23,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      * @param UserCoins $model
      * @return void
      */
-    public function __construct(UserCoins $model)
+    public function __construct(UserCoinHistories $model)
     {
         $this->model = $model;
     }
@@ -35,7 +36,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function getTable(int $userId): string
     {
-        return $this->model->getTable() . UserCoins::getShardId($userId);
+        return $this->model->getTable() . UserCoinHistories::getShardId($userId);
     }
 
     /**
@@ -46,7 +47,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      */
     public function getQueryBuilder(int $userId): Builder
     {
-        return DB::connection(UserCoins::getConnectionNameByUserId($userId))->table($this->getTable($userId));
+        return DB::connection(UserCoinHistories::getConnectionNameByUserId($userId))->table($this->getTable($userId));
     }
 
     /**
@@ -61,8 +62,8 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     {
         $query = $this->getQueryBuilder($userId)
             ->select(['*'])
-            ->where(UserCoins::USER_ID, '=', $userId)
-            ->where(UserCoins::DELETED_AT, '=', null);
+            ->where(UserCoinHistories::USER_ID, '=', $userId)
+            ->where(UserCoinHistories::DELETED_AT, '=', null);
 
         if ($isLock) {
             // ロックをかけた状態で再検索
@@ -88,7 +89,7 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
     }
 
     /**
-     * create recode.
+     * create record.
      *
      * @param int $userId user id
      * @param array $resource create data
@@ -103,16 +104,18 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      * update record.
      *
      * @param int $userId user id
+     * @param string $createdAt recode created date time
      * @param array $resource update data
      * @return int
      */
-    public function update(int $userId, array $resource): int
+    public function update(int $userId, string $createdAt, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
             // ->whereIn('id', [$id])
-            ->where(UserCoins::USER_ID, '=', $userId)
-            ->where(UserCoins::DELETED_AT, '=', null)
+            ->where(UserCoinHistories::USER_ID, '=', $userId)
+            ->where(UserCoinHistories::CREATED_AT, '=', $createdAt)
+            ->where(UserCoinHistories::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -120,15 +123,17 @@ class UserCoinsRepository implements UserCoinsRepositoryInterface
      * delete record.
      *
      * @param int $userId user id
+     * @param string $createdAt recode created date time
      * @param array $resource update data
      * @return int
      */
-    public function delete(int $userId, array $resource): int
+    public function delete(int $userId, string $createdAt, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
-            ->where(UserCoins::USER_ID, '=', $userId)
-            ->where(UserCoins::DELETED_AT, '=', null)
+            ->where(UserCoinHistories::USER_ID, '=', $userId)
+            ->where(UserCoinHistories::CREATED_AT, '=', $createdAt)
+            ->where(UserCoinHistories::DELETED_AT, '=', null)
             ->update($resource);
     }
 }

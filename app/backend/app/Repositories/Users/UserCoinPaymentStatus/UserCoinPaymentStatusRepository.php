@@ -17,7 +17,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new UserCoinPaymentStatusRepository instance.
+     * create instance.
      *
      * @param UserCoinPaymentStatus $model
      * @return void
@@ -46,7 +46,7 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      */
     public function getQueryBuilder(int $userId): Builder
     {
-        return DB::connection(UserCoinPaymentStatus::setConnectionName($userId))->table($this->getTable($userId));
+        return DB::connection(UserCoinPaymentStatus::getConnectionNameByUserId($userId))->table($this->getTable($userId));
     }
 
     /**
@@ -85,17 +85,24 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
      *
      * @param int $userId user id
      * @param string $orderId order id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUserIdAndOrderId(int $userId, string $orderId): Collection|null
+    public function getByUserIdAndOrderId(int $userId, string $orderId, bool $isLock = false): Collection|null
     {
-        $collection = $this->getQueryBuilder($userId)
+        $query = $this->getQueryBuilder($userId)
             ->select(['*'])
             ->where(UserCoinPaymentStatus::USER_ID, '=', $userId)
             ->where(UserCoinPaymentStatus::ORDER_ID, '=', $orderId)
-            ->where(UserCoinPaymentStatus::DELETED_AT, '=', null)
-            ->get();
+            ->where(UserCoinPaymentStatus::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $query = $query->lockForUpdate();
+        }
+
+        $collection = $query->get();
 
         // 存在しない場合
         if ($collection->count() === self::NO_DATA_COUNT) {
@@ -114,26 +121,26 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     }
 
     /**
-     * create UserCoinPaymentStatus data.
+     * create recode.
      *
      * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
-    public function createUserCoinPaymentStatus(int $userId, array $resource): int
+    public function create(int $userId, array $resource): int
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }
 
     /**
-     * update UserCoinPaymentStatus data.
+     * update recode.
      *
      * @param int $userId user id
      * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
-    public function updateUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function update(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
@@ -145,14 +152,14 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
     }
 
     /**
-     * delete UserCoinPaymentStatus data.
+     * delete recode.
      *
      * @param int $userId user id
      * @param string $orderId order id
      * @param array $resource update data
      * @return int
      */
-    public function deleteUserCoinPaymentStatus(int $userId, string $orderId, array $resource): int
+    public function delete(int $userId, string $orderId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)

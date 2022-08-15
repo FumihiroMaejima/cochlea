@@ -20,7 +20,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new AdminsRepository instance.
+     * create instance.
      *
      * @param \App\Models\Admins $model
      * @param \App\Models\AdminsRoles $adminsRolesModel
@@ -44,7 +44,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * Get All Admins Data.
+     * Get All recodes.
      *
      * @return Collection
      */
@@ -56,7 +56,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * Get Admins as List.
+     * Get recodes as List.
      *
      * @return Collection
      */
@@ -97,7 +97,7 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * get Latest Admin data.
+     * get Latest Admin recode.
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
@@ -113,11 +113,12 @@ class AdminsRepository implements AdminsRepositoryInterface
     /**
      * get by id.
      *
-     * @param int $adminId rocord id
+     * @param int $id rocord id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getById(int $id): Collection|null
+    public function getById(int $id, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -136,6 +137,16 @@ class AdminsRepository implements AdminsRepositoryInterface
                 ExceptionStatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Admins::ID, '=', $id)
+            ->where(Admins::DELETED_AT, '=', null)
+            ->lockForUpdate()
+            ->get();
         }
 
         return $collection;
@@ -173,24 +184,24 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * create Admin data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int create row count
      */
-    public function createAdmin(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Admin data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param array $id of record
+     * @param array $resource update data
      * @return int update row count
      */
-    public function updateAdminData(array $resource, int $id): int
+    public function update(int $id, array $resource): int
     {
         // admins
         $admins = $this->getTable();
@@ -222,13 +233,13 @@ class AdminsRepository implements AdminsRepositoryInterface
     }
 
     /**
-     * delete Admin data (set deleted date & flag).
+     * delete recode (set deleted date & flag).
      *
-     * @param array $resource update data
      * @param int $id id of record
+     * @param array $resource update data
      * @return int update row count
      */
-    public function deleteAdminData(array $resource, int $id): int
+    public function delete(int $id, array $resource): int
     {
         // admins
         $admins = $this->getTable();

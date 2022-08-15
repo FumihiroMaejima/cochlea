@@ -23,10 +23,10 @@ class CreateLogsTable extends Migration
         Schema::connection($connectionName)->create('admins_log', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID'); // DBを変える為指定出来ない
-            $table->integer('admin_id')->comment('管理者ID');
+            $table->integer('admin_id')->unsigned()->comment('管理者ID');
             $table->string('function', 255)->comment('実行ファンクション');
-            $table->tinyInteger('status')->comment('ステータス');
-            $table->timestamp('action_time')->comment('実行日時');
+            $table->tinyInteger('status')->unsigned()->comment('ステータス');
+            $table->dateTime('action_time')->comment('実行日時');
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
@@ -39,10 +39,10 @@ class CreateLogsTable extends Migration
          * user_coin_payment_log table
          */
         Schema::connection($connectionName)->create('user_coin_payment_log', function (Blueprint $table) {
-            $table->integer('user_id')->comment('ユーザーID');
-            $table->uuid('order_id')->comment('注文ID');
-            $table->integer('coin_id')->comment('コインID');
-            $table->integer('status')->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
+            $table->integer('user_id')->unsigned()->comment('ユーザーID');
+            $table->uuid('order_id')->comment('注文ID(UUID)');
+            $table->integer('coin_id')->unsigned()->comment('コインID');
+            $table->integer('status')->unsigned()->comment('決済ステータス 1:決済開始, 2:決済中(入金待ち), 3:決済完了, 98:期限切れ, 99:注文キャンセル');
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');

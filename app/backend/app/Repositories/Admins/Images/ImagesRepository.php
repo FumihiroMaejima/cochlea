@@ -16,7 +16,7 @@ class ImagesRepository implements ImagesRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new ImagesRepository instance.
+     * create instance.
      *
      * @param Images $model
      * @return void
@@ -51,14 +51,27 @@ class ImagesRepository implements ImagesRepositoryInterface
     }
 
     /**
+     * get Latest Image data.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|object|static|null
+     */
+    public function getLatestImage(): object
+    {
+        return DB::table($this->getTable())
+            ->latest()
+            ->first();
+    }
+
+    /**
      * get Image by uuid.
      *
      * @param string $uuid
      * @param int $version
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUuid(string $uuid, int $version): Collection|null
+    public function getByUuid(string $uuid, int $version, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -80,61 +93,94 @@ class ImagesRepository implements ImagesRepositoryInterface
             );
         }
 
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+                ->select(['*'])
+                ->where(Images::UUID, '=', $uuid)
+                ->where(Images::VERSION, '=', $version)
+                ->where(Images::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
+        }
+
         return $collection;
     }
 
     /**
-     * get Latest Image data.
+     * get by ids.
      *
-     * @return \Illuminate\Database\Eloquent\Model|object|static|null
+     * @param array $ids rocord ids
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
      */
-    public function getLatestImage(): object
+    public function getByIds(array $ids, bool $isLock = false): Collection|null
     {
-        return DB::table($this->getTable())
-            ->latest()
-            ->first();
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(Images::ID, $ids)
+            ->where(Images::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->whereIn(Images::ID, $ids)
+            ->where(Images::DELETED_AT, '=', null)
+            ->get();
+        }
+
+        return $collection;
     }
 
     /**
-     * create Image data.
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createImage(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Image data.
+     * update recode.
      *
      * @param array $id id of record
      * @param array $resource update data
      * @return int
      */
-    public function updateImage(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where(Images::ID, '=', [$id])
+            ->where(Images::ID, '=', $id)
             ->where(Images::DELETED_AT, '=', null)
             ->update($resource);
     }
 
     /**
-     * delete Images data.
+     * delete recode.
      *
-     * @param array $ids id of records
+     * @param int $id id of record
      * @param array $resource update data
      * @return int
      */
-    public function deleteImage(array $ids, array $resource): int
+    public function delete(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->whereIn(Images::ID, $ids)
+            ->where(Images::ID, '=', $id)
             ->where(Images::DELETED_AT, '=', null)
             ->update($resource);
     }

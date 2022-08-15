@@ -1,0 +1,44 @@
+# Coins:
+  type: array
+  items:
+    type: object
+    required:
+      - id
+      - name
+      - detail
+      - price
+      - cost
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      detail:
+        type: string
+      price:
+        type: integer
+        format: int64
+        description: Coin price
+      cost:
+        type: integer
+        format: int64
+        description: Coin Cost in Application
+  example:
+  - id: 1
+    name: 'test coin1'
+    detail: 'test detail1'
+    price: 200
+    cost: 200
+  - id: 2
+    name: 'test coin2'
+    detail: 'test detail2'
+    price: 500
+    cost: 500
+  - id: 3
+    name: 'test coin3'
+    detail: 'test detail3'
+    price: 1000
+    cost: 1000
+  xml:
+    name: Coins

@@ -20,7 +20,7 @@ class Coins extends Model
     public const START_AT    = 'start_at';
     public const END_AT      = 'end_at';
     public const IMAGE       = 'image';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT  = 'updated_at';
     public const DELETED_AT  = 'deleted_at';
 
@@ -61,7 +61,7 @@ class Coins extends Model
         self::START_AT,
         self::END_AT,
         self::IMAGE,
-        self::CRREATED_AT,
+        self::CREATED_AT,
         self::UPDATED_AT
     ];
 

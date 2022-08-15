@@ -63,7 +63,7 @@ class UserCoinPaymentLogResource extends JsonResource
             UserCoinPaymentLog::ORDER_ID => $orderId,
             UserCoinPaymentLog::COIN_ID => $coinId,
             UserCoinPaymentLog::STATUS => $status,
-            UserCoinPaymentLog::CRREATED_AT => $dateTime,
+            UserCoinPaymentLog::CREATED_AT => $dateTime,
             UserCoinPaymentLog::UPDATED_AT => $dateTime,
             UserCoinPaymentLog::DELETED_AT => null,
         ];
@@ -84,7 +84,6 @@ class UserCoinPaymentLogResource extends JsonResource
             UserCoinPaymentLog::ORDER_ID => $request->{UserCoinPaymentLog::ORDER_ID},
             UserCoinPaymentLog::COIN_ID => $request->{UserCoinPaymentLog::COIN_ID},
             UserCoinPaymentLog::STATUS => $request->{UserCoinPaymentLog::STATUS},
-            UserCoinPaymentLog::CRREATED_AT => $dateTime,
             UserCoinPaymentLog::UPDATED_AT => $dateTime,
         ];
     }

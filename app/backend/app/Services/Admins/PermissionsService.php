@@ -5,8 +5,11 @@ namespace App\Services\Admins;
 use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
 use App\Http\Resources\Admins\PermissionsResource;
+use App\Library\Array\ArrayLibrary;
 
 class PermissionsService
 {
@@ -28,7 +31,7 @@ class PermissionsService
      * @param  \Illuminate\Http\Request $request
      * @return JsonResponse
      */
-    public function getPermissionsList(Request $request): JsonResponse
+    public function getPermissionsAsList(Request $request): JsonResponse
     {
         $collection = $this->permissionsRepository->getPermissionsList();
         $resource = PermissionsResource::toArrayForGetTextAndValueList($collection);

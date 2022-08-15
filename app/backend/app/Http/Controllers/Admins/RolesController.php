@@ -136,7 +136,7 @@ class RolesController extends Controller
     public function update(RoleUpdateRequest $request, int $id)
     {
         // サービスの実行
-        return $this->service->updateRoleData($request, $id);
+        return $this->service->updateRole($id, $request);
     }
 
     /**
