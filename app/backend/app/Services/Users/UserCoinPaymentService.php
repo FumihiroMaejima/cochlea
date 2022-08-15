@@ -225,7 +225,7 @@ class UserCoinPaymentService
                 $this->userCoinsRepository->create($userId, $userCoinResource);
             } else {
                 // ロックをかけて再取得
-                 $userCoin = $this->getUserCoinByUserId($userId, true);
+                $userCoin = $this->getUserCoinByUserId($userId, true);
 
                 // ユーザーのコイン情報の更新
                 $userCoinResource = UserCoinsResource::toArrayForUpdate(
