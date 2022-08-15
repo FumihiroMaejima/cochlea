@@ -23,8 +23,11 @@ class CreateDevelopmentTable extends Migration
             $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス確認日時');
             $table->string('password')->comment('パスワード');
             $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+            // $table->timestamps();
+            // $table->softDeletes();
 
             $table->comment('administrators table');
         });
@@ -48,8 +51,11 @@ class CreateDevelopmentTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('パーミッション名');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+            // $table->timestamps();
+            // $table->softDeletes();
 
             $table->comment('administrator permissions table');
         });
@@ -62,8 +68,11 @@ class CreateDevelopmentTable extends Migration
             $table->string('name')->comment('ロール名');
             $table->string('code')->comment('ロールコード名');
             $table->string('detail')->comment('詳細');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+            // $table->timestamps();
+            // $table->softDeletes();
 
             $table->comment('administrator roles table');
         });
@@ -77,8 +86,11 @@ class CreateDevelopmentTable extends Migration
             $table->string('short_name')->comment('省略名');
             $table->foreignId('role_id')->constrained('roles')->comment('ロールID');
             $table->foreignId('permission_id')->constrained('permissions')->comment('パーミッションID');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+            // $table->timestamps();
+            // $table->softDeletes();
 
             $table->comment('permissions that role has table');
         });
@@ -90,8 +102,11 @@ class CreateDevelopmentTable extends Migration
             $table->id();
             $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
             $table->foreignId('role_id')->constrained('roles')->unique()->comment('ロールID');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+            // $table->timestamps();
+            // $table->softDeletes();
 
             $table->comment('roles that admin has table');
         });

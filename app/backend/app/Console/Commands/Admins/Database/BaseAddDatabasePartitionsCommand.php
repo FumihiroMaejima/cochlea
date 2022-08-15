@@ -99,22 +99,22 @@ class BaseAddDatabasePartitionsCommand extends Command
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => 'table name',
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_ID,
                 self::PRTITION_SETTING_KEY_COLUMN_NAME                => 'column name',
-                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => 1,
-                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 100000,
-                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10,
-                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
-                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => 1, // IDカラムを元にパーティションを貼る場合は必要
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 100000, // IDカラムを元にパーティションを貼る場合は必要
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10, // IDカラムを元にパーティションを貼る場合は必要
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null, // IDカラムを元にパーティションを貼る場合は不要
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null, // IDカラムを元にパーティションを貼る場合は不要
             ],
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => 'table name',
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
                 self::PRTITION_SETTING_KEY_COLUMN_NAME                => 'column name',
-                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
-                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
-                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
-                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
-                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null, // 日時カラムを元にパーティションを貼る場合は不要
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null, // 日時カラムを元にパーティションを貼る場合は不要
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null, // 日時カラムを元にパーティションを貼る場合は不要
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(), // 日時カラムを元にパーティションを貼る場合は必要
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3, // 日時カラムを元にパーティションを貼る場合は必要
             ],
         ];
     }
@@ -324,6 +324,10 @@ class BaseAddDatabasePartitionsCommand extends Command
             ->limit(self::PRTITION_OFFSET_VALUE)
             ->get()
             ->toArray();
+
+        if (empty($collection)) {
+            return [];
+        }
 
         return json_decode(json_encode($collection), true)[0];
     }

@@ -61,7 +61,7 @@ class AddLogDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
      */
     protected function getPartitionSettings(): array
     {
-        $connection = BaseLogDataModel::setConnectionName();
+        $connection = BaseLogDataModel::getLogDatabaseConnection();
 
         // テーブルごとのパーティション設定
         return [

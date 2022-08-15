@@ -116,7 +116,6 @@ class ImagesResource extends JsonResource
             Images::MIME_TYPE  => $fileReousrce[Images::MIME_TYPE],
             Images::S3_KEY     => $fileReousrce[Images::S3_KEY],
             Images::VERSION    => TimeLibrary::strToTimeStamp($dateTime),
-            Images::CREATED_AT => $dateTime,
             Images::UPDATED_AT => $dateTime,
         ];
     }

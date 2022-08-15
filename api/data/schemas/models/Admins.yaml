@@ -27,10 +27,10 @@
         description: Admin`s role id
     example:
       id: 1
-      name: 'test member1'
+      name: 'test admin1'
       email: 'test1@example.com'
       password: 'test password'
       phone: '000-0000-0000'
       roleId: 1
   xml:
-    name: Member
+    name: Admins

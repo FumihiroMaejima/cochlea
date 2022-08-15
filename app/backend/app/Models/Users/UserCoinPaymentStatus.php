@@ -33,7 +33,7 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     public const COIN_ID = 'coin_id';
     public const STATUS = 'status';
     public const PAYMENT_SERVICE_ID = 'payment_service_id';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
@@ -54,6 +54,7 @@ class UserCoinPaymentStatus extends BaseUserDataModel
     protected $primaryKey = [
         self::USER_ID,
         self::ORDER_ID,
+        self::CREATED_AT,
     ];
 
     /**

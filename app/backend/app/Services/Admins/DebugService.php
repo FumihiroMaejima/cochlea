@@ -13,7 +13,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\Time\TimeLibrary;
-use App\Library\String\UnidLibrary;
+use App\Library\String\UuidLibrary;
 
 class DebugService
 {

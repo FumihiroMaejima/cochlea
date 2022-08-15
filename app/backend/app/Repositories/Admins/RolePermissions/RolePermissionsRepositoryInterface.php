@@ -10,11 +10,11 @@ interface RolePermissionsRepositoryInterface
 
     public function getByRoleId(int $id): Collection;
 
-    public function createRolePermission(array $resource): int;
+    public function create(array $resource): int;
 
-    public function updateRolePermissionsData(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
 
-    public function deleteRolePermissionsData(array $resource, int $id): int;
+    public function delete(int $id, array $resource): int;
 
-    public function deleteRolePermissionsByIds(array $resource, array $ids): int;
+    public function deleteByIds(array $ids, array $resource): int;
 }

@@ -11,9 +11,9 @@ interface AdminsRolesRepositoryInterface
 
     public function getByAdminId(int $id): Collection;
 
-    public function createAdminsRole(array $resource): int;
+    public function create(array $resource): int;
 
-    public function updateAdminsRoleData(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
 
-    public function deleteAdminsRoleData(array $resource): int;
+    public function delete(int $id, array $resource): int;
 }

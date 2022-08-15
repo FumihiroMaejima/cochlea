@@ -1,10 +1,10 @@
-# /admin/members/member/{id}:
+# /admin/admins/admin/{id}:
   patch:
     tags:
-      - members
-    summary: Updates member data with form data
+      - admins
+    summary: Updates admin data with form data
     description: ""
-    operationId: updateMemberWithForm
+    operationId: updateAdminWithForm
     parameters:
       - name: Authorization
         in: header
@@ -26,7 +26,7 @@
           type: string
       - name: id
         in: path
-        description: ID of member
+        description: ID of admin
         required: true
         schema:
           type: integer
@@ -76,10 +76,10 @@
       - auth_id: []
   delete:
     tags:
-      - members
-    summary: Deletes a member
+      - admins
+    summary: Deletes a admin
     description: ""
-    operationId: deleteMember
+    operationId: deleteAdmin
     parameters:
       - name: Authorization
         in: header
@@ -101,7 +101,7 @@
           type: string
       - name: id
         in: path
-        description: ID of member
+        description: ID of admin
         required: true
         schema:
           type: integer

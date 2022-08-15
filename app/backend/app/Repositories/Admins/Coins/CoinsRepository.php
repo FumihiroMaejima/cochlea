@@ -16,7 +16,7 @@ class CoinsRepository implements CoinsRepositoryInterface
     private const FIRST_DATA_COUNT = 1;
 
     /**
-     * create a new CoinsRepository instance.
+     * create instance.
      *
      * @param \App\Models\Masters\Coins $model
      * @return void
@@ -83,13 +83,14 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * get by table id.
+     * get by record id.
      *
-     * @param int $id table id.
+     * @param int $id coin id
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getById(int $id): Collection|null
+    public function getById(int $id, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -110,28 +111,72 @@ class CoinsRepository implements CoinsRepositoryInterface
             );
         }
 
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->where(Coins::ID, '=', $id)
+            ->where(Coins::DELETED_AT, '=', null)
+            ->get();
+        }
+
         return $collection;
     }
 
     /**
-     * create Coin data.
+     * get by ids.
+     *
+     * @param array $ids rocord ids
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByIds(array $ids, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(Coins::ID, $ids)
+            ->where(Coins::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+                ->select(['*'])
+                ->whereIn(Coins::ID, $ids)
+                ->where(Coins::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createCoin(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Coin data.
+     * update recode.
      *
      * @param array $id id of record
      * @param array $resource update data
      * @return int
      */
-    public function updateCoin(int $id, array $resource): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
@@ -142,13 +187,13 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * delete Coins data.
+     * delete recode.
      *
      * @param array $ids id of records
      * @param array $resource update data
      * @return int
      */
-    public function deleteCoin(array $ids, array $resource): int
+    public function delete(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

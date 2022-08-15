@@ -115,9 +115,12 @@ backend-clear-full-cache:
 	docker-compose exec app php artisan config:clear && \
 	docker-compose exec app composer dump-autoload
 
-# set partitions in log databases
+# set partitions in databases
 logs-partitions:
 	docker-compose exec app php artisan admins:add-logs-partitions
+
+users-partitions:
+	docker-compose exec app php artisan admins:add-users-partitions
 
 ##############################
 # web server(nginx)

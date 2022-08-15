@@ -1,10 +1,10 @@
-# /admin/members/member:
+# /admin/admins/admin:
   post:
     tags:
-      - members
+      - admins
     summary: Create Administrator
     description: ""
-    operationId: createMemberWithForm
+    operationId: createAdminWithForm
     parameters:
       - name: Authorization
         in: header

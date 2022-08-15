@@ -71,7 +71,7 @@ class CacheLibrary
             }
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
-            /** @var int $setExpireResult 毅然設定処理結果 */
+            /** @var int $setExpireResult 期限設定処理結果 */
             $setExpireResult = Redis::expireAt($key, time() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {

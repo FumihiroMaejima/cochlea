@@ -12,9 +12,11 @@ interface PermissionsRepositoryInterface
 
     public function getPermissionsList(): Collection;
 
-    public function createPermission(array $resource): int;
+    public function getById(int $id, bool $isLock = false): Collection|null;
 
-    public function updatePermissionData(array $resource, int $id): int;
+    public function create(array $resource): int;
 
-    public function deletePermissionsData(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
+
+    public function delete(int $id, array $resource): int;
 }

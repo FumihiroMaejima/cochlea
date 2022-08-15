@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Admins\Roles;
 
+use App\Exceptions\MyApplicationHttpException;
+use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Masters\Roles;
 use App\Models\Masters\RolePermissions;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +14,11 @@ class RolesRepository implements RolesRepositoryInterface
     protected Roles $model;
     protected RolePermissions $rolePermissionsModel;
 
+    private const NO_DATA_COUNT = 0;
+    private const FIRST_DATA_COUNT = 1;
+
     /**
-     * create a new RolesRepository instance.
+     * create instance.
      * @param \App\Models\Roles $model
      * @param \App\Models\RolePermissions $rolePermissions
      * @return void
@@ -35,7 +40,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get All Role Data.
+     * get All recodes.
      *
      * @return Collection
      */
@@ -57,7 +62,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get Roles as List.
+     * get recodes as List.
      *
      * @return Collection
      */
@@ -74,7 +79,7 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * get Latest Role data.
+     * get Latest record.
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
@@ -86,41 +91,117 @@ class RolesRepository implements RolesRepositoryInterface
     }
 
     /**
-     * create Role data.
+     * get by id.
+     *
+     * @param int $id rocord id
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getById(int $id, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Roles::ID, '=', $id)
+            ->where(Roles::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                'has deplicate collections,'
+            );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Roles::ID, '=', $id)
+            ->where(Roles::DELETED_AT, '=', null)
+            ->lockForUpdate()
+            ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
+     * get by ids.
+     *
+     * @param array $ids rocord ids
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByIds(array $ids, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(Roles::ID, $ids)
+            ->where(Roles::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+            ->lockForUpdate()
+            ->select(['*'])
+            ->whereIn(Roles::ID, $ids)
+            ->where(Roles::DELETED_AT, '=', null)
+            ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
+     * create recode.
      *
      * @param array $resource create data
      * @return int
      */
-    public function createRole(array $resource): int
+    public function create(array $resource): int
     {
         return DB::table($this->getTable())->insert($resource);
     }
 
     /**
-     * update Role data.
+     * update recode.
      *
-     * @param array $resource update data
      * @param array $id id of record
+     * @param array $resource update data
      * @return int
      */
-    public function updateRoleData(array $resource, int $id): int
+    public function update(int $id, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where(Roles::ID, '=', [$id])
+            ->where(Roles::ID, '=', $id)
             ->where(Roles::DELETED_AT, '=', null)
             ->update($resource);
     }
 
     /**
-     * delete Role data.
+     * delete recode by ids.
      *
-     * @param array $resource update data
      * @param array $ids id of records
+     * @param array $resource update data
      * @return int
      */
-    public function deleteRoleData(array $resource, array $ids): int
+    public function deleteByIds(array $ids, array $resource): int
     {
         // Query Builderのupdate
         return DB::table($this->getTable())

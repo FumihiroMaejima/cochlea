@@ -59,7 +59,7 @@ class UserCoinsResource extends JsonResource
             UserCoins::FREE_COINS => $freeCoins,
             UserCoins::PAID_COINS => $paidCoins,
             UserCoins::LIMITED_TIME_COINS => $limitedTimeCoins,
-            UserCoins::CRREATED_AT => $dateTime,
+            UserCoins::CREATED_AT => $dateTime,
             UserCoins::UPDATED_AT => $dateTime,
             UserCoins::DELETED_AT => null,
         ];
@@ -83,7 +83,6 @@ class UserCoinsResource extends JsonResource
             UserCoins::FREE_COINS => $freeCoins,
             UserCoins::PAID_COINS => $paidCoins,
             UserCoins::LIMITED_TIME_COINS => $limitedTimeCoins,
-            UserCoins::CRREATED_AT => $dateTime,
             UserCoins::UPDATED_AT => $dateTime,
         ];
     }

@@ -15,15 +15,15 @@ interface AdminsRepositoryInterface
 
     public function getLatestAdmin(): object;
 
-    public function getById(int $id): Collection|null;
+    public function getById(int $id, bool $isLock = false): Collection|null;
 
     public function getByEmail(string $email): Collection|null;
 
-    public function createAdmin(array $resource): int;
+    public function create(array $resource): int;
 
-    public function updateAdminData(array $resource, int $id): int;
+    public function update(int $id, array $resource): int;
 
-    public function deleteAdminData(array $resource, int $id): int;
+    public function delete(int $id, array $resource): int;
 
     public function updatePassword(int $id, array $resource): int;
 }

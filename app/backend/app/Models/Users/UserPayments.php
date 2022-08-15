@@ -17,7 +17,7 @@ class UserPayments extends BaseUserDataModel
     public const USER_ID = 'user_id';
     public const PRODUCT_ID = 'product_id';
     public const PRICE = 'price';
-    public const CRREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 

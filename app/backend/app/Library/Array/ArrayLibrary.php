@@ -9,12 +9,12 @@ use App\Exceptions\ExceptionStatusCodeMessages;
 class ArrayLibrary
 {
     /**
-     * convert stdClass to array
+     * convert stdClass (& stdClasses in array) to array
      *
-     * @param stdClass $object
+     * @param array<int|string, mixed>|stdClass $object
      * @return array converted value
      */
-    public static function toArray(stdClass $object): array
+    public static function toArray(stdClass|array $object): array
     {
         $value = json_decode(json_encode($object), true);
 
@@ -26,5 +26,16 @@ class ArrayLibrary
         }
 
         return $value;
+    }
+
+    /**
+     * get array item first index value.
+     *
+     * @param array $items
+     * @return array<int|string, mixed>|stdClass first index value
+     */
+    public static function getFirst(array $items): array|stdClass
+    {
+        return $items[0];
     }
 }
