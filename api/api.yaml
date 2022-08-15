@@ -13,7 +13,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-  - name: members
+  - name: admins
     description: Administrators infomation
     externalDocs:
       description: Find out more
@@ -33,22 +33,22 @@ tags:
       description: Find out more about our store
       url: http://swagger.io
 paths:
-  /admin/members:
-    $ref: "./data/paths/admin/members/index.yaml"
-  /admin/members/csv:
-    $ref: "./data/paths/admin/members/csv.yaml"
-  /admin/members/member:
-    $ref: "./data/paths/admin/members/member/index.yaml"
-  "/admin/members/member/{id}":
+  /admin/admins:
+    $ref: "./data/paths/admin/admins/index.yaml"
+  /admin/admins/csv:
+    $ref: "./data/paths/admin/admins/csv.yaml"
+  /admin/admins/admin:
+    $ref: "./data/paths/admin/admins/admin/index.yaml"
+  "/admin/admins/admin/{id}":
     parameters:
       - name: id
         in: path
-        description: ID of member
+        description: ID of admin
         required: true
         schema:
           type: integer
           format: int64
-    $ref: "./data/paths/admin/members/member/id.yaml"
+    $ref: "./data/paths/admin/admins/admin/id.yaml"
   /admin/roles:
     $ref: "./data/paths/admin/roles/index.yaml"
   /admin/roles/list:
@@ -104,8 +104,8 @@ components:
     createRoleWithForm:
       $ref: "./data/components/requestBodies/createRoleWithForm.yaml"
   securitySchemes:
-    # members_auth:
-    #   $ref: "./data/components/securitySchemes/membersAuth.yaml"
+    # admins_auth:
+    #   $ref: "./data/components/securitySchemes/adminsAuth.yaml"
     authenticaion_key:
       $ref: "./data/components/securitySchemes/authenticaionKey.yaml"
     authority_key:
@@ -117,8 +117,8 @@ components:
       $ref: "./data/schemas/auth/AuthRequestResponse.yaml"
     AuthenticatedUser:
       $ref: "./data/schemas/auth/AuthenticatedUser.yaml"
-    Member:
-      $ref: "./data/schemas/models/Member.yaml"
+    Admins:
+      $ref: "./data/schemas/models/Admins.yaml"
     Permissions:
       $ref: "./data/schemas/models/Permissions.yaml"
     Roles:
