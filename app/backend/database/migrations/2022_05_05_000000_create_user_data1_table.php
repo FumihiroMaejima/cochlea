@@ -127,6 +127,7 @@ class CreateUserData1Table extends Migration
             $connectionName = ShardingLibrary::getConnectionByNodeNumber($node);
 
             foreach ($shardIds as $shardId) {
+                Schema::connection($connectionName)->dropIfExists('user_coin_histories'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_coin_payment_status'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_coins'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
