@@ -119,6 +119,8 @@ components:
       $ref: "./data/schemas/auth/AuthenticatedUser.yaml"
     Admins:
       $ref: "./data/schemas/models/Admins.yaml"
+    Coins:
+      $ref: "./data/schemas/models/Coins.yaml"
     Permissions:
       $ref: "./data/schemas/models/Permissions.yaml"
     Roles:
