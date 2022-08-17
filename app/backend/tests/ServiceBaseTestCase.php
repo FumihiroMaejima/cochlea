@@ -40,6 +40,8 @@ class ServiceBaseTestCase extends TestCase
 
     /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
     private const CONNECTION_NAME_FOR_CI = 'sqlite';
+    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
 
     protected $initialized = false;
 
@@ -69,7 +71,9 @@ class ServiceBaseTestCase extends TestCase
         // connection 設定がデフォルトの場合
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
-        } else {
+        } else if (($logsConnectionName === self::CONNECTION_NAME_FOR_TESTING) && ($userConnectionName === self::CONNECTION_NAME_FOR_TESTING)) {
+            $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_TESTING]);
+        }  {
             // DB内のテーブルの削除
             $this->artisan('db:wipe', ['--database' => 'mysql']);
             $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
