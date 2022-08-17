@@ -244,7 +244,7 @@ $ composer create-project laravel/laravel=8.* --prefer-dist backend
 
 *2022/05/01現在、「nunomaduro/phpinsights」は依存関係の都合からインストールが出来なかった。
 
-```shell-session
+```shell
 $ composer require guzzlehttp/guzzle
 $ composer require --dev nunomaduro/phpinsights
 $ composer require --dev barryvdh/laravel-debugbar
@@ -275,7 +275,7 @@ vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
 vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor
 ```
 
-単体のファイルにphpunitをかける
+単体のファイルにphpunitをかける場合(通信しないのであればローカルで直接実行が可能)
 
 ```shell-session
 vendor/bin/phpunit tests/Unit/ExampleTest --testdox

@@ -50,16 +50,29 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
-     * test get formatted date time.
+     * test current datetime format.
      *
      * @return void
      */
-    public function testFormated(): void
+    public function testCheckGettingCurrentDateTimeFormat(): void
     {
         // 「20xx-01-01」の様な形式データ
         $expect = mb_substr(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT), 0, 10);
 
         $this->assertEquals($expect, TimeLibrary::getCurrentDateTime(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
+    }
+
+    /**
+     * test get formatted date.
+     *
+     * @return void
+     */
+    public function testFormatedDate(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        $this->assertEquals(date(TimeLibrary::DATE_TIME_FORMAT_YMD),  TimeLibrary::format($dateTime, TimeLibrary::DATE_TIME_FORMAT_YMD));
+        $this->assertEquals(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY),  TimeLibrary::format($dateTime, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
     }
 
     /**
