@@ -24,26 +24,42 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
-     * get current dateTime test.
+     * test get current dateTime test.
      *
      * @return void
      */
     public function testGetCurrentDateTime(): void
     {
         // 「20xx-01-01」の様な形式データ
-        $expect = mb_substr(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT), 0, 9);
+        $expect = mb_substr(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT), 0, 10);
 
         $this->assertStringStartsWith($expect, TimeLibrary::getCurrentDateTime());
     }
 
     /**
-     * get current time stamp.
+     * test get current time stamp.
      *
      * @return void
      */
     public function testStrToTimeStamp(): void
     {
-        $this->assertIsInt(TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime()));
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        $this->assertIsInt(TimeLibrary::strToTimeStamp($dateTime));
+        $this->assertEquals(strtotime($dateTime), TimeLibrary::strToTimeStamp($dateTime));
+    }
+
+    /**
+     * test get formatted date time.
+     *
+     * @return void
+     */
+    public function testFormated(): void
+    {
+        // 「20xx-01-01」の様な形式データ
+        $expect = mb_substr(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT), 0, 10);
+
+        $this->assertEquals($expect, TimeLibrary::getCurrentDateTime(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
     }
 
     /**
