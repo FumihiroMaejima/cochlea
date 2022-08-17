@@ -68,18 +68,12 @@ class ServiceBaseTestCase extends TestCase
         $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
         $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        // connection 設定がデフォルトの場合
+        // connection 設定がCI用の設定の場合
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
-        } else if (($logsConnectionName === self::CONNECTION_NAME_FOR_TESTING) && ($userConnectionName === self::CONNECTION_NAME_FOR_TESTING)) {
+        } {
+            // テスト用DB内のテーブルの削除
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_TESTING]);
-        }  {
-            // DB内のテーブルの削除
-            $this->artisan('db:wipe', ['--database' => 'mysql']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
         }
 
         $this->artisan('migrate:fresh');
