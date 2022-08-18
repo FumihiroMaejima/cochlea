@@ -139,6 +139,28 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test diff days.
+     *
+     * @return void
+     */
+    public function testDiffDays(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $days = 3;
+        $targetDateTime = TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD);
+
+        $origin = date_create($dateTime);
+        $target = date_create($targetDateTime);
+        $interval = date_diff($origin, $target);
+        // echo $interval->format('%d days');
+
+        $this->assertEquals(
+            $interval->format('%d'),
+            TimeLibrary::diffDays($dateTime, $targetDateTime)
+        );
+    }
+
+    /**
      * member crerate data
      * @return array
      */
