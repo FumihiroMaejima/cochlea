@@ -8,6 +8,7 @@ use App\Library\Time\TimeLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
+use DateTime;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -73,6 +74,26 @@ class TimeLibraryTest extends TestCase
 
         $this->assertEquals(date(TimeLibrary::DATE_TIME_FORMAT_YMD),  TimeLibrary::format($dateTime, TimeLibrary::DATE_TIME_FORMAT_YMD));
         $this->assertEquals(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY),  TimeLibrary::format($dateTime, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
+    }
+
+    /**
+     * test add days.
+     *
+     * @return void
+     */
+    public function testAddDays(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $days = 2;
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD,strtotime("+${days} days")) . "\n";
+        // echo TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${days} days")),
+            TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
     }
 
     /**
