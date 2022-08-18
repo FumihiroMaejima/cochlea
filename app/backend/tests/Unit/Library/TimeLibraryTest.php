@@ -104,16 +104,37 @@ class TimeLibraryTest extends TestCase
     public function testAddMonths(): void
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
-        $month = 2;
+        $months = 2;
 
 
         // 確認用
-        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")) . "\n";
-        // echo TimeLibrary::addMonths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${months} month")) . "\n";
+        // echo TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")),
-            TimeLibrary::addMonths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD)
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${months} month")),
+            TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
+    }
+
+    /**
+     * test add years.
+     *
+     * @return void
+     */
+    public function testAddYears(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $years = 2;
+
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${years} month")) . "\n";
+        // echo TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${years} year")),
+            TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
 
