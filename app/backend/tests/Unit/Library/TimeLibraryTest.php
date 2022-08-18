@@ -97,6 +97,27 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test add months.
+     *
+     * @return void
+     */
+    public function testAddMonths(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $month = 2;
+
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")) . "\n";
+        // echo TimeLibrary::addMounths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")),
+            TimeLibrary::addMounths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
+    }
+
+    /**
      * member crerate data
      * @return array
      */
