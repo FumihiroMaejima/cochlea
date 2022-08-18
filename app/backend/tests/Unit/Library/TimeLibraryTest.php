@@ -109,11 +109,11 @@ class TimeLibraryTest extends TestCase
 
         // 確認用
         // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")) . "\n";
-        // echo TimeLibrary::addMounths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+        // echo TimeLibrary::addMonths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
             date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${month} month")),
-            TimeLibrary::addMounths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD)
+            TimeLibrary::addMonths($dateTime, $month, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
 
