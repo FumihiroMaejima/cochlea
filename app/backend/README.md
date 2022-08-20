@@ -280,6 +280,7 @@ vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resour
 ```shell-session
 vendor/bin/phpunit tests/Unit/ExampleTest --testdox
 vendor/bin/phpunit tests/Unit/Library/TimeLibraryTest.php --testdox
+vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
 ```
 
 カバレッジ出力
