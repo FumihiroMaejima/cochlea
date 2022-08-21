@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins\Debug;
+namespace App\Http\Requests\Admin\Debug;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Exceptions\HttpResponseException;

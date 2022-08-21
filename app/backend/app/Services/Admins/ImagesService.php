@@ -13,7 +13,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;

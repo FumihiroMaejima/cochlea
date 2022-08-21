@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins\Roles;
+namespace App\Http\Requests\Admin\Roles;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;

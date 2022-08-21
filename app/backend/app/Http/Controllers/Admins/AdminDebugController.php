@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Services\Admins\DebugService;
 use App\Services\Admins\ImagesService;
 use App\Trait\CheckHeaderTrait;

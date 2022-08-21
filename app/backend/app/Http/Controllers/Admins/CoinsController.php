@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admins\Coins\CoinCreateRequest;
-use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
+use App\Http\Requests\Admin\Coins\CoinCreateRequest;
+use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Services\Admins\CoinsService;
 use App\Trait\CheckHeaderTrait;
 

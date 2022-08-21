@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins\Coins;
+namespace App\Http\Requests\Admin\Coins;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Exceptions\HttpResponseException;
