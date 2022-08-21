@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service;
+namespace Tests\Feature\Service;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
