@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
@@ -299,7 +299,7 @@ class UserCoinPaymentService
         if (is_null($coins)) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_CODE_404,
                 'not exitst coin.'
             );
         }
@@ -342,7 +342,7 @@ class UserCoinPaymentService
 
         if (empty($userCoinPaymentStatus)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'not exist userCoinPaymentStatus.'
             );
         }
@@ -362,7 +362,7 @@ class UserCoinPaymentService
         if (empty(CheckoutLibrary::CHECKOUT_STATUS_VALUE_LIST[$status])) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'invalide status value.'
             );
         }

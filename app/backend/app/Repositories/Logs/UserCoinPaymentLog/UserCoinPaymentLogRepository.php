@@ -3,7 +3,7 @@
 namespace App\Repositories\Logs\UserCoinPaymentLog;
 
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Models\Logs\UserCoinPaymentLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -70,7 +70,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
         }
@@ -103,7 +103,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
         }

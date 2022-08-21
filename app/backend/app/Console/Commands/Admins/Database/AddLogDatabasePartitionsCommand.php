@@ -5,8 +5,6 @@ namespace App\Console\Commands\Admins\Database;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Command;
 use App\Console\Commands\Admins\Database\BaseAddDatabasePartitionsCommand;
-use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
 use App\Models\Logs\AdminsLog;
 use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;

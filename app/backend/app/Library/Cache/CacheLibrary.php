@@ -6,7 +6,7 @@ use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
 use App\Trait\CheckHeaderTrait;
 
@@ -65,7 +65,7 @@ class CacheLibrary
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
                 throw new MyApplicationHttpException(
-                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_CODE_500,
                     'set cache action is failure.'
                 );
             }
@@ -76,7 +76,7 @@ class CacheLibrary
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
                 throw new MyApplicationHttpException(
-                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_CODE_500,
                     'set cache expire action is failure.'
                 );
             }
@@ -100,7 +100,7 @@ class CacheLibrary
             }
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'cache is not exist.'
             );
         }
@@ -110,7 +110,7 @@ class CacheLibrary
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'delete cache action is failure.'
             );
         }

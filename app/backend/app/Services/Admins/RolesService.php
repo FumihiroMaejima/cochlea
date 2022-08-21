@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Exports\Admins\RolesExport;
 use App\Http\Requests\Admins\Roles\RoleCreateRequest;
 use App\Http\Requests\Admins\Roles\RoleDeleteRequest;
@@ -250,7 +250,7 @@ class RolesService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'not exist role.'
             );
         }
@@ -272,7 +272,7 @@ class RolesService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'not exist roles.'
             );
         }

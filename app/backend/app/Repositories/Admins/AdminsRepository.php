@@ -3,7 +3,7 @@
 namespace App\Repositories\Admins;
 
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\Admins;
 use App\Models\Masters\AdminsRoles;
 use Illuminate\Http\Request;
@@ -134,7 +134,7 @@ class AdminsRepository implements AdminsRepositoryInterface
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
         }
@@ -175,7 +175,7 @@ class AdminsRepository implements AdminsRepositoryInterface
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'has deplicate collections,'
             );
         }

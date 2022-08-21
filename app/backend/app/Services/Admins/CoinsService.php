@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admins\Coins\CoinCreateRequest;
 use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
@@ -196,7 +196,7 @@ class CoinsService
 
         if (empty($coins)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'not exist coin.'
             );
         }
@@ -218,7 +218,7 @@ class CoinsService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_CODE_500,
                 'not exist roles.'
             );
         }

@@ -3,7 +3,7 @@
 namespace App\Library\Random;
 
 use Exception;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 
 class RandomStringLibrary
 {
