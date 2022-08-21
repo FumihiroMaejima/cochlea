@@ -36,6 +36,6 @@ class ArrayLibrary
      */
     public static function getFirst(array $items): array|stdClass
     {
-        return $items[0];
+        return current($items);
     }
 }
