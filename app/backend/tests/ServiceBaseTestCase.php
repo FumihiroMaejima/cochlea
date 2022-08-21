@@ -38,6 +38,9 @@ class ServiceBaseTestCase extends TestCase
     protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
     protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
 
+    // token prefix
+    protected const TOKEN_PREFIX = 'Bearer ';
+
     /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
     private const CONNECTION_NAME_FOR_CI = 'sqlite';
     /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
