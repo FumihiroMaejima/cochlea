@@ -36,17 +36,17 @@ class UuidLibraryTest extends TestCase
 
         $this->assertEquals(
             self::VERSION4_STRING,
-            mb_substr($result, strpos(UuidLibrary::PATTERN_V4, self::VERSION4_STRING), 1)
+            mb_substr($result, mb_strpos(UuidLibrary::PATTERN_V4, self::VERSION4_STRING), 1)
         );
 
         $this->assertGreaterThan(
             (UuidLibrary::RANDOM_INT_MIN_8 - 1),
-            mb_substr($result, strpos(UuidLibrary::PATTERN_V4, UuidLibrary::CHAR_VARIANT), 1)
+            mb_substr($result, mb_strpos(UuidLibrary::PATTERN_V4, UuidLibrary::CHAR_VARIANT), 1)
         );
 
         $this->assertLessThan(
             dechex(UuidLibrary::RANDOM_INT_MAX_11 + 1),
-            mb_substr($result, strpos(UuidLibrary::PATTERN_V4, UuidLibrary::CHAR_VARIANT), 1)
+            mb_substr($result, mb_strpos(UuidLibrary::PATTERN_V4, UuidLibrary::CHAR_VARIANT), 1)
         );
     }
 }

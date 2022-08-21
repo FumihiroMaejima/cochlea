@@ -72,8 +72,8 @@ class TimeLibraryTest extends TestCase
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
-        $this->assertEquals(date(TimeLibrary::DATE_TIME_FORMAT_YMD),  TimeLibrary::format($dateTime, TimeLibrary::DATE_TIME_FORMAT_YMD));
-        $this->assertEquals(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY),  TimeLibrary::format($dateTime, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
+        $this->assertEquals(date(TimeLibrary::DATE_TIME_FORMAT_YMD), TimeLibrary::format($dateTime, TimeLibrary::DATE_TIME_FORMAT_YMD));
+        $this->assertEquals(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY), TimeLibrary::format($dateTime, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
     }
 
     /**
@@ -149,8 +149,8 @@ class TimeLibraryTest extends TestCase
         $days = 3;
         $targetDateTime = TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD);
 
-        $origin = date_create($dateTime);
-        $target = date_create($targetDateTime);
+        $origin = date_create_immutable($dateTime);
+        $target = date_create_immutable($targetDateTime);
         $interval = date_diff($origin, $target);
         // echo $interval->format('%d days');
 

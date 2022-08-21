@@ -5,7 +5,6 @@ namespace App\Http\Requests\Admin\Admins;
 use Illuminate\Support\Facades\Config;
 use App\Http\Requests\BaseRequest;
 
-
 class AdminBaseRequest extends BaseRequest
 {
     // attribute keys
