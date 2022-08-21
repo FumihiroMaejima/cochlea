@@ -39,11 +39,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members get request test.
+     * admins get request test.
      *
      * @return void
      */
-    public function testGetMembers(): void
+    public function testGetAdminss(): void
     {
         $response = $this->get(route('admin.admins.index'));
         $response->assertStatus(200)
@@ -51,38 +51,38 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * member data
+     * admin data
      * @param int id
      * @param string name
      * @param string email
      * @param int roleId
      */
-    public function memberDataProvider(): array
+    public function adminDataProvider(): array
     {
         return [
-            'member' => [1, 'test name', Config::get('myappTest.test.admin.login.email'), 1]
+            'admin' => [1, 'test name', Config::get('myappTest.test.admin.login.email'), 1]
         ];
     }
 
     /**
-     * member crerate data
+     * admin crerate data
      * @return array
      */
-    public function memberCreateDataProvider(): array
+    public function adminCreateDataProvider(): array
     {
         $this->createApplication();
 
         return [
-            'create member data' => Config::get('myappTest.test.member.create.success')
+            'create admin data' => Config::get('myappTest.test.admin.create.success')
         ];
     }
 
     /**
-     * members create request test.
-     * @dataProvider memberCreateDataProvider
+     * admin create request test.
+     * @dataProvider adminCreateDataProvider
      * @return void
      */
-    public function testCreateMemberSuccess(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
+    public function testCreateAdminsSuccess(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
         $response = $this->json('POST', route('admin.admins.create'), [
             'name'                  => $name,
@@ -95,10 +95,10 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * member crerate 422 error data
+     * admin crerate 422 error data
      * @return array
      */
-    public function memberCreate422FailedDataProvider(): array
+    public function adminCreate422FailedDataProvider(): array
     {
         $this->createApplication();
 
@@ -106,7 +106,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
 
         $testCase = [];
         foreach ($caseKeys as $key) {
-            $testCase[$key] = Config::get('myappTest.test.member.create.success');
+            $testCase[$key] = Config::get('myappTest.test.admin.create.success');
         }
 
         // データの整形
@@ -121,13 +121,13 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members create 422 error request test.
-     * @dataProvider memberCreate422FailedDataProvider
+     * admins create 422 error request test.
+     * @dataProvider adminCreate422FailedDataProvider
      * @return void
      */
-    public function testCreateMember422Failed(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
+    public function testCreateAdmin422Failed(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
-        /* $data = Config::get('myappTest.test.member.create.success');
+        /* $data = Config::get('myappTest.test.admin.create.success');
         $data['name'] = ''; */
         $response = $this->json('POST', route('admin.admins.create'), [
             'name'                  => $name,
@@ -141,12 +141,12 @@ class AdminsServiceTest extends ServiceBaseTestCase
 
 
     /**
-     * members file download test.
+     * admin file download test.
      * output dir storage/framework/laravel-excel
      *
      * @return void
      */
-    public function testDownloadMembersCsvFile(): void
+    public function testDownloadAdminsCsvFile(): void
     {
         $response = $this->get(route('admin.admins.download'));
         $response->assertStatus(200)
@@ -154,11 +154,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members update request test.
+     * admin update request test.
      *
      * @return void
      */
-    public function testUpdateMembers(): void
+    public function testUpdateAdmins(): void
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
             'name'   => 'test name',
@@ -169,11 +169,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members update request failed test.
+     * admin update request failed test.
      *
      * @return void
      */
-    public function testUpdateFailedMembers(): void
+    public function testUpdateFailedAdmin(): void
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
             'name'   => '',
@@ -184,10 +184,10 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * member crerate data
+     * admin remove data
      * @return array
      */
-    public function memberRemoveDataProvider(): array
+    public function adminRemoveDataProvider(): array
     {
         $this->createApplication();
 
@@ -197,21 +197,21 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members delete request test.
-     * @dataProvider memberRemoveDataProvider
+     * admin delete request test.
+     * @dataProvider adminRemoveDataProvider
      * @return void
      */
-    public function testRemoveMemberSuccess(int $id): void
+    public function testRemoveAdminsSuccess(int $id): void
     {
         $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
         $response->assertStatus(200);
     }
 
     /**
-     * member delete data
+     * admin delete data
      * @return array
      */
-    public function memberRemoveValidationErrorDataProvider(): array
+    public function adminRemoveValidationErrorDataProvider(): array
     {
         $this->createApplication();
 
@@ -222,11 +222,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * members delete request test.
-     * @dataProvider memberRemoveValidationErrorDataProvider
+     * admin delete request test.
+     * @dataProvider adminRemoveValidationErrorDataProvider
      * @return void
      */
-    public function testRemoveMemberValidationError(int $id): void
+    public function testRemoveAdminsValidationError(int $id): void
     {
         $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
         $response->assertStatus(422);
