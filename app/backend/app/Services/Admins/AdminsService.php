@@ -12,13 +12,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Exports\Admins\AdminsExport;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Repositories\Admins\AdminsRepositoryInterface;
-use App\Http\Requests\Admins\AdminCreateRequest;
-use App\Http\Requests\Admins\AdminDeleteRequest;
-use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admin\Admins\AdminCreateRequest;
+use App\Http\Requests\Admin\Admins\AdminDeleteRequest;
+use App\Http\Requests\Admin\Admins\AdminUpdateRequest;
 use App\Http\Resources\Admins\AdminsCollection;
 use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
@@ -122,7 +122,7 @@ class AdminsService
             DB::rollback();
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 $e->getMessage()
             );
             // abort(500);
@@ -168,7 +168,7 @@ class AdminsService
             DB::rollback();
 
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 $e->getMessage()
             );
             // abort(500);
@@ -211,7 +211,7 @@ class AdminsService
 
             // $e->getTraceAsString();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 $e->getMessage(),
             );
             // abort(500);
@@ -237,7 +237,7 @@ class AdminsService
             // 現在のパスワードのチェック
             if (!Hash::check($currentPassword, $admin[Admins::PASSWORD])) {
                 throw new MyApplicationHttpException(
-                    ExceptionStatusCodeMessages::STATUS_CODE_404,
+                    StatusCodeMessages::STATUS_404,
                     'hash check failed.'
                 );
             }
@@ -318,7 +318,7 @@ class AdminsService
 
         if (empty($cache)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_401,
+                StatusCodeMessages::STATUS_401,
                 'failed password update. maybe session expired.'
             );
         }
@@ -331,7 +331,7 @@ class AdminsService
         // token check
         if ($token !== $session[0]) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'failed password update.'
             );
         }
@@ -373,7 +373,7 @@ class AdminsService
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist admin.'
             );
         }
@@ -394,7 +394,7 @@ class AdminsService
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist admin.'
             );
         }

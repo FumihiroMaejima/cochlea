@@ -11,10 +11,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
-use App\Http\Requests\Admins\Coins\CoinCreateRequest;
-use App\Http\Requests\Admins\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admins\Coins\CoinUpdateRequest;
+use App\Library\Message\StatusCodeMessages;
+use App\Http\Requests\Admin\Coins\CoinCreateRequest;
+use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
@@ -196,7 +196,7 @@ class CoinsService
 
         if (empty($coins)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist coin.'
             );
         }
@@ -218,7 +218,7 @@ class CoinsService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist roles.'
             );
         }

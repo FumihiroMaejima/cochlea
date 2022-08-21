@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Library\Stripe\StripeLibrary;
 use App\Models\Users\UserCoinPaymentStatus;
 use Stripe\Checkout\Session;
@@ -169,7 +169,7 @@ class CheckoutLibrary extends StripeLibrary
                 $exipiredSession = $stripe->checkout->sessions->expire($session->id);
             } else {
                 throw new MyApplicationHttpException(
-                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_500,
                     'stripe api error. service id'
                 );
             }
@@ -178,7 +178,7 @@ class CheckoutLibrary extends StripeLibrary
             throw $e;
             // TODO パラメーターの設定とエラー内容によってメッセージの制御
             /* throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'stripe api error.'
             ); */
         }
@@ -202,7 +202,7 @@ class CheckoutLibrary extends StripeLibrary
 
             if ($serviceId !== $session->id) {
                 throw new MyApplicationHttpException(
-                    ExceptionStatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_500,
                     'stripe api error. service id'
                 );
             }
@@ -211,7 +211,7 @@ class CheckoutLibrary extends StripeLibrary
             throw $e;
             // TODO パラメーターの設定とエラー内容によってメッセージの制御
             /* throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'stripe api error.'
             ); */
         }

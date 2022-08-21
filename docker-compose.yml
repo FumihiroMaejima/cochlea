@@ -7,6 +7,7 @@ services:
     volumes:
       - ./app/backend:/var/www/html
       - ./app/php.ini:/usr/local/etc/php/php.ini
+      - ./app/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     ports:
       - "${PHP_FPM_PORT}:9000"
     expose:

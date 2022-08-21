@@ -3,7 +3,7 @@
 namespace App\Library\Random;
 
 use Exception;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 
 class RandomLibrary
 {
@@ -30,6 +30,6 @@ class RandomLibrary
             }
         }
 
-        throw new Exception('failed getting random value,', ExceptionStatusCodeMessages::STATUS_CODE_500);
+        throw new Exception('failed getting random value,', StatusCodeMessages::STATUS_500);
     }
 }

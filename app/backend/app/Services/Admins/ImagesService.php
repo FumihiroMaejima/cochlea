@@ -12,8 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
-use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Library\Message\StatusCodeMessages;
+use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
@@ -51,7 +51,7 @@ class ImagesService
 
         if (is_null($collection)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_404,
                 'not found images.'
             );
         }
@@ -70,7 +70,7 @@ class ImagesService
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_404,
             );
         }
 

@@ -93,6 +93,9 @@ config-clear:
 phpunit:
 	docker-compose exec app vendor/bin/phpunit --testdox
 
+phpunit-cov:
+	docker-compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
+
 phpcsfix:
 	docker-compose exec app vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.php
 
@@ -106,11 +109,11 @@ phpmd:
 backend-serve:
 	cd app/backend && php artisan serve
 
-backend-clear-cache:
+server-cache-clear:
 	docker-compose exec app php artisan cache:clear && \
 	docker-compose exec app php artisan config:clear
 
-backend-clear-full-cache:
+server-full-cache-clear:
 	docker-compose exec app php artisan cache:clear && \
 	docker-compose exec app php artisan config:clear && \
 	docker-compose exec app composer dump-autoload

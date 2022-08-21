@@ -4,7 +4,7 @@ namespace App\Library\Array;
 
 use stdClass;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 
 class ArrayLibrary
 {
@@ -20,7 +20,7 @@ class ArrayLibrary
 
         if (!is_array($value)) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'failed converting to array.'
             );
         }
@@ -36,6 +36,6 @@ class ArrayLibrary
      */
     public static function getFirst(array $items): array|stdClass
     {
-        return $items[0];
+        return current($items);
     }
 }

@@ -99,7 +99,7 @@ class TimeLibrary
      * @param string $format datetime format
      * @return string $dateTimeから$valueヶ月後の$dateTime
      */
-    public static function addMounths(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    public static function addMonths(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
     {
         return (new Carbon($dateTime))->addMonths($value)->format($format);
     }

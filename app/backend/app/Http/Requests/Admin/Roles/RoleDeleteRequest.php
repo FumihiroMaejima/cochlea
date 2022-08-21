@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins;
+namespace App\Http\Requests\Admin\Roles;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
@@ -8,22 +8,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Admins;
+use App\Models\Masters\Roles;
 
-class AdminDeleteRequest extends BaseRequest
+class RoleDeleteRequest extends RoleBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -32,7 +23,7 @@ class AdminDeleteRequest extends BaseRequest
     protected function prepareForValidation()
     {
         // ルーティングで設定しているidパラメーターをリクエストデータとして設定する
-        $this->merge(['id' => $this->route('id')]);
+        // $this->merge(['id' => $this->route('id')]);
     }
 
     /**
@@ -42,9 +33,9 @@ class AdminDeleteRequest extends BaseRequest
      */
     public function rules()
     {
-        $adminsModel = app()->make(Admins::class);
+        $rolesModel = app()->make(Roles::class);
         return [
-            'id' => 'required|integer|exists:' . $adminsModel->getTable() . ',id'
+            'roles' => 'required|array|exists:' . $rolesModel->getTable() . ',id'
         ];
     }
 
@@ -57,7 +48,7 @@ class AdminDeleteRequest extends BaseRequest
     {
         return [
             'required' => ':attributeは必須項目です。',
-            'integer'  => ':attributeは整数を入力してください。',
+            'array'    => ':attributeは配列で入力してください。',
             'exists'   => '指定した:attributeは存在しません。'
         ];
     }
@@ -70,7 +61,7 @@ class AdminDeleteRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'id' => '管理者ID'
+            'roles' => 'ロール'
         ];
     }
 }

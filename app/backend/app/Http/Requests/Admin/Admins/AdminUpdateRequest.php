@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admins;
+namespace App\Http\Requests\Admin\Admins;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
@@ -9,25 +9,15 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;
 
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 // use Illuminate\Validation\ValidationException;
 
-class AdminUpdateRequest extends BaseRequest
+class AdminUpdateRequest extends AdminBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -76,21 +66,6 @@ class AdminUpdateRequest extends BaseRequest
             'between'     => ':attributeは:min〜:max文字以内で入力してください。'
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'id'     => 'id',
-            'name'   => '氏名',
-            'email'  => 'メールアドレス',
-            'roleId' => '権限'
         ];
     }
 }

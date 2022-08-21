@@ -38,8 +38,13 @@ class ServiceBaseTestCase extends TestCase
     protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
     protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
 
+    // token prefix
+    protected const TOKEN_PREFIX = 'Bearer ';
+
     /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
     private const CONNECTION_NAME_FOR_CI = 'sqlite';
+    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
 
     protected $initialized = false;
 
@@ -51,6 +56,10 @@ class ServiceBaseTestCase extends TestCase
         RolePermissionsTableSeeder::class,
         AdminsRolesTableSeeder::class,
     ];
+
+
+    protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
+    protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
 
     /**
      * 初期化処理
@@ -66,16 +75,12 @@ class ServiceBaseTestCase extends TestCase
         $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
         $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        // connection 設定がデフォルトの場合
+        // connection 設定がCI用の設定の場合
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
         } else {
-            // DB内のテーブルの削除
-            $this->artisan('db:wipe', ['--database' => 'mysql']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_logs']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user1']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user2']);
-            $this->artisan('db:wipe', ['--database' => 'mysql_user3']);
+            // テスト用DB内のテーブルの削除
+            $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_TESTING]);
         }
 
         $this->artisan('migrate:fresh');
