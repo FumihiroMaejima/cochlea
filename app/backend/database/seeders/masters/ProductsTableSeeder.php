@@ -28,7 +28,7 @@ class ProductsTableSeeder extends BaseSeeder
         $this->tableName = (new Products())->getTable();
 
         $now = TimeLibrary::getCurrentDateTime();
-        $endDate = TimeLibrary::addMounths($now, self::END_DATE_ADDITIONAL_MOUNTHS);
+        $endDate = TimeLibrary::addMonths($now, self::END_DATE_ADDITIONAL_MOUNTHS);
 
         $template = [
             Products::NAME              => '',

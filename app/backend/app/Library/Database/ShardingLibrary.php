@@ -31,7 +31,7 @@ class ShardingLibrary
     {
         $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+        if (in_array($baseConnectionName, self::getSingleDatabaseConnections(), true)) {
             return $baseConnectionName;
         }
 
@@ -60,7 +60,7 @@ class ShardingLibrary
     {
         $baseConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        if ($baseConnectionName === Config::get('myapp.ci.database.baseConnectionName')) {
+        if (in_array($baseConnectionName, self::getSingleDatabaseConnections(), true)) {
             return $baseConnectionName;
         }
 
@@ -75,5 +75,18 @@ class ShardingLibrary
             // user database2
             return $baseConnectionName .(string)Config::get('myapp.database.users.nodeNumber2');
         }
+    }
+
+    /**
+     * get database connections for using single database.
+     *
+     * @return array<int, string> 単一DBで運用する用のDBコネクション名の配列
+     */
+    public static function getSingleDatabaseConnections(): array
+    {
+        return [
+            Config::get('myapp.unitTest.database.baseConnectionName'),
+            Config::get('myapp.ci.database.baseConnectionName'),
+        ];
     }
 }

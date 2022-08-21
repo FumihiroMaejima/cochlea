@@ -5,8 +5,8 @@ namespace App\Http\Resources\Admins;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Admins\AdminCreateRequest;
-use App\Http\Requests\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admin\Admins\AdminCreateRequest;
+use App\Http\Requests\Admin\Admins\AdminUpdateRequest;
 use App\Models\Masters\Admins;
 use App\Library\Time\TimeLibrary;
 

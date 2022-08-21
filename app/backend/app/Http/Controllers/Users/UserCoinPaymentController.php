@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
 use App\Services\Users\UserCoinPaymentService;
 use App\Trait\CheckHeaderTrait;
@@ -49,7 +49,7 @@ class UserCoinPaymentController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 
@@ -79,7 +79,7 @@ class UserCoinPaymentController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 
@@ -109,7 +109,7 @@ class UserCoinPaymentController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 

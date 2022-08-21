@@ -1,27 +1,19 @@
 <?php
 
-namespace App\Http\Requests\Admins\Coins;
+namespace App\Http\Requests\Admin\Admins;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
-use App\Models\Masters\Coins;
+use App\Models\Masters\Admins;
 
-class CoinDeleteRequest extends BaseRequest
+class AdminDeleteRequest extends AdminBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.coins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -30,7 +22,7 @@ class CoinDeleteRequest extends BaseRequest
     protected function prepareForValidation()
     {
         // ルーティングで設定しているidパラメーターをリクエストデータとして設定する
-        // $this->merge(['id' => $this->route('id')]);
+        $this->merge(['id' => $this->route('id')]);
     }
 
     /**
@@ -40,9 +32,9 @@ class CoinDeleteRequest extends BaseRequest
      */
     public function rules()
     {
-        $coinsModel = new Coins();
+        $adminsModel = app()->make(Admins::class);
         return [
-            'coins' => 'required|array|exists:' . $coinsModel->getTable() . ',id'
+            'id' => 'required|integer|exists:' . $adminsModel->getTable() . ',id'
         ];
     }
 
@@ -55,7 +47,7 @@ class CoinDeleteRequest extends BaseRequest
     {
         return [
             'required' => ':attributeは必須項目です。',
-            'array'    => ':attributeは配列で入力してください。',
+            'integer'  => ':attributeは整数を入力してください。',
             'exists'   => '指定した:attributeは存在しません。'
         ];
     }
@@ -68,7 +60,7 @@ class CoinDeleteRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'coins' => 'コイン商品'
+            self::KEY_ID => '管理者ID'
         ];
     }
 }

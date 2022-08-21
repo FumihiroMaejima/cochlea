@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
-use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;

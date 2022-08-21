@@ -49,6 +49,12 @@ return [
             'node3ShardIds'      => [3, 6, 9, 12],
         ]
     ],
+    // unitTestで使う場合のコネクション名。単一のコネクションに接続させる。
+    'unitTest' => [
+        'database' => [
+            'baseConnectionName' => 'mysql_testing',
+        ],
+    ],
     // CIなどで使う場合のコネクション名。単一のコネクションに接続させる。
     'ci' => [
         'database' => [

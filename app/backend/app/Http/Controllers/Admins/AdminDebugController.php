@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admins\Debug\DebugFileUploadRequest;
+use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Services\Admins\DebugService;
 use App\Services\Admins\ImagesService;
 use App\Trait\CheckHeaderTrait;
@@ -92,7 +92,7 @@ class AdminDebugController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 

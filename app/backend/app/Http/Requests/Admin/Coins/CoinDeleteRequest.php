@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Admins\Debug;
+namespace App\Http\Requests\Admin\Coins;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
-use App\Library\Time\TimeLibrary;
+use App\Models\Masters\Coins;
 
-class DebugFileUploadRequest extends BaseRequest
+class CoinDeleteRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,7 +18,7 @@ class DebugFileUploadRequest extends BaseRequest
      */
     public function authorize()
     {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.debug');
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.coins');
         return parent::authorize();
     }
 
@@ -40,9 +40,9 @@ class DebugFileUploadRequest extends BaseRequest
      */
     public function rules()
     {
+        $coinsModel = new Coins();
         return [
-            self::ATTRIBUTE_NAME_IMAGE       => self::RULE_IMAGE,
-
+            'coins' => 'required|array|exists:' . $coinsModel->getTable() . ',id'
         ];
     }
 
@@ -54,12 +54,9 @@ class DebugFileUploadRequest extends BaseRequest
     public function messages()
     {
         return [
-            'integer'     => ':attributeは整数で入力してください。',
-            'file'        => ':attributeはファイル形式で入力してください。',
-            'image'       => ':attributeは画像ファイルで入力してください。',
-            'image.max'   => ':attributeは最大:max KBで入力してください。',
-            'image.mimes' => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
-            'image.dimentions' => self::RULE_KEY_MESSAGE_IMAGE_DIMENTIONS,
+            'required' => ':attributeは必須項目です。',
+            'array'    => ':attributeは配列で入力してください。',
+            'exists'   => '指定した:attributeは存在しません。'
         ];
     }
 
@@ -71,7 +68,7 @@ class DebugFileUploadRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'image'    => 'デバッグ画像イメージ',
+            'coins' => 'コイン商品'
         ];
     }
 }

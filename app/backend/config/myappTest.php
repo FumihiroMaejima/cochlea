@@ -6,9 +6,7 @@ return [
             'login' => [
                 'email'    => 'test' . 'admin1' . '@example.com',
                 'password' => env('TEST_ADMIN_SEEDER_PASSWORD', 'password')
-            ]
-        ],
-        'member' => [
+            ],
             'create' => [
                 'success' => [
                     'name'                  => 'test name',
@@ -17,7 +15,7 @@ return [
                     'password'              => 'testpassword' . '12345',
                     'password_confirmation' => 'testpassword' . '12345'
                 ]
-            ]
+            ],
         ],
         'roles' => [
             'create' => [

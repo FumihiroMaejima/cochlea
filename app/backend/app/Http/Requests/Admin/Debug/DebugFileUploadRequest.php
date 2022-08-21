@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Admins\Roles;
+namespace App\Http\Requests\Admin\Debug;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
-use App\Models\Masters\Admins;
-use App\Models\Masters\Roles;
+use App\Library\Time\TimeLibrary;
 
-class RoleDeleteRequest extends BaseRequest
+class DebugFileUploadRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +18,7 @@ class RoleDeleteRequest extends BaseRequest
      */
     public function authorize()
     {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.debug');
         return parent::authorize();
     }
 
@@ -43,9 +40,9 @@ class RoleDeleteRequest extends BaseRequest
      */
     public function rules()
     {
-        $rolesModel = app()->make(Roles::class);
         return [
-            'roles' => 'required|array|exists:' . $rolesModel->getTable() . ',id'
+            self::ATTRIBUTE_NAME_IMAGE       => self::RULE_IMAGE,
+
         ];
     }
 
@@ -57,9 +54,12 @@ class RoleDeleteRequest extends BaseRequest
     public function messages()
     {
         return [
-            'required' => ':attributeは必須項目です。',
-            'array'    => ':attributeは配列で入力してください。',
-            'exists'   => '指定した:attributeは存在しません。'
+            'integer'     => ':attributeは整数で入力してください。',
+            'file'        => ':attributeはファイル形式で入力してください。',
+            'image'       => ':attributeは画像ファイルで入力してください。',
+            'image.max'   => ':attributeは最大:max KBで入力してください。',
+            'image.mimes' => self::RULE_KEY_MESSAGE_IMAGE_MIMES,
+            'image.dimentions' => self::RULE_KEY_MESSAGE_IMAGE_DIMENTIONS,
         ];
     }
 
@@ -71,7 +71,7 @@ class RoleDeleteRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'roles' => 'ロール'
+            'image'    => 'デバッグ画像イメージ',
         ];
     }
 }

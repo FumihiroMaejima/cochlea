@@ -3,7 +3,7 @@
 namespace App\Repositories\Users\UserCoinHistories;
 
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +80,7 @@ class UserCoinHistoriesRepository implements UserCoinHistoriesRepositoryInterfac
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                ExceptionStatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'has deplicate collections,'
             );
         }

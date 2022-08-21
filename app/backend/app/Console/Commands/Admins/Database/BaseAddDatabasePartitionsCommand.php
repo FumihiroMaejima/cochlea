@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
-use App\Exceptions\ExceptionStatusCodeMessages;
+use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 
 class BaseAddDatabasePartitionsCommand extends Command
@@ -272,7 +272,7 @@ class BaseAddDatabasePartitionsCommand extends Command
             return;
         }
 
-        $targetDate = TimeLibrary::addMounths($currentDate, $mounthCount);
+        $targetDate = TimeLibrary::addMonths($currentDate, $mounthCount);
 
         // パーティションの追加日数の算出
         $days = TimeLibrary::diffDays($currentDate, $targetDate);
