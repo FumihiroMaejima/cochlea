@@ -8,6 +8,7 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Library\Message\StatusCodeMessages;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -43,7 +44,7 @@ class PermissionsServiceTest extends ServiceBaseTestCase
     public function testGetPermissionsList(): void
     {
         $response = $this->get(route('admin.permissions.list'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(4, 'data');
     }
 }

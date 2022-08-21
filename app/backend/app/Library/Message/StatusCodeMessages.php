@@ -5,6 +5,10 @@ namespace App\Library\Message;
 class StatusCodeMessages
 {
     // ステータスコード
+    public const STATUS_200 = 200;
+    public const STATUS_201 = 201;
+    public const STATUS_203 = 203;
+    public const STATUS_301 = 301;
     public const STATUS_400 = 400;
     public const STATUS_401 = 401;
     public const STATUS_402 = 402;

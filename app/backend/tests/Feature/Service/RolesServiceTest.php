@@ -8,6 +8,7 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Library\Message\StatusCodeMessages;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,7 +44,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testGetRoles(): void
     {
         $response = $this->get(route('admin.roles.index'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, 'data');
     }
 
@@ -55,7 +56,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testGetRolesList(): void
     {
         $response = $this->get(route('admin.roles.list'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, 'data');
     }
 
@@ -85,7 +86,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             'detail'      => $detail,
             'permissions' => $permissions
         ]);
-        $response->assertStatus(201);
+        $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -125,7 +126,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             'detail'      => $detail,
             'permissions' => $permissions
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
     /**
@@ -137,7 +138,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testDownloadRolesCsvFile(): void
     {
         $response = $this->get(route('admin.roles.download'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
     }
 
@@ -155,7 +156,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             'detail'      => 'test detail',
             'permissions' => [2]
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
     /**
@@ -171,7 +172,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             'detail'      => 'test detail',
             'permissions' => []
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
     /**
@@ -183,7 +184,7 @@ class RolesServiceTest extends ServiceBaseTestCase
         $response = $this->json('DELETE', route('admin.roles.delete'), [
             'roles' => [1]
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
     /**
@@ -210,6 +211,6 @@ class RolesServiceTest extends ServiceBaseTestCase
         $response = $this->json('DELETE', route('admin.roles.delete'), [
             'roles' => $roles
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }

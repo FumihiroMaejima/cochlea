@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Library\Message\StatusCodeMessages;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,7 +47,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testGetAdminss(): void
     {
         $response = $this->get(route('admin.admins.index'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, 'data');
     }
 
@@ -91,7 +92,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             'password'              => $password,
             'password_confirmation' => $password_confirmation
         ]);
-        $response->assertStatus(201);
+        $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -136,7 +137,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             'password'              => $password,
             'password_confirmation' => $password_confirmation
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
 
@@ -149,7 +150,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testDownloadAdminsCsvFile(): void
     {
         $response = $this->get(route('admin.admins.download'));
-        $response->assertStatus(200)
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
     }
 
@@ -165,7 +166,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             'email'  => Config::get('myappTest.test.admin.login.email'),
             'roleId' => 1
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
     /**
@@ -180,7 +181,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             'email'  => Config::get('myappTest.test.admin.login.email'),
             'roleId' => 1
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
     /**
@@ -204,7 +205,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testRemoveAdminsSuccess(int $id): void
     {
         $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
-        $response->assertStatus(200);
+        $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
     /**
@@ -229,6 +230,6 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testRemoveAdminsValidationError(int $id): void
     {
         $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
-        $response->assertStatus(422);
+        $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }
