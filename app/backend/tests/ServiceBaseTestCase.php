@@ -78,8 +78,7 @@ class ServiceBaseTestCase extends TestCase
         // connection 設定がCI用の設定の場合
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
-        }
-        {
+        } else {
             // テスト用DB内のテーブルの削除
             $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_TESTING]);
         }
