@@ -151,7 +151,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      */
     public function testUpdateRoles(): void
     {
-        $response = $this->json('PATCH', route('admin.roles.update', ['id' => 4]), [
+        $response = $this->json('PATCH', route('admin.roles.update', [RoleBaseRequest::KEY_ID => 4]), [
             RoleBaseRequest::KEY_NAME        => 'test name',
             RoleBaseRequest::KEY_CODE        => 'test_code1',
             RoleBaseRequest::KEY_DETAIL      => 'test detail',
@@ -167,7 +167,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      */
     public function testUpdateFailedRoles(): void
     {
-        $response = $this->json('PATCH', route('admin.roles.update', ['id' => 4]), [
+        $response = $this->json('PATCH', route('admin.roles.update', [RoleBaseRequest::KEY_ID => 4]), [
             RoleBaseRequest::KEY_NAME        => '',
             RoleBaseRequest::KEY_CODE        => 'test_code1',
             RoleBaseRequest::KEY_DETAIL      => 'test detail',

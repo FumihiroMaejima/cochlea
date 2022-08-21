@@ -162,7 +162,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testUpdateAdmins(): void
     {
-        $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
+        $response = $this->json('PATCH', route('admin.admins.update', [AdminBaseRequest::KEY_ID => 1]), [
             AdminBaseRequest::KEY_NAME    => 'test name',
             AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
             AdminBaseRequest::KEY_ROLE_ID => 1
@@ -177,7 +177,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testUpdateFailedAdmin(): void
     {
-        $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
+        $response = $this->json('PATCH', route('admin.admins.update', [AdminBaseRequest::KEY_ID => 1]), [
             AdminBaseRequest::KEY_NAME    => '',
             AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
             AdminBaseRequest::KEY_ROLE_ID => 1
@@ -205,7 +205,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testRemoveAdminsSuccess(int $id): void
     {
-        $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
+        $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]));
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -230,7 +230,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testRemoveAdminsValidationError(int $id): void
     {
-        $response = $this->json('DELETE', route('admin.admins.delete', ['id' => $id]));
+        $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]));
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }
