@@ -8,22 +8,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Admins;
 
-class AdminDeleteRequest extends BaseRequest
+class AdminDeleteRequest extends AdminBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *

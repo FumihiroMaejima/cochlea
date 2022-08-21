@@ -8,23 +8,13 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 
-class AdminCreateRequest extends BaseRequest
+class AdminCreateRequest extends AdminBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.admins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -71,23 +61,6 @@ class AdminCreateRequest extends BaseRequest
             'same'     => ':attributeは同一の値ではありません。'
             // 'email' => 'アルファベット半角で入力してください。'
             // 'tel.regex' => '「000-0000-0000」の形式で入力してください。'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'id'                    => 'id',
-            'name'                  => '氏名',
-            'email'                 => 'メールアドレス',
-            'roleId'                => '権限',
-            'password'              => 'パスワード',
-            'password_confirmation' => '確認用パスワード'
         ];
     }
 }
