@@ -8,22 +8,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Permissions;
 
-class RoleCreateRequest extends BaseRequest
+class RoleCreateRequest extends RoleBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.roles');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -65,21 +55,6 @@ class RoleCreateRequest extends BaseRequest
             'array'      => ':attributeは配列で入力してください。',
             'between'    => ':attributeは:min〜:max文字以内で入力してください。',
             'exists'     => '指定した:attributeは存在しません。'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'name'        => 'ロール名',
-            'code'        => 'ロールコード',
-            'detail'      => '詳細',
-            'permissions' => 'パーミッション'
         ];
     }
 }
