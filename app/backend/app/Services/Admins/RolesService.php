@@ -250,7 +250,7 @@ class RolesService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist role.'
             );
         }
@@ -272,7 +272,7 @@ class RolesService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist roles.'
             );
         }

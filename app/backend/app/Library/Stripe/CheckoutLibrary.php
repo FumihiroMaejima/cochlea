@@ -169,7 +169,7 @@ class CheckoutLibrary extends StripeLibrary
                 $exipiredSession = $stripe->checkout->sessions->expire($session->id);
             } else {
                 throw new MyApplicationHttpException(
-                    StatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_500,
                     'stripe api error. service id'
                 );
             }
@@ -178,7 +178,7 @@ class CheckoutLibrary extends StripeLibrary
             throw $e;
             // TODO パラメーターの設定とエラー内容によってメッセージの制御
             /* throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'stripe api error.'
             ); */
         }
@@ -202,7 +202,7 @@ class CheckoutLibrary extends StripeLibrary
 
             if ($serviceId !== $session->id) {
                 throw new MyApplicationHttpException(
-                    StatusCodeMessages::STATUS_CODE_500,
+                    StatusCodeMessages::STATUS_500,
                     'stripe api error. service id'
                 );
             }
@@ -211,7 +211,7 @@ class CheckoutLibrary extends StripeLibrary
             throw $e;
             // TODO パラメーターの設定とエラー内容によってメッセージの制御
             /* throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'stripe api error.'
             ); */
         }

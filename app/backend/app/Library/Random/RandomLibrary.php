@@ -30,6 +30,6 @@ class RandomLibrary
             }
         }
 
-        throw new Exception('failed getting random value,', StatusCodeMessages::STATUS_CODE_500);
+        throw new Exception('failed getting random value,', StatusCodeMessages::STATUS_500);
     }
 }

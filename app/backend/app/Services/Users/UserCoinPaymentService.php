@@ -299,7 +299,7 @@ class UserCoinPaymentService
         if (is_null($coins)) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_404,
                 'not exitst coin.'
             );
         }
@@ -342,7 +342,7 @@ class UserCoinPaymentService
 
         if (empty($userCoinPaymentStatus)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist userCoinPaymentStatus.'
             );
         }
@@ -362,7 +362,7 @@ class UserCoinPaymentService
         if (empty(CheckoutLibrary::CHECKOUT_STATUS_VALUE_LIST[$status])) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'invalide status value.'
             );
         }

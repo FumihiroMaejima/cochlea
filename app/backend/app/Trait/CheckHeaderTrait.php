@@ -34,7 +34,7 @@ trait CheckHeaderTrait
 
         if (!is_integer($userId) || ($userId <= 0)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_401,
+                StatusCodeMessages::STATUS_401,
                 'Invalid header data.'
             );
         }
@@ -53,7 +53,7 @@ trait CheckHeaderTrait
 
         if (empty($sessionId)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_401,
+                StatusCodeMessages::STATUS_401,
                 'Invalid header data.'
             );
         }

@@ -83,7 +83,7 @@ class DebugController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 
@@ -110,7 +110,7 @@ class DebugController extends Controller
         if ($validator->fails()) {
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_422,
+                StatusCodeMessages::STATUS_422,
             );
         }
 

@@ -70,7 +70,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'has deplicate collections,'
             );
         }
@@ -103,7 +103,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
         // 複数ある場合
         if ($collection->count() > self::FIRST_DATA_COUNT) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'has deplicate collections,'
             );
         }

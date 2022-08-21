@@ -20,7 +20,7 @@ class ArrayLibrary
 
         if (!is_array($value)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'failed converting to array.'
             );
         }

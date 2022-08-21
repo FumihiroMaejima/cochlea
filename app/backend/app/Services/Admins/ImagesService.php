@@ -51,7 +51,7 @@ class ImagesService
 
         if (is_null($collection)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_404,
                 'not found images.'
             );
         }
@@ -70,7 +70,7 @@ class ImagesService
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_404,
+                StatusCodeMessages::STATUS_404,
             );
         }
 

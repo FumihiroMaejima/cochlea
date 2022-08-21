@@ -196,7 +196,7 @@ class CoinsService
 
         if (empty($coins)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist coin.'
             );
         }
@@ -218,7 +218,7 @@ class CoinsService
 
         if (empty($roles)) {
             throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_CODE_500,
+                StatusCodeMessages::STATUS_500,
                 'not exist roles.'
             );
         }
