@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Admins;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,7 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\Admin\AdminBaseRequest;
+use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;

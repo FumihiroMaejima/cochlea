@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Admins;
 
 use Illuminate\Support\Facades\Config;
 use App\Http\Requests\BaseRequest;

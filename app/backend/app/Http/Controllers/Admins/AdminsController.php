@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 // use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Services\Admins\AdminsService;
-use App\Http\Requests\Admin\AdminCreateRequest;
-use App\Http\Requests\Admin\AdminDeleteRequest;
-use App\Http\Requests\Admin\AdminUpdateRequest;
-use App\Http\Requests\Admin\AdminUpdatePasswordRequest;
-use App\Http\Requests\Admin\AdminForgotPasswordRequest;
-use App\Http\Requests\Admin\AdminResetPasswordRequest;
+use App\Http\Requests\Admin\Admins\AdminCreateRequest;
+use App\Http\Requests\Admin\Admins\AdminDeleteRequest;
+use App\Http\Requests\Admin\Admins\AdminUpdateRequest;
+use App\Http\Requests\Admin\Admins\AdminUpdatePasswordRequest;
+use App\Http\Requests\Admin\Admins\AdminForgotPasswordRequest;
+use App\Http\Requests\Admin\Admins\AdminResetPasswordRequest;
 use App\Trait\CheckHeaderTrait;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
