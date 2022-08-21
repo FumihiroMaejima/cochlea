@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
+use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,7 +46,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.roles.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertJsonCount(5, 'data');
+            ->assertJsonCount(5, RoleBaseRequest::RESPONSE_KEY_DATA);
     }
 
     /**
@@ -57,7 +58,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.roles.list'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertJsonCount(5, 'data');
+            ->assertJsonCount(5, RoleBaseRequest::RESPONSE_KEY_DATA);
     }
 
     /**
@@ -81,10 +82,10 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testCreateRoleSuccess(string $name, string $code, string $detail, array $permissions): void
     {
         $response = $this->json('POST', route('admin.roles.create'), [
-            'name'        => $name,
-            'code'        => $code,
-            'detail'      => $detail,
-            'permissions' => $permissions
+            RoleBaseRequest::KEY_NAME        => $name,
+            RoleBaseRequest::KEY_CODE        => $code,
+            RoleBaseRequest::KEY_DETAIL      => $detail,
+            RoleBaseRequest::KEY_PERMISSIONS => $permissions
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
@@ -104,11 +105,11 @@ class RolesServiceTest extends ServiceBaseTestCase
         }
 
         // データの整形
-        $testCase['no_name']['name']                    = '';
-        $testCase['no_code']['code']                    = '';
-        $testCase['no_detail']['detail']                = '';
-        $testCase['no_permission']['permissions']       = [];
-        $testCase['no_exist_permission']['permissions'] = [5];
+        $testCase['no_name'][RoleBaseRequest::KEY_NAME]                    = '';
+        $testCase['no_code'][RoleBaseRequest::KEY_CODE]                    = '';
+        $testCase['no_detail'][RoleBaseRequest::KEY_DETAIL]                = '';
+        $testCase['no_permission'][RoleBaseRequest::KEY_PERMISSIONS]       = [];
+        $testCase['no_exist_permission'][RoleBaseRequest::KEY_PERMISSIONS] = [5];
 
         return $testCase;
     }
@@ -121,10 +122,10 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testCreateRole422Failed(string $name, string $code, string $detail, array $permissions): void
     {
         $response = $this->json('POST', route('admin.roles.create'), [
-            'name'        => $name,
-            'code'        => $code,
-            'detail'      => $detail,
-            'permissions' => $permissions
+            RoleBaseRequest::KEY_NAME        => $name,
+            RoleBaseRequest::KEY_CODE        => $code,
+            RoleBaseRequest::KEY_DETAIL      => $detail,
+            RoleBaseRequest::KEY_PERMISSIONS => $permissions
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
@@ -151,10 +152,10 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testUpdateRoles(): void
     {
         $response = $this->json('PATCH', route('admin.roles.update', ['id' => 4]), [
-            'name'        => 'test name',
-            'code'        => 'test_code1',
-            'detail'      => 'test detail',
-            'permissions' => [2]
+            RoleBaseRequest::KEY_NAME        => 'test name',
+            RoleBaseRequest::KEY_CODE        => 'test_code1',
+            RoleBaseRequest::KEY_DETAIL      => 'test detail',
+            RoleBaseRequest::KEY_PERMISSIONS => [2]
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
@@ -167,10 +168,10 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testUpdateFailedRoles(): void
     {
         $response = $this->json('PATCH', route('admin.roles.update', ['id' => 4]), [
-            'name'        => '',
-            'code'        => 'test_code1',
-            'detail'      => 'test detail',
-            'permissions' => []
+            RoleBaseRequest::KEY_NAME        => '',
+            RoleBaseRequest::KEY_CODE        => 'test_code1',
+            RoleBaseRequest::KEY_DETAIL      => 'test detail',
+            RoleBaseRequest::KEY_PERMISSIONS => []
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
@@ -182,7 +183,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testRemoveRoleSuccess(): void
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [
-            'roles' => [1]
+            RoleBaseRequest::KEY_ROLES => [1]
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
@@ -196,8 +197,8 @@ class RolesServiceTest extends ServiceBaseTestCase
         $this->createApplication();
 
         return [
-            'no exist roles'             => ['roles' => [100]],
-            'not integer value in array' => ['roles' => ['string']]
+            'no exist roles'             => [RoleBaseRequest::KEY_ROLES => [100]],
+            'not integer value in array' => [RoleBaseRequest::KEY_ROLES => ['string']]
         ];
     }
 
@@ -209,7 +210,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     public function testRemoveMemberValidationError(array $roles): void
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [
-            'roles' => $roles
+            RoleBaseRequest::KEY_ROLES => $roles
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
