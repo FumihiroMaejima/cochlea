@@ -60,7 +60,7 @@ class AdminDeleteRequest extends AdminBaseRequest
     public function attributes()
     {
         return [
-            'id' => '管理者ID'
+            self::KEY_ID => '管理者ID'
         ];
     }
 }

@@ -8,6 +8,7 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
+use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -48,7 +49,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.admins.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertJsonCount(5, 'data');
+            ->assertJsonCount(5, AdminBaseRequest::RESPONSE_KEY_DATA);
     }
 
     /**
@@ -86,11 +87,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testCreateAdminsSuccess(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
         $response = $this->json('POST', route('admin.admins.create'), [
-            'name'                  => $name,
-            'email'                 => $email,
-            'roleId'                => $roleId,
-            'password'              => $password,
-            'password_confirmation' => $password_confirmation
+            AdminBaseRequest::KEY_NAME                  => $name,
+            AdminBaseRequest::KEY_EMAIL                 => $email,
+            AdminBaseRequest::KEY_ROLE_ID               => $roleId,
+            AdminBaseRequest::KEY_PASSWORD              => $password,
+            AdminBaseRequest::KEY_PASSWORD_CONFIRMATION => $password_confirmation
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
@@ -111,12 +112,12 @@ class AdminsServiceTest extends ServiceBaseTestCase
         }
 
         // データの整形
-        $testCase['no_name']['name']                                   = '';
-        $testCase['no_email']['email']                                 = '';
-        $testCase['no_exist_role']['roleId']                           = 0;
-        $testCase['no_password']['password']                           = '';
-        $testCase['no_password_confirmation']['password_confirmation'] = '';
-        $testCase['not_same_password']['password_confirmation']        = '1234';
+        $testCase['no_name'][AdminBaseRequest::KEY_NAME]                                   = '';
+        $testCase['no_email'][AdminBaseRequest::KEY_EMAIL]                                 = '';
+        $testCase['no_exist_role'][AdminBaseRequest::KEY_ROLE_ID]                          = 0;
+        $testCase['no_password'][AdminBaseRequest::KEY_PASSWORD]                           = '';
+        $testCase['no_password_confirmation'][AdminBaseRequest::KEY_PASSWORD_CONFIRMATION] = '';
+        $testCase['not_same_password'][AdminBaseRequest::KEY_PASSWORD_CONFIRMATION]        = '1234';
 
         return $testCase;
     }
@@ -131,11 +132,11 @@ class AdminsServiceTest extends ServiceBaseTestCase
         /* $data = Config::get('myappTest.test.admin.create.success');
         $data['name'] = ''; */
         $response = $this->json('POST', route('admin.admins.create'), [
-            'name'                  => $name,
-            'email'                 => $email,
-            'roleId'                => $roleId,
-            'password'              => $password,
-            'password_confirmation' => $password_confirmation
+            AdminBaseRequest::KEY_NAME                  => $name,
+            AdminBaseRequest::KEY_EMAIL                 => $email,
+            AdminBaseRequest::KEY_ROLE_ID               => $roleId,
+            AdminBaseRequest::KEY_PASSWORD              => $password,
+            AdminBaseRequest::KEY_PASSWORD_CONFIRMATION => $password_confirmation
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
@@ -162,9 +163,9 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testUpdateAdmins(): void
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
-            'name'   => 'test name',
-            'email'  => Config::get('myappTest.test.admin.login.email'),
-            'roleId' => 1
+            AdminBaseRequest::KEY_NAME    => 'test name',
+            AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
+            AdminBaseRequest::KEY_ROLE_ID => 1
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
@@ -177,9 +178,9 @@ class AdminsServiceTest extends ServiceBaseTestCase
     public function testUpdateFailedAdmin(): void
     {
         $response = $this->json('PATCH', route('admin.admins.update', ['id' => 1]), [
-            'name'   => '',
-            'email'  => Config::get('myappTest.test.admin.login.email'),
-            'roleId' => 1
+            AdminBaseRequest::KEY_NAME    => '',
+            AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
+            AdminBaseRequest::KEY_ROLE_ID => 1
         ]);
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
@@ -193,7 +194,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
         $this->createApplication();
 
         return [
-            'id is 3' => ['id' => 3]
+            'id is 3' => [AdminBaseRequest::KEY_ID => 3]
         ];
     }
 
@@ -217,8 +218,8 @@ class AdminsServiceTest extends ServiceBaseTestCase
         $this->createApplication();
 
         return [
-            'no exist id' => ['id' => 100],
-            'not inteder value' => ['id' => (int)('string value')]
+            'no exist id' => [AdminBaseRequest::KEY_ID => 100],
+            'not inteder value' => [AdminBaseRequest::KEY_ID => (int)('string value')]
         ];
     }
 

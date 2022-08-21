@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Config;
 
 class BaseRequest extends FormRequest
 {
+    // response keys
+    public const RESPONSE_KEY_DATA = 'data';
+
     protected const AUTHORIZATION_ERROR_STATUS_CODE = 403;
     protected const AUTHORIZATION_ERROR_MESSAGE = 'Forbidden';
     protected const VALIDATION_ERROR_STATUS_CODE = 422;
