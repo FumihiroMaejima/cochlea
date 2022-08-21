@@ -33,18 +33,17 @@ class ArrayLibraryTest extends TestCase
                         'test_key12' => 12,
                         'test_key13' => 13,
                     ],
-                    [
-                        'test_key21' => 21,
-                        'test_key22' => 22,
-                        'test_key23' => 23,
-                    ],
-                    [
-                        'test_key21' => 21,
-                        'test_key22' => 22,
-                        'test_key23' => 23,
+                ],
+            ],
+            'convert object to array' => [
+                [
+                    'test_key11' => (object)[
+                        'test_key11' => 11,
+                        'test_key12' => 12,
+                        'test_key13' => 13,
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -56,8 +55,13 @@ class ArrayLibraryTest extends TestCase
      */
     public function testToArray(array $data): void
     {
-        echo var_dump($data);
+        $result = ArrayLibrary::toArray($data);
 
-        $this->assertEquals(json_decode(json_encode($data), true), ArrayLibrary::toArray($data));
+        // echo var_dump($data);
+        // echo var_dump($result);
+
+        $this->assertEquals(json_decode(json_encode($data), true), $result);
+        // 一番先頭の要素
+        $this->assertIsArray(current($result));
     }
 }
