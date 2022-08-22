@@ -114,7 +114,18 @@ class CoinsServiceTest extends ServiceBaseTestCase
     {
         $this->createApplication();
 
-        $caseKeys = ['no_name', 'no_detail', 'no_price', 'no_cost', 'no_start_at', 'no_end_at', 'no_image', 'price_less_than_0', 'cost_less_than_0', 'start_at_grater_than_end_at', 'start_at_invalid_format'];
+        $caseKeys = [
+            'no_name',
+            'no_detail',
+            'no_price',
+            'no_cost',
+            'no_start_at',
+            'no_end_at',
+            'price_less_than_0',
+            'cost_less_than_0',
+            'start_at_grater_than_end_at',
+            'start_at_invalid_format'
+        ];
         $testCase = [];
         foreach ($caseKeys as $key) {
             $testCase[$key] = Config::get('myappTest.test.coins.create.success');
