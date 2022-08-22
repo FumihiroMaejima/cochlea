@@ -26,6 +26,20 @@ return [
                     'permissions' => [1,2,3],
                 ]
             ]
-        ]
+        ],
+        'coins' => [
+            'create' => [
+                'success' => [
+                    'name'      => 'test name',
+                    'detail'    => 'role`s detail.',
+                    'price'     => 350,
+                    'cost'      => 350,
+                    'start_at'  => '2022/05/10 00:00:00',
+                    'end_at'    => '2022/08/10 23:59:59',
+                    'image'     => null,
+                    'coins'     => [2,3],
+                ]
+            ]
+        ],
     ],
 ];

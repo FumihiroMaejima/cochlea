@@ -145,11 +145,11 @@ class RolesServiceTest extends ServiceBaseTestCase
 
 
     /**
-     * roles update request test.
+     * role update request test.
      *
      * @return void
      */
-    public function testUpdateRoles(): void
+    public function testUpdateRole(): void
     {
         $response = $this->json('PATCH', route('admin.roles.update', [RoleBaseRequest::KEY_ID => 4]), [
             RoleBaseRequest::KEY_NAME        => 'test name',
@@ -161,11 +161,11 @@ class RolesServiceTest extends ServiceBaseTestCase
     }
 
     /**
-     * roles update request failed test.
+     * role update request failed test.
      *
      * @return void
      */
-    public function testUpdateFailedRoles(): void
+    public function testUpdateFailedRole(): void
     {
         $response = $this->json('PATCH', route('admin.roles.update', [RoleBaseRequest::KEY_ID => 4]), [
             RoleBaseRequest::KEY_NAME        => '',
@@ -207,7 +207,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      * @dataProvider roleRemoveValidationErrorDataProvider
      * @return void
      */
-    public function testRemoveMemberValidationError(array $roles): void
+    public function testRemoveRoleValidationError(array $roles): void
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [
             RoleBaseRequest::KEY_ROLES => $roles
