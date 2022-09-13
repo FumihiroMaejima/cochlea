@@ -19,6 +19,8 @@ use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Admins\Roles\RolesRepositoryInterface;
 use App\Exports\Admins\RolesExport;
+use App\Exports\Masters\Coins\CoinsExport;
+use App\Exports\Masters\Coins\CoinsTemplateExport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Models\Masters\Coins;
@@ -77,7 +79,21 @@ class CoinsService
     {
         $data = $this->coinsRepository->getCoins();
 
-        return Excel::download(new RolesExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        // return Excel::download(new RolesExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new CoinsExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
+    }
+
+    /**
+     * download enemies template data service
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(
+            new CoinsTemplateExport(collect(Config::get('myappFile.service.admins.coins.template'))),
+            'master_coins_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
+        );
     }
 
     /**

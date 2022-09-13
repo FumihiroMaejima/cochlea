@@ -83,6 +83,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/coin', [\App\Http\Controllers\Admins\CoinsController::class, 'create'])->name('admin.coins.create');
             Route::patch('/coin/{id}', [\App\Http\Controllers\Admins\CoinsController::class, 'update'])->name('admin.coins.update');
             Route::delete('/coin', [\App\Http\Controllers\Admins\CoinsController::class, 'destroy'])->name('admin.coins.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\CoinsController::class, 'template'])->name('admin.coins.download.template');
         });
     });
 

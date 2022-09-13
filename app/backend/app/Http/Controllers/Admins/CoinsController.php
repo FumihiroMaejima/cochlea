@@ -65,6 +65,23 @@ class CoinsController extends Controller
     }
 
     /**
+     * download import template for import the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     */
+    public function template(Request $request): BinaryFileResponse|JsonResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // サービスの実行
+        return $this->service->downloadTemplate();
+    }
+
+    /**
      * creating a new resource.
      *
      * @param  CoinCreateRequest  $request
