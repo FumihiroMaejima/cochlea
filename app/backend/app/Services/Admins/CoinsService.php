@@ -17,8 +17,6 @@ use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
-use App\Exports\Admins\RolesExport;
 use App\Exports\Masters\Coins\CoinsExport;
 use App\Exports\Masters\Coins\CoinsTemplateExport;
 use App\Library\Array\ArrayLibrary;
@@ -79,7 +77,6 @@ class CoinsService
     {
         $data = $this->coinsRepository->getCoins();
 
-        // return Excel::download(new RolesExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
         return Excel::download(new CoinsExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
     }
 
