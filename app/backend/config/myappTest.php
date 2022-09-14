@@ -39,7 +39,22 @@ return [
                     'image'     => null,
                     'coins'     => [2,3],
                 ]
-            ]
+            ],
+            'import' => [
+                'success' => [
+                    'fileName'  => 'game_coins_template_20220404000000.xlsx',
+                    'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'   => 'test coin1',
+                        'detail' => 'test coin1',
+                        'price'  => 100,
+                        'cost'   => 100,
+                    ]
+                ]
+            ],
         ],
     ],
 ];

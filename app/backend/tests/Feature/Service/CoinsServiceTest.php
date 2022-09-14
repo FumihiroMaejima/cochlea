@@ -180,12 +180,25 @@ class CoinsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    /* public function testDownloadRolesCsvFile(): void
+    public function testDownloadCoinsCsvFile(): void
     {
-        $response = $this->get(route('admin.coins.download'));
-        $response->assertStatus(StatusCodeMessages::STATUS_200)
+        $response = $this->get(route('admin.coins.download.csv'));
+        $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
-    } */
+    }
+
+    /**
+     * coins template file download test.
+     * output dir storage/framework/laravel-excel
+     *
+     * @return void
+     */
+    public function testDownloadCoinsTemplateFile(): void
+    {
+        $response = $this->get(route('admin.coins.download.template'));
+        $response->assertStatus(200)
+            ->assertHeader('content-type', self::CONTENT_TYPE_APPLICATION_EXCEL);
+    }
 
 
     /**
