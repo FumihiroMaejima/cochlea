@@ -18,6 +18,9 @@ class CoinBaseRequest extends BaseRequest
     public const KEY_IMAGE    = 'image';
     public const KEY_COINS    = 'coins';
 
+    // attribute keys options
+    public const KEY_FILE = 'file';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -45,6 +48,7 @@ class CoinBaseRequest extends BaseRequest
             self::KEY_START_AT => '公開開始日時',
             self::KEY_END_AT   => '公開終了日時',
             self::KEY_IMAGE    => 'イメージ',
+            self::KEY_FILE     => 'ファイル',
         ];
     }
 }
