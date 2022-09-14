@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Coins\CoinCreateRequest;
 use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admin\Coins\CoinsImportRequest;
 use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Services\Admins\CoinsService;
 use App\Trait\CheckHeaderTrait;
@@ -79,6 +80,18 @@ class CoinsController extends Controller
 
         // サービスの実行
         return $this->service->downloadTemplate();
+    }
+
+    /**
+     * import coin data by file.
+     *
+     * @param CoinsImportRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadTemplate(CoinsImportRequest $request): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->importTemplate($request->file);
     }
 
     /**

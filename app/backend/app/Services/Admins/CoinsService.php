@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admin\Coins\CoinCreateRequest;
@@ -19,6 +20,7 @@ use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Exports\Masters\Coins\CoinsExport;
 use App\Exports\Masters\Coins\CoinsTemplateExport;
+use App\Imports\Masters\Coins\CoinsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Models\Masters\Coins;
@@ -91,6 +93,51 @@ class CoinsService
             new CoinsTemplateExport(collect(Config::get('myappFile.service.admins.coins.template'))),
             'master_coins_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
         );
+    }
+
+
+    /**
+     * imort enemies by template data service
+     *
+     * @param UploadedFile $file
+     * @return JsonResponse
+     */
+    public function importTemplate(UploadedFile $file)
+    {
+        // ファイル名チェック
+        if (!preg_match('/^game_coins_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+                'no include title.'
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            // Excel::import(new EnemiesImport, $file, null, \Maatwebsite\Excel\Excel::XLSX);
+            // Excel::import(new EnemiesImport($file), $file, null, \Maatwebsite\Excel\Excel::XLSX);
+            $fileData = Excel::toArray(new CoinsImport($file), $file, null, \Maatwebsite\Excel\Excel::XLSX);
+
+            // $resource = app()->make(GameEnemiesCreateResource::class, ['resource' => $fileData[0]])->toArray($request);
+            $resource = CoinsResource::toArrayForCreate(current($fileData));
+
+            $insertCount = $this->coinsRepository->create($resource);
+
+            DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
+
+            // レスポンスの制御
+            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
+            $status = ($insertCount > 0) ? 201 : 401;
+
+            return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            abort(500);
+        }
     }
 
     /**
