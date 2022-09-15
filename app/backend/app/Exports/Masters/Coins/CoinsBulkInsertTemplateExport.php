@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests\Admin\Coins\CoinBaseRequest;
 use App\Models\Masters\Coins;
 
-class CoinsTemplateExport implements FromCollection, WithHeadings, WithTitle, WithMapping
+class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, WithTitle, WithMapping
 {
     use Exportable;
 

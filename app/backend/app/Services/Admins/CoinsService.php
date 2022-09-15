@@ -19,7 +19,7 @@ use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Exports\Masters\Coins\CoinsExport;
-use App\Exports\Masters\Coins\CoinsTemplateExport;
+use App\Exports\Masters\Coins\CoinsBulkInsertTemplateExport;
 use App\Imports\Masters\Coins\CoinsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
@@ -90,7 +90,7 @@ class CoinsService
     public function downloadTemplate()
     {
         return Excel::download(
-            new CoinsTemplateExport(collect(Config::get('myappFile.service.admins.coins.template'))),
+            new CoinsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.coins.template'))),
             'master_coins_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
         );
     }

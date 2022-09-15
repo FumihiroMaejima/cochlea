@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Library\Message\StatusCodeMessages;
-use App\Exports\Masters\Coins\CoinsTemplateExport;
+use App\Exports\Masters\Coins\CoinsBulkInsertTemplateExport;
 use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 use App\Http\Requests\Admin\Coins\CoinBaseRequest;
 use Database\Seeders\Masters\AdminsTableSeeder;
@@ -215,7 +215,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
         /* make file */
         // Symfony file package extends SplFileInfo
         $symfonyFile = Excel::download(
-            new CoinsTemplateExport(collect(Config::get('myappTest.test.coins.import.fileData'))), $name
+            new CoinsBulkInsertTemplateExport(collect(Config::get('myappTest.test.coins.import.fileData'))), $name
         )->getFile();
         $file = UploadedFile::fake()->createWithContent($name, $symfonyFile->getContent());
 
