@@ -8,7 +8,10 @@ use Tests\ServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Library\Message\StatusCodeMessages;
+use App\Exports\Masters\Coins\CoinsTemplateExport;
 use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 use App\Http\Requests\Admin\Coins\CoinBaseRequest;
 use Database\Seeders\Masters\AdminsTableSeeder;
@@ -198,6 +201,28 @@ class CoinsServiceTest extends ServiceBaseTestCase
         $response = $this->get(route('admin.coins.download.template'));
         $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_APPLICATION_EXCEL);
+    }
+
+    /**
+     * import coins filee request test.
+     *
+     * @return void
+     */
+    public function testImportCoins(): void
+    {
+        $name = Config::get('myappTest.test.coins.import.success')['fileName'];
+
+        /* make file */
+        // Symfony file package extends SplFileInfo
+        $symfonyFile = Excel::download(
+            new CoinsTemplateExport(collect(Config::get('myappTest.test.coins.import.fileData'))), $name
+        )->getFile();
+        $file = UploadedFile::fake()->createWithContent($name, $symfonyFile->getContent());
+
+        $response = $this->json('POST', route('admin.coins.upload.template'), [
+            'file' => $file
+        ]);
+        $response->assertStatus(201);
     }
 
 
