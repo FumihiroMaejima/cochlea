@@ -45,6 +45,9 @@ class CoinsTemplateExport implements FromCollection, WithHeadings, WithTitle, Wi
             '詳細',
             '購入価格',
             'アプリケーション内コスト',
+            '公開開始日時',
+            '公開終了日時',
+            '画像',
         ];
     }
 
@@ -69,6 +72,9 @@ class CoinsTemplateExport implements FromCollection, WithHeadings, WithTitle, Wi
             'detail' => $item->{Coins::DETAIL},
             'price'  => $item->{Coins::PRICE},
             'cost'   => $item->{Coins::COST},
+            'start_at' => $item->{Coins::START_AT},
+            'end_at'   => $item->{Coins::END_AT},
+            'image'    => $item->{Coins::IMAGE},
         ];
     }
 }
