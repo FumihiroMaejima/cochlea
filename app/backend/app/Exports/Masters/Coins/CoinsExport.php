@@ -41,11 +41,13 @@ class CoinsExport implements FromCollection, WithHeadings, WithTitle, WithMappin
     public function headings(): array
     {
         return [
-            'id',
             'コイン名',
             '詳細',
             '購入価格',
-            'アプリケーション内コスト'
+            'アプリケーション内コスト',
+            '画像',
+            '公開開始日時',
+            '公開終了日時',
         ];
     }
 
@@ -66,11 +68,13 @@ class CoinsExport implements FromCollection, WithHeadings, WithTitle, WithMappin
     {
         // return $data;
         return [
-            'id'     => $item->{CoinBaseRequest::KEY_ID},
-            'name'   => $item->{CoinBaseRequest::KEY_NAME},
-            'detail' => $item->{CoinBaseRequest::KEY_DETAIL},
-            'price'  => $item->{CoinBaseRequest::KEY_PRICE},
-            'cost'   => $item->{CoinBaseRequest::KEY_COST},
+            'name'     => $item->{CoinBaseRequest::KEY_NAME},
+            'detail'   => $item->{CoinBaseRequest::KEY_DETAIL},
+            'price'    => $item->{CoinBaseRequest::KEY_PRICE},
+            'cost'     => $item->{CoinBaseRequest::KEY_COST},
+            'image'    => $item->{CoinBaseRequest::KEY_IMAGE},
+            'start_at' => $item->{CoinBaseRequest::KEY_START_AT},
+            'end_at'   => $item->{CoinBaseRequest::KEY_END_AT},
         ];
     }
 }

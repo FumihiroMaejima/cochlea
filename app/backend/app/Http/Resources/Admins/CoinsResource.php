@@ -168,12 +168,15 @@ class CoinsResource extends JsonResource
             // 先頭はファイルのヘッダーに当たる為除外
             if ($key !== 0) {
                 $response[] = [
-                    'name'       => $item[0],
-                    'detail'     => $item[1],
-                    'price'      => $item[2],
-                    'cost'       => $item[3],
-                    'created_at' => $dateTime,
-                    'updated_at' => $dateTime,
+                    Coins::NAME       => $item[0],
+                    Coins::DETAIL     => $item[1],
+                    Coins::PRICE      => $item[2],
+                    Coins::COST       => $item[3],
+                    Coins::IMAGE      => $item[4],
+                    Coins::START_AT   => $item[5],
+                    Coins::CREATED_AT => $item[6],
+                    Coins::END_AT     => $dateTime,
+                    Coins::UPDATED_AT => $dateTime,
                 ];
             }
         }
