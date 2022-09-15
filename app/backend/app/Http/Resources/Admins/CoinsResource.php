@@ -172,10 +172,10 @@ class CoinsResource extends JsonResource
                     Coins::DETAIL     => $item[1],
                     Coins::PRICE      => $item[2],
                     Coins::COST       => $item[3],
-                    Coins::IMAGE      => $item[4],
-                    Coins::START_AT   => $item[5],
-                    Coins::CREATED_AT => $item[6],
-                    Coins::END_AT     => $dateTime,
+                    Coins::START_AT   => $item[4],
+                    Coins::END_AT     => $item[5],
+                    Coins::IMAGE      => $item[6] ?? '',
+                    Coins::CREATED_AT => $dateTime,
                     Coins::UPDATED_AT => $dateTime,
                 ];
             }

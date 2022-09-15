@@ -35,7 +35,7 @@ return [
                     'price'     => 350,
                     'cost'      => 350,
                     'start_at'  => '2022/05/10 00:00:00',
-                    'end_at'    => '2022/08/10 23:59:59',
+                    'end_at'    => '2030/12/31 23:59:59',
                     'image'     => null,
                     'coins'     => [2,3],
                 ]
@@ -48,10 +48,13 @@ return [
                 ],
                 'fileData' => [
                     (object)[
-                        'name'   => 'test coin1',
-                        'detail' => 'test coin1',
-                        'price'  => 100,
-                        'cost'   => 100,
+                        'name'     => 'test coin1',
+                        'detail'   => 'test coin1',
+                        'price'    => 500,
+                        'cost'     => 500,
+                        'start_at' => '2022/05/10 00:00:00',
+                        'end_at'   => '2030/12/31 23:59:59',
+                        'image'    => null,
                     ]
                 ]
             ],

@@ -45,9 +45,9 @@ class CoinsExport implements FromCollection, WithHeadings, WithTitle, WithMappin
             '詳細',
             '購入価格',
             'アプリケーション内コスト',
-            '画像',
             '公開開始日時',
             '公開終了日時',
+            '画像',
         ];
     }
 
@@ -72,9 +72,9 @@ class CoinsExport implements FromCollection, WithHeadings, WithTitle, WithMappin
             'detail'   => $item->{CoinBaseRequest::KEY_DETAIL},
             'price'    => $item->{CoinBaseRequest::KEY_PRICE},
             'cost'     => $item->{CoinBaseRequest::KEY_COST},
-            'image'    => $item->{CoinBaseRequest::KEY_IMAGE},
             'start_at' => $item->{CoinBaseRequest::KEY_START_AT},
             'end_at'   => $item->{CoinBaseRequest::KEY_END_AT},
+            'image'    => $item->{CoinBaseRequest::KEY_IMAGE},
         ];
     }
 }

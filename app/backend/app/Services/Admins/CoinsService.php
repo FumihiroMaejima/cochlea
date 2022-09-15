@@ -119,7 +119,7 @@ class CoinsService
             $fileData = Excel::toArray(new CoinsImport($file), $file, null, \Maatwebsite\Excel\Excel::XLSX);
 
             // $resource = app()->make(GameEnemiesCreateResource::class, ['resource' => $fileData[0]])->toArray($request);
-            $resource = CoinsResource::toArrayForCreate(current($fileData));
+            $resource = CoinsResource::toArrayForBulkInsert(current($fileData));
 
             $insertCount = $this->coinsRepository->create($resource);
 
