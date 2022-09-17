@@ -1,0 +1,40 @@
+# /admin/coins/coin/{id}:
+  patch:
+    tags:
+      - roles
+    summary: Update Coin
+    description: ""
+    operationId: UpdateCoinWithForm
+    parameters:
+      - name: id
+        in: path
+        description: ID of Coin
+        required: true
+        schema:
+          type: integer
+          format: int64
+    requestBody:
+      $ref: "../../../../components/requestBodies/createCoinWithForm.yaml"
+    responses:
+      "200":
+        description: successful UPdate
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []

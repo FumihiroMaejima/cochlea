@@ -151,4 +151,36 @@ class CoinsResource extends JsonResource
             self::RESOURCE_KEY_DELETED_AT => $dateTime
         ];
     }
+
+    /**
+     * Transform the resource into an array for bulk insert.
+     *
+     * @param array $resouce
+     * @return array
+     */
+    public static function toArrayForBulkInsert(array $resouce)
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        $response = [];
+
+        foreach ($resouce as $key => $item) {
+            // 先頭はファイルのヘッダーに当たる為除外
+            if ($key !== 0) {
+                $response[] = [
+                    Coins::NAME       => $item[0],
+                    Coins::DETAIL     => $item[1],
+                    Coins::PRICE      => $item[2],
+                    Coins::COST       => $item[3],
+                    Coins::START_AT   => $item[4],
+                    Coins::END_AT     => $item[5],
+                    Coins::IMAGE      => $item[6] ?? '',
+                    Coins::CREATED_AT => $dateTime,
+                    Coins::UPDATED_AT => $dateTime,
+                ];
+            }
+        }
+
+        return $response;
+    }
 }

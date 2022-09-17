@@ -34,6 +34,7 @@ class RoleBaseRequest extends BaseRequest
     public function attributes()
     {
         return [
+            self::KEY_ID          => 'ロールID',
             self::KEY_NAME        => 'ロール名',
             self::KEY_CODE        => 'ロールコード',
             self::KEY_DETAIL      => '詳細',

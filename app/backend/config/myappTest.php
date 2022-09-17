@@ -26,6 +26,38 @@ return [
                     'permissions' => [1,2,3],
                 ]
             ]
-        ]
+        ],
+        'coins' => [
+            'create' => [
+                'success' => [
+                    'name'      => 'test name',
+                    'detail'    => 'role`s detail.',
+                    'price'     => 350,
+                    'cost'      => 350,
+                    'start_at'  => '2022/05/10 00:00:00',
+                    'end_at'    => '2030/12/31 23:59:59',
+                    'image'     => null,
+                    'coins'     => [2,3],
+                ]
+            ],
+            'import' => [
+                'success' => [
+                    'fileName'  => 'game_coins_template_20220404000000.xlsx',
+                    'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'     => 'test coin1',
+                        'detail'   => 'test coin1',
+                        'price'    => 500,
+                        'cost'     => 500,
+                        'start_at' => '2022/05/10 00:00:00',
+                        'end_at'   => '2030/12/31 23:59:59',
+                        'image'    => null,
+                    ]
+                ]
+            ],
+        ],
     ],
 ];

@@ -7,21 +7,11 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
+use App\Http\Requests\Admin\Coins\CoinBaseRequest;
 use App\Library\Time\TimeLibrary;
 
-class CoinCreateRequest extends BaseRequest
+class CoinCreateRequest extends CoinBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.coins');
-        return parent::authorize();
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -74,24 +64,6 @@ class CoinCreateRequest extends BaseRequest
             'image'       => ':attributeは画像ファイルで入力してください。',
             'image.max'   => ':attributeは最大:max KBで入力してください。',
             'exists'      => '指定した:attributeは存在しません。'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'name'     => 'コイン名',
-            'detail'   => '詳細',
-            'price'    => 'コインの購入価格',
-            'cost'     => 'アプリケーション内のコインの価格',
-            'start_at' => '公開開始日時',
-            'end_at'   => '公開終了日時',
-            'image'    => 'イメージ',
         ];
     }
 }
