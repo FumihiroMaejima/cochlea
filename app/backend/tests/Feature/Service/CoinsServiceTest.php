@@ -95,8 +95,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
         string $startAt,
         string $endAt,
         string|null $image
-    ): void
-    {
+    ): void {
         $response = $this->json('POST', route('admin.coins.create'), [
             CoinBaseRequest::KEY_NAME     => $name,
             CoinBaseRequest::KEY_DETAIL   => $detail,
@@ -163,8 +162,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
         string $startAt,
         string $endAt,
         string|null $image
-    ): void
-    {
+    ): void {
         $response = $this->json('POST', route('admin.coins.create'), [
             CoinBaseRequest::KEY_NAME     => $name,
             CoinBaseRequest::KEY_DETAIL   => $detail,
@@ -215,7 +213,8 @@ class CoinsServiceTest extends ServiceBaseTestCase
         /* make file */
         // Symfony file package extends SplFileInfo
         $symfonyFile = Excel::download(
-            new CoinsBulkInsertTemplateExport(collect(Config::get('myappTest.test.coins.import.fileData'))), $name
+            new CoinsBulkInsertTemplateExport(collect(Config::get('myappTest.test.coins.import.fileData'))),
+            $name
         )->getFile();
         $file = UploadedFile::fake()->createWithContent($name, $symfonyFile->getContent());
 
