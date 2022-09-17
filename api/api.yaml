@@ -18,6 +18,8 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+  - name: coins
+    description: Coins infomation
   - name: roles
     description: Roles infomation
   - name: gameEnemies
@@ -67,6 +69,24 @@ paths:
           type: integer
           format: int64
     $ref: "./data/paths/admin/roles/role/id.yaml"
+  /admin/coins:
+    $ref: "./data/paths/admin/coins/index.yaml"
+  /admin/coins/csv:
+    $ref: "./data/paths/admin/coins/csv.yaml"
+  /admin/coins/template:
+    $ref: "./data/paths/admin/coins/template.yaml"
+  /admin/coins/coin:
+    $ref: "./data/paths/admin/coins/coin/index.yaml"
+  "/admin/coins/coin/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of coin
+        required: true
+        schema:
+          type: integer
+          format: int64
+    $ref: "./data/paths/admin/coins/coin/id.yaml"
 #   /admin/game/enemies:
 #     $ref: "./data/paths/admin/game/enemies/index.yaml"
 #   /admin/game/enemies/file/csv:

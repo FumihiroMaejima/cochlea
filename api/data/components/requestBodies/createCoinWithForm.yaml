@@ -1,0 +1,25 @@
+# createRoleWithForm:
+  description: test createCoinWithForm description.
+  content:
+    # application/x-www-form-urlencoded:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: name of Coin
+            type: string
+          detail:
+            description: detail of Coin
+            type: string
+          price:
+            description: price of Coin
+            type: integer
+          cost:
+            description: cost of Coin
+            type: integer
+        required:
+          - name
+          - detail
+          - price
+          - cost

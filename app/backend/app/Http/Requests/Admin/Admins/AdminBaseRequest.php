@@ -37,7 +37,7 @@ class AdminBaseRequest extends BaseRequest
     public function attributes()
     {
         return [
-            self::KEY_ID                    => 'id',
+            self::KEY_ID                    => '管理者ID',
             self::KEY_NAME                  => '氏名',
             self::KEY_EMAIL                 => 'メールアドレス',
             self::KEY_ROLE_ID               => '権限',

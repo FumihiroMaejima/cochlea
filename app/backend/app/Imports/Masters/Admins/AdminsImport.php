@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Imports\Admins;
+namespace App\Imports\Masters\Admins;
 
 use App\Models\Masters\Admins;
 use Maatwebsite\Excel\Concerns\ToModel;

@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Coins\CoinCreateRequest;
 use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
+use App\Http\Requests\Admin\Coins\CoinsImportRequest;
 use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Services\Admins\CoinsService;
 use App\Trait\CheckHeaderTrait;
@@ -62,6 +63,35 @@ class CoinsController extends Controller
 
         // サービスの実行
         return $this->service->downloadCSV($request);
+    }
+
+    /**
+     * download import template for import the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     */
+    public function template(Request $request): BinaryFileResponse|JsonResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // サービスの実行
+        return $this->service->downloadTemplate();
+    }
+
+    /**
+     * import coin data by file.
+     *
+     * @param CoinsImportRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadTemplate(CoinsImportRequest $request): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->importTemplate($request->file);
     }
 
     /**

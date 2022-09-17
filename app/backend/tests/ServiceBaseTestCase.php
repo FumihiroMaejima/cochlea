@@ -60,6 +60,7 @@ class ServiceBaseTestCase extends TestCase
 
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
+    protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /**
      * 初期化処理
@@ -74,15 +75,17 @@ class ServiceBaseTestCase extends TestCase
 
         $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
         $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
+        $connection = '';
 
         // connection 設定がCI用の設定の場合
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
-            $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_CI]);
+            $connection = self::CONNECTION_NAME_FOR_CI;
         } else {
             // テスト用DB内のテーブルの削除
-            $this->artisan('db:wipe', ['--database' => self::CONNECTION_NAME_FOR_TESTING]);
+            $connection = self::CONNECTION_NAME_FOR_TESTING;
         }
 
+        $this->artisan('db:wipe', ['--database' => $connection]);
         $this->artisan('migrate:fresh');
         $this->seed($this->seederClasses);
 
