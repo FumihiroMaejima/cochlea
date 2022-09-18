@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Ioformations extends Model
+class Informations extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -27,6 +27,8 @@ class Ioformations extends Model
     public const NAME       = 'name';
     public const TYPE       = 'type';
     public const DETAIL     = 'detail';
+    public const START_AT   = 'start_at';
+    public const END_AT     = 'end_at';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
@@ -64,6 +66,8 @@ class Ioformations extends Model
         self::NAME,
         self::TYPE,
         self::DETAIL,
+        self::START_AT,
+        self::END_AT,
         self::CREATED_AT,
         self::UPDATED_AT
     ];
