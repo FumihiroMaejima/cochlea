@@ -11,6 +11,17 @@ class Ioformations extends Model
     use HasFactory;
     use SoftDeletes;
 
+    // 決済のステータス
+    public const INFORMATION_TYPE_DEFAULT = 0b01; // お知らせ
+    public const INFORMATION_TYPE_MAINTENANCE = 0b10; // メンテナンス
+    public const INFORMATION_TYPE_FAILURE = 0b11; // 障害
+
+    public const INFORMATION_TYPE_LIST = [
+        self::INFORMATION_TYPE_DEFAULT => 'お知らせ',
+        self::INFORMATION_TYPE_MAINTENANCE => 'メンテナンス',
+        self::INFORMATION_TYPE_FAILURE => '障害',
+    ];
+
     // カラム一覧
     public const ID         = 'id';
     public const NAME       = 'name';

@@ -124,7 +124,7 @@ class CreateUserData1Table extends Migration
                     $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
                     // プライマリキー設定
-                    $table->primary(['user_id', 'information_id', 'created_at']);
+                    $table->primary(['user_id', 'information_id', 'created_at'], 'user_read_informations1_primary');
 
                     $table->comment('about user read informations table');
                 });
