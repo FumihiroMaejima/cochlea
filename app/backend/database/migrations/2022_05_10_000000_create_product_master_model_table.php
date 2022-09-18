@@ -37,6 +37,21 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
+         * informations table
+         */
+        Schema::create('informations', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('お知らせ名');
+            $table->tinyInteger('type')->unsigned()->comment('お知らせタイプ 1:お知らせ、2:メンテナンス、3:障害');
+            $table->text('detail')->comment('詳細');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('informations table');
+        });
+
+        /**
          * products table
          */
         Schema::create('coins', function (Blueprint $table) {
@@ -117,6 +132,7 @@ class CreateProductMasterModelTable extends Migration
     public function down()
     {
         Schema::dropIfExists('images');
+        Schema::dropIfExists('informations');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('manufactureres');

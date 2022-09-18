@@ -25,7 +25,7 @@ class CreateUserData1Table extends Migration
                  */
                 Schema::connection($connectionName)->create('user_coin_histories'.$shardId, function (Blueprint $table) {
                     $table->integer('user_id')->unsigned()->comment('ユーザーID');
-                    $table->tinyInteger('type')->unsigned()->comment('履歴タイプ 1:購入、2:獲得:、3:消費:、4:期限切れ');
+                    $table->tinyInteger('type')->unsigned()->comment('履歴タイプ 1:購入、2:獲得、3:消費、4:期限切れ');
                     $table->integer('get_free_coins')->unsigned()->default(0)->comment('獲得した無料コイン数');
                     $table->integer('get_paid_coins')->unsigned()->default(0)->comment('購入・獲得した有料コイン数');
                     $table->integer('get_limited_time_coins')->unsigned()->default(0)->comment('購入・獲得した期間限定コイン数');
@@ -112,6 +112,22 @@ class CreateUserData1Table extends Migration
 
                     $table->comment('about user comment table');
                 });
+
+                /**
+                 * user_read_informations table
+                 */
+                Schema::connection($connectionName)->create('user_read_informations'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->unsigned()->comment('ユーザーID');
+                    $table->integer('information_id')->unsigned()->comment('お知らせID');
+                    $table->dateTime('created_at')->comment('登録日時');
+                    $table->dateTime('updated_at')->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+                    // プライマリキー設定
+                    $table->primary(['user_id', 'information_id', 'created_at']);
+
+                    $table->comment('about user read informations table');
+                });
             }
         }
     }
@@ -132,6 +148,7 @@ class CreateUserData1Table extends Migration
                 Schema::connection($connectionName)->dropIfExists('user_coins'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_read_informations'.$shardId);
             }
         }
     }
