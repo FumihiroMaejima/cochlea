@@ -70,7 +70,7 @@ class CoinsService
     }
 
     /**
-     * download role data service
+     * download coin data service
      *
      * @param  \Illuminate\Http\Request;  $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
@@ -83,7 +83,7 @@ class CoinsService
     }
 
     /**
-     * download enemies template data service
+     * download coin template data service
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
