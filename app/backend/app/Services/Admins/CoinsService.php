@@ -97,7 +97,7 @@ class CoinsService
 
 
     /**
-     * imort enemies by template data service
+     * imort coins by template data service
      *
      * @param UploadedFile $file
      * @return JsonResponse
