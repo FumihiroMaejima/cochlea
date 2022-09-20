@@ -42,7 +42,7 @@ return [
             ],
             'import' => [
                 'success' => [
-                    'fileName'  => 'game_coins_template_20220404000000.xlsx',
+                    'fileName'  => 'master_coins_template_20220404000000.xlsx',
                     'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     'size'      => 1000
                 ],
