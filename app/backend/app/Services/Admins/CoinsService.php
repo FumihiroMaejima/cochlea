@@ -105,7 +105,7 @@ class CoinsService
     public function importTemplate(UploadedFile $file)
     {
         // ファイル名チェック
-        if (!preg_match('/^game_coins_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
+        if (!preg_match('/^master_coins_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_422,
                 'no include title.'
