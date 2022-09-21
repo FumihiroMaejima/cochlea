@@ -31,7 +31,7 @@ return [
             'create' => [
                 'success' => [
                     'name'      => 'test name',
-                    'detail'    => 'role`s detail.',
+                    'detail'    => 'coins`s detail.',
                     'price'     => 350,
                     'cost'      => 350,
                     'start_at'  => '2022/05/10 00:00:00',
@@ -55,6 +55,35 @@ return [
                         'start_at' => '2022/05/10 00:00:00',
                         'end_at'   => '2030/12/31 23:59:59',
                         'image'    => null,
+                    ]
+                ]
+            ],
+        ],
+        'informations' => [
+            'create' => [
+                'success' => [
+                    'name'         => 'test name',
+                    'type'         => 1,
+                    'detail'       => 'informations`s detail.',
+                    'start_at'     => '2022/05/10 00:00:00',
+                    'end_at'       => '2030/12/31 23:59:59',
+                    'informations' => [2,3],
+                ]
+            ],
+            'import' => [
+                'success' => [
+                    'fileName'  => 'master_informations_template_20220404000000.xlsx',
+                    'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'         => 'test name',
+                        'type'         => 1,
+                        'detail'       => 'informations`s detail.',
+                        'start_at'     => '2022/05/10 00:00:00',
+                        'end_at'       => '2030/12/31 23:59:59',
+                        'informations' => [2,3],
                     ]
                 ]
             ],

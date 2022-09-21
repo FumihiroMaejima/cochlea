@@ -7,6 +7,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Http\Requests\Admin\Coins\CoinCreateRequest;
 use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
+use App\Http\Requests\Admin\Informations\InformationCreateRequest;
+use App\Http\Requests\Admin\Informations\InformationDeleteRequest;
+use App\Http\Requests\Admin\Informations\InformationImportRequest;
+use App\Http\Requests\Admin\Informations\InformationUpdateRequest;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Masters\Informations;
@@ -97,10 +101,10 @@ class InformationsResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param CoinCreateRequest $request
+     * @param InformationCreateRequest $request
      * @return array
      */
-    public static function toArrayForCreate(CoinCreateRequest $request): array
+    public static function toArrayForCreate(InformationCreateRequest $request): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
@@ -118,10 +122,10 @@ class InformationsResource extends JsonResource
     /**
      * Transform the resource into an array for update.
      *
-     * @param CoinUpdateRequest $request
+     * @param InformationUpdateRequest $request
      * @return array
      */
-    public static function toArrayForUpdate(CoinUpdateRequest $request): array
+    public static function toArrayForUpdate(InformationUpdateRequest $request): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
