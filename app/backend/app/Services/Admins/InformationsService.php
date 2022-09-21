@@ -58,7 +58,7 @@ class InformationsService
         // キャッシュチェック
         if (is_null($cache)) {
             $collection = $this->informationsRepository->getRecords();
-            $resourceCollection = InformationsResource::toArrayForGetCoinsCollection($collection);
+            $resourceCollection = InformationsResource::toArrayForGetInformationsCollection($collection);
 
             if (!empty($resourceCollection)) {
                 CacheLibrary::setCache(self::CACHE_KEY_INFORMATION_COIN_COLLECTION_LIST, $resourceCollection);
