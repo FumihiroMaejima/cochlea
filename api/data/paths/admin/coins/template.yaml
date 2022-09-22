@@ -32,7 +32,7 @@
       - coins
     summary: Import coins Template File
     description: ""
-    operationId: importEnemiesWithFile
+    operationId: importCoinsWithFile
     parameters:
       - name: Authorization
         in: header
