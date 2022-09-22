@@ -1,7 +1,7 @@
 # /admin/coins/coin/{id}:
   patch:
     tags:
-      - roles
+      - coins
     summary: Update Coin
     description: ""
     operationId: UpdateCoinWithForm
