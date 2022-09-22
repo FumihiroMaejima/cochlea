@@ -178,13 +178,17 @@ class InformationsService
     /**
      * update information data service
      *
-     * @param  InformationUpdateRequest $request
-     * @param  int  $id
+     * @param int $id record id
+     * @param string $name name
+     * @param int $type type
+     * @param string $detail detail
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateInformation(InformationUpdateRequest $request, int $id): JsonResponse
+    public function updateInformation(int $id, string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
     {
-        $resource = InformationsResource::toArrayForUpdate($request);
+        $resource = InformationsResource::toArrayForUpdate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
         try {

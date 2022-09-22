@@ -156,7 +156,14 @@ class InformationsController extends Controller
     public function update(InformationUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateInformation($request, $id);
+        return $this->service->updateInformation(
+            $id,
+            $request->{InformationCreateRequest::KEY_NAME},
+            $request->{InformationCreateRequest::KEY_TYPE},
+            $request->{InformationCreateRequest::KEY_DETAIL},
+            $request->{InformationCreateRequest::KEY_START_AT},
+            $request->{InformationCreateRequest::KEY_END_AT},
+        );
     }
 
     /**
