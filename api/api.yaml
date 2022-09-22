@@ -14,16 +14,18 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
   - name: admins
-    description: Administrators infomation
+    description: Administrators information
     externalDocs:
       description: Find out more
       url: http://swagger.io
   - name: coins
-    description: Coins infomation
+    description: Coins information
+  - name: informations
+    description: Informations information
   - name: roles
-    description: Roles infomation
+    description: Roles information
   - name: gameEnemies
-    description: GameEnemies infomation
+    description: GameEnemies information
   - name: auth
     description: Operations about authentication
     externalDocs:
@@ -87,6 +89,24 @@ paths:
           type: integer
           format: int64
     $ref: "./data/paths/admin/coins/coin/id.yaml"
+  /admin/informations:
+    $ref: "./data/paths/admin/informations/index.yaml"
+  /admin/informations/csv:
+    $ref: "./data/paths/admin/informations/csv.yaml"
+  /admin/informations/template:
+    $ref: "./data/paths/admin/informations/template.yaml"
+  /admin/informations/information:
+    $ref: "./data/paths/admin/informations/information/index.yaml"
+  "/admin/informations/information/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of information
+        required: true
+        schema:
+          type: integer
+          format: int64
+    $ref: "./data/paths/admin/informations/information/id.yaml"
 #   /admin/game/enemies:
 #     $ref: "./data/paths/admin/game/enemies/index.yaml"
 #   /admin/game/enemies/file/csv:
@@ -141,6 +161,8 @@ components:
       $ref: "./data/schemas/models/Admins.yaml"
     Coins:
       $ref: "./data/schemas/models/Coins.yaml"
+    Informations:
+      $ref: "./data/schemas/models/Informations.yaml"
     Permissions:
       $ref: "./data/schemas/models/Permissions.yaml"
     Roles:

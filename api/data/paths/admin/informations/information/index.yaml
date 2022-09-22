@@ -1,0 +1,107 @@
+# /admin/informations/information:
+  post:
+    tags:
+      - informations
+    summary: Create Information
+    description: ""
+    operationId: createInformationWithForm
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      $ref: "../../../../components/requestBodies/createInformationWithForm.yaml"
+    responses:
+      "201":
+        description: successful Create
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []
+  delete:
+    tags:
+      - informations
+    summary: Deletes some informations
+    description: ""
+    operationId: deleteInformation
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: informations
+        in: query
+        description: ID of information
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+    responses:
+      "200":
+        description: successful Delete
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "400":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "404":
+        description: Membeer not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []
