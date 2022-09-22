@@ -17,7 +17,7 @@
       $ref: "../../../../components/requestBodies/createCoinWithForm.yaml"
     responses:
       "200":
-        description: successful UPdate
+        description: successful Update
         content:
           application/json:
             schema:
