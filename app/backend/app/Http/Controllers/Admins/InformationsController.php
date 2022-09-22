@@ -63,7 +63,7 @@ class InformationsController extends Controller
         }
 
         // サービスの実行
-        return $this->service->downloadCSV($request);
+        return $this->service->downloadCSV();
     }
 
     /**
@@ -104,7 +104,13 @@ class InformationsController extends Controller
     public function create(InformationCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createInformation($request);
+        return $this->service->createInformation(
+            $request->{InformationCreateRequest::KEY_NAME},
+            $request->{InformationCreateRequest::KEY_TYPE},
+            $request->{InformationCreateRequest::KEY_DETAIL},
+            $request->{InformationCreateRequest::KEY_START_AT},
+            $request->{InformationCreateRequest::KEY_END_AT},
+        );
     }
 
     /**

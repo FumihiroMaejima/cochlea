@@ -101,19 +101,23 @@ class InformationsResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param InformationCreateRequest $request
+     * @param string $name name
+     * @param int $type type
+     * @param string $detail detail
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
      * @return array
      */
-    public static function toArrayForCreate(InformationCreateRequest $request): array
+    public static function toArrayForCreate(string $name, int $type, string $detail, string $startAt, string $endAt): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME       => $request->{Informations::NAME},
-            self::RESOURCE_KEY_TYPE       => $request->{Informations::TYPE},
-            self::RESOURCE_KEY_DETAIL     => $request->{Informations::DETAIL},
-            self::RESOURCE_KEY_START_AT   => $request->{Informations::START_AT},
-            self::RESOURCE_KEY_END_AT     => $request->{Informations::END_AT},
+            self::RESOURCE_KEY_NAME       => $name,
+            self::RESOURCE_KEY_TYPE       => $type,
+            self::RESOURCE_KEY_DETAIL     => $detail,
+            self::RESOURCE_KEY_START_AT   => $startAt,
+            self::RESOURCE_KEY_END_AT     => $endAt,
             self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime,
         ];

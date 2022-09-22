@@ -73,10 +73,9 @@ class InformationsService
     /**
      * download information data service
      *
-     * @param  \Illuminate\Http\Request;  $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadCSV(Request $request)
+    public function downloadCSV()
     {
         $data = $this->informationsRepository->getRecords();
 
@@ -142,15 +141,18 @@ class InformationsService
     }
 
     /**
-     * update information data service
+     * create information data service
      *
-     * @param  InformationCreateRequest  $request
-     * @param  int  $id
+     * @param string $name name
+     * @param int $type type
+     * @param string $detail detail
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createInformation(InformationCreateRequest $request): JsonResponse
+    public function createInformation(string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
     {
-        $resource = InformationsResource::toArrayForCreate($request);
+        $resource = InformationsResource::toArrayForCreate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
         try {
