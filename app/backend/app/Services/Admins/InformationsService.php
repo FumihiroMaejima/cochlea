@@ -216,16 +216,13 @@ class InformationsService
     /**
      * delete information data service
      *
-     * @param  InformationDeleteRequest $request
-     * @param  int  $id
+     * @param array $informationIds id of records
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteInformation(InformationDeleteRequest $request): JsonResponse
+    public function deleteInformation(array $informationIds): JsonResponse
     {
         DB::beginTransaction();
         try {
-            $informationIds = $request->informations;
-
             $resource = InformationsResource::toArrayForDelete();
 
             // ロックをかける為transaction内で実行
@@ -273,15 +270,15 @@ class InformationsService
     }
 
     /**
-     * get informations by role ids.
+     * get informations by information ids.
      *
-     * @param array $coinIds role id
+     * @param array $ids records id
      * @return array
      */
-    private function getInformationsByIds(array $coinIds): array
+    private function getInformationsByIds(array $ids): array
     {
         // 更新用途で使う為lockをかける
-        $informations = $this->informationsRepository->getByIds($coinIds, true);
+        $informations = $this->informationsRepository->getByIds($ids, true);
 
         if (empty($informations)) {
             throw new MyApplicationHttpException(

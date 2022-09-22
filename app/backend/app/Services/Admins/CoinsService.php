@@ -266,9 +266,9 @@ class CoinsService
     }
 
     /**
-     * get coins by role ids.
+     * get coins by coin ids.
      *
-     * @param array $coinIds role id
+     * @param array $coinIds coin id
      * @return array
      */
     private function getCoinsByIds(array $coinIds): array

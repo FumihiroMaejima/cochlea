@@ -175,6 +175,6 @@ class InformationsController extends Controller
     public function destroy(InformationDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteInformation($request);
+        return $this->service->deleteInformation($request->{InformationCreateRequest::KEY_INFORMATIONS});
     }
 }
