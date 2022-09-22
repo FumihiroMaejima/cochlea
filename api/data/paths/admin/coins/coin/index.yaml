@@ -1,10 +1,10 @@
-# /admin/roles/role:
+# /admin/coins/coin:
   post:
     tags:
-      - roles
-    summary: Create Role
+      - coins
+    summary: Create Coin
     description: ""
-    operationId: createRoleWithForm
+    operationId: createCoinWithForm
     parameters:
       - name: Authorization
         in: header
@@ -25,7 +25,7 @@
         schema:
           type: string
     requestBody:
-      $ref: "../../../../components/requestBodies/createRoleWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createCoinWithForm.yaml"
     responses:
       "201":
         description: successful Create
@@ -51,10 +51,10 @@
       - auth_id: []
   delete:
     tags:
-      - roles
-    summary: Deletes some roles
+      - coins
+    summary: Deletes some coins
     description: ""
-    operationId: deleteRole
+    operationId: deleteCoin
     parameters:
       - name: Authorization
         in: header
@@ -68,9 +68,9 @@
         required: true
         schema:
           type: string
-      - name: roles
+      - name: coins
         in: query
-        description: ID of role
+        description: ID of coin
         required: true
         schema:
           type: array
@@ -82,13 +82,13 @@
     #       schema:
     #         type: object
     #         properties:
-    #           roles:
-    #             description: ID of role
+    #           coins:
+    #             description: ID of coin
     #             type: array
     #             items:
     #               type: integer
     #         required:
-    #           - roles
+    #           - coins
     responses:
       "200":
         description: successful Delete
