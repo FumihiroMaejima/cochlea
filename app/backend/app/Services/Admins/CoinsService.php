@@ -150,7 +150,7 @@ class CoinsService
      * @param string|null $image image
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createCoin(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
+    public function createCoin(string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
     {
         $resource = CoinsResource::toArrayForCreate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 
@@ -188,7 +188,7 @@ class CoinsService
      * @param string|null $image image
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateCoin(int $id, string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
+    public function updateCoin(int $id, string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
     {
         $resource = CoinsResource::toArrayForUpdate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 

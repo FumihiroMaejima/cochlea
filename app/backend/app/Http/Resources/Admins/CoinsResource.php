@@ -104,7 +104,7 @@ class CoinsResource extends JsonResource
      * @param string|null $image image
      * @return array
      */
-    public static function toArrayForCreate(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): array
+    public static function toArrayForCreate(string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
@@ -133,7 +133,7 @@ class CoinsResource extends JsonResource
      * @param string|null $image image
      * @return array
      */
-    public static function toArrayForUpdate(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): array
+    public static function toArrayForUpdate(string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
