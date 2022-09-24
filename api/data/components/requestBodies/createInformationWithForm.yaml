@@ -1,0 +1,29 @@
+# createRoleWithForm:
+  description: test createInformationWithForm description.
+  content:
+    # application/x-www-form-urlencoded:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: name of Information
+            type: string
+          type:
+            description: type of Information
+            type: integer
+          detail:
+            description: detail of Information
+            type: string
+          start_at:
+            description: start datetime of Information
+            type: string
+          end_at:
+            description: end datetime of Information
+            type: string
+        required:
+          - name
+          - type
+          - detail
+          - start_at
+          - end_at

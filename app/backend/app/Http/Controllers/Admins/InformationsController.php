@@ -8,27 +8,28 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinsImportRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
-use App\Services\Admins\CoinsService;
+use App\Http\Requests\Admin\Informations\InformationCreateRequest;
+use App\Http\Requests\Admin\Informations\InformationDeleteRequest;
+use App\Http\Requests\Admin\Informations\InformationImportRequest;
+use App\Http\Requests\Admin\Informations\InformationUpdateRequest;
+use App\Services\Admins\InformationsService;
 use App\Trait\CheckHeaderTrait;
 
-class CoinsController extends Controller
+class InformationsController extends Controller
 {
     use CheckHeaderTrait;
-    private CoinsService $service;
+    private InformationsService $service;
 
     /**
-     * Create a new RolesController instance.
+     * Create a new controller instance.
      *
+     * @param InformationsService $service
      * @return void
      */
-    public function __construct(CoinsService $coinsService)
+    public function __construct(InformationsService $service)
     {
         $this->middleware('auth:api-admins');
-        $this->service = $coinsService;
+        $this->service = $service;
     }
 
     /**
@@ -40,12 +41,12 @@ class CoinsController extends Controller
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
-        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
         // サービスの実行
-        return $this->service->getCoins();
+        return $this->service->getInformations($request);
     }
 
     /**
@@ -57,7 +58,7 @@ class CoinsController extends Controller
     public function download(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
-        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
@@ -74,7 +75,7 @@ class CoinsController extends Controller
     public function template(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
-        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
@@ -85,10 +86,10 @@ class CoinsController extends Controller
     /**
      * import coin data by file.
      *
-     * @param CoinsImportRequest $request
+     * @param InformationImportRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function uploadTemplate(CoinsImportRequest $request): JsonResponse
+    public function uploadTemplate(InformationImportRequest $request): JsonResponse
     {
         // サービスの実行
         return $this->service->importTemplate($request->file);
@@ -97,21 +98,18 @@ class CoinsController extends Controller
     /**
      * creating a new resource.
      *
-     * @param  CoinCreateRequest  $request
+     * @param  InformationCreateRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(CoinCreateRequest $request): JsonResponse
+    public function create(InformationCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        // return $this->service->createCoin($request);
-        return $this->service->createCoin(
-            $request->{CoinCreateRequest::KEY_NAME},
-            $request->{CoinCreateRequest::KEY_DETAIL},
-            $request->{CoinCreateRequest::KEY_PRICE},
-            $request->{CoinCreateRequest::KEY_COST},
-            $request->{CoinCreateRequest::KEY_START_AT},
-            $request->{CoinCreateRequest::KEY_END_AT},
-            $request->{CoinCreateRequest::KEY_IMAGE} ?? ''
+        return $this->service->createInformation(
+            $request->{InformationCreateRequest::KEY_NAME},
+            $request->{InformationCreateRequest::KEY_TYPE},
+            $request->{InformationCreateRequest::KEY_DETAIL},
+            $request->{InformationCreateRequest::KEY_START_AT},
+            $request->{InformationCreateRequest::KEY_END_AT},
         );
     }
 
@@ -151,34 +149,32 @@ class CoinsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  CoinUpdateRequest  $request
+     * @param  InformationUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(CoinUpdateRequest $request, int $id): JsonResponse
+    public function update(InformationUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateCoin(
+        return $this->service->updateInformation(
             $id,
-            $request->{CoinUpdateRequest::KEY_NAME},
-            $request->{CoinUpdateRequest::KEY_DETAIL},
-            $request->{CoinUpdateRequest::KEY_PRICE},
-            $request->{CoinUpdateRequest::KEY_COST},
-            $request->{CoinUpdateRequest::KEY_START_AT},
-            $request->{CoinUpdateRequest::KEY_END_AT},
-            $request->{CoinUpdateRequest::KEY_IMAGE} ?? ''
+            $request->{InformationCreateRequest::KEY_NAME},
+            $request->{InformationCreateRequest::KEY_TYPE},
+            $request->{InformationCreateRequest::KEY_DETAIL},
+            $request->{InformationCreateRequest::KEY_START_AT},
+            $request->{InformationCreateRequest::KEY_END_AT},
         );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  CoinDeleteRequest  $request
+     * @param  InformationDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(CoinDeleteRequest $request): JsonResponse
+    public function destroy(InformationDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteCoin($request->{CoinUpdateRequest::KEY_COINS});
+        return $this->service->deleteInformation($request->{InformationCreateRequest::KEY_INFORMATIONS});
     }
 }

@@ -8,6 +8,7 @@ use App\Console\Commands\Admins\Database\BaseAddDatabasePartitionsCommand;
 use App\Models\Logs\AdminsLog;
 use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;
+use App\Models\Logs\UserReadInformationLog;
 use App\Library\Time\TimeLibrary;
 
 class AddLogDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
@@ -77,6 +78,17 @@ class AddLogDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
                 self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentLog::CREATED_AT,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+            ],
+            [
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserReadInformationLog())->getTable(),
                 self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
                 self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentLog::CREATED_AT,
                 self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,

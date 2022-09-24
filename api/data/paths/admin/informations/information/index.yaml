@@ -1,10 +1,10 @@
-# /admin/coins/coin:
+# /admin/informations/information:
   post:
     tags:
-      - coins
-    summary: Create Coin
+      - informations
+    summary: Create Information
     description: ""
-    operationId: createCoinWithForm
+    operationId: createInformationWithForm
     parameters:
       - name: Authorization
         in: header
@@ -25,7 +25,7 @@
         schema:
           type: string
     requestBody:
-      $ref: "../../../../components/requestBodies/createCoinWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createInformationWithForm.yaml"
     responses:
       "201":
         description: successful Create
@@ -51,10 +51,10 @@
       - auth_id: []
   delete:
     tags:
-      - coins
-    summary: Deletes some coins
+      - informations
+    summary: Deletes some informations
     description: ""
-    operationId: deleteCoin
+    operationId: deleteInformation
     parameters:
       - name: Authorization
         in: header
@@ -68,27 +68,14 @@
         required: true
         schema:
           type: string
-      - name: coins
+      - name: informations
         in: query
-        description: ID of coin
+        description: ID of information
         required: true
         schema:
           type: array
           items:
             type: integer
-    # requestBody:
-    #   content:
-    #     application/x-www-form-urlencoded:
-    #       schema:
-    #         type: object
-    #         properties:
-    #           coins:
-    #             description: ID of coin
-    #             type: array
-    #             items:
-    #               type: integer
-    #         required:
-    #           - coins
     responses:
       "200":
         description: successful Delete

@@ -52,6 +52,22 @@ class CreateLogsTable extends Migration
 
             $table->comment('user coin payment log table');
         });
+
+        /**
+         * user_read_information_log table
+         */
+        Schema::connection($connectionName)->create('user_read_information_log', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned()->comment('ユーザーID');
+            $table->integer('information_id')->unsigned()->comment('お知らせID');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            // プライマリキー設定
+            $table->primary(['user_id', 'information_id', 'created_at'], 'user_read_information_log_primary');
+
+            $table->comment('user read information log table');
+        });
     }
 
     /**
@@ -65,5 +81,6 @@ class CreateLogsTable extends Migration
 
         Schema::connection($connectionName)->dropIfExists('admins_log');
         Schema::connection($connectionName)->dropIfExists('user_coin_payment_log');
+        Schema::connection($connectionName)->dropIfExists('user_read_information_log');
     }
 }

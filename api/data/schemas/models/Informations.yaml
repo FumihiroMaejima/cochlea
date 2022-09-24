@@ -1,0 +1,48 @@
+# Informations:
+  type: array
+  items:
+    type: object
+    required:
+      - id
+      - name
+      - type
+      - detail
+      - start_at
+      - end_at
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      type:
+        type: integer
+        format: int64
+        description: Information type
+      detail:
+        type: string
+      start_at:
+        type: string
+      end_at:
+        type: string
+  example:
+  - id: 1
+    name: 'test coin1'
+    type: 1
+    detail: 'test detail1'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  - id: 2
+    name: 'test coin2'
+    type: 2
+    detail: 'test detail2'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  - id: 3
+    name: 'test coin3'
+    type: 3
+    detail: 'test detail3'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  xml:
+    name: Informations
