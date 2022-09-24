@@ -47,10 +47,9 @@ class CoinsService
     /**
      * get coins data
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return JsonResponse
      */
-    public function getCoins(Request $request): JsonResponse
+    public function getCoins(): JsonResponse
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST);
 
@@ -72,10 +71,9 @@ class CoinsService
     /**
      * download coin data service
      *
-     * @param  \Illuminate\Http\Request;  $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadCSV(Request $request)
+    public function downloadCSV()
     {
         $data = $this->coinsRepository->getCoins();
 
@@ -143,13 +141,18 @@ class CoinsService
     /**
      * update coin data service
      *
-     * @param  CoinCreateRequest  $request
-     * @param  int  $id
+     * @param string $name name
+     * @param string $detail detail
+     * @param int $price price
+     * @param int $cost cost
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
+     * @param string|null $image image
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createCoin(CoinCreateRequest $request): JsonResponse
+    public function createCoin(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
     {
-        $resource = CoinsResource::toArrayForCreate($request);
+        $resource = CoinsResource::toArrayForCreate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 
         DB::beginTransaction();
         try {
@@ -175,13 +178,19 @@ class CoinsService
     /**
      * update coin data service
      *
-     * @param  CoinUpdateRequest $request
-     * @param  int  $id
+     * @param int $id
+     * @param string $name name
+     * @param string $detail detail
+     * @param int $price price
+     * @param int $cost cost
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
+     * @param string|null $image image
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateCoin(CoinUpdateRequest $request, int $id): JsonResponse
+    public function updateCoin(int $id, string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
     {
-        $resource = CoinsResource::toArrayForUpdate($request);
+        $resource = CoinsResource::toArrayForUpdate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 
         DB::beginTransaction();
         try {

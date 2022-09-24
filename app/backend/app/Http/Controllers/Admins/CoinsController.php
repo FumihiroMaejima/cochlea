@@ -45,7 +45,7 @@ class CoinsController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getCoins($request);
+        return $this->service->getCoins();
     }
 
     /**
@@ -62,7 +62,7 @@ class CoinsController extends Controller
         }
 
         // サービスの実行
-        return $this->service->downloadCSV($request);
+        return $this->service->downloadCSV();
     }
 
     /**
@@ -103,7 +103,16 @@ class CoinsController extends Controller
     public function create(CoinCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createCoin($request);
+        // return $this->service->createCoin($request);
+        return $this->service->createCoin(
+            $request->{CoinCreateRequest::KEY_NAME},
+            $request->{CoinCreateRequest::KEY_DETAIL},
+            $request->{CoinCreateRequest::KEY_PRICE},
+            $request->{CoinCreateRequest::KEY_COST},
+            $request->{CoinCreateRequest::KEY_START_AT},
+            $request->{CoinCreateRequest::KEY_END_AT},
+            $request->{CoinCreateRequest::KEY_IMAGE} ?? ''
+        );
     }
 
     /**
@@ -149,7 +158,16 @@ class CoinsController extends Controller
     public function update(CoinUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateCoin($request, $id);
+        return $this->service->updateCoin(
+            $id,
+            $request->{CoinUpdateRequest::KEY_NAME},
+            $request->{CoinUpdateRequest::KEY_DETAIL},
+            $request->{CoinUpdateRequest::KEY_PRICE},
+            $request->{CoinUpdateRequest::KEY_COST},
+            $request->{CoinUpdateRequest::KEY_START_AT},
+            $request->{CoinUpdateRequest::KEY_END_AT},
+            $request->{CoinUpdateRequest::KEY_IMAGE} ?? ''
+        );
     }
 
     /**

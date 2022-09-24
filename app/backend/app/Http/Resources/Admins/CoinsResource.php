@@ -95,21 +95,27 @@ class CoinsResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param CoinCreateRequest $request
+     * @param string $name name
+     * @param string $detail detail
+     * @param int $price price
+     * @param int $cost cost
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
+     * @param string|null $image image
      * @return array
      */
-    public static function toArrayForCreate(CoinCreateRequest $request): array
+    public static function toArrayForCreate(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME       => $request->{Coins::NAME},
-            self::RESOURCE_KEY_DETAIL     => $request->{Coins::DETAIL},
-            self::RESOURCE_KEY_PRICE      => $request->{Coins::PRICE},
-            self::RESOURCE_KEY_COST       => $request->{Coins::COST},
-            self::RESOURCE_KEY_START_AT   => $request->{Coins::START_AT},
-            self::RESOURCE_KEY_END_AT     => $request->{Coins::END_AT},
-            self::RESOURCE_KEY_IMAGE      => $request->{Coins::IMAGE} ?? '',
+            self::RESOURCE_KEY_NAME       => $name,
+            self::RESOURCE_KEY_DETAIL     => $detail,
+            self::RESOURCE_KEY_PRICE      => $price,
+            self::RESOURCE_KEY_COST       => $cost,
+            self::RESOURCE_KEY_START_AT   => $startAt,
+            self::RESOURCE_KEY_END_AT     => $endAt,
+            self::RESOURCE_KEY_IMAGE      => $image ?? '',
             self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime,
         ];
@@ -118,21 +124,27 @@ class CoinsResource extends JsonResource
     /**
      * Transform the resource into an array for update.
      *
-     * @param CoinUpdateRequest $request
+     * @param string $name name
+     * @param string $detail detail
+     * @param int $price price
+     * @param int $cost cost
+     * @param string $startAt start datetime
+     * @param string $endAt end datetime
+     * @param string|null $image image
      * @return array
      */
-    public static function toArrayForUpdate(CoinUpdateRequest $request): array
+    public static function toArrayForUpdate(string $name, string $detail, int $price,  int $cost, string $startAt, string $endAt, string|null $image): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            self::RESOURCE_KEY_NAME       => $request->{Coins::NAME},
-            self::RESOURCE_KEY_DETAIL     => $request->{Coins::DETAIL},
-            self::RESOURCE_KEY_PRICE      => $request->{Coins::PRICE},
-            self::RESOURCE_KEY_COST       => $request->{Coins::COST},
-            self::RESOURCE_KEY_START_AT   => $request->{Coins::START_AT},
-            self::RESOURCE_KEY_END_AT     => $request->{Coins::END_AT},
-            self::RESOURCE_KEY_IMAGE      => $request->{Coins::IMAGE} ?? '',
+            self::RESOURCE_KEY_NAME       => $name,
+            self::RESOURCE_KEY_DETAIL     => $detail,
+            self::RESOURCE_KEY_PRICE      => $price,
+            self::RESOURCE_KEY_COST       => $cost,
+            self::RESOURCE_KEY_START_AT   => $startAt,
+            self::RESOURCE_KEY_END_AT     => $endAt,
+            self::RESOURCE_KEY_IMAGE      => $image ?? '',
             self::RESOURCE_KEY_UPDATED_AT => $dateTime
         ];
     }
