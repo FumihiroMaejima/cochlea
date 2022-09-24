@@ -179,6 +179,6 @@ class CoinsController extends Controller
     public function destroy(CoinDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteCoin($request);
+        return $this->service->deleteCoin($request->{CoinUpdateRequest::KEY_COINS});
     }
 }

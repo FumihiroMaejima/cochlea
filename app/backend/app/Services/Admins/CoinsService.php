@@ -218,16 +218,13 @@ class CoinsService
     /**
      * delete coin data service
      *
-     * @param  CoinDeleteRequest $request
-     * @param  int  $id
+     * @param array<int, int> $coinIds
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteCoin(CoinDeleteRequest $request): JsonResponse
+    public function deleteCoin(array $coinIds): JsonResponse
     {
         DB::beginTransaction();
         try {
-            $coinIds = $request->coins;
-
             $resource = CoinsResource::toArrayForDelete();
 
             // ロックをかける為transaction内で実行
