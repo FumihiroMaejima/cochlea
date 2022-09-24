@@ -86,6 +86,17 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/file/template', [\App\Http\Controllers\Admins\CoinsController::class, 'template'])->name('admin.coins.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\CoinsController::class, 'uploadTemplate'])->name('admin.coins.upload.template');
         });
+
+        // informations
+        Route::group(['prefix' => 'informations'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\InformationsController::class, 'index'])->name('admin.informations.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\InformationsController::class, 'download'])->name('admin.informations.download.csv');
+            Route::post('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'create'])->name('admin.informations.create');
+            Route::patch('/information/{id}', [\App\Http\Controllers\Admins\InformationsController::class, 'update'])->name('admin.informations.update');
+            Route::delete('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'destroy'])->name('admin.informations.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
+        });
     });
 
     // debug API

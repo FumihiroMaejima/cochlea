@@ -9,11 +9,12 @@ return [
     ],
     'executionRole' => [
         'services' => [
-            'admins'      => ['master', 'administrator', 'develop'],
-            'permissions' => ['master', 'administrator', 'develop'],
-            'roles'       => ['master', 'administrator', 'develop'],
-            'coins'       => ['master', 'administrator', 'develop'],
-            'debug'       => ['master', 'administrator', 'develop'],
+            'admins'       => ['master', 'administrator', 'develop'],
+            'permissions'  => ['master', 'administrator', 'develop'],
+            'roles'        => ['master', 'administrator', 'develop'],
+            'coins'        => ['master', 'administrator', 'develop'],
+            'informations' => ['master', 'administrator', 'develop'],
+            'debug'        => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [

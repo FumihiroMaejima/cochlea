@@ -13,6 +13,24 @@ class CreateProductMasterModelTable extends Migration
      */
     public function up()
     {
+        /**
+         * products table
+         */
+        Schema::create('coins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('コイン名');
+            $table->text('detail')->comment('詳細');
+            $table->integer('price')->unsigned()->comment('コインの購入価格');
+            $table->integer('cost')->unsigned()->comment('アプリケーション内のコインの価格');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->string('image', 255)->comment('イメージ');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('coins table');
+        });
 
         /**
          * images table
@@ -37,22 +55,20 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
-         * products table
+         * informations table
          */
-        Schema::create('coins', function (Blueprint $table) {
+        Schema::create('informations', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->comment('コイン名');
+            $table->string('name', 255)->comment('お知らせ名');
+            $table->tinyInteger('type')->unsigned()->comment('お知らせタイプ 1:お知らせ、2:メンテナンス、3:障害');
             $table->text('detail')->comment('詳細');
-            $table->integer('price')->unsigned()->comment('コインの購入価格');
-            $table->integer('cost')->unsigned()->comment('アプリケーション内のコインの価格');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->string('image', 255)->comment('イメージ');
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
-            $table->comment('coins table');
+            $table->comment('informations table');
         });
 
         /**
@@ -116,7 +132,9 @@ class CreateProductMasterModelTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('coins');
         Schema::dropIfExists('images');
+        Schema::dropIfExists('informations');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('manufactureres');

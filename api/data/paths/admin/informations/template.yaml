@@ -1,9 +1,9 @@
-# /admin/coins/file/template:
+# /admin/informations/file/template:
   get:
     tags:
-      - coins
-    summary: Get coins Template File
-    description: Returns Template File of Coins
+      - informations
+    summary: Get informations Template File
+    description: Returns Template File of Informations
     responses:
       "200":
         description: successful operation
@@ -12,7 +12,7 @@
             schema:
               $ref: "../../../schemas/files/FileData.yaml"
       "404":
-        description: Coins not found
+        description: Informations not found
         content:
           application/json:
             schema:
@@ -29,10 +29,10 @@
       - auth_id: []
   post:
     tags:
-      - coins
-    summary: Import coins Template File
+      - informations
+    summary: Import informations Template File
     description: ""
-    operationId: importCoinsWithFile
+    operationId: importInformationsWithFile
     parameters:
       - name: Authorization
         in: header

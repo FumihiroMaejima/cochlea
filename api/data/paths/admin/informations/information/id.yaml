@@ -1,20 +1,20 @@
 # /admin/coins/coin/{id}:
   patch:
     tags:
-      - coins
-    summary: Update Coin
+      - informations
+    summary: Update Information
     description: ""
-    operationId: UpdateCoinWithForm
+    operationId: UpdateInformationWithForm
     parameters:
       - name: id
         in: path
-        description: ID of Coin
+        description: ID of Information
         required: true
         schema:
           type: integer
           format: int64
     requestBody:
-      $ref: "../../../../components/requestBodies/createCoinWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createInformationWithForm.yaml"
     responses:
       "200":
         description: successful Update
