@@ -37,7 +37,7 @@ class CreateProductMasterModelTable extends Migration
          */
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->comment('お知らせ名');
+            $table->string('name', 255)->comment('イベント名');
             $table->tinyInteger('type')->unsigned()->comment('イベントタイプ');
             $table->text('detail')->comment('詳細');
             $table->dateTime('start_at')->comment('公開開始日時');
@@ -150,6 +150,7 @@ class CreateProductMasterModelTable extends Migration
     public function down()
     {
         Schema::dropIfExists('coins');
+        Schema::dropIfExists('events');
         Schema::dropIfExists('images');
         Schema::dropIfExists('informations');
         Schema::dropIfExists('products');
