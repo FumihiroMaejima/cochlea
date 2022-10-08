@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Repositories\Admins\Informations;
+namespace App\Repositories\Admins\Events;
 
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Models\Masters\Coins;
-use App\Models\Masters\Informations;
+use App\Models\Masters\Events;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
-class InformationsRepository implements InformationsRepositoryInterface
+class EventsRepository implements EventsRepositoryInterface
 {
-    protected Informations $model;
+    protected Events $model;
 
     private const NO_DATA_COUNT = 0;
     private const FIRST_DATA_COUNT = 1;
@@ -19,10 +18,10 @@ class InformationsRepository implements InformationsRepositoryInterface
     /**
      * create instance.
      *
-     * @param \App\Models\Masters\Informations $model
+     * @param \App\Models\Masters\Events $model
      * @return void
      */
-    public function __construct(Informations $model)
+    public function __construct(Events $model)
     {
         $this->model = $model;
     }
@@ -50,7 +49,7 @@ class InformationsRepository implements InformationsRepositoryInterface
         // collection
         return DB::table($coins)
             ->select(['*'])
-            ->where(Informations::DELETED_AT, '=', null)
+            ->where(Events::DELETED_AT, '=', null)
             ->get();
     }
 
@@ -66,8 +65,8 @@ class InformationsRepository implements InformationsRepositoryInterface
 
         // collection
         return DB::table($coins)
-            ->select([Informations::ID, Informations::NAME])
-            ->where(Informations::DELETED_AT, '=', null)
+            ->select([Events::ID, Events::NAME])
+            ->where(Events::DELETED_AT, '=', null)
             ->get();
     }
 
@@ -95,8 +94,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
-            ->where(Informations::ID, '=', $id)
-            ->where(Informations::DELETED_AT, '=', null)
+            ->where(Events::ID, '=', $id)
+            ->where(Events::DELETED_AT, '=', null)
             ->get();
 
         // 存在しない場合
@@ -117,8 +116,8 @@ class InformationsRepository implements InformationsRepositoryInterface
             $collection = DB::table($this->getTable())
             ->lockForUpdate()
             ->select(['*'])
-            ->where(Informations::ID, '=', $id)
-            ->where(Informations::DELETED_AT, '=', null)
+            ->where(Events::ID, '=', $id)
+            ->where(Events::DELETED_AT, '=', null)
             ->get();
         }
 
@@ -137,8 +136,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
-            ->whereIn(Informations::ID, $ids)
-            ->where(Informations::DELETED_AT, '=', null)
+            ->whereIn(Events::ID, $ids)
+            ->where(Events::DELETED_AT, '=', null)
             ->get();
 
         // 存在しない場合
@@ -150,8 +149,8 @@ class InformationsRepository implements InformationsRepositoryInterface
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
                 ->select(['*'])
-                ->whereIn(Informations::ID, $ids)
-                ->where(Informations::DELETED_AT, '=', null)
+                ->whereIn(Events::ID, $ids)
+                ->where(Events::DELETED_AT, '=', null)
                 ->lockForUpdate()
                 ->get();
         }
@@ -182,8 +181,8 @@ class InformationsRepository implements InformationsRepositoryInterface
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where(Informations::ID, '=', [$id])
-            ->where(Informations::DELETED_AT, '=', null)
+            ->where(Events::ID, '=', [$id])
+            ->where(Events::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -198,8 +197,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->whereIn(Informations::ID, $ids)
-            ->where(Informations::DELETED_AT, '=', null)
+            ->whereIn(Events::ID, $ids)
+            ->where(Events::DELETED_AT, '=', null)
             ->update($resource);
     }
 }
