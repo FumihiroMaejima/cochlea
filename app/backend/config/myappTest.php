@@ -88,5 +88,34 @@ return [
                 ]
             ],
         ],
+        'events' => [
+            'create' => [
+                'success' => [
+                    'name'         => 'test name',
+                    'type'         => 1,
+                    'detail'       => 'events`s detail.',
+                    'start_at'     => '2022/05/10 00:00:00',
+                    'end_at'       => '2030/12/31 23:59:59',
+                    'events' => [2,3],
+                ]
+            ],
+            'import' => [
+                'success' => [
+                    'fileName'  => 'master_events_template_20220404000000.xlsx',
+                    'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'         => 'test name',
+                        'type'         => 1,
+                        'detail'       => 'events`s detail.',
+                        'start_at'     => '2022/05/10 00:00:00',
+                        'end_at'       => '2030/12/31 23:59:59',
+                        'events' => [2,3],
+                    ]
+                ]
+            ],
+        ],
     ],
 ];
