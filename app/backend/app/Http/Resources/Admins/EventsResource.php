@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
-use App\Models\Masters\Informations;
+use App\Models\Masters\Events;
 
-class InformationsResource extends JsonResource
+class EventsResource extends JsonResource
 {
     public const RESOURCE_KEY_DATA = 'data';
     public const RESOURCE_KEY_TEXT = 'text';
@@ -47,18 +47,18 @@ class InformationsResource extends JsonResource
      * @param Collection $collection
      * @return array
      */
-    public static function toArrayForGetInformationsCollection(Collection $collection)
+    public static function toArrayForGetEventsCollection(Collection $collection)
     {
         // レスポンス
         $response = [];
 
         foreach ($collection as $item) {
-            $item->{Informations::START_AT} = TimeLibrary::format($item->{Informations::START_AT});
-            $item->{Informations::END_AT} = TimeLibrary::format($item->{Informations::END_AT});
+            $item->{Events::START_AT} = TimeLibrary::format($item->{Events::START_AT});
+            $item->{Events::END_AT} = TimeLibrary::format($item->{Events::END_AT});
 
             // if array
-            // $item[Informations::START_AT] = TimeLibrary::format($item[Informations::START_AT]);
-            // $item[Informations::END_AT] = TimeLibrary::format($item[Informations::END_AT]);
+            // $item[Events::START_AT] = TimeLibrary::format($item[Events::START_AT]);
+            // $item[Events::END_AT] = TimeLibrary::format($item[Events::END_AT]);
             $response[self::RESOURCE_KEY_DATA][] = $item;
         }
 
@@ -81,8 +81,8 @@ class InformationsResource extends JsonResource
         foreach ($collection as $item) {
             // 各itemのresourceはstdClassオブジェクトの１レコード分のデータ
             $role = [
-                self::RESOURCE_KEY_TEXT => $item->{Informations::NAME},
-                self::RESOURCE_KEY_VALUE => $item->{Informations::ID},
+                self::RESOURCE_KEY_TEXT => $item->{Events::NAME},
+                self::RESOURCE_KEY_VALUE => $item->{Events::ID},
             ];
             // 多次元配列の中の連想配列を格納
             $response[self::RESOURCE_KEY_DATA][] = $role;
@@ -171,13 +171,13 @@ class InformationsResource extends JsonResource
             // 先頭はファイルのヘッダーに当たる為除外
             if ($key !== 0) {
                 $response[] = [
-                    Informations::NAME       => $item[0],
-                    Informations::TYPE       => $item[1],
-                    Informations::DETAIL     => $item[2],
-                    Informations::START_AT   => $item[3],
-                    Informations::END_AT     => $item[4],
-                    Informations::CREATED_AT => $dateTime,
-                    Informations::UPDATED_AT => $dateTime,
+                    Events::NAME       => $item[0],
+                    Events::TYPE       => $item[1],
+                    Events::DETAIL     => $item[2],
+                    Events::START_AT   => $item[3],
+                    Events::END_AT     => $item[4],
+                    Events::CREATED_AT => $dateTime,
+                    Events::UPDATED_AT => $dateTime,
                 ];
             }
         }
