@@ -6,10 +6,10 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use App\Library\Time\TimeLibrary;
-use App\Models\Masters\Informations;
+use App\Models\Masters\Events;
 use Database\Seeders\BaseSeeder;
 
-class InformationsTableSeeder extends BaseSeeder
+class EventsTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
@@ -25,19 +25,19 @@ class InformationsTableSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->tableName = (new Informations())->getTable();
+        $this->tableName = (new Events())->getTable();
 
         $now = TimeLibrary::getCurrentDateTime();
         $endDate = TimeLibrary::addYears($now, self::END_DATE_ADDITIONAL_YEARS);
 
         $template = [
-            Informations::NAME       => '',
-            Informations::TYPE       => 1,
-            Informations::DETAIL     => '',
-            Informations::START_AT   => $now,
-            Informations::END_AT     => $endDate,
-            Informations::CREATED_AT => $now,
-            Informations::UPDATED_AT => $now
+            Events::NAME       => '',
+            Events::TYPE       => 1,
+            Events::DETAIL     => '',
+            Events::START_AT   => $now,
+            Events::END_AT     => $endDate,
+            Events::CREATED_AT => $now,
+            Events::UPDATED_AT => $now
         ];
 
         // insert用データ
@@ -55,9 +55,9 @@ class InformationsTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Informations::NAME]   = 'お知らせ_' . (string)($i);
-            $row[Informations::TYPE]   = (($i - 1) % 3) + 1;
-            $row[Informations::DETAIL] = 'お知らせ詳細xxxxx_' . (string)($i) . '';
+            $row[Events::NAME]   = 'イベント_' . (string)($i);
+            $row[Events::TYPE]   = (($i - 1) % 3) + 1;
+            $row[Events::DETAIL] = 'イベント詳細xxxxx_' . (string)($i) . '';
 
             $data[] = $row;
         }
