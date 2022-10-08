@@ -273,7 +273,7 @@ class UserCoinPaymentService
 
         // キャッシュチェック
         if (is_null($cache)) {
-            $collection = $this->coinsRepository->getCoins();
+            $collection = $this->coinsRepository->getRecords();
             $resourceCollection = CoinsResource::toArrayForGetCoinsCollection($collection);
 
             if (!empty($resourceCollection)) {
