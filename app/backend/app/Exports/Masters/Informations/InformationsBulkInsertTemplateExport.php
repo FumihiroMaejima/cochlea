@@ -54,7 +54,7 @@ class InformationsBulkInsertTemplateExport implements FromCollection, WithHeadin
      */
     public function title(): string
     {
-        return '敵キャラクター作成テンプレート';
+        return 'お知らせ作成テンプレート';
     }
 
     /**

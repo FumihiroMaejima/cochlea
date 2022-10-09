@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\Masters\Coins;
+namespace App\Exports\Masters\Events;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -8,10 +8,9 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Support\Collection;
-use App\Http\Requests\Admin\Coins\CoinBaseRequest;
-use App\Models\Masters\Coins;
+use App\Models\Masters\Events;
 
-class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, WithTitle, WithMapping
+class EventsBulkInsertTemplateExport implements FromCollection, WithHeadings, WithTitle, WithMapping
 {
     use Exportable;
 
@@ -41,13 +40,11 @@ class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, Wit
     public function headings(): array
     {
         return [
-            'コイン名',
+            'イベント名',
+            '種類',
             '詳細',
-            '購入価格',
-            'アプリケーション内コスト',
             '公開開始日時',
             '公開終了日時',
-            '画像',
         ];
     }
 
@@ -57,7 +54,7 @@ class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, Wit
      */
     public function title(): string
     {
-        return 'コイン情報作成テンプレート';
+        return 'イベント作成テンプレート';
     }
 
     /**
@@ -68,13 +65,11 @@ class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, Wit
     {
         // return $data;
         return [
-            'name'   => $item->{Coins::NAME},
-            'detail' => $item->{Coins::DETAIL},
-            'price'  => $item->{Coins::PRICE},
-            'cost'   => $item->{Coins::COST},
-            'start_at' => $item->{Coins::START_AT},
-            'end_at'   => $item->{Coins::END_AT},
-            'image'    => $item->{Coins::IMAGE},
+            'name'     => $item->{Events::NAME},
+            'type'     => $item->{Events::TYPE},
+            'detail'   => $item->{Events::DETAIL},
+            'start_at' => $item->{Events::START_AT},
+            'end_at'   => $item->{Events::END_AT},
         ];
     }
 }
