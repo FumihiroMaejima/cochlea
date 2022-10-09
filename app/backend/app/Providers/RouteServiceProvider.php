@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
+     * 1ユーザー又は1IPアドレス当たりのリクエスト回数制限
+     *
+     * Laravelのデフォルトは1分回に60回。
+     *
+     * @var int
+     */
+    private const MAX_ATTEMPT_REQUEST_COUNT = 100;
+
+    /**
      * The path to the "home" route for your application.
      *
      * This is used by Laravel authentication to redirect users after login.
@@ -46,7 +55,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            // return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(self::MAX_ATTEMPT_REQUEST_COUNT)->by($request->user()?->id ?: $request->ip());
         });
     }
 }
