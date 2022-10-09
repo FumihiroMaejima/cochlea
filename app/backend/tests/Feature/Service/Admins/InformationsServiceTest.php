@@ -61,11 +61,11 @@ class InformationsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testGetinformations(): void
+    public function testGetInformations(): void
     {
         $response = $this->get(route('admin.informations.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertJsonCount(5, InformationBaseRequest::RESPONSE_KEY_DATA);
+            ->assertJsonCount(5, self::RESPONSE_KEY_DATA);
     }
 
     /**
@@ -167,7 +167,7 @@ class InformationsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testDownloadinformationsCsvFile(): void
+    public function testDownloadInformationsCsvFile(): void
     {
         $response = $this->get(route('admin.informations.download.csv'));
         $response->assertStatus(200)
@@ -180,7 +180,7 @@ class InformationsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testDownloadinformationsTemplateFile(): void
+    public function testDownloadInformationsTemplateFile(): void
     {
         $response = $this->get(route('admin.informations.download.template'));
         $response->assertStatus(200)

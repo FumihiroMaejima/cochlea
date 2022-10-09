@@ -57,7 +57,7 @@ class InformationsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testGetinformations(): void
+    public function testGetInformations(): void
     {
         $response = $this->get(route('noAuth.informations.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
