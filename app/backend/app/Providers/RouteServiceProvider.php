@@ -55,6 +55,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
+            // \Illuminate\Routing\Middleware\ThrottleRequestsのリクエスト数制限の設定
             // return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
             return Limit::perMinute(self::MAX_ATTEMPT_REQUEST_COUNT)->by($request->user()?->id ?: $request->ip());
         });
