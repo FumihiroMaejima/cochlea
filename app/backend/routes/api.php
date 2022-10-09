@@ -97,6 +97,17 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
+
+        // events
+        Route::group(['prefix' => 'events'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\EventsController::class, 'index'])->name('admin.events.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\EventsController::class, 'download'])->name('admin.events.download.csv');
+            Route::post('/event', [\App\Http\Controllers\Admins\EventsController::class, 'create'])->name('admin.events.create');
+            Route::patch('/event/{id}', [\App\Http\Controllers\Admins\EventsController::class, 'update'])->name('admin.events.update');
+            Route::delete('/event', [\App\Http\Controllers\Admins\EventsController::class, 'destroy'])->name('admin.events.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'template'])->name('admin.events.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'uploadTemplate'])->name('admin.events.upload.template');
+        });
     });
 
     // debug API
