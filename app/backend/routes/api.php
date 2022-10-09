@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
 
 Route::get('test', function () {
     return 'api connection test!';
-})->name('api.test.route');
+})->name('api.sample.test.route');
 
 /*
 |--------------------------------------------------------------------------
