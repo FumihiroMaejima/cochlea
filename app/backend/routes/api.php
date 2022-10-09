@@ -126,6 +126,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'coins'], function () {
         Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
     });
+    // informations
+    Route::group(['prefix' => 'informations'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
+    });
 
     // user auth
     Route::middleware(['middleware' => 'auth:api-users'])->group(function () {
