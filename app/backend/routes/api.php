@@ -122,6 +122,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('login', [\App\Http\Controllers\Users\AuthController::class, 'login'])->name('auth.user.login');
     });
 
+    // coins
+    Route::group(['prefix' => 'coins'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
+    });
+
     // user auth
     Route::middleware(['middleware' => 'auth:api-users'])->group(function () {
         Route::group(['prefix' => 'auth'], function () {
