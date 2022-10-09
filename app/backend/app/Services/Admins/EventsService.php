@@ -54,7 +54,7 @@ class EventsService
         // キャッシュチェック
         if (is_null($cache)) {
             $collection = $this->eventsRepository->getRecords();
-            $resourceCollection = EventsResource::toArrayForGetInformationsCollection($collection);
+            $resourceCollection = EventsResource::toArrayForGetCollectionList($collection);
 
             if (!empty($resourceCollection)) {
                 CacheLibrary::setCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, $resourceCollection);
@@ -148,7 +148,7 @@ class EventsService
      */
     public function createEvent(string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
     {
-        $resource = Events::toArrayForCreate($name, $type, $detail, $startAt, $endAt);
+        $resource = EventsResource::toArrayForCreate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
         try {
@@ -184,7 +184,7 @@ class EventsService
      */
     public function updateEvent(int $id, string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
     {
-        $resource = Events::toArrayForUpdate($name, $type, $detail, $startAt, $endAt);
+        $resource = EventsResource::toArrayForUpdate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
         try {
@@ -219,7 +219,7 @@ class EventsService
     {
         DB::beginTransaction();
         try {
-            $resource = Events::toArrayForDelete();
+            $resource = EventsResource::toArrayForDelete();
 
             // ロックをかける為transaction内で実行
             $rows = $this->getEventsByIds($informationIds);

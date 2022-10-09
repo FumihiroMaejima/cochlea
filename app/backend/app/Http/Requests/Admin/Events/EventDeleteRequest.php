@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Admin\Events;
 
 use App\Http\Requests\Admin\Events\EventBaseRequest;
-use App\Models\Masters\Informations;
+use App\Models\Masters\Events;
 
 class EventDeleteRequest extends EventBaseRequest
 {
@@ -25,9 +25,9 @@ class EventDeleteRequest extends EventBaseRequest
      */
     public function rules()
     {
-        $model = new Informations();
+        $model = new Events();
         return [
-            'informations' => 'required|array|exists:' . $model->getTable() . ',id'
+            'events' => 'required|array|exists:' . $model->getTable() . ',id'
         ];
     }
 

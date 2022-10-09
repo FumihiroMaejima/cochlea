@@ -47,7 +47,7 @@ class EventsResource extends JsonResource
      * @param Collection $collection
      * @return array
      */
-    public static function toArrayForGetEventsCollection(Collection $collection)
+    public static function toArrayForGetCollectionList(Collection $collection)
     {
         // レスポンス
         $response = [];
