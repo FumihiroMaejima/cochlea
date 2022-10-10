@@ -20,6 +20,8 @@ tags:
       url: http://swagger.io
   - name: coins
     description: Coins information
+  - name: events
+    description: Events information
   - name: informations
     description: Informations information
   - name: roles
@@ -107,6 +109,24 @@ paths:
           type: integer
           format: int64
     $ref: "./data/paths/admin/informations/information/id.yaml"
+  /admin/events:
+    $ref: "./data/paths/admin/events/index.yaml"
+  /admin/events/csv:
+    $ref: "./data/paths/admin/events/csv.yaml"
+  /admin/events/template:
+    $ref: "./data/paths/admin/events/template.yaml"
+  /admin/events/event:
+    $ref: "./data/paths/admin/events/event/index.yaml"
+  "/admin/events/event/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of event
+        required: true
+        schema:
+          type: integer
+          format: int64
+    $ref: "./data/paths/admin/events/event/id.yaml"
 #   /admin/game/enemies:
 #     $ref: "./data/paths/admin/game/enemies/index.yaml"
 #   /admin/game/enemies/file/csv:
@@ -161,6 +181,8 @@ components:
       $ref: "./data/schemas/models/Admins.yaml"
     Coins:
       $ref: "./data/schemas/models/Coins.yaml"
+    Events:
+      $ref: "./data/schemas/models/Events.yaml"
     Informations:
       $ref: "./data/schemas/models/Informations.yaml"
     Permissions:

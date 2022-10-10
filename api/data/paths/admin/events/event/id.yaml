@@ -1,20 +1,20 @@
-# /admin/informations/information/{id}:
+# /admin/events/event/{id}:
   patch:
     tags:
-      - informations
-    summary: Update Information
+      - events
+    summary: Update Event
     description: ""
-    operationId: UpdateInformationWithForm
+    operationId: UpdateEventWithForm
     parameters:
       - name: id
         in: path
-        description: ID of Information
+        description: ID of Event
         required: true
         schema:
           type: integer
           format: int64
     requestBody:
-      $ref: "../../../../components/requestBodies/createInformationWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createEventnWithForm.yaml"
     responses:
       "200":
         description: successful Update

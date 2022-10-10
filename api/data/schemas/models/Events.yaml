@@ -1,4 +1,4 @@
-# Informations:
+# Events:
   type: array
   items:
     type: object
@@ -18,7 +18,7 @@
       type:
         type: integer
         format: int64
-        description: Information type
+        description: Event type
       detail:
         type: string
       start_at:
@@ -27,22 +27,22 @@
         type: string
   example:
   - id: 1
-    name: 'test information1'
+    name: 'test event1'
     type: 1
     detail: 'test detail1'
     start_at: '2022/05/10 00:00:00'
     end_at: '2035/12/31 23:59:59'
   - id: 2
-    name: 'test information2'
+    name: 'test event2'
     type: 2
     detail: 'test detail2'
     start_at: '2022/05/10 00:00:00'
     end_at: '2035/12/31 23:59:59'
   - id: 3
-    name: 'test information3'
+    name: 'test event3'
     type: 3
     detail: 'test detail3'
     start_at: '2022/05/10 00:00:00'
     end_at: '2035/12/31 23:59:59'
   xml:
-    name: Informations
+    name: Events
