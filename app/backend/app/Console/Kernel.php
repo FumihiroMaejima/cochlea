@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Debug\TestCommand::class,
+        Commands\Debug\TestCommandWithParam::class,
         Commands\Admins\Database\AddLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\AddUserDatabasePartitionsCommand::class,
     ];
