@@ -14,7 +14,7 @@
           type: integer
           format: int64
     requestBody:
-      $ref: "../../../../components/requestBodies/createEventnWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createEventWithForm.yaml"
     responses:
       "200":
         description: successful Update
