@@ -11,7 +11,7 @@ class TestCommandWithParam extends Command
      *
      * @var string
      */
-    protected $signature = 'debug:test1 {paramName}'; // if require parameter 'debug:test {param}';
+    protected $signature = 'debug:test1 {paramName} {--o=}'; // if require parameter 'debug:test {param}, option is {--o=}';
 
     /**
      * The console command description.(コンソールコマンドの説明)
@@ -39,8 +39,12 @@ class TestCommandWithParam extends Command
     public function handle(): void
     {
         $value = $this->argument('paramName');
+        $option = $this->option('o');
+        // 全ての引数を配列で取得する場合
+        // $arguments = $this->arguments();
         // 現在日時(タイムゾーン付き)
         echo date('c') . "\n";
         echo $value . "\n";
+        echo $option . "\n";
     }
 }
