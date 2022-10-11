@@ -1,0 +1,83 @@
+# /admin/events/file/template:
+  get:
+    tags:
+      - events
+    summary: Get events Template File
+    description: Returns Template File of Events
+    responses:
+      "200":
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/files/FileData.yaml"
+      "404":
+        description: Events not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      default:
+        description: unsuccessful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []
+  post:
+    tags:
+      - events
+    summary: Import events Template File
+    description: ""
+    operationId: importEventsWithFile
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-Authority
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                description: File Data
+                type: string
+                format: binary
+            required:
+              - file
+    responses:
+      "201":
+        description: successful Create
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []

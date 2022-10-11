@@ -41,7 +41,7 @@ class CoinsRepository implements CoinsRepositoryInterface
      *
      * @return Collection
      */
-    public function getCoins(): Collection
+    public function getRecords(): Collection
     {
         // coins
         $coins = $this->getTable();
@@ -58,7 +58,7 @@ class CoinsRepository implements CoinsRepositoryInterface
      *
      * @return Collection
      */
-    public function getCoinsList(): Collection
+    public function getRecordList(): Collection
     {
         // coins
         $coins = $this->getTable();
@@ -75,7 +75,7 @@ class CoinsRepository implements CoinsRepositoryInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
-    public function getLatestCoin(): object
+    public function getLatestRecord(): object
     {
         return DB::table($this->getTable())
             ->latest()

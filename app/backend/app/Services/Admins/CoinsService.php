@@ -55,7 +55,7 @@ class CoinsService
 
         // キャッシュチェック
         if (is_null($cache)) {
-            $collection = $this->coinsRepository->getCoins();
+            $collection = $this->coinsRepository->getRecords();
             $resourceCollection = CoinsResource::toArrayForGetCoinsCollection($collection);
 
             if (!empty($resourceCollection)) {
@@ -75,7 +75,7 @@ class CoinsService
      */
     public function downloadCSV()
     {
-        $data = $this->coinsRepository->getCoins();
+        $data = $this->coinsRepository->getRecords();
 
         return Excel::download(new CoinsExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
     }

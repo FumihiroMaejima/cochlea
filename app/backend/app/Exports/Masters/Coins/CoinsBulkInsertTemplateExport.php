@@ -57,7 +57,7 @@ class CoinsBulkInsertTemplateExport implements FromCollection, WithHeadings, Wit
      */
     public function title(): string
     {
-        return '敵キャラクター作成テンプレート';
+        return 'コイン情報作成テンプレート';
     }
 
     /**

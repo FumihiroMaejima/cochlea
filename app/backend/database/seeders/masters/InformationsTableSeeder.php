@@ -56,7 +56,7 @@ class InformationsTableSeeder extends BaseSeeder
             $row = $template;
 
             $row[Informations::NAME]   = 'お知らせ_' . (string)($i);
-            $row[Informations::TYPE]   = (($i - 1) % 3)+ 1; // TODO $i?か確認
+            $row[Informations::TYPE]   = (($i - 1) % 3) + 1;
             $row[Informations::DETAIL] = 'お知らせ詳細xxxxx_' . (string)($i) . '';
 
             $data[] = $row;

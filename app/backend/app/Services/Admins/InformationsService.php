@@ -75,7 +75,7 @@ class InformationsService
     {
         $data = $this->informationsRepository->getRecords();
 
-        return Excel::download(new InformationsExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new InformationsExport($data), 'informations_info_' . Carbon::now()->format('YmdHis') . '.csv');
     }
 
     /**
@@ -252,9 +252,9 @@ class InformationsService
     private function getInformationById(int $coinId): array
     {
         // 更新用途で使う為lockをかける
-        $coins = $this->informationsRepository->getById($coinId, true);
+        $informations = $this->informationsRepository->getById($coinId, true);
 
-        if (empty($coins)) {
+        if (empty($informations)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
                 'not exist coin.'
@@ -262,7 +262,7 @@ class InformationsService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($informations->toArray()));
     }
 
     /**

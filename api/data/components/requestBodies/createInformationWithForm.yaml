@@ -1,4 +1,4 @@
-# createRoleWithForm:
+# createInformationWithForm:
   description: test createInformationWithForm description.
   content:
     # application/x-www-form-urlencoded:

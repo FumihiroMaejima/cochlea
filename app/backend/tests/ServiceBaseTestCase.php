@@ -57,6 +57,9 @@ class ServiceBaseTestCase extends TestCase
         AdminsRolesTableSeeder::class,
     ];
 
+    // response keys
+    protected const RESPONSE_KEY_DATA = 'data';
+
 
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
-use App\Models\Masters\Coins;
 use App\Models\Masters\Informations;
 
 class InformationsResource extends JsonResource
@@ -54,12 +53,12 @@ class InformationsResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
-            $item->{Coins::START_AT} = TimeLibrary::format($item->{Coins::START_AT});
-            $item->{Coins::END_AT} = TimeLibrary::format($item->{Coins::END_AT});
+            $item->{Informations::START_AT} = TimeLibrary::format($item->{Informations::START_AT});
+            $item->{Informations::END_AT} = TimeLibrary::format($item->{Informations::END_AT});
 
             // if array
-            // $item[Coins::START_AT] = TimeLibrary::format($item[Coins::START_AT]);
-            // $item[Coins::END_AT] = TimeLibrary::format($item[Coins::END_AT]);
+            // $item[Informations::START_AT] = TimeLibrary::format($item[Informations::START_AT]);
+            // $item[Informations::END_AT] = TimeLibrary::format($item[Informations::END_AT]);
             $response[self::RESOURCE_KEY_DATA][] = $item;
         }
 
