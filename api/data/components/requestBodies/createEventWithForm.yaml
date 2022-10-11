@@ -1,0 +1,29 @@
+# createEventWithForm:
+  description: test createEventWithForm description.
+  content:
+    # application/x-www-form-urlencoded:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: name of Event
+            type: string
+          type:
+            description: type of Event
+            type: integer
+          detail:
+            description: detail of Event
+            type: string
+          start_at:
+            description: start datetime of Event
+            type: string
+          end_at:
+            description: end datetime of Event
+            type: string
+        required:
+          - name
+          - type
+          - detail
+          - start_at
+          - end_at

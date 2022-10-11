@@ -13,6 +13,7 @@ return [
             'permissions'  => ['master', 'administrator', 'develop'],
             'roles'        => ['master', 'administrator', 'develop'],
             'coins'        => ['master', 'administrator', 'develop'],
+            'events'       => ['master', 'administrator', 'develop'],
             'informations' => ['master', 'administrator', 'develop'],
             'debug'        => ['master', 'administrator', 'develop'],
         ]

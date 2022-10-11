@@ -8,11 +8,11 @@ interface CoinsRepositoryInterface
 {
     public function getTable(): string;
 
-    public function getCoins(): Collection;
+    public function getRecords(): Collection;
 
-    public function getCoinsList(): Collection;
+    public function getRecordList(): Collection;
 
-    public function getLatestCoin(): object;
+    public function getLatestRecord(): object;
 
     public function getById(int $id, bool $isLock = false): Collection|null;
 

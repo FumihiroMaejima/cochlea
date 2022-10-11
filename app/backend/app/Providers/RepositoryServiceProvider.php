@@ -10,6 +10,8 @@ use App\Repositories\Admins\AdminsRoles\AdminsRolesRepository;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Repositories\Admins\Coins\CoinsRepository;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Admins\Events\EventsRepository;
+use App\Repositories\Admins\Events\EventsRepositoryInterface;
 use App\Repositories\Admins\Images\ImagesRepository;
 use App\Repositories\Admins\Images\ImagesRepositoryInterface;
 use App\Repositories\Admins\Informations\InformationsRepository;
@@ -41,6 +43,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AdminsRepositoryInterface::class, AdminsRepository::class);
         $this->app->bind(AdminsRolesRepositoryInterface::class, AdminsRolesRepository::class);
         $this->app->bind(CoinsRepositoryInterface::class, CoinsRepository::class);
+        $this->app->bind(EventsRepositoryInterface::class, EventsRepository::class);
         $this->app->bind(ImagesRepositoryInterface::class, ImagesRepository::class);
         $this->app->bind(InformationsRepositoryInterface::class, InformationsRepository::class);
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);

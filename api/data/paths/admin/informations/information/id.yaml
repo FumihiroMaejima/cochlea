@@ -1,4 +1,4 @@
-# /admin/coins/coin/{id}:
+# /admin/informations/information/{id}:
   patch:
     tags:
       - informations

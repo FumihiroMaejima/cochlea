@@ -50,7 +50,7 @@ class InformationsRepository implements InformationsRepositoryInterface
         // collection
         return DB::table($coins)
             ->select(['*'])
-            ->where(informations::DELETED_AT, '=', null)
+            ->where(Informations::DELETED_AT, '=', null)
             ->get();
     }
 
@@ -66,8 +66,8 @@ class InformationsRepository implements InformationsRepositoryInterface
 
         // collection
         return DB::table($coins)
-            ->select([informations::ID, informations::NAME])
-            ->where(informations::DELETED_AT, '=', null)
+            ->select([Informations::ID, Informations::NAME])
+            ->where(Informations::DELETED_AT, '=', null)
             ->get();
     }
 
@@ -95,8 +95,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
-            ->where(informations::ID, '=', $id)
-            ->where(informations::DELETED_AT, '=', null)
+            ->where(Informations::ID, '=', $id)
+            ->where(Informations::DELETED_AT, '=', null)
             ->get();
 
         // 存在しない場合
@@ -117,8 +117,8 @@ class InformationsRepository implements InformationsRepositoryInterface
             $collection = DB::table($this->getTable())
             ->lockForUpdate()
             ->select(['*'])
-            ->where(informations::ID, '=', $id)
-            ->where(informations::DELETED_AT, '=', null)
+            ->where(Informations::ID, '=', $id)
+            ->where(Informations::DELETED_AT, '=', null)
             ->get();
         }
 
@@ -137,8 +137,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
-            ->whereIn(informations::ID, $ids)
-            ->where(informations::DELETED_AT, '=', null)
+            ->whereIn(Informations::ID, $ids)
+            ->where(Informations::DELETED_AT, '=', null)
             ->get();
 
         // 存在しない場合
@@ -150,8 +150,8 @@ class InformationsRepository implements InformationsRepositoryInterface
             // ロックをかけた状態で再検索
             $collection = DB::table($this->getTable())
                 ->select(['*'])
-                ->whereIn(informations::ID, $ids)
-                ->where(informations::DELETED_AT, '=', null)
+                ->whereIn(Informations::ID, $ids)
+                ->where(Informations::DELETED_AT, '=', null)
                 ->lockForUpdate()
                 ->get();
         }
@@ -182,8 +182,8 @@ class InformationsRepository implements InformationsRepositoryInterface
         // Query Builderのupdate
         return DB::table($this->getTable())
             // ->whereIn('id', [$id])
-            ->where(informations::ID, '=', [$id])
-            ->where(informations::DELETED_AT, '=', null)
+            ->where(Informations::ID, '=', [$id])
+            ->where(Informations::DELETED_AT, '=', null)
             ->update($resource);
     }
 
@@ -198,8 +198,8 @@ class InformationsRepository implements InformationsRepositoryInterface
     {
         // Query Builderのupdate
         return DB::table($this->getTable())
-            ->whereIn(informations::ID, $ids)
-            ->where(informations::DELETED_AT, '=', null)
+            ->whereIn(Informations::ID, $ids)
+            ->where(Informations::DELETED_AT, '=', null)
             ->update($resource);
     }
 }

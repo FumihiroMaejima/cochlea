@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
 
 Route::get('test', function () {
     return 'api connection test!';
-})->name('api.test.route');
+})->name('api.sample.test.route');
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +97,17 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
+
+        // events
+        Route::group(['prefix' => 'events'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\EventsController::class, 'index'])->name('admin.events.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\EventsController::class, 'download'])->name('admin.events.download.csv');
+            Route::post('/event', [\App\Http\Controllers\Admins\EventsController::class, 'create'])->name('admin.events.create');
+            Route::patch('/event/{id}', [\App\Http\Controllers\Admins\EventsController::class, 'update'])->name('admin.events.update');
+            Route::delete('/event', [\App\Http\Controllers\Admins\EventsController::class, 'destroy'])->name('admin.events.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'template'])->name('admin.events.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'uploadTemplate'])->name('admin.events.upload.template');
+        });
     });
 
     // debug API
@@ -120,6 +131,19 @@ Route::group(['prefix' => 'v1'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [\App\Http\Controllers\Users\AuthController::class, 'login'])->name('auth.user.login');
+    });
+
+    // coins
+    Route::group(['prefix' => 'coins'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
+    });
+    // events
+    Route::group(['prefix' => 'events'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\EventsController::class, 'index'])->name('noAuth.events.index');
+    });
+    // informations
+    Route::group(['prefix' => 'informations'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
     });
 
     // user auth
