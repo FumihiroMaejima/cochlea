@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Users;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\Users\CoinsService;
+
 // use App\Trait\CheckHeaderTrait;
 
 class CoinsController extends Controller
