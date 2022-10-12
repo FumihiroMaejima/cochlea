@@ -9,12 +9,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Trait\HelperTrait;
-use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\PermissionsTableSeeder;
 use Database\Seeders\Masters\RolePermissionsTableSeeder;
 use Database\Seeders\Masters\RolesTableSeeder;
+use Database\Seeders\UsersTableSeeder;
 
 /**
  * ユーザー用のServiceクラスのテスト用Baseクラス
@@ -92,8 +92,8 @@ class UserServiceBaseTestCase extends TestCase
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.user.login'), [
-            'email'    => Config::get('myappTest.test.admin.login.email'),
-            'password' => Config::get('myappTest.test.admin.login.password')
+            'email'    => Config::get('myappTest.test.user.login.email'),
+            'password' => Config::get('myappTest.test.user.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
         return [

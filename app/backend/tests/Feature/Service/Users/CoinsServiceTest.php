@@ -16,20 +16,24 @@ use Database\Seeders\Masters\CoinsTableSeeder;
 use Database\Seeders\Masters\PermissionsTableSeeder;
 use Database\Seeders\Masters\RolePermissionsTableSeeder;
 use Database\Seeders\Masters\RolesTableSeeder;
+use Database\Seeders\UsersTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CoinsServiceTest extends UserServiceBaseTestCase
 {
+    // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
     protected array $refreshTables = [
         'coins',
+        'users',
     ];
 
     // target seeders.
     protected array $seederClasses = [
         // AdminsTableSeeder::class,
         CoinsTableSeeder::class,
+        UsersTableSeeder::class,
         // PermissionsTableSeeder::class,
         // RolesTableSeeder::class,
         // RolePermissionsTableSeeder::class,

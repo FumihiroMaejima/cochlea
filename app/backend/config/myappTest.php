@@ -17,6 +17,21 @@ return [
                 ]
             ],
         ],
+        'user' => [
+            'login' => [
+                'email'    => 'test' . 'user1' . '@example.com',
+                'password' => env('TEST_USR_SEEDER_PASSWORD', 'password')
+            ],
+            'create' => [
+                'success' => [
+                    'name'                  => 'test name',
+                    'email'                 => 'testuser'. '12345XXX' . '@example.com',
+                    'roleId'                => 1,
+                    'password'              => 'testpassword' . '12345',
+                    'password_confirmation' => 'testpassword' . '12345'
+                ]
+            ],
+        ],
         'roles' => [
             'create' => [
                 'success' => [
