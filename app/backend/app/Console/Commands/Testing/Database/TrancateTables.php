@@ -55,7 +55,8 @@ class TrancateTables extends Command
         echo 'Truncate Tables.' . "\n";
         // echo var_dump($values) . "\n";
         if (config('app.env') === 'testing') {
-            self::truncateTable($values);
+            // artisanコマンド自体のパラメーターも含まれる為、keyを指定する。
+            self::truncateTable($values['tables']);
         }
     }
 
@@ -85,6 +86,11 @@ class TrancateTables extends Command
         // TRUNCATEの実行
         foreach ($tables as $table) {
             // IF EXISTS
+            /* DB::statement(
+                "
+                    SELECT * FROM ${database}.${table};
+                "
+            ); */
             DB::statement(
                 "
                     TRUNCATE TABLE ${database}.${table};
