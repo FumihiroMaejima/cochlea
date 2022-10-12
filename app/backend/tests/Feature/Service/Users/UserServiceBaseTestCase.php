@@ -50,6 +50,9 @@ class UserServiceBaseTestCase extends TestCase
 
     protected $initialized = false;
 
+    // 初期化の為のtruncateを行う対象のテーブル名
+    protected array $refreshTables = [];
+
     // target seeders.
     protected array $seederClasses = [
         UsersTableSeeder::class,
@@ -84,7 +87,7 @@ class UserServiceBaseTestCase extends TestCase
 
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
-        $this->artisan('testing:truncate', ['tables' => ['informations']]);
+        $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
         $this->seed($this->seederClasses);
 
         // ログインリクエスト

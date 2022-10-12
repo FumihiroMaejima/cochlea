@@ -16,6 +16,8 @@ class TrancateTables extends Command
     /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
     private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
 
+    private const PARAMETER_KEY_TABLES = 'tables';
+
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
      *
@@ -56,7 +58,10 @@ class TrancateTables extends Command
         // echo var_dump($values) . "\n";
         if (config('app.env') === 'testing') {
             // artisanコマンド自体のパラメーターも含まれる為、keyを指定する。
-            self::truncateTable($values['tables']);
+            $tables = $values[self::PARAMETER_KEY_TABLES];
+            if (!empty($tables)) {
+                self::truncateTable($values[self::PARAMETER_KEY_TABLES]);
+            }
         }
     }
 
