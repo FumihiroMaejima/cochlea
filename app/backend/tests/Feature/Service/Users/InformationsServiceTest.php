@@ -22,6 +22,10 @@ use Database\Seeders\Masters\RolesTableSeeder;
 
 class InformationsServiceTest extends UserServiceBaseTestCase
 {
+    protected array $refreshTables = [
+        'informations',
+    ];
+
     // target seeders.
     protected array $seederClasses = [
         // AdminsTableSeeder::class,
