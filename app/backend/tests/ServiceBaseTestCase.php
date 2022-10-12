@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Library\Database\ShardingLibrary;
 use App\Trait\HelperTrait;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
@@ -76,17 +77,8 @@ class ServiceBaseTestCase extends TestCase
         // $this->refreshTestDatabase();
         // $this->runDatabaseMigrations();
 
-        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
-        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
-        $connection = '';
-
-        // connection 設定がCI用の設定の場合
-        if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
-            $connection = self::CONNECTION_NAME_FOR_CI;
-        } else {
-            // テスト用DB内のテーブルの削除
-            $connection = self::CONNECTION_NAME_FOR_TESTING;
-        }
+        // connection設定がCI用かテスト用DB内かの判定
+        $connection = ShardingLibrary::getSingleConnectionByConfig();
 
         $this->artisan('db:wipe', ['--database' => $connection]);
         $this->artisan('migrate:fresh');

@@ -73,18 +73,6 @@ class UserServiceBaseTestCase extends TestCase
      */
     protected function init(): array
     {
-        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
-        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
-        $connection = '';
-
-        // connection 設定がCI用の設定の場合
-        if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
-            $connection = self::CONNECTION_NAME_FOR_CI;
-        } else {
-            // テスト用DB内のテーブルの削除
-            $connection = self::CONNECTION_NAME_FOR_TESTING;
-        }
-
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
         $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
 class TrancateTables extends Command
@@ -75,17 +76,7 @@ class TrancateTables extends Command
     private static function truncateTable(array $tables): void
     {
         // 対象のDBの設定
-        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
-        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
-        $connection = '';
-
-        // connection 設定がCI用の設定の場合
-        if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
-            $connection = self::CONNECTION_NAME_FOR_CI;
-        } else {
-            // テスト用DB内のテーブル
-            $connection = self::CONNECTION_NAME_FOR_TESTING;
-        }
+        $connection = ShardingLibrary::getSingleConnectionByConfig();
         $database = Config::get("database.connections.${connection}.database");
 
         // TRUNCATEの実行
