@@ -10,12 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
-use Database\Seeders\Masters\AdminsTableSeeder;
-use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\InformationsTableSeeder;
-use Database\Seeders\Masters\PermissionsTableSeeder;
-use Database\Seeders\Masters\RolePermissionsTableSeeder;
-use Database\Seeders\Masters\RolesTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,12 +23,7 @@ class InformationsServiceTest extends UserServiceBaseTestCase
 
     // target seeders.
     protected array $seederClasses = [
-        // AdminsTableSeeder::class,
         InformationsTableSeeder::class,
-        // PermissionsTableSeeder::class,
-        // RolesTableSeeder::class,
-        // RolePermissionsTableSeeder::class,
-        // AdminsRolesTableSeeder::class,
     ];
 
     /**

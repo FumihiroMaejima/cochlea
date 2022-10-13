@@ -9,11 +9,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Trait\HelperTrait;
-use Database\Seeders\Masters\AdminsTableSeeder;
-use Database\Seeders\Masters\AdminsRolesTableSeeder;
-use Database\Seeders\Masters\PermissionsTableSeeder;
-use Database\Seeders\Masters\RolePermissionsTableSeeder;
-use Database\Seeders\Masters\RolesTableSeeder;
 use Database\Seeders\UsersTableSeeder;
 
 /**
@@ -32,7 +27,6 @@ class UserServiceBaseTestCase extends TestCase
     // admin resource key
     protected const ADMIN_RESOURCE_KEY_ID = 'id';
     protected const ADMIN_RESOURCE_KEY_NAME = 'name';
-    protected const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
 
     // init() response key
     protected const INIT_REQUEST_RESPONSE_TOKEN = 'token';
@@ -42,11 +36,6 @@ class UserServiceBaseTestCase extends TestCase
 
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
-
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
 
     protected $initialized = false;
 
