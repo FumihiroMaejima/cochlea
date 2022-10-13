@@ -54,8 +54,8 @@ class TrancateTables extends Command
         $values = $this->arguments();
 
         // 現在日時(タイムゾーン付き)
-        echo date('c') . "\n";
-        echo 'Truncate Tables.' . "\n";
+        // echo date('c') . "\n";
+        // echo 'Truncate Tables.' . "\n";
         // echo var_dump($values) . "\n";
         if (config('app.env') === 'testing') {
             // artisanコマンド自体のパラメーターも含まれる為、keyを指定する。
