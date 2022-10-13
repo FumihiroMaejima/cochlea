@@ -9,14 +9,10 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
+use Exception;
 
 class TrancateTables extends Command
 {
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
-
     private const PARAMETER_KEY_TABLES = 'tables';
 
     /**
@@ -53,10 +49,6 @@ class TrancateTables extends Command
     {
         $values = $this->arguments();
 
-        // 現在日時(タイムゾーン付き)
-        // echo date('c') . "\n";
-        // echo 'Truncate Tables.' . "\n";
-        // echo var_dump($values) . "\n";
         if (config('app.env') === 'testing') {
             // artisanコマンド自体のパラメーターも含まれる為、keyを指定する。
             $tables = $values[self::PARAMETER_KEY_TABLES];
@@ -79,18 +71,22 @@ class TrancateTables extends Command
         $connection = ShardingLibrary::getSingleConnectionByConfig();
         $database = Config::get("database.connections.${connection}.database");
 
-        // TRUNCATEの実行
-        foreach ($tables as $table) {
-            // IF EXISTS
-            /* DB::statement(
-                "
-                    SELECT * FROM ${database}.${table};
-                "
-            ); */
-            DB::statement(
-                "
-                    TRUNCATE TABLE ${database}.${table};
-                "
+        try {
+            // TRUNCATEの実行
+            foreach ($tables as $table) {
+                DB::statement(
+                    "
+                        TRUNCATE TABLE ${database}.${table};
+                    "
+                );
+            }
+        } catch (Exception $e) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'テスト用バッチ実行エラー。データの初期化に失敗しました。 ' . TimeLibrary::getCurrentDateTime(),
+                ['tables' => $tables],
+                false,
+                $e
             );
         }
     }
