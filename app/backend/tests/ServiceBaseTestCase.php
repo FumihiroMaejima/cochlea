@@ -4,6 +4,7 @@ namespace Tests;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -42,14 +43,13 @@ class ServiceBaseTestCase extends TestCase
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
 
-    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_CI = 'sqlite';
-    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
-    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
-
     protected $initialized = false;
 
+    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
+    protected array $refreshTables = [];
+
     // target seeders.
+    /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
     protected array $seederClasses = [
         AdminsTableSeeder::class,
         PermissionsTableSeeder::class,

@@ -4,6 +4,7 @@ namespace Tests\Feature\Service\Users;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -39,10 +40,11 @@ class UserServiceBaseTestCase extends TestCase
 
     protected $initialized = false;
 
-    // 初期化の為のtruncateを行う対象のテーブル名
+    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
     protected array $refreshTables = [];
 
     // target seeders.
+    /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
     protected array $seederClasses = [
         UsersTableSeeder::class,
     ];
