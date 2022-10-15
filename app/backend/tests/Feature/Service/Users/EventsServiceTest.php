@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
+use App\Models\Masters\Events;
 use Database\Seeders\Masters\EventsTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -17,10 +18,6 @@ use Database\Seeders\Masters\EventsTableSeeder;
 
 class EventsServiceTest extends UserServiceBaseTestCase
 {
-    protected array $refreshTables = [
-        'events',
-    ];
-
     // target seeders.
     protected array $seederClasses = [
         EventsTableSeeder::class,
@@ -32,6 +29,10 @@ class EventsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
+        $this->refreshTables = [
+            (new Events())->getTable(),
+        ];
+
         parent::setUp();
         $loginUser = [];
 

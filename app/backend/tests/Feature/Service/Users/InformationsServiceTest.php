@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
+use App\Models\Masters\Informations;
 use Database\Seeders\Masters\InformationsTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -17,10 +18,6 @@ use Database\Seeders\Masters\InformationsTableSeeder;
 
 class InformationsServiceTest extends UserServiceBaseTestCase
 {
-    protected array $refreshTables = [
-        'informations',
-    ];
-
     // target seeders.
     protected array $seederClasses = [
         InformationsTableSeeder::class,
@@ -32,6 +29,10 @@ class InformationsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
+        $this->refreshTables = [
+            (new Informations())->getTable(),
+        ];
+
         parent::setUp();
         $loginUser = [];
 

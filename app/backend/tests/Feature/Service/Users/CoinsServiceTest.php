@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
+use App\Models\Masters\Coins;
+use App\Models\User;
 use Database\Seeders\Masters\CoinsTableSeeder;
 use Database\Seeders\UsersTableSeeder;
 
@@ -18,12 +20,6 @@ use Database\Seeders\UsersTableSeeder;
 
 class CoinsServiceTest extends UserServiceBaseTestCase
 {
-    // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
-    protected array $refreshTables = [
-        'coins',
-        'users',
-    ];
-
     // target seeders.
     protected array $seederClasses = [
         CoinsTableSeeder::class,
@@ -36,6 +32,11 @@ class CoinsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
+        // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
+        $this->refreshTables = [
+            (new Coins())->getTable(),
+            (new User())->getTable(),
+        ];
         parent::setUp();
         $loginUser = [];
 
