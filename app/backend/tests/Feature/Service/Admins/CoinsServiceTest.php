@@ -27,7 +27,7 @@ use Database\Seeders\Masters\RolesTableSeeder;
 class CoinsServiceTest extends ServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
         CoinsTableSeeder::class,
         PermissionsTableSeeder::class,

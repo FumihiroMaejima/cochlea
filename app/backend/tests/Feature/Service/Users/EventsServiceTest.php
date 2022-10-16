@@ -19,7 +19,7 @@ use Database\Seeders\Masters\EventsTableSeeder;
 class EventsServiceTest extends UserServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         EventsTableSeeder::class,
     ];
 

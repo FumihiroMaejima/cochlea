@@ -26,7 +26,7 @@ use Database\Seeders\Masters\RolesTableSeeder;
 class InformationsServiceTest extends ServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
         InformationsTableSeeder::class,
         PermissionsTableSeeder::class,

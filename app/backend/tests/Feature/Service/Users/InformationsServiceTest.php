@@ -19,7 +19,7 @@ use Database\Seeders\Masters\InformationsTableSeeder;
 class InformationsServiceTest extends UserServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         InformationsTableSeeder::class,
     ];
 

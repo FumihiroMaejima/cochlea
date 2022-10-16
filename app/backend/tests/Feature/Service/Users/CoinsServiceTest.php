@@ -21,7 +21,7 @@ use Database\Seeders\UsersTableSeeder;
 class CoinsServiceTest extends UserServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         CoinsTableSeeder::class,
         UsersTableSeeder::class,
     ];

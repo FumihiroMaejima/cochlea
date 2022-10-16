@@ -49,8 +49,8 @@ class ServiceBaseTestCase extends TestCase
     protected array $refreshTables = [];
 
     // target seeders.
-    /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
-    protected array $seederClasses = [
+    /** @var array<int, Seeder> SEEDER_CLASSES insert予定のシーダーファイル  */
+    protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
         PermissionsTableSeeder::class,
         RolesTableSeeder::class,
@@ -82,7 +82,7 @@ class ServiceBaseTestCase extends TestCase
 
         $this->artisan('db:wipe', ['--database' => $connection]);
         $this->artisan('migrate:fresh');
-        $this->seed($this->seederClasses);
+        $this->seed(static::SEEDER_CLASSES);
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
