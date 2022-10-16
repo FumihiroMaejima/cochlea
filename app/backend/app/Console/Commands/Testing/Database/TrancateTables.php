@@ -74,6 +74,15 @@ class TrancateTables extends Command
         $database = Config::get("database.connections.${connection}.database");
 
         try {
+            if ($connection === self::CONNECTION_NAME_FOR_CI) {
+                // DBがsqliteの場合
+                DB::statement(
+                    "
+                        ATTACH DATABASE '${database}' as db;
+                    "
+                );
+
+            }
             // TRUNCATEの実行
             foreach ($tables as $table) {
 
@@ -81,10 +90,8 @@ class TrancateTables extends Command
                     // DBがsqliteの場合
                     DB::statement(
                         "
-                            ATTACH DATABASE '${database}' as db;
                             DELETE FROM db.${table};
                             DELETE FROM sqlite_sequence WHERE name = db.${table};
-                            DETACH DATABASE db;
                         "
                     );
 
