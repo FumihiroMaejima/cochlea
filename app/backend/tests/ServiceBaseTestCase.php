@@ -4,6 +4,7 @@ namespace Tests;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -80,9 +81,14 @@ class ServiceBaseTestCase extends TestCase
         // connection設定がCI用かテスト用DB内かの判定
         $connection = ShardingLibrary::getSingleConnectionByConfig();
 
-        $this->artisan('db:wipe', ['--database' => $connection]);
-        $this->artisan('migrate:fresh');
-        $this->seed(static::SEEDER_CLASSES);
+        // $this->artisan('db:wipe', ['--database' => $connection]);
+        // $this->artisan('migrate:fresh');
+        // $this->seed(static::SEEDER_CLASSES);
+        Artisan::call('db:wipe', ['--database' => $connection]);
+        Artisan::call('migrate:fresh');
+        foreach (static::SEEDER_CLASSES as $className) {
+            Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
+        }
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
