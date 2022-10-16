@@ -13,10 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\Debug\TestCommand::class,
-        Commands\Debug\TestCommandWithParam::class,
         Commands\Admins\Database\AddLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\AddUserDatabasePartitionsCommand::class,
+        Commands\Testing\Database\TrancateTables::class,
+        Commands\Debug\TestCommand::class,
+        Commands\Debug\TestCommandWithParam::class,
     ];
 
     /**

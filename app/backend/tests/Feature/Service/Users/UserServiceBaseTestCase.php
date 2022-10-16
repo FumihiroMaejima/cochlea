@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Feature\Service\Users;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
@@ -9,18 +9,13 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Library\Database\ShardingLibrary;
 use App\Trait\HelperTrait;
-use Database\Seeders\Masters\AdminsTableSeeder;
-use Database\Seeders\Masters\AdminsRolesTableSeeder;
-use Database\Seeders\Masters\PermissionsTableSeeder;
-use Database\Seeders\Masters\RolePermissionsTableSeeder;
-use Database\Seeders\Masters\RolesTableSeeder;
+use Database\Seeders\UsersTableSeeder;
 
 /**
- * Serviceクラスのテスト用Baseクラス
+ * ユーザー用のServiceクラスのテスト用Baseクラス
  */
-class ServiceBaseTestCase extends TestCase
+class UserServiceBaseTestCase extends TestCase
 {
     use HelperTrait;
 
@@ -33,11 +28,11 @@ class ServiceBaseTestCase extends TestCase
     // admin resource key
     protected const ADMIN_RESOURCE_KEY_ID = 'id';
     protected const ADMIN_RESOURCE_KEY_NAME = 'name';
-    protected const ADMIN_RESOURCE_KEY_AUTHORITY = 'authority';
 
     // init() response key
     protected const INIT_REQUEST_RESPONSE_TOKEN = 'token';
     protected const INIT_REQUEST_RESPONSE_USER_ID = 'user_id';
+    protected const INIT_REQUEST_RESPONSE_USER_NAME = 'name';
     protected const INIT_REQUEST_RESPONSE_USER_AUTHORITY = 'user_authority';
 
     // token prefix
@@ -51,11 +46,7 @@ class ServiceBaseTestCase extends TestCase
     // target seeders.
     /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
     protected array $seederClasses = [
-        AdminsTableSeeder::class,
-        PermissionsTableSeeder::class,
-        RolesTableSeeder::class,
-        RolePermissionsTableSeeder::class,
-        AdminsRolesTableSeeder::class,
+        UsersTableSeeder::class,
     ];
 
     // response keys
@@ -73,27 +64,21 @@ class ServiceBaseTestCase extends TestCase
      */
     protected function init(): array
     {
-        // $this->refreshDatabase();
-        // $this->refreshTestDatabase();
-        // $this->runDatabaseMigrations();
-
-        // connection設定がCI用かテスト用DB内かの判定
-        $connection = ShardingLibrary::getSingleConnectionByConfig();
-
-        $this->artisan('db:wipe', ['--database' => $connection]);
-        $this->artisan('migrate:fresh');
+        // $this->artisan('db:wipe', ['--database' => $connection]);
+        // $this->artisan('migrate:fresh');
+        $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
         $this->seed($this->seederClasses);
 
         // ログインリクエスト
-        $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myappTest.test.admin.login.email'),
-            'password' => Config::get('myappTest.test.admin.login.password')
+        $response = $this->json('POST', route('auth.user.login'), [
+            'email'    => Config::get('myappTest.test.user.login.email'),
+            'password' => Config::get('myappTest.test.user.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
         return [
-            self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN],
-            self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID],
-            self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY]
+            self::INIT_REQUEST_RESPONSE_TOKEN     => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
+            self::INIT_REQUEST_RESPONSE_USER_ID   => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
+            self::INIT_REQUEST_RESPONSE_USER_NAME => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_NAME] ?? ''
         ];
     }
 

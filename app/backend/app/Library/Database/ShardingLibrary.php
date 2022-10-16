@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Config;
 
 class ShardingLibrary
 {
+    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_CI = 'sqlite';
+    /** @var string CONNECTION_NAME_FOR_TESTING UnitTestで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_TESTING = 'mysql_testing';
+
     /**
      * get database node number & shard ids setting.
      *
@@ -88,5 +93,24 @@ class ShardingLibrary
             Config::get('myapp.unitTest.database.baseConnectionName'),
             Config::get('myapp.ci.database.baseConnectionName'),
         ];
+    }
+
+    /**
+     * get single database connection name from config.
+     *
+     * @return array<int, string> 単一DBで運用する用のDBコネクション名の配列
+     */
+    public static function getSingleConnectionByConfig(): string
+    {
+        $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
+        $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
+
+        // CI用ののコネクション
+        if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
+            return self::CONNECTION_NAME_FOR_CI;
+        } else {
+            // テスト用DB内のテーブルのコネクション
+            return self::CONNECTION_NAME_FOR_TESTING;
+        }
     }
 }
