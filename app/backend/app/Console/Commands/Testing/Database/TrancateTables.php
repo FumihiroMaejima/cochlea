@@ -76,25 +76,25 @@ class TrancateTables extends Command
         try {
             if ($connection === self::CONNECTION_NAME_FOR_CI) {
                 // DBがsqliteの場合
+                // DB名をコード上で指定しやすい形にする
+                // ATTACHはDB::statement間で共通になる為初回だけ実行
                 DB::statement(
                     "
                         ATTACH DATABASE '${database}' as db;
                     "
                 );
-
             }
             // TRUNCATEの実行
             foreach ($tables as $table) {
-
                 if ($connection === self::CONNECTION_NAME_FOR_CI) {
                     // DBがsqliteの場合
+                    // TRUNCATE文が無いのでDELETE文でデータを削除し、シーケンスも初期化する
                     DB::statement(
                         "
                             DELETE FROM db.${table};
                             DELETE FROM sqlite_sequence WHERE name = db.${table};
                         "
                     );
-
                 } else {
                     DB::statement(
                         "
