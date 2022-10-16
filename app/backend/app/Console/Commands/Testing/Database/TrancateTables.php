@@ -84,7 +84,7 @@ class TrancateTables extends Command
                             ATTACH DATABASE '${database}' as db;
                             DELETE FROM db.${table};
                             DELETE FROM sqlite_sequence WHERE name = db.${table};
-                            detach db;
+                            DETACH DATABASE db;
                         "
                     );
 
