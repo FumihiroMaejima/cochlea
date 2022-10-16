@@ -14,6 +14,8 @@ use Exception;
 class TrancateTables extends Command
 {
     private const PARAMETER_KEY_TABLES = 'tables';
+    /** @var string CONNECTION_NAME_FOR_CI CIなどで使う場合のコネクション名。単一のコネクションに接続させる。 */
+    private const CONNECTION_NAME_FOR_CI = 'sqlite';
 
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
@@ -74,11 +76,28 @@ class TrancateTables extends Command
         try {
             // TRUNCATEの実行
             foreach ($tables as $table) {
-                DB::statement(
+
+                if ($connection === self::CONNECTION_NAME_FOR_CI) {
+                    // DBがsqliteの場合
+                    DB::statement(
+                        "
+                            DELETE FROM ${database}.${table};
+                            DELETE FROM sqlite_sequence WHERE name = ${database}.${table};
+                        "
+                    );
+
+                } else {
+                    DB::statement(
+                        "
+                            TRUNCATE TABLE ${database}.${table};
+                        "
+                    );
+                }
+                /* DB::statement(
                     "
                         TRUNCATE TABLE ${database}.${table};
                     "
-                );
+                ); */
             }
         } catch (Exception $e) {
             throw new MyApplicationHttpException(
