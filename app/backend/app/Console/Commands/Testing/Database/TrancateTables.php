@@ -81,8 +81,9 @@ class TrancateTables extends Command
                     // DBがsqliteの場合
                     DB::statement(
                         "
-                            DELETE FROM sqlite.${table};
-                            DELETE FROM sqlite_sequence WHERE name = sqlite.${table};
+                            ATTACH DATABASE ${database} as db;
+                            DELETE FROM db.${table};
+                            DELETE FROM sqlite_sequence WHERE name = db.${table};
                         "
                     );
 
