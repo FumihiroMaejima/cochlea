@@ -29,15 +29,16 @@ class InformationsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
-        $this->refreshTables = [
-            (new Informations())->getTable(),
-        ];
-
         parent::setUp();
         $loginUser = [];
 
+        // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $loginUser         = $this->init();
+            $this->refreshTables = [
+                (new Informations())->getTable(),
+            ];
+
+            $loginUser         = $this->setUpInit();
             $this->initialized = true;
         }
 

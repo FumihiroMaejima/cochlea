@@ -39,31 +39,32 @@ class UserServiceBaseTestCase extends TestCase
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
 
-    protected $initialized = false;
-
-    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
-    protected array $refreshTables = [];
-
-    // target seeders.
-    /** @var array<int, Seeder> $SEEDER_CLASSES insert予定のシーダーファイル  */
-    protected const SEEDER_CLASSES = [
-        UsersTableSeeder::class,
-    ];
-
     // response keys
     protected const RESPONSE_KEY_DATA = 'data';
-
 
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
+    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
+    protected array $refreshTables = [];
+
+    // target seeders.
+    /** @var array<int, Seeder> SEEDER_CLASSES insert予定のシーダーファイル  */
+    protected const SEEDER_CLASSES = [
+        UsersTableSeeder::class,
+    ];
+
+    /** @var bool $initialized whichever initialized.  */
+    protected $initialized = false;
+
     /**
-     * 初期化処理
+     * setup初期化処理
+     * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
      * @return array
      */
-    protected function init(): array
+    protected function setUpInit(): array
     {
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');

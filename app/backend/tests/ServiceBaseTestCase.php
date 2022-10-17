@@ -44,7 +44,12 @@ class ServiceBaseTestCase extends TestCase
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
 
-    protected $initialized = false;
+    // response keys
+    protected const RESPONSE_KEY_DATA = 'data';
+
+    protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
+    protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
+    protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
     protected array $refreshTables = [];
@@ -59,16 +64,12 @@ class ServiceBaseTestCase extends TestCase
         AdminsRolesTableSeeder::class,
     ];
 
-    // response keys
-    protected const RESPONSE_KEY_DATA = 'data';
-
-
-    protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
-    protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
-    protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    /** @var bool $initialized whichever initialized.  */
+    protected $initialized = false;
 
     /**
-     * 初期化処理
+     * setup初期化処理
+     * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
      * @return array
      */
