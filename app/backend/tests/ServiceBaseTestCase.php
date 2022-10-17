@@ -47,6 +47,7 @@ class ServiceBaseTestCase extends TestCase
     // response keys
     protected const RESPONSE_KEY_DATA = 'data';
 
+    // content-type
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -73,7 +74,7 @@ class ServiceBaseTestCase extends TestCase
      *
      * @return array
      */
-    protected function init(): array
+    protected function setUpInit(): array
     {
         // $this->refreshDatabase();
         // $this->refreshTestDatabase();

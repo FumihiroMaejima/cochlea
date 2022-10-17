@@ -25,8 +25,9 @@ class PermissionsServiceTest extends ServiceBaseTestCase
         parent::setUp();
         $loginUser = [];
 
+        // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $loginUser         = $this->init();
+            $loginUser         = $this->setUpInit();
             $this->initialized = true;
         }
 
