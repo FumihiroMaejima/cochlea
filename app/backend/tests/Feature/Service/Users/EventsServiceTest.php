@@ -34,11 +34,11 @@ class EventsServiceTest extends UserServiceBaseTestCase
 
         // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $this->refreshTables = [
-                (new Events())->getTable(),
-            ];
-
-            $loginUser         = $this->setUpInit();
+            $loginUser = $this->setUpInit(
+                [
+                    (new Events())->getTable(),
+                ]
+            );
             $this->initialized = true;
         }
 

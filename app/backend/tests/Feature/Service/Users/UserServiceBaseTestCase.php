@@ -47,9 +47,6 @@ class UserServiceBaseTestCase extends TestCase
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
-    protected array $refreshTables = [];
-
     // target seeders.
     /** @var array<int, Seeder> SEEDER_CLASSES insert予定のシーダーファイル  */
     protected const SEEDER_CLASSES = [
@@ -63,16 +60,17 @@ class UserServiceBaseTestCase extends TestCase
      * setup初期化処理
      * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
+     * @param array<int string> $tables refresh target tables
      * @return array
      */
-    protected function setUpInit(): array
+    protected function setUpInit(array $tables = []): array
     {
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
         // $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
         // $this->seed(static::SEEDER_CLASSES);
 
-        Artisan::call('testing:truncate', ['tables' => $this->refreshTables]);
+        Artisan::call('testing:truncate', ['tables' => $tables]);
         foreach (static::SEEDER_CLASSES as $className) {
             Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
         }

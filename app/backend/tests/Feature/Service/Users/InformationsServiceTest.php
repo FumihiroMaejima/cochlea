@@ -34,11 +34,11 @@ class InformationsServiceTest extends UserServiceBaseTestCase
 
         // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $this->refreshTables = [
-                (new Informations())->getTable(),
-            ];
-
-            $loginUser         = $this->setUpInit();
+            $loginUser = $this->setUpInit(
+                [
+                    (new Informations())->getTable(),
+                ]
+            );
             $this->initialized = true;
         }
 

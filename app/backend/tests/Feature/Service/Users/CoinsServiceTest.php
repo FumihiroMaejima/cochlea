@@ -38,12 +38,12 @@ class CoinsServiceTest extends UserServiceBaseTestCase
         // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
             // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
-            $this->refreshTables = [
-                (new Coins())->getTable(),
-                (new User())->getTable(),
-            ];
-
-            $loginUser         = $this->setUpInit();
+            $loginUser = $this->setUpInit(
+                [
+                    (new Coins())->getTable(),
+                    (new User())->getTable(),
+                ]
+            );
             $this->initialized = true;
         }
 
