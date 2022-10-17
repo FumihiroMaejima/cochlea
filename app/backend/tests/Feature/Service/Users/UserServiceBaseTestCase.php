@@ -4,6 +4,7 @@ namespace Tests\Feature\Service\Users;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -66,8 +67,13 @@ class UserServiceBaseTestCase extends TestCase
     {
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
-        $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
-        $this->seed(static::SEEDER_CLASSES);
+        // $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
+        // $this->seed(static::SEEDER_CLASSES);
+
+        Artisan::call('testing:truncate', ['tables' => $this->refreshTables]);
+        foreach (static::SEEDER_CLASSES as $className) {
+            Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
+        }
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.user.login'), [
