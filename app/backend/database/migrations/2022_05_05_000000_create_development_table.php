@@ -119,11 +119,12 @@ class CreateDevelopmentTable extends Migration
      */
     public function down()
     {
+        // 子テーブルから削除をかける
+        Schema::dropIfExists('role_permissions');
+        Schema::dropIfExists('admins_roles');
         Schema::dropIfExists('admins');
         // Schema::dropIfExists('admins_log');
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('role_permissions');
-        Schema::dropIfExists('admins_roles');
     }
 }
