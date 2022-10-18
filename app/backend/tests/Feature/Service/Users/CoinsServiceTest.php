@@ -21,7 +21,7 @@ use Database\Seeders\UsersTableSeeder;
 class CoinsServiceTest extends UserServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         CoinsTableSeeder::class,
         UsersTableSeeder::class,
     ];
@@ -32,23 +32,24 @@ class CoinsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
-        // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
-        $this->refreshTables = [
-            (new Coins())->getTable(),
-            (new User())->getTable(),
-        ];
         parent::setUp();
-        $loginUser = [];
 
+        // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $loginUser         = $this->init();
+            // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
+            $loginUser = $this->setUpInit(
+                [
+                    (new Coins())->getTable(),
+                    (new User())->getTable(),
+                ]
+            );
             $this->initialized = true;
-        }
 
-        $this->withHeaders([
-            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-        ]);
+            $this->withHeaders([
+                Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+                Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
+            ]);
+        }
     }
 
     /**

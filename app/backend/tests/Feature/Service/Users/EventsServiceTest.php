@@ -19,7 +19,7 @@ use Database\Seeders\Masters\EventsTableSeeder;
 class EventsServiceTest extends UserServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         EventsTableSeeder::class,
     ];
 
@@ -29,22 +29,22 @@ class EventsServiceTest extends UserServiceBaseTestCase
      */
     protected function setUp(): void
     {
-        $this->refreshTables = [
-            (new Events())->getTable(),
-        ];
-
         parent::setUp();
-        $loginUser = [];
 
+        // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $loginUser         = $this->init();
+            $loginUser = $this->setUpInit(
+                [
+                    (new Events())->getTable(),
+                ]
+            );
             $this->initialized = true;
-        }
 
-        $this->withHeaders([
-            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-        ]);
+            $this->withHeaders([
+                Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+                Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
+            ]);
+        }
     }
 
     /**
