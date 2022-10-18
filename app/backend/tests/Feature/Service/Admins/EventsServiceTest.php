@@ -36,27 +36,6 @@ class EventsServiceTest extends ServiceBaseTestCase
     ];
 
     /**
-     * setUpは各テストメソッドが実行される前に実行する
-     * 親クラスのsetUpを必ず実行する
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // 各クラスで1回だけ行たい処理
-        if (!$this->initialized) {
-            $loginUser         = $this->setUpInit();
-            $this->initialized = true;
-
-            $this->withHeaders([
-                Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-                Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-                Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-            ]);
-        }
-    }
-
-    /**
      * events get request test.
      *
      * @return void

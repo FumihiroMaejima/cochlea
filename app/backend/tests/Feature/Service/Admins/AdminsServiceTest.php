@@ -22,7 +22,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
      */
-    protected function setUp(): void
+    /* protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,9 +37,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
                 Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
             ]);
         }
-
-        // Config::get('myapp.headers.authority')
-    }
+    } */
 
     /**
      * admins get request test.
