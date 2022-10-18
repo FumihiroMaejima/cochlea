@@ -4,6 +4,7 @@ namespace Tests;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -43,14 +44,20 @@ class ServiceBaseTestCase extends TestCase
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
 
-    protected $initialized = false;
+    // response keys
+    protected const RESPONSE_KEY_DATA = 'data';
+
+    // content-type
+    protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
+    protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
+    protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
     protected array $refreshTables = [];
 
     // target seeders.
-    /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
-    protected array $seederClasses = [
+    /** @var array<int, Seeder> SEEDER_CLASSES insert予定のシーダーファイル  */
+    protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
         PermissionsTableSeeder::class,
         RolesTableSeeder::class,
@@ -58,20 +65,17 @@ class ServiceBaseTestCase extends TestCase
         AdminsRolesTableSeeder::class,
     ];
 
-    // response keys
-    protected const RESPONSE_KEY_DATA = 'data';
-
-
-    protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
-    protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
-    protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    /** @var bool $initialized whichever initialized.  */
+    protected $initialized = false;
 
     /**
-     * 初期化処理
+     * setup初期化処理
+     * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
+     * @param bool $isWipe whichever wipe database.
      * @return array
      */
-    protected function init(): array
+    protected function setUpInit(bool $isWipe = false): array
     {
         // $this->refreshDatabase();
         // $this->refreshTestDatabase();
@@ -80,9 +84,16 @@ class ServiceBaseTestCase extends TestCase
         // connection設定がCI用かテスト用DB内かの判定
         $connection = ShardingLibrary::getSingleConnectionByConfig();
 
-        $this->artisan('db:wipe', ['--database' => $connection]);
-        $this->artisan('migrate:fresh');
-        $this->seed($this->seederClasses);
+        // $this->artisan('db:wipe', ['--database' => $connection]);
+        // $this->artisan('migrate:fresh');
+        // $this->seed(static::SEEDER_CLASSES);
+        if ($isWipe) {
+            Artisan::call('db:wipe', ['--database' => $connection]);
+        }
+        Artisan::call('migrate:fresh', ['--database' => $connection]);
+        foreach (static::SEEDER_CLASSES as $className) {
+            Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
+        }
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.admin.login'), [
@@ -104,5 +115,17 @@ class ServiceBaseTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // 各クラスで1回だけ行たい処理
+        if (!$this->initialized) {
+            $loginUser         = $this->setUpInit(true);
+            $this->initialized = true;
+
+            $this->withHeaders([
+                Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+                Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
+                Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
+            ]);
+        }
     }
 }

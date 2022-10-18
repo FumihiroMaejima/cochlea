@@ -4,6 +4,7 @@ namespace Tests\Feature\Service\Users;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,36 +39,41 @@ class UserServiceBaseTestCase extends TestCase
     // token prefix
     protected const TOKEN_PREFIX = 'Bearer ';
 
-    protected $initialized = false;
-
-    /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
-    protected array $refreshTables = [];
-
-    // target seeders.
-    /** @var array<int, Seeder> $refreshTables insert予定のシーダーファイル  */
-    protected array $seederClasses = [
-        UsersTableSeeder::class,
-    ];
-
     // response keys
     protected const RESPONSE_KEY_DATA = 'data';
 
-
+    // content-type
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
+    // target seeders.
+    /** @var array<int, Seeder> SEEDER_CLASSES insert予定のシーダーファイル  */
+    protected const SEEDER_CLASSES = [
+        UsersTableSeeder::class,
+    ];
+
+    /** @var bool $initialized whichever initialized.  */
+    protected $initialized = false;
+
     /**
-     * 初期化処理
+     * setup初期化処理
+     * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
+     * @param array<int string> $tables refresh target tables
      * @return array
      */
-    protected function init(): array
+    protected function setUpInit(array $tables = []): array
     {
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
-        $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
-        $this->seed($this->seederClasses);
+        // $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
+        // $this->seed(static::SEEDER_CLASSES);
+
+        Artisan::call('testing:truncate', ['tables' => $tables]);
+        foreach (static::SEEDER_CLASSES as $className) {
+            Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
+        }
 
         // ログインリクエスト
         $response = $this->json('POST', route('auth.user.login'), [

@@ -27,7 +27,7 @@ use Database\Seeders\Masters\RolesTableSeeder;
 class CoinsServiceTest extends ServiceBaseTestCase
 {
     // target seeders.
-    protected array $seederClasses = [
+    protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
         CoinsTableSeeder::class,
         PermissionsTableSeeder::class,
@@ -35,27 +35,6 @@ class CoinsServiceTest extends ServiceBaseTestCase
         RolePermissionsTableSeeder::class,
         AdminsRolesTableSeeder::class,
     ];
-
-    /**
-     * setUpは各テストメソッドが実行される前に実行する
-     * 親クラスのsetUpを必ず実行する
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $loginUser = [];
-
-        if (!$this->initialized) {
-            $loginUser         = $this->init();
-            $this->initialized = true;
-        }
-
-        $this->withHeaders([
-            Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-            Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-            Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-        ]);
-    }
 
     /**
      * coins get request test.
