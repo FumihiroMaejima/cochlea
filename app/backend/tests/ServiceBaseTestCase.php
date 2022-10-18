@@ -72,9 +72,10 @@ class ServiceBaseTestCase extends TestCase
      * setup初期化処理
      * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
+     * @param bool $isWipe whichever wipe database.
      * @return array
      */
-    protected function setUpInit(): array
+    protected function setUpInit(bool $isWipe = false): array
     {
         // $this->refreshDatabase();
         // $this->refreshTestDatabase();
@@ -86,8 +87,10 @@ class ServiceBaseTestCase extends TestCase
         // $this->artisan('db:wipe', ['--database' => $connection]);
         // $this->artisan('migrate:fresh');
         // $this->seed(static::SEEDER_CLASSES);
-        Artisan::call('db:wipe', ['--database' => $connection]);
-        Artisan::call('migrate:fresh');
+        if ($isWipe) {
+            Artisan::call('db:wipe', ['--database' => $connection]);
+        }
+        Artisan::call('migrate:fresh', ['--database' => $connection]);
         foreach (static::SEEDER_CLASSES as $className) {
             Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
         }

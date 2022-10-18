@@ -29,7 +29,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
 
         // 各クラスで1回だけ行たい処理
         if (!$this->initialized) {
-            $loginUser         = $this->setUpInit();
+            $loginUser         = $this->setUpInit(true);
             $this->initialized = true;
         }
 
