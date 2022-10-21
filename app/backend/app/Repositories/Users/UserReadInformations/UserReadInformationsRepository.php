@@ -88,6 +88,47 @@ class UserReadInformationsRepository implements UserReadInformationsRepositoryIn
     }
 
     /**
+     * get by user id & master id.
+     *
+     * @param int $userId user id
+     * @param int $informationId information id
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByUserIdAndInformationId(int $userId, int $informationId, bool $isLock = false): Collection|null
+    {
+        $query = $this->getQueryBuilder($userId)
+            ->select(['*'])
+            ->where(UserReadInformations::USER_ID, '=', $userId)
+            ->where(UserReadInformations::INFORMATION_ID, '=', $informationId)
+            ->where(UserReadInformations::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $query = $query->lockForUpdate();
+        }
+
+        $collection = $query->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'has deplicate collections,'
+            );
+        }
+
+        return $collection;
+    }
+
+
+    /**
      * create recode.
      *
      * @param int $userId user id
