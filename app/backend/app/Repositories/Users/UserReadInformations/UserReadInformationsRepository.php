@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Admins\UserReadInformations;
+namespace App\Repositories\Users\UserReadInformations;
 
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;

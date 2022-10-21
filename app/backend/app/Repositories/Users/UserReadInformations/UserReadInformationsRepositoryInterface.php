@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Admins\UserReadInformations;
+namespace App\Repositories\Users\UserReadInformations;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;

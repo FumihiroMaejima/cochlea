@@ -30,6 +30,8 @@ use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepository;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepository;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
+use App\Repositories\Users\UserReadInformations\UserReadInformationsRepository;
+use App\Repositories\Users\UserReadInformations\UserReadInformationsRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -53,6 +55,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserCoinPaymentStatusRepositoryInterface::class, UserCoinPaymentStatusRepository::class);
         $this->app->bind(UserCoinHistoriesRepositoryInterface::class, UserCoinHistoriesRepository::class);
         $this->app->bind(UserCoinsRepositoryInterface::class, UserCoinsRepository::class);
+        $this->app->bind(UserReadInformationsRepositoryInterface::class, UserReadInformationsRepository::class);
     }
 
     /**
