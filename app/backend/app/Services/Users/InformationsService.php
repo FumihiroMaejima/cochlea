@@ -79,7 +79,6 @@ class InformationsService
     {
         // お知らせの取得
         $information = $this->getInformationById($userId, $informationId);
-
         // TODO 期間判定
         if (is_null($information)) {
             throw new MyApplicationHttpException(
@@ -99,9 +98,6 @@ class InformationsService
         // DB 登録
         DB::beginTransaction();
         try {
-            // ロックをかけて再取得
-            //  $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
-
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
             $createCount = $this->userReadInformationsRepository->create($userId, $resource);
 
@@ -149,7 +145,6 @@ class InformationsService
     {
         // お知らせの取得
         $information = $this->getInformationById($userId, $informationId);
-
         // TODO 期間判定
         if (is_null($information)) {
             throw new MyApplicationHttpException(
@@ -171,12 +166,12 @@ class InformationsService
         DB::beginTransaction();
         try {
             // ロックをかけて再取得
-            $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
+            $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId, true);
 
             $resource = UserReadInformationsResource::toArrayForDelete($userId, $informationId);
-            $createCount = $this->userReadInformationsRepository->delete($userId, $resource);
+            $removeCount = $this->userReadInformationsRepository->delete($userId, $resource);
 
-            if ($createCount <= 0) {
+            if ($removeCount <= 0) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Delete record failed.'
