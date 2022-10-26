@@ -165,6 +165,13 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
             });
         });
+
+        // informations
+        Route::group(['prefix' => 'informations'], function () {
+            Route::group(['prefix' => 'information'], function () {
+                Route::post('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'createUserReadInformation'])->name('user.informations.information.read.create');
+            });
+        });
     });
 
     // debug API

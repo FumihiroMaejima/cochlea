@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Informations\UserReadInformationCreateRequest;
 use App\Services\Users\InformationsService;
 use App\Trait\CheckHeaderTrait;
 
@@ -46,30 +47,17 @@ class InformationsController extends Controller
     /**
      * create user read information request handling.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param UserReadInformationCreateRequest $request
+     * @param int $informationId
      * @return JsonResponse
      */
-    public function createUserReadInformation(Request $request): JsonResponse
+    public function createUserReadInformation(UserReadInformationCreateRequest $request): JsonResponse
     {
-        // バリデーションチェック
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'informationId' => ['required','integer'],
-            ]
-        );
-
-        if ($validator->fails()) {
-            // $validator->errors()->toArray();
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_422,
-            );
-        }
-
         // ユーザーIDの取得
         $userId = $this->getUserId($request);
 
         // サービスの実行
-        return $this->service->createUserReadInformation($userId, $request->informationId);
+        // return $this->service->createUserReadInformation($userId, $request->informationId);
+        return $this->service->createUserReadInformation($userId, $request->{UserReadInformationCreateRequest::KEY_ID});
     }
 }
