@@ -54,10 +54,9 @@ class InformationsController extends Controller
     public function createUserReadInformation(UserReadInformationCreateRequest $request): JsonResponse
     {
         // ユーザーIDの取得
-        $userId = $this->getUserId($request);
+        $userId = self::getUserId($request);
 
         // サービスの実行
-        // return $this->service->createUserReadInformation($userId, $request->informationId);
         return $this->service->createUserReadInformation($userId, $request->{UserReadInformationCreateRequest::KEY_ID});
     }
 }
