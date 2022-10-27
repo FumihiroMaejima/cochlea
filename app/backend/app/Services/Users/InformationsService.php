@@ -129,7 +129,8 @@ class InformationsService
                 'code' => StatusCodeMessages::STATUS_201,
                 'message' => 'Successfully Create!',
                 'data' => true,
-            ]
+            ],
+            StatusCodeMessages::STATUS_201
         );
     }
 

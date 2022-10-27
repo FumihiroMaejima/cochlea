@@ -9,8 +9,11 @@ use Tests\Feature\Service\Users\UserServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Http\Requests\User\Informations\InformationBaseRequest;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\Informations;
+use App\Models\Users\UserReadInformations;
+use App\Repositories\Users\UserReadInformations\UserReadInformationsRepository;
 use Database\Seeders\Masters\InformationsTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -36,6 +39,7 @@ class InformationsServiceTest extends UserServiceBaseTestCase
             $loginUser = $this->setUpInit(
                 [
                     (new Informations())->getTable(),
+                    // (new UserReadInformationsRepository())->getTable(), // $userIdからshardIdを設定する必要がある。
                 ]
             );
             $this->initialized = true;
@@ -57,5 +61,34 @@ class InformationsServiceTest extends UserServiceBaseTestCase
         $response = $this->get(route('noAuth.informations.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, self::RESPONSE_KEY_DATA);
+    }
+
+    /**
+     * user read information crerate data
+     * @return array
+     */
+    public function userReadInformationCreateDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            'create user read information' => [
+                InformationBaseRequest::KEY_ID => 1
+            ]
+        ];
+    }
+
+    /**
+     * user reead information create request test.
+     * @dataProvider userReadInformationCreateDataProvider
+     * @return void
+     */
+    public function testCreateUserReadInformationSuccess(int $informationId): void
+    {
+        $response = $this->json(
+            'POST',
+            route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId])
+        );
+        $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 }
