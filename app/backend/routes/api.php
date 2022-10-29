@@ -179,6 +179,9 @@ Route::group(['prefix' => 'v1'], function () {
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
+            Route::get('phpinfo', function () {
+                phpinfo();
+            })->name('user.debug.phpinfo');
 
             // stripe決済
             Route::group(['prefix' => 'checkout'], function () {
