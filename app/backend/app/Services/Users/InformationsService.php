@@ -217,9 +217,9 @@ class InformationsService
     private function getInformationById(int $informationId): array
     {
         // 更新用途で使う為lockをかける
-        $coins = $this->informationsRepository->getById($informationId, true);
+        $informations = $this->informationsRepository->getById($informationId, true);
 
-        if (empty($coins)) {
+        if (empty($informations)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
                 'not exist coin.'
