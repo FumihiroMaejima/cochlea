@@ -57,9 +57,6 @@ class InformationsController extends Controller
         // ユーザーIDの取得
         $userId = self::getUserId($request);
 
-        echo 'check test: ' . "\n";
-        echo $userId;
-
         // サービスの実行
         return $this->service->createUserReadInformation($userId, $request->{UserReadInformationCreateRequest::KEY_ID});
     }
