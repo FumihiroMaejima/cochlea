@@ -120,12 +120,7 @@ class InformationsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                $e->getMessage(),
-                isResponseMessage: true
-            );
-            // throw $e;
+            throw $e;
         }
 
         return response()->json(
@@ -222,8 +217,14 @@ class InformationsService
         if (empty($informations)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
-                'not exist coin.'
+                'not exist coin.',
+                ['informations' => $informations],
+                true
             );
+            /* throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'not exist coin.'
+            ); */
         }
 
         // 複数チェックはrepository側で実施済み
