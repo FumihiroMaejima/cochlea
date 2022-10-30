@@ -213,6 +213,8 @@ class InformationsService
     {
         // 更新用途で使う為lockをかける
         $informations = $this->informationsRepository->getById($informationId, true);
+        echo 'informations' . "\n";
+        echo var_dump($informations);
 
         if (empty($informations)) {
             throw new MyApplicationHttpException(
