@@ -38,7 +38,7 @@ class InformationsServiceTest extends UserServiceBaseTestCase
         if (!$this->initialized) {
             $loginUser = $this->setUpInit(
                 [
-                    (new Informations())->getTable(),
+                    // (new Informations())->getTable(),
                     // (new UserReadInformationsRepository())->getTable(), // $userIdからshardIdを設定する必要がある。
                 ]
             );
@@ -89,7 +89,6 @@ class InformationsServiceTest extends UserServiceBaseTestCase
             'POST',
             route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId])
         );
-        echo var_dump($response);
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 }
