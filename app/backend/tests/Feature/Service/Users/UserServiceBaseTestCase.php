@@ -81,6 +81,8 @@ class UserServiceBaseTestCase extends TestCase
             'password' => Config::get('myappTest.test.user.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
+        echo var_dump($response);
+
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN     => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
             self::INIT_REQUEST_RESPONSE_USER_ID   => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
