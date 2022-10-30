@@ -11,7 +11,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
-class BaseAddDatabasePartitionsCommand extends Command
+class BaseDatabasePartitionsCommand extends Command
 {
     // information schema table name.
     private const INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME = 'INFORMATION_SCHEMA.PARTITIONS';

@@ -4,14 +4,14 @@ namespace App\Console\Commands\Admins\Database;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Command;
-use App\Console\Commands\Admins\Database\BaseAddDatabasePartitionsCommand;
+use App\Console\Commands\Admins\Database\BaseDatabasePartitionsCommand;
 use App\Models\Logs\AdminsLog;
 use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;
 use App\Models\Logs\UserReadInformationLog;
 use App\Library\Time\TimeLibrary;
 
-class AddLogDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
+class AddLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
 {
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)

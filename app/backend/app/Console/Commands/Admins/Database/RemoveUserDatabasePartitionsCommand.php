@@ -4,7 +4,7 @@ namespace App\Console\Commands\Admins\Database;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Command;
-use App\Console\Commands\Admins\Database\BaseAddDatabasePartitionsCommand;
+use App\Console\Commands\Admins\Database\BaseDatabasePartitionsCommand;
 use App\Models\Users\BaseUserDataModel;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoinPaymentStatus;
@@ -12,7 +12,7 @@ use App\Models\Users\UserReadInformations;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
-class RemoveUserDatabasePartitionsCommand extends BaseAddDatabasePartitionsCommand
+class RemoveUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
 {
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
