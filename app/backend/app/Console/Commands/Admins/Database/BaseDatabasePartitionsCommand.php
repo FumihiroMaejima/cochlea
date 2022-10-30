@@ -215,7 +215,6 @@ class BaseDatabasePartitionsCommand extends Command
 
             // TODO　delete paririonの実行
             echo var_dump($expiredPartions);
-
         }
     }
 
@@ -374,7 +373,6 @@ class BaseDatabasePartitionsCommand extends Command
         string $tableName,
         string $dateTime = ''
     ): array {
-
         if ($dateTime === '') {
             // $dateTime = TimeLibrary::addDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
             $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);

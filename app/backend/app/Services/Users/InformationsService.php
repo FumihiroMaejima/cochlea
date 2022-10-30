@@ -36,8 +36,7 @@ class InformationsService
     public function __construct(
         InformationsRepositoryInterface $informationsRepository,
         UserReadInformationsRepositoryInterface $userReadInformationsRepository
-    )
-    {
+    ) {
         $this->informationsRepository = $informationsRepository;
         $this->userReadInformationsRepository = $userReadInformationsRepository;
     }
