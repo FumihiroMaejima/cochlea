@@ -131,6 +131,32 @@ class TimeLibrary
     }
 
     /**
+     * sub mounth to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 減算月数
+     * @param string $format datetime format
+     * @return string $dateTimeから$valueヶ月前の$dateTime
+     */
+    public static function subMonths(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->subMonths($value)->format($format);
+    }
+
+    /**
+     * sub mounth to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 減算年数
+     * @param string $format datetime format
+     * @return string $dateTimeの$value年前のdateTime
+     */
+    public static function subYears(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->subYears($value)->format($format);
+    }
+
+    /**
      * add mounth to dateTime parameter.
      *
      * @param string $dateTime 日時
