@@ -120,6 +120,8 @@ class InformationsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
+
+            echo var_dump($e->getMessage());
             throw $e;
         }
 
