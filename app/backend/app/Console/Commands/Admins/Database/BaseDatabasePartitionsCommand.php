@@ -401,7 +401,8 @@ class BaseDatabasePartitionsCommand extends Command
             "))
             ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
-            ->where('PARTITION_DESCRIPTION', '>=', $dateTime)
+            ->where('CREATE_TIME', '<', $dateTime)
+            // ->where('PARTITION_DESCRIPTION', '<', $dateTime)
             ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
             ->get()
             ->toArray();
