@@ -118,6 +118,19 @@ class TimeLibrary
     }
 
     /**
+     * sub days to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 減算日数
+     * @param string $format datetime format
+     * @return string $dateTimeから$value日前の$dateTime
+     */
+    public static function subDays(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->subDays($value)->format($format);
+    }
+
+    /**
      * add mounth to dateTime parameter.
      *
      * @param string $dateTime 日時

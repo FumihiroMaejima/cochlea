@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
 class BaseAddDatabasePartitionsCommand extends Command
@@ -196,6 +197,29 @@ class BaseAddDatabasePartitionsCommand extends Command
     }
 
     /**
+     * remove partitions.
+     *
+     * @return void
+     * @throws MyApplicationHttpException
+     */
+    protected function removePartitions(): void
+    {
+        // パーティションを設定する対象のテーブル情報の取得
+        $partitionSettings = $this->getPartitionSettings();
+
+        foreach ($partitionSettings as $setting) {
+            $expiredPartions = $this->getExpiredPartitions(
+                $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
+                $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
+            );
+
+            // TODO　delete paririonの実行
+            echo var_dump($expiredPartions);
+
+        }
+    }
+
+    /**
      * add partition by id.
      *
      * @param string $connection connection name
@@ -330,6 +354,58 @@ class BaseAddDatabasePartitionsCommand extends Command
         }
 
         return json_decode(json_encode($collection), true)[0];
+    }
+
+
+    /**
+     * get expired partiion record by CREATE_TIME
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @param string $dateTime expired date time
+     * @return array
+     */
+    private function getExpiredPartitions(
+        string $connection,
+        string $tableName,
+        string $dateTime = ''
+    ): array {
+
+        if ($dateTime === '') {
+            // $dateTime = TimeLibrary::addDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
+            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
+        }
+
+        $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
+
+        echo $dateTime . "\n";
+        echo $connection . "\n";
+
+
+        // パーティションの情報の取得(指定された日付より以前のパーティション)
+        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
+        $collection = $this->getQueryBuilderForInformantionSchema($connection)
+            ->select(DB::raw("
+                TABLE_SCHEMA,
+                TABLE_NAME,
+                PARTITION_NAME,
+                PARTITION_ORDINAL_POSITION,
+                TABLE_ROWS,
+                CREATE_TIME
+            "))
+            ->where('TABLE_SCHEMA', '=', $schema)
+            ->where('TABLE_NAME', '=', $tableName)
+            ->where('CREATE_TIME', '<', $dateTime)
+            ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
+            ->limit(self::PRTITION_OFFSET_VALUE)
+            ->get()
+            ->toArray();
+
+        if (empty($collection)) {
+            return [];
+        }
+
+        return json_decode(json_encode($collection), true);
     }
 
     /**
