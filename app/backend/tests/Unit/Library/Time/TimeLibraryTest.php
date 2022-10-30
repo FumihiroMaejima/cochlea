@@ -139,6 +139,68 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test sub days.
+     *
+     * @return void
+     */
+    public function testSubDays(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $days = 2;
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD,strtotime("+${days} days")) . "\n";
+        // echo TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${days} days")),
+            TimeLibrary::subDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
+    }
+
+    /**
+     * test sub months.
+     *
+     * @return void
+     */
+    public function testSubMonths(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $months = 2;
+
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${months} month")) . "\n";
+        // echo TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${months} month")),
+            TimeLibrary::subMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
+    }
+
+    /**
+     * test sub years.
+     *
+     * @return void
+     */
+    public function testSubYears(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $years = 2;
+
+
+        // 確認用
+        // echo date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${years} month")) . "\n";
+        // echo TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${years} year")),
+            TimeLibrary::subYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD)
+        );
+    }
+
+    /**
      * test diff days.
      *
      * @return void

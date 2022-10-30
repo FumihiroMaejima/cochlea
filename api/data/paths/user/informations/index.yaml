@@ -1,0 +1,29 @@
+# /user/informations:
+  get:
+    tags:
+      - informations
+    summary: Find User Available informations
+    description: Returns informations data
+    responses:
+      "200":
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/models/Informations.yaml"
+      "404":
+        description: Informations not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      default:
+        description: unsuccessful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []

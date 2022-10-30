@@ -12,21 +12,21 @@ use App\Models\Users\UserReadInformations;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
-class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
+class RemoveUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
 {
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
      *
      * @var string
      */
-    protected $signature = 'admins:add-users-partitions'; // if require parameter 'debug:test {param}';
+    protected $signature = 'admins:remove-users-partitions'; // if require parameter 'debug:test {param}';
 
     /**
      * The console command description.(コンソールコマンドの説明)
      *
      * @var string
      */
-    protected $description = 'add users database paprtitions';
+    protected $description = 'remove users database paprtitions';
 
 
     /**
@@ -49,7 +49,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
         echo 'Setting Partitions.' . "\n";
         echo 'Date: ' . TimeLibrary::getCurrentDateTime() . "\n";
 
-        $this->setPartitions();
+        $this->removePartitions();
 
         echo 'Finish.' . "\n";
     }

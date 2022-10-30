@@ -25,14 +25,18 @@ trait CheckHeaderTrait
      * get user id from header
      *
      * @param Illuminate\Http\Request $request
+     * @param bool $ignoreNoData ignore if no user id.
      * @return int
      */
-    public function getUserId(Request $request): int
+    public static function getUserId(Request $request, bool $ignoreNoData = false): int
     {
         // ヘッダーから取得した時は文字列になっている。
         $userId = (int)$request->header(Config::get('myapp.headers.id'));
 
         if (!is_integer($userId) || ($userId <= 0)) {
+            if ($ignoreNoData) {
+                return 0;
+            }
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
                 'Invalid header data.'

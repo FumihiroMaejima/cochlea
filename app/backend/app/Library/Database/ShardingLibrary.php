@@ -98,7 +98,7 @@ class ShardingLibrary
     /**
      * get single database connection name from config.
      *
-     * @return array<int, string> 単一DBで運用する用のDBコネクション名の配列
+     * @return string
      */
     public static function getSingleConnectionByConfig(): string
     {
@@ -112,5 +112,15 @@ class ShardingLibrary
             // テスト用DB内のテーブルのコネクション
             return self::CONNECTION_NAME_FOR_TESTING;
         }
+    }
+
+    /**
+     * get single database connection name from config.
+     *
+     * @return string 単一DBで運用する用のDBコネクション名の配列
+     */
+    public static function getDatabaseNameByConnection($connection): string
+    {
+        return Config::get("database.connections.$connection.database");
     }
 }
