@@ -78,9 +78,6 @@ class InformationsService
     {
         // お知らせの取得
         $information = $this->getInformationById($userId, $informationId);
-
-        echo var_dump($information);
-
         // TODO 期間判定
         if (is_null($information)) {
             throw new MyApplicationHttpException(
@@ -90,8 +87,6 @@ class InformationsService
         }
 
         $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
-        echo var_dump($userReadInformation);
-
         if ($userReadInformation) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
@@ -125,8 +120,6 @@ class InformationsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-
-            echo var_dump($e->getMessage());
             throw $e;
         }
 
