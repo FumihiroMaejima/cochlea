@@ -227,7 +227,7 @@ class InformationsService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
+        return ArrayLibrary::toArray(ArrayLibrary::getFirst($informations->toArray()));
     }
 
     /**
