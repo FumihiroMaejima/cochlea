@@ -45,7 +45,7 @@ class MyApplicationHttpException extends HttpException
         // メッセージをレスポンスとして返さない場合
         if (!$isResponseMessage) {
             // ログに出力
-            $this->setErrorLog($parameter);
+            // $this->setErrorLog($parameter);
             // ログ出力後にメッセージを初期化(Handlerクラスでエラーメッセージを設定する)
             $this->message = '';
         }
