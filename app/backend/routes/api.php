@@ -165,12 +165,23 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
             });
         });
+
+        // informations
+        Route::group(['prefix' => 'informations'], function () {
+            Route::group(['prefix' => 'information'], function () {
+                Route::post('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'createUserReadInformation'])->name('user.informations.information.read.create');
+                Route::delete('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'deleteUserReadInformation'])->name('user.informations.information.read.delete');
+            });
+        });
     });
 
     // debug API
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Users\DebugController::class, 'test'])->name('user.debug.test.get');
+            Route::get('phpinfo', function () {
+                phpinfo();
+            })->name('user.debug.phpinfo');
 
             // stripe決済
             Route::group(['prefix' => 'checkout'], function () {

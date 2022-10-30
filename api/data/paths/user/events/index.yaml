@@ -1,0 +1,28 @@
+# /user/events:
+  get:
+    tags:
+      - events
+    summary: Find User Available Events
+    description: Returns events data
+    responses:
+      "200":
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/models/Events.yaml"
+      "404":
+        description: Events not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      default:
+        description: unsuccessful operation
+        content:
+          application/json:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - auth_id: []

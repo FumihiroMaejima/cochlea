@@ -1,0 +1,89 @@
+# /user/informations/information/{id}/alreadyRead:
+  post:
+    tags:
+      - informations
+    summary: Create User Read Information
+    description: ""
+    operationId: createInformationWithForm
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+    responses:
+      "201":
+        description: successful Create
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - auth_id: []
+  delete:
+    tags:
+      - informations
+    summary: Deletes User Read informations
+    description: ""
+    operationId: deleteInformation
+    parameters:
+      - name: Authorization
+        in: header
+        description: api key
+        required: true
+        schema:
+          type: string
+      - name: X-Auth-ID
+        in: header
+        description: auth id
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: successful Delete
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "400":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "404":
+        description: Membeer not found
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid ID supplied
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - auth_id: []

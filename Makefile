@@ -125,6 +125,9 @@ logs-partitions:
 users-partitions:
 	docker-compose exec app php artisan admins:add-users-partitions
 
+remove-users-partitions:
+	docker-compose exec app php artisan admins:remove-users-partitions
+
 ##############################
 # web server(nginx)
 ##############################

@@ -70,7 +70,9 @@ class UserServiceBaseTestCase extends TestCase
         // $this->artisan('testing:truncate', ['tables' => $this->refreshTables]);
         // $this->seed(static::SEEDER_CLASSES);
 
-        Artisan::call('testing:truncate', ['tables' => $tables]);
+        if (!empty($tables)) {
+            Artisan::call('testing:truncate', ['tables' => $tables]);
+        }
         foreach (static::SEEDER_CLASSES as $className) {
             Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
         }

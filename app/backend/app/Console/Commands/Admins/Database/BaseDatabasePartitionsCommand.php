@@ -8,9 +8,10 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
-class BaseAddDatabasePartitionsCommand extends Command
+class BaseDatabasePartitionsCommand extends Command
 {
     // information schema table name.
     private const INFORMATION_SCHEMA_PARTITIONS_TABLE_NAME = 'INFORMATION_SCHEMA.PARTITIONS';
@@ -196,6 +197,28 @@ class BaseAddDatabasePartitionsCommand extends Command
     }
 
     /**
+     * remove partitions.
+     *
+     * @return void
+     * @throws MyApplicationHttpException
+     */
+    protected function removePartitions(): void
+    {
+        // パーティションを設定する対象のテーブル情報の取得
+        $partitionSettings = $this->getPartitionSettings();
+
+        foreach ($partitionSettings as $setting) {
+            $expiredPartions = $this->getExpiredPartitions(
+                $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
+                $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
+            );
+
+            // TODO　delete paririonの実行
+            echo var_dump($expiredPartions);
+        }
+    }
+
+    /**
      * add partition by id.
      *
      * @param string $connection connection name
@@ -309,6 +332,8 @@ class BaseAddDatabasePartitionsCommand extends Command
      */
     private function checkLatestPartition(string $connection, string $tableName): array
     {
+        $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
+
         // パーティションの情報の取得(最新の1件)
         // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
         $collection = $this->getQueryBuilderForInformantionSchema($connection)
@@ -317,8 +342,10 @@ class BaseAddDatabasePartitionsCommand extends Command
                 TABLE_NAME,
                 PARTITION_NAME,
                 PARTITION_ORDINAL_POSITION,
-                TABLE_ROWS
+                TABLE_ROWS,
+                CREATE_TIME
             "))
+            ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
             ->orderBy('PARTITION_ORDINAL_POSITION', 'desc')
             ->limit(self::PRTITION_OFFSET_VALUE)
@@ -330,6 +357,59 @@ class BaseAddDatabasePartitionsCommand extends Command
         }
 
         return json_decode(json_encode($collection), true)[0];
+    }
+
+
+    /**
+     * get expired partiion record by CREATE_TIME
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @param string $dateTime expired date time
+     * @return array
+     */
+    private function getExpiredPartitions(
+        string $connection,
+        string $tableName,
+        string $dateTime = ''
+    ): array {
+        if ($dateTime === '') {
+            // $dateTime = TimeLibrary::addDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
+            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
+        }
+
+        $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
+
+        // echo $dateTime . "\n";
+        // echo $connection . "\n";
+
+        // パーティションの情報の取得(指定された日付より以前のパーティション)
+        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
+        // CREATE_TIMEはpartitionを追加する度に更新されている？っぽいのでwhereに不向きかも。
+        // PARTITION_DESCRIPTIONの方が良さそう
+        $collection = $this->getQueryBuilderForInformantionSchema($connection)
+            ->select(DB::raw("
+                TABLE_SCHEMA,
+                TABLE_NAME,
+                PARTITION_NAME,
+                PARTITION_ORDINAL_POSITION,
+                TABLE_ROWS,
+                CREATE_TIME,
+                PARTITION_DESCRIPTION
+            "))
+            ->where('TABLE_SCHEMA', '=', $schema)
+            ->where('TABLE_NAME', '=', $tableName)
+            ->where('CREATE_TIME', '<', $dateTime)
+            // ->where('PARTITION_DESCRIPTION', '<', $dateTime)
+            ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
+            ->get()
+            ->toArray();
+
+        if (empty($collection)) {
+            return [];
+        }
+
+        return json_decode(json_encode($collection), true);
     }
 
     /**

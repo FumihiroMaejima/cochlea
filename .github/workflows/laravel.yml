@@ -36,6 +36,7 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: cd app/backend && vendor/bin/phpunit
+      # run: cd app/backend && vendor/bin/phpunit --testdox
       # run: cd app/backend && vendor/bin/phpunit --coverage-text --colors=never > storage/logs/coverage.log
     - name: Execute phpcs
       run: cd app/backend && vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
