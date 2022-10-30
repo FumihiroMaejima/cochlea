@@ -45,6 +45,8 @@ class InformationsServiceTest extends UserServiceBaseTestCase
             $this->initialized = true;
 
             echo var_dump($loginUser);
+            echo 'user id' . "\n";
+            echo $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID] . "\n";
 
             $this->withHeaders([
                 Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
