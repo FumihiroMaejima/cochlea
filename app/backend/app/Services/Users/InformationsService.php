@@ -217,13 +217,13 @@ class InformationsService
         if (empty($informations)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
-                'not exist coin.',
-                ['informations' => $informations],
+                'not exist informations.: ' . $informationId,
+                ['informationId' => $informationId, 'informations' => $informations],
                 true
             );
             /* throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
-                'not exist coin.'
+                'not exist informations.'
             ); */
         }
 
