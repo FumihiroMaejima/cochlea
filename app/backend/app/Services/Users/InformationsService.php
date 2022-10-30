@@ -120,7 +120,14 @@ class InformationsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            throw $e;
+
+            // TODO 検証用
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                $e->getMessage(),
+                isResponseMessage: true
+            );
+            // throw $e;
         }
 
         return response()->json(
