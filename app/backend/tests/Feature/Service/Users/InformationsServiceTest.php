@@ -89,6 +89,7 @@ class InformationsServiceTest extends UserServiceBaseTestCase
             'POST',
             route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId])
         );
+        echo var_dump($response);
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 }
