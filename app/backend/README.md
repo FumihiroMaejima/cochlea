@@ -1633,7 +1633,8 @@ $ php artisan vendor:publish --provider="NunoMaduro\PhpInsights\Application\Adap
 
 ### コマンドの実行
 ```shell
-$ php asrisan insights
+$ php atrisan insights
+$ php artisan insights -s
 ```
 
 ---
