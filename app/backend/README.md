@@ -1638,6 +1638,23 @@ $ php artisan insights -s
 ```
 
 ---
+
+
+## PHPStan
+
+### PHP Insightsのインストール
+
+```shell
+$ composer require --dev phpstan/phpstan phpstan/extension-installer
+```
+
+
+### コマンドの実行
+```shell
+$ ./vendor/bin/phpstan analyze app tests
+```
+
+---
 ### backendのpackage.jsonのアップデート
 
 update対象の確認
