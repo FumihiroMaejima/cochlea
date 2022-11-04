@@ -216,7 +216,7 @@ class BaseDatabasePartitionsCommand extends Command
             // 1週間前より前の日付のパーティションは削除
             $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 7, TimeLibrary::DATE_TIME_FORMAT_YMD);
 
-            $partions = $this->getExpiredPartitions(
+            $partions = $this->getPartitionsByTableName(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
@@ -371,27 +371,17 @@ class BaseDatabasePartitionsCommand extends Command
 
 
     /**
-     * get expired partiion record by CREATE_TIME
+     * get partiion by table name
      *
      * @param string $connection connection name
      * @param string $tableName table name
-     * @param string $dateTime expired date time
      * @return array
      */
-    private function getExpiredPartitions(
+    private function getPartitionsByTableName(
         string $connection,
         string $tableName,
-        string $dateTime = ''
     ): array {
-        if ($dateTime === '') {
-            // $dateTime = TimeLibrary::addDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
-            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
-        }
-
         $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
-
-        // echo $dateTime . "\n";
-        // echo $connection . "\n";
 
         // パーティションの情報の取得(指定された日付より以前のパーティション)
         // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
@@ -409,8 +399,6 @@ class BaseDatabasePartitionsCommand extends Command
             "))
             ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
-            // ->where('CREATE_TIME', '<', $dateTime)
-            // ->where('PARTITION_DESCRIPTION', '<', $dateTime)
             ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
             ->get()
             ->toArray();
