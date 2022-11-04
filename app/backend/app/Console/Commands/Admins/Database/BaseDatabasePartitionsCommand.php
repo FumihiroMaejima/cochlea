@@ -219,13 +219,21 @@ class BaseDatabasePartitionsCommand extends Command
             }
 
             // 1週間前より前の日付のパーティションは削除
-            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 5, TimeLibrary::DATE_TIME_FORMAT_YMD);
+            // $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 5, TimeLibrary::DATE_TIME_FORMAT_YMD);
+
+            // 現在から設定された保存期間を引いたの日付を設定
+            $dateTime = TimeLibrary::subMonths(
+                TimeLibrary::getCurrentDateTime(),
+                $setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT],
+                TimeLibrary::DATE_TIME_FORMAT_YMD
+            );
 
             $partions = $this->getPartitionsByTableName(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
 
+            // 保存期間が切れたパーティションを取得
             $expiredPartions = self::filteringPartitionsByDateTime($partions, $dateTime);
 
             // TODO　delete paririonの実行
