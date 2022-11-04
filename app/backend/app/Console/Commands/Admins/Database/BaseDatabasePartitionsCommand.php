@@ -31,7 +31,7 @@ class BaseDatabasePartitionsCommand extends Command
     protected const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
     protected const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
     protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'monthCount'; // パーティション数(1パーティション=1日を月数で設定)
-
+    protected const NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT = 'storeMonthCount'; // パーティションの保存月数(削除しない場合は未指定。)
     // partition type
     protected const PARTITION_TYPE_ID = 1;
     protected const PARTITION_TYPE_DATE = 2;
@@ -105,6 +105,7 @@ class BaseDatabasePartitionsCommand extends Command
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10, // IDカラムを元にパーティションを貼る場合は必要
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null, // IDカラムを元にパーティションを貼る場合は不要
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null, // IDカラムを元にパーティションを貼る場合は不要
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null, // IDカラムを元にパーティションを貼る場合は不要
             ],
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -116,6 +117,7 @@ class BaseDatabasePartitionsCommand extends Command
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null, // 日時カラムを元にパーティションを貼る場合は不要
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(), // 日時カラムを元にパーティションを貼る場合は必要
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3, // 日時カラムを元にパーティションを貼る場合は必要
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4, // 日時カラムを元にパーティションを貼る、かつ定期的に削除したい場合は必要
             ],
         ];
     }
@@ -208,13 +210,16 @@ class BaseDatabasePartitionsCommand extends Command
         $partitionSettings = $this->getPartitionSettings();
 
         foreach ($partitionSettings as $setting) {
-            // 日付でパーティションを作成していない場合
-            if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
+            // 日付でパーティションを作成していない場合や保存期間を設定していない(=永続化する)場合
+            if (
+                ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID)
+                || (is_null($setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT]))
+            ) {
                 continue;
             }
 
             // 1週間前より前の日付のパーティションは削除
-            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 7, TimeLibrary::DATE_TIME_FORMAT_YMD);
+            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 5, TimeLibrary::DATE_TIME_FORMAT_YMD);
 
             $partions = $this->getPartitionsByTableName(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],

@@ -79,6 +79,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                     self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                     self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
                     self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                    self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
                 ];
                 $partitionSettings[] = [
                     self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -90,6 +91,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                     self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                     self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
                     self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                    self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
                 ];
                 $partitionSettings[] = [
                     self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -101,6 +103,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                     self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                     self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
                     self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                    self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
                 ];
             }
 

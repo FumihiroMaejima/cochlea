@@ -74,6 +74,7 @@ class AddLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10,
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
             ],
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -85,6 +86,7 @@ class AddLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
             ],
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -96,6 +98,7 @@ class AddLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
             ],
         ];
     }
