@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Admins\Database\AddLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\AddUserDatabasePartitionsCommand::class,
+        Commands\Admins\Database\RemoveLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\RemoveUserDatabasePartitionsCommand::class,
         Commands\Testing\Database\TrancateTables::class,
         Commands\Debug\TestCommand::class,
