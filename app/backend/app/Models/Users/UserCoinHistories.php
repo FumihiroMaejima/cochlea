@@ -20,12 +20,14 @@ class UserCoinHistories extends BaseUserDataModel
     public const USER_COINS_HISTORY_TYPE_GAIN = 2; // 獲得
     public const USER_COINS_HISTORY_TYPE_CONSUME = 3; // 消費
     public const USER_COINS_HISTORY_TYPE_EXPIRED = 4; // 期限切れ
+    public const USER_COINS_HISTORY_TYPE_COMPENSATION = 5; // 補填
 
     public const USER_COINS_HISTORY_TYPE_VALUES = [
         self::USER_COINS_HISTORY_TYPE_PURCHASED,
         self::USER_COINS_HISTORY_TYPE_GAIN,
         self::USER_COINS_HISTORY_TYPE_CONSUME,
         self::USER_COINS_HISTORY_TYPE_EXPIRED,
+        self::USER_COINS_HISTORY_TYPE_COMPENSATION,
     ];
 
     // カラム一覧
