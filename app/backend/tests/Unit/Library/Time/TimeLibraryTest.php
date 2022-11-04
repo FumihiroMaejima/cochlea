@@ -231,7 +231,7 @@ class TimeLibraryTest extends TestCase
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
         $days = 3;
-        $targetDateTime = date($dateTime, strtotime("-${days} days"));
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("-${days} days"));
 
         // echo $interval->format('%d days');
 
@@ -250,9 +250,7 @@ class TimeLibraryTest extends TestCase
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
         $days = 3;
-        $targetDateTime = date($dateTime, strtotime("+${days} days"));
-
-        // echo $interval->format('%d days');
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("+${days} days"));
 
         $this->assertEquals(
             (strtotime($dateTime) < strtotime($targetDateTime)),
