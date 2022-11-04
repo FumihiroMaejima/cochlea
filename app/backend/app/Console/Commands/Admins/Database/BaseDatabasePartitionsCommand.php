@@ -208,10 +208,20 @@ class BaseDatabasePartitionsCommand extends Command
         $partitionSettings = $this->getPartitionSettings();
 
         foreach ($partitionSettings as $setting) {
-            $expiredPartions = $this->getExpiredPartitions(
+            // 日付でパーティションを作成していない場合
+            if ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID) {
+                continue;
+            }
+
+            // 1週間前より前の日付のパーティションは削除
+            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 7, TimeLibrary::DATE_TIME_FORMAT_YMD);
+
+            $partions = $this->getExpiredPartitions(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
+
+            $expiredPartions = self::filteringPartitionsByDateTime($partions, $dateTime);
 
             // TODO　delete paririonの実行
             echo var_dump($expiredPartions);
@@ -399,7 +409,7 @@ class BaseDatabasePartitionsCommand extends Command
             "))
             ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
-            ->where('CREATE_TIME', '<', $dateTime)
+            // ->where('CREATE_TIME', '<', $dateTime)
             // ->where('PARTITION_DESCRIPTION', '<', $dateTime)
             ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
             ->get()
@@ -410,6 +420,41 @@ class BaseDatabasePartitionsCommand extends Command
         }
 
         return json_decode(json_encode($collection), true);
+    }
+
+
+    /**
+     * filtering partiions by datetime
+     *
+     * @param array $partitions partitions
+     * @param string|null $dateTime target date time
+     * @return array
+     */
+    private function filteringPartitionsByDateTime(
+        array $partitions,
+        string|null $dateTime = null
+    ): array {
+        if (is_null($dateTime)) {
+            $dateTime = TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
+        }
+
+        $response = [];
+        foreach($partitions as $partition) {
+            // パーティションが既に貼られている場合は最新の日付の翌日の日付でパーティションを設定する。
+            if (empty($partition['PARTITION_ORDINAL_POSITION'])) {
+                continue;
+            }
+
+            // パーティション名から「p」の文字を切り取り日付を取得
+            $partitionDate = mb_substr($partition['PARTITION_NAME'], 1);
+
+            // 指定された日付未満の場合
+            if (TimeLibrary::lesser($partitionDate, $dateTime)) {
+                $response[$partition['PARTITION_ORDINAL_POSITION']] = $partition;
+            }
+        }
+
+        return $response;
     }
 
     /**

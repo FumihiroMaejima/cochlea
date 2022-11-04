@@ -168,4 +168,30 @@ class TimeLibrary
     {
         return (new Carbon($dateTime))->diffInDays($targetDateTime);
     }
+
+    /**
+     * whichever dateTime is greater than target.
+     *
+     * @param string $dateTime 日時
+     * @param string $targetDateTime 比較対象の日付
+     * @param string $format datetime format
+     * @return bool 日数
+     */
+    public static function greater(string $dateTime, string $targetDateTime): bool
+    {
+        return (new Carbon($dateTime))->greaterThan($targetDateTime);
+    }
+
+    /**
+     * whichever dateTime is less than target.
+     *
+     * @param string $dateTime 日時
+     * @param string $targetDateTime 比較対象の日付
+     * @param string $format datetime format
+     * @return bool 日数
+     */
+    public static function lesser(string $dateTime, string $targetDateTime): bool
+    {
+        return (new Carbon($dateTime))->lessThan($targetDateTime);
+    }
 }
