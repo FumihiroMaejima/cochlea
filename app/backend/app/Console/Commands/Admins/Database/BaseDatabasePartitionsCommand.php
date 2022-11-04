@@ -30,7 +30,7 @@ class BaseDatabasePartitionsCommand extends Command
     protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
     protected const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
     protected const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
-    protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'mounthCount'; // パーティション数(1パーティション=1日を月数で設定)
+    protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'monthCount'; // パーティション数(1パーティション=1日を月数で設定)
 
     // partition type
     protected const PARTITION_TYPE_ID = 1;
@@ -288,7 +288,7 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $tableName table name
      * @param string $columnName column name
      * @param string $currentDate partition start date time
-     * @param int $mounthCount add partition count as month
+     * @param int $monthCount add partition count as month
      * @param string $type alter table type
      * @return array
      */
@@ -297,7 +297,7 @@ class BaseDatabasePartitionsCommand extends Command
         string $tableName,
         string $columnName,
         string $currentDate,
-        int $mounthCount = 3,
+        int $monthCount = 3,
         string $type = self::ALTER_TABLE_TYPE_CREATE
     ): void {
         // typeの値の確認
@@ -305,7 +305,7 @@ class BaseDatabasePartitionsCommand extends Command
             return;
         }
 
-        $targetDate = TimeLibrary::addMonths($currentDate, $mounthCount);
+        $targetDate = TimeLibrary::addMonths($currentDate, $monthCount);
 
         // パーティションの追加日数の算出
         $days = TimeLibrary::diffDays($currentDate, $targetDate);
@@ -492,7 +492,6 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $databaseName database name
      * @param string $tableName table name
      * @param string $partitionName partition name
-     * @param int $mounthCount add partition count as month
      * @return void
      */
     private static function deletePartition(string $databaseName, string $tableName, string $partitionName): void
