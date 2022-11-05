@@ -4,6 +4,7 @@ namespace App\Repositories\Logs\UserCoinPaymentLog;
 
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -44,7 +45,7 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
      */
     public function getQueryBuilder(): Builder
     {
-        return DB::connection(UserCoinPaymentLog::getLogDatabaseConnection())->table($this->getTable());
+        return DB::connection(BaseLogDataModel::getLogDatabaseConnection())->table($this->getTable());
     }
 
     /**

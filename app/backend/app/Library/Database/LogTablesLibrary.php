@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models\Logs;
+namespace App\Library\Database;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use App\Library\Database\LogTablesLibrary;
 
-class BaseLogDataModel extends Model
+class LogTablesLibrary
 {
     /**
      * get log databse connection name.
@@ -15,6 +13,6 @@ class BaseLogDataModel extends Model
      */
     public static function getLogDatabaseConnection(): string
     {
-        return LogTablesLibrary::getLogDatabaseConnection();
+        return Config::get('myapp.database.logs.baseConnectionName');
     }
 }
