@@ -16,7 +16,6 @@ use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 
 class RolesServiceTest extends ServiceBaseTestCase
 {
-
     /**
      * roles get request test.
      *

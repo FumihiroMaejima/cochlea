@@ -440,7 +440,7 @@ class BaseDatabasePartitionsCommand extends Command
         }
 
         $response = [];
-        foreach($partitions as $partition) {
+        foreach ($partitions as $partition) {
             // パーティションが既に貼られている場合は最新の日付の翌日の日付でパーティションを設定する。
             if (empty($partition['PARTITION_ORDINAL_POSITION'])) {
                 continue;
