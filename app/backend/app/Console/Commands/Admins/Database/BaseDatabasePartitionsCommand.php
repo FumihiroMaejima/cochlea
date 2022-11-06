@@ -211,8 +211,7 @@ class BaseDatabasePartitionsCommand extends Command
 
         foreach ($partitionSettings as $setting) {
             // 日付でパーティションを作成していない場合や保存期間を設定していない(=永続化する)場合
-            if (
-                ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID)
+            if (($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID)
                 || (is_null($setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT]))
             ) {
                 continue;
