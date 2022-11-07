@@ -6,17 +6,11 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Logs\BaseLogDataModel;
 use App\Models\Logs\UserCoinPaymentLog;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\Logs\BaseLogRepository;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Query\Builder;
 
-class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterface
+class UserCoinPaymentLogRepository extends BaseLogRepository implements UserCoinPaymentLogRepositoryInterface
 {
-    protected UserCoinPaymentLog $model;
-
-    private const NO_DATA_COUNT = 0;
-    private const FIRST_DATA_COUNT = 1;
-
     /**
      * create instance.
      *
@@ -26,26 +20,6 @@ class UserCoinPaymentLogRepository implements UserCoinPaymentLogRepositoryInterf
     public function __construct(UserCoinPaymentLog $model)
     {
         $this->model = $model;
-    }
-
-    /**
-     * get Model Table Name in This Repository.
-     *
-     * @return string
-     */
-    public function getTable(): string
-    {
-        return $this->model->getTable();
-    }
-
-    /**
-     * get query builder by user id
-     *
-     * @return Builder
-     */
-    public function getQueryBuilder(): Builder
-    {
-        return DB::connection(BaseLogDataModel::getLogDatabaseConnection())->table($this->getTable());
     }
 
     /**
