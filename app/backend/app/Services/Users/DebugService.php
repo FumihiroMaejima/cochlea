@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Random\RandomLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
@@ -86,6 +87,27 @@ class DebugService
                 'code' => 200,
                 'message' => 'Successfully Payment! ' . $orderId,
                 'data' => [],
+            ]
+        );
+    }
+
+    /**
+     * get random wighted value.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function gacha(): JsonResponse
+    {
+        $entries = [10, 20, 30];
+        // 対象の要素のkeyを取得
+        $targetKey = RandomLibrary::getWeightedRandomValue($entries);
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success.',
+                'data' => $entries[$targetKey] ?? 0,
             ]
         );
     }
