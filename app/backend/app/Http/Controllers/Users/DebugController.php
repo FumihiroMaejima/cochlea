@@ -28,6 +28,8 @@ class DebugController extends Controller
      */
     public function __construct(DebugService $debugService, ImagesService $imagesService)
     {
+        // 認証が必要なメソッドのみ指定する
+        $this->middleware('auth:api-users', ['only' => ['assignCoins']]);
         $this->service = $debugService;
         $this->imagesService = $imagesService;
     }
@@ -116,6 +118,43 @@ class DebugController extends Controller
 
         // サービスの実行
         return $this->service->completeCheckout($request->orderId);
+    }
+
+    /**
+     * assign coins.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function assignCoins(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'freeCoins' => ['int','min:1'],
+                'paidCoins' => ['int','min:1'],
+                'limitedTimeCoins' => ['int','min:1'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        // ユーザーIDの取得
+        $userId = self::getUserId($request);
+
+        // サービスの実行
+        return $this->service->assignCoins(
+            $userId,
+            $request->freeCoins ?? 0,
+            $request->paidCoins ?? 0,
+            $request->limitedTimeCoins ?? 0,
+        );
     }
 
     /**
