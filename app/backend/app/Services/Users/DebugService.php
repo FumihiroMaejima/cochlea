@@ -53,8 +53,7 @@ class DebugService
         UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
         UserCoinsRepositoryInterface $userCoinsRepository,
         UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
-    )
-    {
+    ) {
         $this->prop = 'debug propaty';
         // コイン関係
         $this->coinsRepository = $coinsRepository;
@@ -143,9 +142,7 @@ class DebugService
         int $paidCoins,
         int $limitedTimeCoins,
         string|null $expiredAt = null
-    ): JsonResponse
-    {
-
+    ): JsonResponse {
         // DB 登録
         DB::beginTransaction();
         try {
