@@ -479,6 +479,27 @@ class BaseDatabasePartitionsCommand extends Command
     }
 
     /**
+     * create partiions by hash
+     * (指定カラムをパーティション化キーとして使用して HASH によって$countつのパーティションにパーティション化)
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @param string $columnName column name
+     * @param int $count partition count
+     * @return void
+     */
+    private static function createPartitionsByHash(string $databaseName, string $tableName, string $columnName, int $count): void
+    {
+        DB::statement(
+            "
+                ALTER TABLE ${databaseName}.${tableName}
+                PARTITION BY HASH(${columnName})
+                PARTITIONS ${count};
+            "
+        );
+    }
+
+    /**
      * add partiions
      *
      * @param string $databaseName database name
