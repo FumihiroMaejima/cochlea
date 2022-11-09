@@ -245,7 +245,8 @@ class UserCoinPaymentService
                 UserCoinHistories::USER_COINS_HISTORY_TYPE_PURCHASED,
                 UserCoins::DEFAULT_COIN_COUNT,
                 $$coin[Coins::PRICE],
-                UserCoins::DEFAULT_COIN_COUNT
+                UserCoins::DEFAULT_COIN_COUNT,
+                orderId: $orderId
             );
             $this->userCoinHistoriesRepositoryInterface->create($userId, $userCoinHistoriesResource);
 
