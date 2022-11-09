@@ -286,7 +286,7 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitions($databaseName, $tableName, $columnName, $partitions);
+            self::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
             self::addPartitions($databaseName, $tableName, $partitions);
@@ -338,7 +338,7 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitions($databaseName, $tableName, $columnName, $partitions);
+            self::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
             self::addPartitions($databaseName, $tableName, $partitions);
@@ -458,7 +458,7 @@ class BaseDatabasePartitionsCommand extends Command
     }
 
     /**
-     * create partiions
+     * create partiions by range
      *
      * @param string $databaseName database name
      * @param string $tableName table name
@@ -466,7 +466,7 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $$partitions partition setting statemetns
      * @return void
      */
-    private static function createPartitions(string $databaseName, string $tableName, string $columnName, string $partitions): void
+    private static function createPartitionsByRange(string $databaseName, string $tableName, string $columnName, string $partitions): void
     {
         DB::statement(
             "
