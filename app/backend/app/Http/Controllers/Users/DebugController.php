@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
 use App\Services\Admins\ImagesService;
@@ -132,9 +133,15 @@ class DebugController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'freeCoins' => ['int','min:1'],
-                'paidCoins' => ['int','min:1'],
-                'limitedTimeCoins' => ['int','min:1'],
+                'freeCoins' => ['int', 'min:1'],
+                'paidCoins' => ['int', 'min:1'],
+                'limitedTimeCoins' => ['int', 'min:1'],
+                'expiredAt' => [
+                    'required_with_all:limitedTimeCoins',
+                    'date',
+                    'date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
+                    'after:'.TimeLibrary::getCurrentDateTime()
+                ],
             ]
         );
 
@@ -142,6 +149,8 @@ class DebugController extends Controller
             // $validator->errors()->toArray();
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_422,
+                'validation error.',
+                $validator->errors()->toArray()
             );
         }
 
@@ -154,6 +163,7 @@ class DebugController extends Controller
             $request->freeCoins ?? 0,
             $request->paidCoins ?? 0,
             $request->limitedTimeCoins ?? 0,
+            $request->expiredAt ?? null,
         );
     }
 

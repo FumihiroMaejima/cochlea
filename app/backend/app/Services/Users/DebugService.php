@@ -134,13 +134,15 @@ class DebugService
      * @param int $freeCoins free coin count
      * @param int $paidCoins paid coin count
      * @param int $limitedTimeCoins limited time coin count
+     * @param string|null $expiredAt limited time coin exprired time
      * @return JsonResponse
      */
     public function assignCoins(
         int $userId,
         int $freeCoins,
         int $paidCoins,
-        int $limitedTimeCoins
+        int $limitedTimeCoins,
+        string|null $expiredAt = null
     ): JsonResponse
     {
 
@@ -180,7 +182,8 @@ class DebugService
                 UserCoinHistories::USER_COINS_HISTORY_TYPE_COMPENSATION,
                 $freeCoins,
                 $paidCoins,
-                $limitedTimeCoins
+                $limitedTimeCoins,
+                exipiredAt: $expiredAt
             );
             $this->userCoinHistoriesRepositoryInterface->create($userId, $userCoinHistoriesResource);
 
