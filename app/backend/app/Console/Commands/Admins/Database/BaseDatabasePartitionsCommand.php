@@ -222,8 +222,8 @@ class BaseDatabasePartitionsCommand extends Command
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
                     $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
-                    $latestPartitionPosition,
                     $paritionCount,
+                    $latestPartitionPosition,
                     $alterTableType
                 );
             } else {
