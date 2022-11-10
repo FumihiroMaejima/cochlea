@@ -411,7 +411,7 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitionsByHash($databaseName, $tableName, $columnName, 16, $count);
+            self::createPartitionsByHashDiv($databaseName, $tableName, $columnName, 16, $count);
         } else {
             $partitions = '';
             // 追加する分のパーティション設定を作成
@@ -569,7 +569,7 @@ class BaseDatabasePartitionsCommand extends Command
      * @param int $count partition count
      * @return void
      */
-    private static function createPartitionsByHash(
+    private static function createPartitionsByHashDiv(
         string $databaseName,
         string $tableName,
         string $columnName,
