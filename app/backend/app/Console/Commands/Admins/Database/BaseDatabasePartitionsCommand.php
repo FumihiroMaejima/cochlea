@@ -202,8 +202,8 @@ class BaseDatabasePartitionsCommand extends Command
 
                 // パーティションが既に貼られている場合はを設定値に達するまでパーテションを追加
                 if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
-                    // パーティション名から「p」の文字を切り取りIDを取得
-                    $latestPartitionPosition = (int)mb_substr($latestPartition['PARTITION_NAME'], 1);
+                    // hashはPARTITION_ORDINAL_POSITIONを参照する
+                    $latestPartitionPosition = (int)$latestPartition['PARTITION_ORDINAL_POSITION'];
 
                     // 設定以上のパーティションを作る必要が無い為skip
                     if (
