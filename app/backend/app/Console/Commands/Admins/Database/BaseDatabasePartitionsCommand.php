@@ -198,6 +198,7 @@ class BaseDatabasePartitionsCommand extends Command
                 // user_idのHASHでパーティションを貼る場合
 
                 $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT];
+                $latestPartitionPosition = 0;
 
                 // パーティションが既に貼られている場合はを設定値に達するまでパーテションを追加
                 if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
@@ -220,6 +221,7 @@ class BaseDatabasePartitionsCommand extends Command
                     $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                     $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
                     $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
+                    $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
                     $latestPartitionPosition,
                     $paritionCount,
                     $alterTableType
@@ -243,7 +245,7 @@ class BaseDatabasePartitionsCommand extends Command
 
         foreach ($partitionSettings as $setting) {
             // 日付でパーティションを作成していない場合や保存期間を設定していない(=永続化する)場合
-            if (($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_ID)
+            if (($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] !== self::PARTITION_TYPE_DATE)
                 || (is_null($setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT]))
             ) {
                 continue;
@@ -384,9 +386,9 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $connection connection name
      * @param string $tableName table name
      * @param string $columnName column name
-     * @param int $position partition start position
-     * @param string $baseNumber data count in 1 partition
+     * @param string $baseNumber div base nubmer
      * @param int $count partition count
+     * @param int $position partition start position
      * @param string $type alter table type
      * @return array
      */
@@ -394,8 +396,9 @@ class BaseDatabasePartitionsCommand extends Command
         string $connection,
         string $tableName,
         string $columnName,
+        int $baseNumber = 16,
+        int $count = 16,
         int $position = 1,
-        int $count = 1,
         string $type = self::ALTER_TABLE_TYPE_CREATE
     ): void {
         // typeの値の確認
@@ -408,7 +411,13 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitionsByHashDiv($databaseName, $tableName, $columnName, 16, $count);
+            self::createPartitionsByHashDiv(
+                $databaseName,
+                $tableName,
+                $columnName,
+                $baseNumber,
+                $count
+            );
         } else {
             $partitions = '';
             // 追加する分のパーティション設定を作成
