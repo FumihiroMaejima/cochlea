@@ -35,10 +35,12 @@ class BaseDatabasePartitionsCommand extends Command
     // partition type
     protected const PARTITION_TYPE_ID = 1;
     protected const PARTITION_TYPE_DATE = 2;
+    protected const PARTITION_TYPE_HASH_ID = 3;
 
     public const PARTITION_TYPES = [
         self::PARTITION_TYPE_ID,
-        self::PARTITION_TYPE_DATE
+        self::PARTITION_TYPE_DATE,
+        self::PARTITION_TYPE_HASH_ID,
     ];
 
     protected const ALTER_TABLE_TYPE_CREATE = 'create';
@@ -190,6 +192,39 @@ class BaseDatabasePartitionsCommand extends Command
                     $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
                     $setting[self::NAME_PRTITION_SETTING_KEY_TARGET_DATE],
                     $setting[self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT],
+                    $alterTableType
+                );
+            } elseif ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_HASH_ID) {
+                // HASHでパーティションを貼る場合
+
+                $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER];
+
+                // パーティションが既に貼られている場合はを設定値に達するまでパーテションを追加
+                if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
+                    // パーティション名から「p」の文字を切り取りIDを取得
+                    $latestPartitionPosition = (int)mb_substr($latestPartition['PARTITION_NAME'], 1);
+                    $nextPartitionStartPosition = $latestPartitionPosition + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER];
+                    $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $nextPartitionStartPosition;
+                    $alterTableType = self::ALTER_TABLE_TYPE_ADD;
+
+
+                    // 設定以上のパーティションを作る必要が無い為skip
+                    if (
+                        ($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER]) ||
+                        (($setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - $latestPartitionPosition) <= 0)
+                    ) {
+                        continue;
+                    } else {
+                        $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - $latestPartitionPosition;
+                    }
+                }
+
+                $this->addHashPartitionById(
+                    $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
+                    $latestPartitionPosition,
+                    $paritionCount,
                     $alterTableType
                 );
             } else {
@@ -345,6 +380,51 @@ class BaseDatabasePartitionsCommand extends Command
         }
     }
 
+
+    /**
+     * add hash partitions by id.
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @param string $columnName column name
+     * @param int $position partition start position
+     * @param string $baseNumber data count in 1 partition
+     * @param int $count partition count
+     * @param string $type alter table type
+     * @return array
+     */
+    private function addHashPartitionById(
+        string $connection,
+        string $tableName,
+        string $columnName,
+        int $position = 1,
+        int $count = 1,
+        string $type = self::ALTER_TABLE_TYPE_CREATE
+    ): void {
+        // typeの値の確認
+        if (!in_array($type, self::ALTER_TABLE_TYPES)) {
+            return;
+        }
+
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
+
+        // パーティションの情報の追加
+        if ($type === self::ALTER_TABLE_TYPE_CREATE) {
+            // 新規作成(上書き)
+            self::createPartitionsByHash($databaseName, $tableName, $columnName, 16, $count);
+        } else {
+            $partitions = '';
+            // 追加する分のパーティション設定を作成
+            foreach (range(1, $count) as $i) {
+                $name = $position + $i;
+                $partitionSetting = "PARTITION p${name}";
+                $partitions .= $partitionSetting;
+            }
+            // 追加
+            self::addPartitions($databaseName, $tableName, $partitions);
+        }
+    }
+
     /**
      * check current partiion record
      *
@@ -485,15 +565,21 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $databaseName database name
      * @param string $tableName table name
      * @param string $columnName column name
+     * @param string $divCount div count
      * @param int $count partition count
      * @return void
      */
-    private static function createPartitionsByHash(string $databaseName, string $tableName, string $columnName, int $count): void
-    {
+    private static function createPartitionsByHash(
+        string $databaseName,
+        string $tableName,
+        string $columnName,
+        string $divCount,
+        int $count
+    ): void {
         DB::statement(
             "
                 ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY HASH(${columnName})
+                PARTITION BY HASH(${columnName} div ${divCount})
                 PARTITIONS ${count};
             "
         );
