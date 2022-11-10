@@ -27,7 +27,7 @@ class BaseDatabasePartitionsCommand extends Command
 
     // パーティションタイプごとの詳細な設定
     protected const ID_PRTITION_SETTING_KEY_TARGET_ID = 'targetId'; // パーティション数の起算ID
-    protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
+    protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティションあたりのID数
     protected const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
     protected const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
     protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'monthCount'; // パーティション数(1パーティション=1日を月数で設定)
@@ -195,27 +195,24 @@ class BaseDatabasePartitionsCommand extends Command
                     $alterTableType
                 );
             } elseif ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_HASH_ID) {
-                // HASHでパーティションを貼る場合
+                // user_idのHASHでパーティションを貼る場合
 
-                $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER];
+                $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT];
 
                 // パーティションが既に貼られている場合はを設定値に達するまでパーテションを追加
                 if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
                     // パーティション名から「p」の文字を切り取りIDを取得
                     $latestPartitionPosition = (int)mb_substr($latestPartition['PARTITION_NAME'], 1);
-                    $nextPartitionStartPosition = $latestPartitionPosition + $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER];
-                    $setting[self::ID_PRTITION_SETTING_KEY_TARGET_ID] = $nextPartitionStartPosition;
-                    $alterTableType = self::ALTER_TABLE_TYPE_ADD;
-
 
                     // 設定以上のパーティションを作る必要が無い為skip
                     if (
-                        ($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER]) ||
-                        (($setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - $latestPartitionPosition) <= 0)
+                        ($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]) ||
+                        (($setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] - $latestPartitionPosition) <= 0)
                     ) {
                         continue;
                     } else {
-                        $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER] - $latestPartitionPosition;
+                        $alterTableType = self::ALTER_TABLE_TYPE_ADD;
+                        $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] - $latestPartitionPosition;
                     }
                 }
 
