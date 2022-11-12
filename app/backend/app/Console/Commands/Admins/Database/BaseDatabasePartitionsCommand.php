@@ -316,7 +316,7 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = Config::get("database.connections.${connection}.database");
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
@@ -368,7 +368,7 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = Config::get("database.connections.${connection}.database");
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
