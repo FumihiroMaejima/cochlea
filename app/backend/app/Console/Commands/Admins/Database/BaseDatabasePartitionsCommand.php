@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\PartitionLibrary;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
@@ -320,10 +321,10 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
+            PartitionLibrary::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
-            self::addPartitions($databaseName, $tableName, $partitions);
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
         }
     }
 
@@ -372,10 +373,10 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
+            PartitionLibrary::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
-            self::addPartitions($databaseName, $tableName, $partitions);
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
         }
     }
 
@@ -411,7 +412,7 @@ class BaseDatabasePartitionsCommand extends Command
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitionsByHashDiv(
+            PartitionLibrary::createPartitionsByHashDiv(
                 $databaseName,
                 $tableName,
                 $columnName,
@@ -427,7 +428,7 @@ class BaseDatabasePartitionsCommand extends Command
                 $partitions .= $partitionSetting;
             }
             // 追加
-            self::addPartitions($databaseName, $tableName, $partitions);
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
         }
     }
 
@@ -541,90 +542,5 @@ class BaseDatabasePartitionsCommand extends Command
         }
 
         return $response;
-    }
-
-    /**
-     * create partiions by range
-     *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $columnName column name
-     * @param string $$partitions partition setting statemetns
-     * @return void
-     */
-    private static function createPartitionsByRange(string $databaseName, string $tableName, string $columnName, string $partitions): void
-    {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY RANGE COLUMNS(${columnName}) (
-                    ${partitions}
-                )
-            "
-        );
-    }
-
-    /**
-     * create partiions by hash
-     * (指定カラムをパーティション化キーとして使用して HASH によって$countつのパーティションにパーティション化)
-     *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $columnName column name
-     * @param string $divCount div count
-     * @param int $count partition count
-     * @return void
-     */
-    private static function createPartitionsByHashDiv(
-        string $databaseName,
-        string $tableName,
-        string $columnName,
-        string $divCount,
-        int $count
-    ): void {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY HASH(${columnName} div ${divCount})
-                PARTITIONS ${count};
-            "
-        );
-    }
-
-    /**
-     * add partiions
-     *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $$partitions partition setting statemetns
-     * @return void
-     */
-    private static function addPartitions(string $databaseName, string $tableName, string $partitions): void
-    {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName}
-                ADD PARTITION (
-                    ${partitions}
-                )
-            "
-        );
-    }
-
-    /**
-     * delete partiion.
-     *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $partitionName partition name
-     * @return void
-     */
-    private static function deletePartition(string $databaseName, string $tableName, string $partitionName): void
-    {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName} DROP PARTITION ${partitionName};
-            "
-        );
     }
 }
