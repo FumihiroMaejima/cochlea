@@ -5,11 +5,6 @@ namespace App\Console\Commands\Admins\Database;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Command;
 use App\Console\Commands\Admins\Database\BaseDatabasePartitionsCommand;
-use App\Models\Users\BaseUserDataModel;
-use App\Models\Users\UserCoinHistories;
-use App\Models\Users\UserCoinPaymentStatus;
-use App\Models\Users\UserReadInformations;
-use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 
 class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
@@ -55,66 +50,12 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
     }
 
     /**
-     * get settings for adding partition target tables.
+     * get settings for partition target tables.
      *
      * @return array
      */
     protected function getPartitionSettings(): array
     {
-        $partitionSettings = [];
-        $dateTime = TimeLibrary::getCurrentDateTime();
-
-        // テーブルごとのパーティション設定
-        foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
-            $connection = ShardingLibrary::getConnectionByNodeNumber($node);
-
-            foreach ($shardIds as $shardId) {
-                $partitionSettings = array_merge(
-                    $partitionSettings,
-                    [
-                        [
-                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
-                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinHistories())->getTable().$shardId,
-                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_HASH_ID,
-                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinHistories::USER_ID,
-                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
-                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 16,
-                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 16,
-                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
-                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
-                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
-                        ],
-                        [
-                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
-                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentStatus())->getTable().$shardId,
-                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
-                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentStatus::CREATED_AT,
-                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
-                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
-                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
-                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
-                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
-                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
-                        ],
-                        [
-                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
-                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserReadInformations())->getTable().$shardId,
-                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
-                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentStatus::CREATED_AT,
-                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
-                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
-                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
-                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
-                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
-                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
-                        ],
-                    ]
-                );
-            }
-
-            // $partitionSettings = array_merge($partitionSettings, $subPartitionSettings);
-        }
-
-        return $partitionSettings;
+        return $this->getUserDatabsePartitionSettings();
     }
 }
