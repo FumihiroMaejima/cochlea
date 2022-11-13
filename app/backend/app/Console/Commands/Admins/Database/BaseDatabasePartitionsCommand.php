@@ -269,7 +269,7 @@ class BaseDatabasePartitionsCommand extends Command
                 TimeLibrary::DATE_TIME_FORMAT_YMD
             );
 
-            $partions = $this->getPartitionsByTableName(
+            $partions = PartitionLibrary::getPartitionsByTableName(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
@@ -474,48 +474,6 @@ class BaseDatabasePartitionsCommand extends Command
 
         return json_decode(json_encode($collection), true)[0];
     }
-
-
-    /**
-     * get partiion by table name
-     *
-     * @param string $connection connection name
-     * @param string $tableName table name
-     * @return array
-     */
-    private function getPartitionsByTableName(
-        string $connection,
-        string $tableName,
-    ): array {
-        $schema = DatabaseLibrary::getDatabaseNameByConnection($connection);
-
-        // パーティションの情報の取得(指定された日付より以前のパーティション)
-        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
-        // CREATE_TIMEはpartitionを追加する度に更新されている？っぽいのでwhereに不向きかも。
-        // PARTITION_DESCRIPTIONの方が良さそう
-        $collection = $this->getQueryBuilderForInformantionSchema($connection)
-            ->select(DB::raw("
-                TABLE_SCHEMA,
-                TABLE_NAME,
-                PARTITION_NAME,
-                PARTITION_ORDINAL_POSITION,
-                TABLE_ROWS,
-                CREATE_TIME,
-                PARTITION_DESCRIPTION
-            "))
-            ->where('TABLE_SCHEMA', '=', $schema)
-            ->where('TABLE_NAME', '=', $tableName)
-            ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
-            ->get()
-            ->toArray();
-
-        if (empty($collection)) {
-            return [];
-        }
-
-        return json_decode(json_encode($collection), true);
-    }
-
 
     /**
      * filtering partiions by datetime

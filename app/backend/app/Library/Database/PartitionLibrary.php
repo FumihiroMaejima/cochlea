@@ -3,9 +3,19 @@
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\DB;
+use App\Library\Database\DatabaseLibrary;
 
 class PartitionLibrary
 {
+    // keys
+    public const KEY_TABLE_SCHEMA = 'TABLE_SCHEMA';
+    public const KEY_TABLE_NAME = 'TABLE_NAME';
+    public const KEY_PARTITION_NAME = 'PARTITION_NAME';
+    public const KEY_PARTITION_ORDINAL_POSITION = 'PARTITION_ORDINAL_POSITION';
+    public const KEY_TABLE_ROWS = 'TABLE_ROWS';
+    public const KEY_CREATE_TIME = 'CREATE_TIME';
+    public const KEY_PARTITION_DESCRIPTION = 'PARTITION_DESCRIPTION';
+
     /**
      * create partiions by range
      *
@@ -89,5 +99,48 @@ class PartitionLibrary
                 ALTER TABLE ${databaseName}.${tableName} DROP PARTITION ${partitionName};
             "
         );
+    }
+
+    /**
+     * get partiion by table name
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @param string $sort sort setting 'ASC' or 'DESC'
+     * @return array
+     */
+    public static function getPartitionsByTableName(
+        string $connection,
+        string $tableName,
+        string $sort = 'ASC'
+    ): array {
+        $schema = DatabaseLibrary::getDatabaseNameByConnection($connection);
+
+        // パーティションの情報の取得(指定された日付より以前のパーティション)
+        // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
+        // CREATE_TIMEはpartitionを追加する度に更新されている？っぽいのでwhereに不向き。
+        // PARTITION_DESCRIPTIONの方が良さそう
+        $collection = DB::connection($connection)
+            ->table('INFORMATION_SCHEMA.PARTITIONS')
+            ->select(DB::raw("
+                TABLE_SCHEMA,
+                TABLE_NAME,
+                PARTITION_NAME,
+                PARTITION_ORDINAL_POSITION,
+                TABLE_ROWS,
+                CREATE_TIME,
+                PARTITION_DESCRIPTION
+            "))
+            ->where('TABLE_SCHEMA', '=', $schema)
+            ->where('TABLE_NAME', '=', $tableName)
+            ->orderBy('PARTITION_ORDINAL_POSITION', $sort)
+            ->get()
+            ->toArray();
+
+        if (empty($collection)) {
+            return [];
+        }
+
+        return json_decode(json_encode($collection), true);
     }
 }
