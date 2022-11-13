@@ -15,7 +15,6 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        // $connectionName = Config::get('myapp.database.logs.baseConnectionName');
         $connectionName = LogTablesLibrary::getLogDatabaseConnection();
 
         // 管理者系
@@ -79,7 +78,6 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        // $connectionName = Config::get('myapp.database.logs.baseConnectionName');
         $connectionName = LogTablesLibrary::getLogDatabaseConnection();
 
         Schema::connection($connectionName)->dropIfExists('admins_log');
