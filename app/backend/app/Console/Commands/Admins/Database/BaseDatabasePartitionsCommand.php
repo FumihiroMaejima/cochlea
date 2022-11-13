@@ -214,8 +214,7 @@ class BaseDatabasePartitionsCommand extends Command
                     $latestPartitionPosition = (int)$latestPartition['PARTITION_ORDINAL_POSITION'];
 
                     // 設定以上のパーティションを作る必要が無い為skip
-                    if (
-                        ($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]) ||
+                    if (($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]) ||
                         (($setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] - $latestPartitionPosition) <= 0)
                     ) {
                         continue;
