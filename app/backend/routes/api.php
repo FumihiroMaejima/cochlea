@@ -195,6 +195,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('coins/assign', [\App\Http\Controllers\Users\DebugController::class, 'assignCoins'])->name('user.debug.coins.assign');
 
             Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.random.get');
+
+            // PDF出力
+            Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
         });
     }
 });

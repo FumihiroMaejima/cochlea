@@ -127,27 +127,9 @@ class AdminDebugController extends Controller
      */
     public function getSamplePDF(Request $request): BinaryFileResponse|JsonResponse
     {
-        $key = 'igoreAuth';
-        // バリデーションチェック
-        $validator = Validator::make(
-            $request->all(),
-            [
-                $key => ['int'],
-            ]
-        );
-
-        if ($validator->fails()) {
-            // $validator->errors()->toArray();
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_422,
-            );
-        }
-
-        if (!$request->{$key}) {
-            // 権限チェック
-            if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
         }
 
         return response()->file(PdfLibrary::getSamplePDF());
