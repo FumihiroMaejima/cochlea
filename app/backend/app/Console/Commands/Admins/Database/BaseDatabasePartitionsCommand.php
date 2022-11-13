@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\DatabaseLibrary;
 use App\Library\Database\PartitionLibrary;
 use App\Library\Database\ShardingLibrary;
 use App\Models\Logs\AdminsLog;
@@ -322,7 +323,7 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
+        $databaseName = DatabaseLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
@@ -374,7 +375,7 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
+        $databaseName = DatabaseLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
@@ -413,7 +414,7 @@ class BaseDatabasePartitionsCommand extends Command
             return;
         }
 
-        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
+        $databaseName = DatabaseLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
@@ -447,7 +448,7 @@ class BaseDatabasePartitionsCommand extends Command
      */
     private function checkLatestPartition(string $connection, string $tableName): array
     {
-        $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
+        $schema = DatabaseLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の取得(最新の1件)
         // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
@@ -486,7 +487,7 @@ class BaseDatabasePartitionsCommand extends Command
         string $connection,
         string $tableName,
     ): array {
-        $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
+        $schema = DatabaseLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の取得(指定された日付より以前のパーティション)
         // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
