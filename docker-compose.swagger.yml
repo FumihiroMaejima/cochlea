@@ -31,4 +31,6 @@ services:
     ports:
       # api.yamlで定義しているmockサーバーのport
       - 3200:4010
-    command: mock -h 0.0.0.0 /tmp/openapi.yaml
+    # command: mock -h 0.0.0.0 /tmp/openapi.yaml
+    # -dオプションでレスポンスが動的に変わる
+    command: mock -h 0.0.0.0 -d /tmp/openapi.yaml
