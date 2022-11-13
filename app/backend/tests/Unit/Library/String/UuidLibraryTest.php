@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service\String;
+namespace Tests\Unit\Library\String;
 
 use App\Library\String\UuidLibrary;
 use Tests\TestCase;
