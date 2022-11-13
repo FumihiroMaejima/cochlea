@@ -899,6 +899,42 @@ use Maatwebsite\Excel\Facades\Excel;
 return Excel::download(new TestExport($collection), 'filename_' . Carbon::now()->format('YmdHis') . '.csv');
 ```
 
+### PDFファイルの入出力
+
+- TCPDFのインストール
+
+```shell-session
+$ composer require tecnickcom/tcpdf
+```
+
+Laravelで利用する場合、`use TCPDF;`の宣言だけで良い
+
+```php
+use TCPDF;
+
+    $tcpdf = new TCPDF();
+    $tcpdf->AddPage();
+    $tcpdf->SetFont("kozgopromedium", "", 10);
+    $html = <<< EOF
+    <style>
+    body {
+        color: #212121;
+    }
+    </style>
+    <h1>header1</h1>
+    <p>
+    sample text.
+    </p>
+    <p>
+    contents.
+    </p>
+    EOF;
+
+    $tcpdf->writeHTML($html);
+    return $tcpdf->Output('sample.pdf', 'I');
+
+```
+
 ### 通知の作成
 
 slack通知の場合は`slack-notification-channel`をインストールする。

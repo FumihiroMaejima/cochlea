@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service\Time;
+namespace Tests\Unit\Library\Time;
 
 // use PHPUnit\Framework\TestCase;
 

@@ -117,6 +117,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('list', [\App\Http\Controllers\Admins\AdminDebugController::class, 'list'])->name('admin.debug.list.get');
             Route::get('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getImage'])->name('admin.debug.image.get');
             Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'uploadImage'])->name('admin.debug.image.post');
+            Route::get('sample-pdf', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getSamplePDF'])->name('admin.debug.samplePdf.get');
         });
     }
 });
@@ -194,6 +195,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('coins/assign', [\App\Http\Controllers\Users\DebugController::class, 'assignCoins'])->name('user.debug.coins.assign');
 
             Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.random.get');
+
+            // PDF出力
+            Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
         });
     }
 });

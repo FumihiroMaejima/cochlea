@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service\Array;
+namespace Tests\Unit\Library\Array;
 
 use App\Library\Array\ArrayLibrary;
 use Tests\TestCase;

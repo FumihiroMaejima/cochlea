@@ -23,6 +23,6 @@
           application/json:
             schema:
               $ref: "../../../schemas/request/ApiErrorResponse.yaml"
-    security:
-      - authenticaion_key: []
-      - auth_id: []
+    # security:
+    #   - authenticaion_key: []
+    #   - auth_id: []
