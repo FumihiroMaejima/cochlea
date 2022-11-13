@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
+use App\Library\Database\LogTablesLibrary;
 
 class CreateLogsTable extends Migration
 {
@@ -14,7 +15,7 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
+        $connectionName = LogTablesLibrary::getLogDatabaseConnection();
 
         // 管理者系
         /**
@@ -77,7 +78,7 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        $connectionName = Config::get('myapp.database.logs.baseConnectionName');
+        $connectionName = LogTablesLibrary::getLogDatabaseConnection();
 
         Schema::connection($connectionName)->dropIfExists('admins_log');
         Schema::connection($connectionName)->dropIfExists('user_coin_payment_log');

@@ -50,6 +50,7 @@ class ServiceBaseTestCase extends TestCase
     // content-type
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
+    protected const CONTENT_TYPE_TEXT_CSV_WITH_UTF8 = 'text/csv; charset=UTF-8';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /** @var array<int, string> $refreshTables 初期化の為のtruncateを行う対象のテーブル名  */
@@ -102,9 +103,9 @@ class ServiceBaseTestCase extends TestCase
         ], ['Content-Type' => 'application/json'])->json();
 
         return [
-            self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN],
-            self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID],
-            self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY]
+            self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
+            self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
+            self::INIT_REQUEST_RESPONSE_USER_AUTHORITY => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_AUTHORITY] ?? ''
         ];
     }
 

@@ -16,7 +16,6 @@ use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 
 class RolesServiceTest extends ServiceBaseTestCase
 {
-
     /**
      * roles get request test.
      *
@@ -120,7 +119,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.roles.download'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
+            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
 

@@ -7,10 +7,6 @@ use Illuminate\Database\Query\Builder;
 
 interface UserCoinPaymentStatusRepositoryInterface
 {
-    public function getTable(int $userId): string;
-
-    public function getQueryBuilder(int $userId): Builder;
-
     public function getByUserId(int $userId): Collection|null;
 
     public function getByUserIdAndOrderId(int $userId, string $orderId, bool $isLock = false): Collection|null;

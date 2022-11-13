@@ -8,7 +8,15 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\PartitionLibrary;
 use App\Library\Database\ShardingLibrary;
+use App\Models\Logs\AdminsLog;
+use App\Models\Logs\BaseLogDataModel;
+use App\Models\Logs\UserCoinPaymentLog;
+use App\Models\Logs\UserReadInformationLog;
+use App\Models\Users\UserCoinHistories;
+use App\Models\Users\UserCoinPaymentStatus;
+use App\Models\Users\UserReadInformations;
 use App\Library\Time\TimeLibrary;
 
 class BaseDatabasePartitionsCommand extends Command
@@ -27,18 +35,20 @@ class BaseDatabasePartitionsCommand extends Command
 
     // パーティションタイプごとの詳細な設定
     protected const ID_PRTITION_SETTING_KEY_TARGET_ID = 'targetId'; // パーティション数の起算ID
-    protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティション値りのID数
+    protected const ID_PRTITION_SETTING_KEY_BASE_NUMBER = 'baseNumber'; // 1パーティションあたりのID数
     protected const ID_PRTITION_SETTING_KEY_PARTITION_COUNT = 'partitionCount'; // パーティション数
     protected const NAME_PRTITION_SETTING_KEY_TARGET_DATE = 'targetDate'; // パーティション数の起算日
-    protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'mounthCount'; // パーティション数(1パーティション=1日を月数で設定)
-
+    protected const NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT = 'monthCount'; // パーティション数(1パーティション=1日を月数で設定)
+    protected const NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT = 'storeMonthCount'; // パーティションの保存月数(削除しない場合は未指定。)
     // partition type
     protected const PARTITION_TYPE_ID = 1;
     protected const PARTITION_TYPE_DATE = 2;
+    protected const PARTITION_TYPE_HASH_ID = 3;
 
     public const PARTITION_TYPES = [
         self::PARTITION_TYPE_ID,
-        self::PARTITION_TYPE_DATE
+        self::PARTITION_TYPE_DATE,
+        self::PARTITION_TYPE_HASH_ID,
     ];
 
     protected const ALTER_TABLE_TYPE_CREATE = 'create';
@@ -105,6 +115,7 @@ class BaseDatabasePartitionsCommand extends Command
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10, // IDカラムを元にパーティションを貼る場合は必要
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null, // IDカラムを元にパーティションを貼る場合は不要
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null, // IDカラムを元にパーティションを貼る場合は不要
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null, // IDカラムを元にパーティションを貼る場合は不要
             ],
             [
                 self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
@@ -116,6 +127,7 @@ class BaseDatabasePartitionsCommand extends Command
                 self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null, // 日時カラムを元にパーティションを貼る場合は不要
                 self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(), // 日時カラムを元にパーティションを貼る場合は必要
                 self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3, // 日時カラムを元にパーティションを貼る場合は必要
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4, // 日時カラムを元にパーティションを貼る、かつ定期的に削除したい場合は必要
             ],
         ];
     }
@@ -190,6 +202,37 @@ class BaseDatabasePartitionsCommand extends Command
                     $setting[self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT],
                     $alterTableType
                 );
+            } elseif ($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] === self::PARTITION_TYPE_HASH_ID) {
+                // user_idのHASHでパーティションを貼る場合
+
+                $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT];
+                $latestPartitionPosition = 0;
+
+                // パーティションが既に貼られている場合はを設定値に達するまでパーテションを追加
+                if (!empty($latestPartition['PARTITION_ORDINAL_POSITION'])) {
+                    // hashはPARTITION_ORDINAL_POSITIONを参照する
+                    $latestPartitionPosition = (int)$latestPartition['PARTITION_ORDINAL_POSITION'];
+
+                    // 設定以上のパーティションを作る必要が無い為skip
+                    if (($latestPartitionPosition >= $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT]) ||
+                        (($setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] - $latestPartitionPosition) <= 0)
+                    ) {
+                        continue;
+                    } else {
+                        $alterTableType = self::ALTER_TABLE_TYPE_ADD;
+                        $paritionCount = $setting[self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT] - $latestPartitionPosition;
+                    }
+                }
+
+                $this->addHashPartitionById(
+                    $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_TABLE_NAME],
+                    $setting[self::PRTITION_SETTING_KEY_COLUMN_NAME],
+                    $setting[self::ID_PRTITION_SETTING_KEY_BASE_NUMBER],
+                    $paritionCount,
+                    $latestPartitionPosition,
+                    $alterTableType
+                );
             } else {
                 continue;
             }
@@ -208,10 +251,30 @@ class BaseDatabasePartitionsCommand extends Command
         $partitionSettings = $this->getPartitionSettings();
 
         foreach ($partitionSettings as $setting) {
-            $expiredPartions = $this->getExpiredPartitions(
+            // 日付でパーティションを作成していない場合や保存期間を設定していない(=永続化する)場合
+            if (($setting[self::PRTITION_SETTING_KEY_PARTITION_TYPE] !== self::PARTITION_TYPE_DATE)
+                || (is_null($setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT]))
+            ) {
+                continue;
+            }
+
+            // 1週間前より前の日付のパーティションは削除
+            // $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 5, TimeLibrary::DATE_TIME_FORMAT_YMD);
+
+            // 現在から設定された保存期間を引いたの日付を設定
+            $dateTime = TimeLibrary::subMonths(
+                TimeLibrary::getCurrentDateTime(),
+                $setting[self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT],
+                TimeLibrary::DATE_TIME_FORMAT_YMD
+            );
+
+            $partions = $this->getPartitionsByTableName(
                 $setting[self::PRTITION_SETTING_KEY_CONNECTION_NAME],
                 $setting[self::PRTITION_SETTING_KEY_TABLE_NAME]
             );
+
+            // 保存期間が切れたパーティションを取得
+            $expiredPartions = self::filteringPartitionsByDateTime($partions, $dateTime);
 
             // TODO　delete paririonの実行
             echo var_dump($expiredPartions);
@@ -259,15 +322,15 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = Config::get("database.connections.${connection}.database");
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitions($databaseName, $tableName, $columnName, $partitions);
+            PartitionLibrary::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
-            self::addPartitions($databaseName, $tableName, $partitions);
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
         }
     }
 
@@ -278,7 +341,7 @@ class BaseDatabasePartitionsCommand extends Command
      * @param string $tableName table name
      * @param string $columnName column name
      * @param string $currentDate partition start date time
-     * @param int $mounthCount add partition count as month
+     * @param int $monthCount add partition count as month
      * @param string $type alter table type
      * @return array
      */
@@ -287,7 +350,7 @@ class BaseDatabasePartitionsCommand extends Command
         string $tableName,
         string $columnName,
         string $currentDate,
-        int $mounthCount = 3,
+        int $monthCount = 3,
         string $type = self::ALTER_TABLE_TYPE_CREATE
     ): void {
         // typeの値の確認
@@ -295,7 +358,7 @@ class BaseDatabasePartitionsCommand extends Command
             return;
         }
 
-        $targetDate = TimeLibrary::addMonths($currentDate, $mounthCount);
+        $targetDate = TimeLibrary::addMonths($currentDate, $monthCount);
 
         // パーティションの追加日数の算出
         $days = TimeLibrary::diffDays($currentDate, $targetDate);
@@ -311,15 +374,67 @@ class BaseDatabasePartitionsCommand extends Command
             $partitions .= $partitionSetting;
         }
 
-        $databaseName = Config::get("database.connections.${connection}.database");
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
 
         // パーティションの情報の追加
         if ($type === self::ALTER_TABLE_TYPE_CREATE) {
             // 新規作成(上書き)
-            self::createPartitions($databaseName, $tableName, $columnName, $partitions);
+            PartitionLibrary::createPartitionsByRange($databaseName, $tableName, $columnName, $partitions);
         } else {
             // 追加
-            self::addPartitions($databaseName, $tableName, $partitions);
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
+        }
+    }
+
+
+    /**
+     * add hash partitions by id.
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @param string $columnName column name
+     * @param string $baseNumber div base nubmer
+     * @param int $count partition count
+     * @param int $position partition start position
+     * @param string $type alter table type
+     * @return array
+     */
+    private function addHashPartitionById(
+        string $connection,
+        string $tableName,
+        string $columnName,
+        int $baseNumber = 16,
+        int $count = 16,
+        int $position = 1,
+        string $type = self::ALTER_TABLE_TYPE_CREATE
+    ): void {
+        // typeの値の確認
+        if (!in_array($type, self::ALTER_TABLE_TYPES)) {
+            return;
+        }
+
+        $databaseName = ShardingLibrary::getDatabaseNameByConnection($connection);
+
+        // パーティションの情報の追加
+        if ($type === self::ALTER_TABLE_TYPE_CREATE) {
+            // 新規作成(上書き)
+            PartitionLibrary::createPartitionsByHashDiv(
+                $databaseName,
+                $tableName,
+                $columnName,
+                $baseNumber,
+                $count
+            );
+        } else {
+            $partitions = '';
+            // 追加する分のパーティション設定を作成
+            foreach (range(1, $count) as $i) {
+                $name = $position + $i;
+                $partitionSetting = "PARTITION p${name}";
+                $partitions .= $partitionSetting;
+            }
+            // 追加
+            PartitionLibrary::addPartitions($databaseName, $tableName, $partitions);
         }
     }
 
@@ -361,27 +476,17 @@ class BaseDatabasePartitionsCommand extends Command
 
 
     /**
-     * get expired partiion record by CREATE_TIME
+     * get partiion by table name
      *
      * @param string $connection connection name
      * @param string $tableName table name
-     * @param string $dateTime expired date time
      * @return array
      */
-    private function getExpiredPartitions(
+    private function getPartitionsByTableName(
         string $connection,
         string $tableName,
-        string $dateTime = ''
     ): array {
-        if ($dateTime === '') {
-            // $dateTime = TimeLibrary::addDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
-            $dateTime = TimeLibrary::subDays(TimeLibrary::getCurrentDateTime(), 3, TimeLibrary::DATE_TIME_FORMAT_YMD);
-        }
-
         $schema = ShardingLibrary::getDatabaseNameByConnection($connection);
-
-        // echo $dateTime . "\n";
-        // echo $connection . "\n";
 
         // パーティションの情報の取得(指定された日付より以前のパーティション)
         // `PARTITION_NAME`では正しくソートされないので`PARTITION_ORDINAL_POSITION`でソートをかける
@@ -399,8 +504,6 @@ class BaseDatabasePartitionsCommand extends Command
             "))
             ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
-            ->where('CREATE_TIME', '<', $dateTime)
-            // ->where('PARTITION_DESCRIPTION', '<', $dateTime)
             ->orderBy('PARTITION_ORDINAL_POSITION', 'ASC')
             ->get()
             ->toArray();
@@ -412,62 +515,152 @@ class BaseDatabasePartitionsCommand extends Command
         return json_decode(json_encode($collection), true);
     }
 
-    /**
-     * create partiions
-     *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $columnName column name
-     * @param string $$partitions partition setting statemetns
-     * @return void
-     */
-    private static function createPartitions(string $databaseName, string $tableName, string $columnName, string $partitions): void
-    {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY RANGE COLUMNS(${columnName}) (
-                    ${partitions}
-                )
-            "
-        );
-    }
 
     /**
-     * add partiions
+     * filtering partiions by datetime
      *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $$partitions partition setting statemetns
-     * @return void
+     * @param array $partitions partitions
+     * @param string|null $dateTime target date time
+     * @return array
      */
-    private static function addPartitions(string $databaseName, string $tableName, string $partitions): void
-    {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName}
-                ADD PARTITION (
-                    ${partitions}
-                )
-            "
-        );
+    private function filteringPartitionsByDateTime(
+        array $partitions,
+        string|null $dateTime = null
+    ): array {
+        if (is_null($dateTime)) {
+            $dateTime = TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
+        }
+
+        $response = [];
+        foreach ($partitions as $partition) {
+            // パーティションが既に貼られている場合は最新の日付の翌日の日付でパーティションを設定する。
+            if (empty($partition['PARTITION_ORDINAL_POSITION'])) {
+                continue;
+            }
+
+            // パーティション名から「p」の文字を切り取り日付を取得
+            $partitionDate = mb_substr($partition['PARTITION_NAME'], 1);
+
+            // 指定された日付未満の場合
+            if (TimeLibrary::lesser($partitionDate, $dateTime)) {
+                $response[$partition['PARTITION_ORDINAL_POSITION']] = $partition;
+            }
+        }
+
+        return $response;
     }
 
+
     /**
-     * delete partiion.
+     * get log database settings for partition target tables.
      *
-     * @param string $databaseName database name
-     * @param string $tableName table name
-     * @param string $partitionName partition name
-     * @param int $mounthCount add partition count as month
-     * @return void
+     * @return array
      */
-    private static function deletePartition(string $databaseName, string $tableName, string $partitionName): void
+    protected function getLogDatabasePartitionSettings(): array
     {
-        DB::statement(
-            "
-                ALTER TABLE ${databaseName}.${tableName} DROP PARTITION ${partitionName};
-            "
-        );
+        $connection = BaseLogDataModel::getLogDatabaseConnection();
+
+        // テーブルごとのパーティション設定
+        return [
+            [
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new AdminsLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_ID,
+                self::PRTITION_SETTING_KEY_COLUMN_NAME                => AdminsLog::ID,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => 1,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 100000,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 10,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
+            ],
+            [
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentLog::CREATED_AT,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
+            ],
+            [
+                self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserReadInformationLog())->getTable(),
+                self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentLog::CREATED_AT,
+                self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => TimeLibrary::getCurrentDateTime(),
+                self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => 4,
+            ],
+        ];
+    }
+
+
+    /**
+     * get user database settings for partition target tables.
+     *
+     * @return array
+     */
+    protected function getUserDatabsePartitionSettings(): array
+    {
+        $partitionSettings = [];
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        // テーブルごとのパーティション設定
+        foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
+            $connection = ShardingLibrary::getConnectionByNodeNumber($node);
+
+            foreach ($shardIds as $shardId) {
+                $partitionSettings = array_merge(
+                    $partitionSettings,
+                    [
+                        [
+                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinHistories())->getTable().$shardId,
+                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_HASH_ID,
+                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinHistories::USER_ID,
+                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 16,
+                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 16,
+                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
+                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
+                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
+                        ],
+                        [
+                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserCoinPaymentStatus())->getTable().$shardId,
+                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentStatus::CREATED_AT,
+                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
+                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
+                        ],
+                        [
+                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserReadInformations())->getTable().$shardId,
+                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_DATE,
+                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserCoinPaymentStatus::CREATED_AT,
+                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => null,
+                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
+                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
+                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
+                        ],
+                    ]
+                );
+            }
+        }
+
+        return $partitionSettings;
     }
 }

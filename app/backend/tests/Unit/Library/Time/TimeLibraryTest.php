@@ -223,6 +223,42 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test greater than days.
+     *
+     * @return void
+     */
+    public function testGreaterThanDateTime(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $days = 3;
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("-${days} days"));
+
+        // echo $interval->format('%d days');
+
+        $this->assertEquals(
+            (strtotime($dateTime) > strtotime($targetDateTime)),
+            TimeLibrary::greater($dateTime, $targetDateTime)
+        );
+    }
+
+    /**
+     * test lesser than days.
+     *
+     * @return void
+     */
+    public function testLesserThanDateTime(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $days = 3;
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("+${days} days"));
+
+        $this->assertEquals(
+            (strtotime($dateTime) < strtotime($targetDateTime)),
+            TimeLibrary::lesser($dateTime, $targetDateTime)
+        );
+    }
+
+    /**
      * member crerate data
      * @return array
      */

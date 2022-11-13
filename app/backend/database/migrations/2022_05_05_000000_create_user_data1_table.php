@@ -25,7 +25,7 @@ class CreateUserData1Table extends Migration
                  */
                 Schema::connection($connectionName)->create('user_coin_histories'.$shardId, function (Blueprint $table) {
                     $table->integer('user_id')->unsigned()->comment('ユーザーID');
-                    $table->tinyInteger('type')->unsigned()->comment('履歴タイプ 1:購入、2:獲得、3:消費、4:期限切れ');
+                    $table->tinyInteger('type')->unsigned()->comment('履歴タイプ 1:購入、2:獲得、3:消費、4:期限切れ、5:補填');
                     $table->integer('get_free_coins')->unsigned()->default(0)->comment('獲得した無料コイン数');
                     $table->integer('get_paid_coins')->unsigned()->default(0)->comment('購入・獲得した有料コイン数');
                     $table->integer('get_limited_time_coins')->unsigned()->default(0)->comment('購入・獲得した期間限定コイン数');

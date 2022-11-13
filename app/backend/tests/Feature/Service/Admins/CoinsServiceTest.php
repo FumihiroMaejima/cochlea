@@ -164,7 +164,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.coins.download.csv'));
         $response->assertStatus(200)
-            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
+            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
     /**

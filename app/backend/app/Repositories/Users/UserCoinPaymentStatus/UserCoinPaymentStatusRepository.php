@@ -5,17 +5,13 @@ namespace App\Repositories\Users\UserCoinPaymentStatus;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Users\UserCoinPaymentStatus;
+use App\Repositories\Users\BaseUserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 
-class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepositoryInterface
+class UserCoinPaymentStatusRepository extends BaseUserRepository implements UserCoinPaymentStatusRepositoryInterface
 {
-    protected UserCoinPaymentStatus $model;
-
-    private const NO_DATA_COUNT = 0;
-    private const FIRST_DATA_COUNT = 1;
-
     /**
      * create instance.
      *
@@ -27,27 +23,6 @@ class UserCoinPaymentStatusRepository implements UserCoinPaymentStatusRepository
         $this->model = $model;
     }
 
-    /**
-     * get Model Table Name in This Repository.
-     *
-     * @param int $userId user id
-     * @return string
-     */
-    public function getTable(int $userId): string
-    {
-        return $this->model->getTable() . UserCoinPaymentStatus::getShardId($userId);
-    }
-
-    /**
-     * get query builder by user id
-     *
-     * @param int $userId user id
-     * @return Builder
-     */
-    public function getQueryBuilder(int $userId): Builder
-    {
-        return DB::connection(UserCoinPaymentStatus::getConnectionNameByUserId($userId))->table($this->getTable($userId));
-    }
 
     /**
      * get by user id.

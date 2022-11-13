@@ -151,7 +151,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.admins.download'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
-            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
+            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
     /**

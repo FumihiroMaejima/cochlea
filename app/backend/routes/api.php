@@ -189,6 +189,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('cancel', [\App\Http\Controllers\Users\DebugController::class, 'cancelCheckout'])->name('user.debug.checkout.cancel');
                 Route::get('complete', [\App\Http\Controllers\Users\DebugController::class, 'completeCheckout'])->name('user.debug.checkout.complete');
             });
+
+            // コイン付与
+            Route::post('coins/assign', [\App\Http\Controllers\Users\DebugController::class, 'assignCoins'])->name('user.debug.coins.assign');
+
+            Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.random.get');
         });
     }
 });

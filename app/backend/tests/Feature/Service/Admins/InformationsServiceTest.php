@@ -150,7 +150,7 @@ class InformationsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->get(route('admin.informations.download.csv'));
         $response->assertStatus(200)
-            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV);
+            ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
     /**

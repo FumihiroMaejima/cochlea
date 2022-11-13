@@ -15,6 +15,7 @@ use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
 use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Http\Resources\Logs\UserCoinPaymentLogResource;
+use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
@@ -27,6 +28,7 @@ use App\Library\Cache\CacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
+use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoinPaymentStatus;
 use App\Models\Users\UserCoins;
 use App\Repositories\Users\UserCoins\UserCoinsRepository;
@@ -236,6 +238,17 @@ class UserCoinPaymentService
                 );
                 $this->userCoinsRepository->update($userId, $userCoinResource);
             }
+
+            // コイン履歴の設定(購入)
+            $userCoinHistoriesResource = UserCoinHistoriesResource::toArrayForCreate(
+                $userId,
+                UserCoinHistories::USER_COINS_HISTORY_TYPE_PURCHASED,
+                UserCoins::DEFAULT_COIN_COUNT,
+                $$coin[Coins::PRICE],
+                UserCoins::DEFAULT_COIN_COUNT,
+                orderId: $orderId
+            );
+            $this->userCoinHistoriesRepositoryInterface->create($userId, $userCoinHistoriesResource);
 
             // ログの設定
             $userCoinPaymentLogResource = UserCoinPaymentLogResource::toArrayForCreate(
