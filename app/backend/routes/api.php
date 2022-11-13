@@ -117,6 +117,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('list', [\App\Http\Controllers\Admins\AdminDebugController::class, 'list'])->name('admin.debug.list.get');
             Route::get('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getImage'])->name('admin.debug.image.get');
             Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'uploadImage'])->name('admin.debug.image.post');
+            Route::get('sample-pdf', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getSamplePDF'])->name('admin.debug.samplePdf.get');
         });
     }
 });

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\File\PdfLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
@@ -118,68 +119,37 @@ class AdminDebugController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * テスト用PDFファイルの表示
      *
-     * @return \Illuminate\Http\Response
+     * @param DebugFileUploadRequest $request
+     * @return BinaryFileResponse|JsonResponse
+     * @throws MyApplicationHttpException
      */
-    public function create()
+    public function getSamplePDF(Request $request): BinaryFileResponse|JsonResponse
     {
-        //
-    }
+        $key = 'igoreAuth';
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                $key => ['int'],
+            ]
+        );
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if (!$request->{$key}) {
+            // 権限チェック
+            if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->file(PdfLibrary::getSamplePDF());
     }
 }
