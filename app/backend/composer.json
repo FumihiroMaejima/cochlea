@@ -43,7 +43,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Database\\Seeders\\Logs\\": "database/seeders/logs/",
-            "Database\\Seeders\\Masters\\": "database/seeders/masters/"
+            "Database\\Seeders\\Masters\\": "database/seeders/masters/",
+            "Database\\Seeders\\Users\\": "database/seeders/users/"
         }
     },
     "autoload-dev": {
