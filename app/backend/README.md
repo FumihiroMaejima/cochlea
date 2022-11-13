@@ -899,6 +899,14 @@ use Maatwebsite\Excel\Facades\Excel;
 return Excel::download(new TestExport($collection), 'filename_' . Carbon::now()->format('YmdHis') . '.csv');
 ```
 
+### PDFファイルの入出力
+
+- TCPDFのインストール
+
+```shell-session
+$ composer require tecnickcom/tcpdf
+```
+
 ### 通知の作成
 
 slack通知の場合は`slack-notification-channel`をインストールする。
