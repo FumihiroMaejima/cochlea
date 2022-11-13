@@ -10,3 +10,13 @@ services:
       - 8100:8080
     environment:
       SWAGGER_FILE: "/tmp/swagger.yaml"
+
+  ui:
+    container_name: ${PROJECT_NAME}_swagger-ui
+    image: 'swaggerapi/swagger-ui'
+    volumes:
+      - ./api:/usr/share/nginx/html/docs
+    ports:
+      - 8200:8080
+    environment:
+      URL: "./docs/api.yaml"
