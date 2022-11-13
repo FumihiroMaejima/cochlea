@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
 use App\Services\Admins\ImagesService;
@@ -28,6 +29,8 @@ class DebugController extends Controller
      */
     public function __construct(DebugService $debugService, ImagesService $imagesService)
     {
+        // 認証が必要なメソッドのみ指定する
+        $this->middleware('auth:api-users', ['only' => ['assignCoins']]);
         $this->service = $debugService;
         $this->imagesService = $imagesService;
     }
@@ -119,68 +122,58 @@ class DebugController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * assign coins.
      *
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
      */
-    public function create()
+    public function assignCoins(Request $request): JsonResponse
     {
-        //
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'freeCoins' => ['int', 'min:1'],
+                'paidCoins' => ['int', 'min:1'],
+                'limitedTimeCoins' => ['int', 'min:1'],
+                'expiredAt' => [
+                    'required_with_all:limitedTimeCoins',
+                    'date',
+                    'date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
+                    'after:'.TimeLibrary::getCurrentDateTime()
+                ],
+            ]
+        );
+
+        if ($validator->fails()) {
+            // $validator->errors()->toArray();
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+                'validation error.',
+                $validator->errors()->toArray()
+            );
+        }
+
+        // ユーザーIDの取得
+        $userId = self::getUserId($request);
+
+        // サービスの実行
+        return $this->service->assignCoins(
+            $userId,
+            $request->freeCoins ?? 0,
+            $request->paidCoins ?? 0,
+            $request->limitedTimeCoins ?? 0,
+            $request->expiredAt ?? null,
+        );
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Complete Stipe Checkout Session.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function debugRandomValue(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->service->gacha();
     }
 }

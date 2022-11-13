@@ -16,7 +16,6 @@ use App\Http\Requests\BaseRequest;
 
 class PermissionsServiceTest extends ServiceBaseTestCase
 {
-
     /**
      * roles get request test.
      *

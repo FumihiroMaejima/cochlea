@@ -79,9 +79,8 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
      */
     public function update(int $adminId, array $resource): int
     {
-
-       /*  $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
-        $table->foreignId('role_id')->constrained('role')->comment('ロールID'); */
+        /*  $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
+         $table->foreignId('role_id')->constrained('role')->comment('ロールID'); */
 
         // Query Builderのupdate
         return DB::table($this->getTable())

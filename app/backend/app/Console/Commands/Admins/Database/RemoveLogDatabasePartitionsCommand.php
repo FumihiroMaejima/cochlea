@@ -7,21 +7,21 @@ use Illuminate\Console\Command;
 use App\Console\Commands\Admins\Database\BaseDatabasePartitionsCommand;
 use App\Library\Time\TimeLibrary;
 
-class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
+class RemoveLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
 {
     /**
      * The name and signature of the console command.(コンソールコマンドの名前と使い方)
      *
      * @var string
      */
-    protected $signature = 'admins:add-users-partitions'; // if require parameter 'debug:test {param}';
+    protected $signature = 'admins:remove-logs-partitions'; // if require parameter 'debug:test {param}';
 
     /**
      * The console command description.(コンソールコマンドの説明)
      *
      * @var string
      */
-    protected $description = 'add users database paprtitions';
+    protected $description = 'remove log database paprtitions';
 
 
     /**
@@ -44,7 +44,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
         echo 'Setting Partitions.' . "\n";
         echo 'Date: ' . TimeLibrary::getCurrentDateTime() . "\n";
 
-        $this->setPartitions();
+        $this->removePartitions();
 
         echo 'Finish.' . "\n";
     }
@@ -56,7 +56,7 @@ class AddUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
      */
     protected function getPartitionSettings(): array
     {
-        // ユーザー系テーブルの設定を取得
-        return $this->getUserDatabsePartitionSettings();
+        // ログ系テーブルの設定を取得
+        return $this->getLogDatabasePartitionSettings();
     }
 }

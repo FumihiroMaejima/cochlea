@@ -22,7 +22,6 @@ use Stripe\Exception\ApiErrorException;
 
 class CheckoutLibrary extends StripeLibrary
 {
-
     // query
     private const QUERY_ORDER_ID = '?orderId=';
 

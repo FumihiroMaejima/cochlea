@@ -45,6 +45,7 @@ class UserServiceBaseTestCase extends TestCase
     // content-type
     protected const CONTENT_TYPE_APPLICATION_CSV = 'application/csv';
     protected const CONTENT_TYPE_TEXT_CSV = 'text/csv';
+    protected const CONTENT_TYPE_TEXT_CSV_WITH_UTF8 = 'text/csv; charset=UTF-8';
     protected const CONTENT_TYPE_APPLICATION_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     // target seeders.

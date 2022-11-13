@@ -5,17 +5,13 @@ namespace App\Repositories\Users\UserReadInformations;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Users\UserReadInformations;
+use App\Repositories\Users\BaseUserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 
-class UserReadInformationsRepository implements UserReadInformationsRepositoryInterface
+class UserReadInformationsRepository extends BaseUserRepository implements UserReadInformationsRepositoryInterface
 {
-    protected UserReadInformations $model;
-
-    private const NO_DATA_COUNT = 0;
-    private const FIRST_DATA_COUNT = 1;
-
     /**
      * create instance.
      *
@@ -25,28 +21,6 @@ class UserReadInformationsRepository implements UserReadInformationsRepositoryIn
     public function __construct(UserReadInformations $model)
     {
         $this->model = $model;
-    }
-
-    /**
-     * get Model Table Name in This Repository.
-     *
-     * @param int $userId user id
-     * @return string
-     */
-    public function getTable(int $userId): string
-    {
-        return $this->model->getTable() . UserReadInformations::getShardId($userId);
-    }
-
-    /**
-     * get query builder by user id.
-     *
-     * @param int $userId user id
-     * @return Builder
-     */
-    public function getQueryBuilder(int $userId): Builder
-    {
-        return DB::connection(UserReadInformations::getConnectionNameByUserId($userId))->table($this->getTable($userId));
     }
 
     /**

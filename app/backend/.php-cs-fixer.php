@@ -20,6 +20,7 @@ return $config
         '@PSR2' => true,
         'blank_line_after_opening_tag' => false,
         'linebreak_after_opening_tag'  => false,
+        'new_with_braces' => true,
         // 'declare_strict_types'         => true,
         'phpdoc_types_order'           => [
             'null_adjustment' => 'always_last',

@@ -1614,6 +1614,45 @@ $stripe->request('GET', '/v1/customers', $params = ['limit' => 3], $options = []
 
 ```
 
+---
+
+
+## PHP Insights
+
+### PHP Insightsのインストール
+
+```shell
+$ composer require nunomaduro/phpinsights --dev
+```
+
+### configファイルの生成
+
+```shell
+$ php artisan vendor:publish --provider="NunoMaduro\PhpInsights\Application\Adapters\Laravel\InsightsServiceProvider"
+```
+
+### コマンドの実行
+```shell
+$ php atrisan insights
+$ php artisan insights -s
+```
+
+---
+
+
+## PHPStan
+
+### PHP Insightsのインストール
+
+```shell
+$ composer require --dev phpstan/phpstan phpstan/extension-installer
+```
+
+
+### コマンドの実行
+```shell
+$ ./vendor/bin/phpstan analyze app tests
+```
 
 ---
 ### backendのpackage.jsonのアップデート
