@@ -105,6 +105,12 @@ phpcs:
 phpmd:
 	docker-compose exec app vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor,app/Console, database/seeds
 
+php-insights:
+	docker-compose exec app php artisan insights -s
+
+phpstan:
+	docker-compose exec app vendor/bin/phpstan analyze app tests
+
 # local server
 backend-serve:
 	cd app/backend && php artisan serve

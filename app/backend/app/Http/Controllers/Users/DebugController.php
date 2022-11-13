@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\File\PdfLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
 use App\Services\Admins\ImagesService;
 use App\Trait\CheckHeaderTrait;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DebugController extends Controller
 {
@@ -175,5 +177,17 @@ class DebugController extends Controller
     public function debugRandomValue(): JsonResponse
     {
         return $this->service->gacha();
+    }
+
+    /**
+     * テスト用PDFファイルの表示
+     *
+     * @param DebugFileUploadRequest $request
+     * @return BinaryFileResponse|JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getSamplePDF(): BinaryFileResponse|JsonResponse
+    {
+        return response()->file(PdfLibrary::getSamplePDF());
     }
 }

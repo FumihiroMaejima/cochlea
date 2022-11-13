@@ -1,7 +1,7 @@
 version: '3'
 services:
   editor:
-    container_name: ${PROJECT_NAME}_swagger-editor
+    container_name: ${PROJECT_NAME:-testProject}_swagger-editor
     image: 'swaggerapi/swagger-editor'
     volumes:
       - ./api/api.yaml:/tmp/swagger.yaml
@@ -10,3 +10,27 @@ services:
       - 8100:8080
     environment:
       SWAGGER_FILE: "/tmp/swagger.yaml"
+
+  # 立ち上がりにやや時間がかかる(30sec?)
+  ui:
+    container_name: ${PROJECT_NAME:-testProject}_swagger-ui
+    image: 'swaggerapi/swagger-ui'
+    volumes:
+      - ./api:/usr/share/nginx/html/docs
+    ports:
+      - 8200:8080
+    environment:
+      URL: "./docs/api.yaml"
+
+  api:
+    container_name: ${PROJECT_NAME:-testProject}_swagger-api
+    image: 'stoplight/prism'
+    volumes:
+      - ./api/api.yaml:/tmp/openapi.yaml
+      - ./api/data/:/tmp/data/
+    ports:
+      # api.yamlで定義しているmockサーバーのport
+      - 3200:4010
+    # command: mock -h 0.0.0.0 /tmp/openapi.yaml
+    # -dオプションでレスポンスが動的に変わる
+    command: mock -h 0.0.0.0 -d /tmp/openapi.yaml
