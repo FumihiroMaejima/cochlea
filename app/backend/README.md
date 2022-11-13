@@ -1397,6 +1397,7 @@ DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
 
 
 ```php
+    [
         ...
         /* 'errorlog' => [
             'driver' => 'errorlog',
