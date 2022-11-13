@@ -11,6 +11,7 @@ services:
     environment:
       SWAGGER_FILE: "/tmp/swagger.yaml"
 
+  # 立ち上がりにやや時間がかかる(30sec?)
   ui:
     container_name: ${PROJECT_NAME:-testProject}_swagger-ui
     image: 'swaggerapi/swagger-ui'
@@ -20,3 +21,14 @@ services:
       - 8200:8080
     environment:
       URL: "./docs/api.yaml"
+
+  api:
+    container_name: ${PROJECT_NAME:-testProject}_swagger-api
+    image: 'stoplight/prism'
+    volumes:
+      - ./api/api.yaml:/tmp/openapi.yaml
+      - ./api/data/:/tmp/data/
+    ports:
+      # api.yamlで定義しているmockサーバーのport
+      - 3200:4010
+    command: mock -h 0.0.0.0 /tmp/openapi.yaml
