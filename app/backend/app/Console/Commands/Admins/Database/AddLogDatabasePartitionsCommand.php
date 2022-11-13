@@ -56,6 +56,7 @@ class AddLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
      */
     protected function getPartitionSettings(): array
     {
+        // ログ系テーブルの設定を取得
         return $this->getLogDatabasePartitionSettings();
     }
 }

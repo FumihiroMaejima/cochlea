@@ -56,6 +56,7 @@ class RemoveUserDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
      */
     protected function getPartitionSettings(): array
     {
+        // ユーザー系テーブルの設定を取得
         return $this->getUserDatabsePartitionSettings();
     }
 }
