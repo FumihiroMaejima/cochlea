@@ -76,7 +76,7 @@ class BaseSlackNotification extends Notification
      */
     public function toSlack($notifiable)
     {
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->from(Config::get('app.name') . ': ' . Config::get('myapp.slack.name'), Config::get('myapp.slack.icon'))
             ->to(Config::get('myapp.slack.channel'))
             ->content($this->messageContent . "\n" . $this->message)
