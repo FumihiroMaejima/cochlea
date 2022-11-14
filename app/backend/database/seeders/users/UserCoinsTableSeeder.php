@@ -17,7 +17,7 @@ class UserCoinsTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 10;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 100;
 
     /**
      * Run the database seeds.
@@ -65,10 +65,9 @@ class UserCoinsTableSeeder extends BaseSeeder
             $data[] = $row;
         }
 
+        $model = (new UserCoins());
         foreach ($data as $row) {
-            DB::table(
-                $this->tableName . ShardingLibrary::getShardIdByUserId($row[UserCoins::USER_ID])
-            )->insert($data);
+            $model->getQueryBuilder($row[UserCoins::USER_ID])->insert($data);
         }
     }
 }
