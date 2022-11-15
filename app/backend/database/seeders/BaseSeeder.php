@@ -23,27 +23,19 @@ class BaseSeeder extends Seeder
     /**
      * get data length by env.
      *
-     * @param string $envName 環境の値(local,stg,production,testingなど)
-     * @param int $productionLength production時のインサートするデータ数
-     * @param int $testingLength testing時のインサートするデータ数
-     * @param int $developLength localや開発時のインサートするデータ数
      * @return int
      */
-    protected function getSeederDataLengthByEnv(
-        string $envName,
-        int $productionLength = self::SEEDER_DATA_LENGTH,
-        int $testingLength = self::SEEDER_DATA_TESTING_LENGTH,
-        int $developLength = self::SEEDER_DATA_DEVELOP_LENGTH,
-    ): int {
+    protected function getSeederDataLengthByEnv(): int
+    {
+        $envName = Config::get('app.env');
         if ($envName === 'production') {
-            return $productionLength;
+            return static::SEEDER_DATA_LENGTH;
         } elseif ($envName === 'testing') {
             // testの時
-            return $testingLength;
+            return static::SEEDER_DATA_TESTING_LENGTH;
         } else {
             // localやstaging
-            return $developLength;
-            // return self::SEEDER_DATA_LENGTH;
+            return static::SEEDER_DATA_DEVELOP_LENGTH;
         }
     }
 }
