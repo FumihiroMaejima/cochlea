@@ -51,8 +51,11 @@ class ShardingLibrary
      */
     public static function getShardIdByUserId(int $userId): int
     {
-        // 除算の余り
-        return $userId % Config::get('myapp.database.users.shardCount');
+        // 除算の余りを求める
+        $shardCount = Config::get('myapp.database.users.shardCount');
+        $shardId = $userId % $shardCount;
+        // 割り切れる場合は$shardCount自体がshardIDとなる
+        return $shardId !== 0 ? $shardId : $shardCount;
     }
 
     /**

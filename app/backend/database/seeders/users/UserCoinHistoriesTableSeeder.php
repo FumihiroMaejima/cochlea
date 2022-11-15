@@ -142,7 +142,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         DB::beginTransaction();
         try {
             foreach ($data as $row) {
-                $model->getQueryBuilder($row[UserCoinHistories::USER_ID])->insert($data);
+                $model->getQueryBuilder($row[UserCoinHistories::USER_ID])->insert($row);
             }
             DB::commit();
         } catch (Exception $e) {
