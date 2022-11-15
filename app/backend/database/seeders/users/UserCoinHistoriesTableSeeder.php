@@ -14,6 +14,7 @@ use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
 use Database\Seeders\BaseSeeder;
+use Exception;
 
 class UserCoinHistoriesTableSeeder extends BaseSeeder
 {
@@ -70,7 +71,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
             // 履歴の種類
             $historyType = rand(
                 current(UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUES),
-                end(UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUES)
+                last(UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUES)
             );
 
             // コインの形式
@@ -138,8 +139,15 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         }
 
         $model = (new UserCoinHistories());
-        foreach ($data as $row) {
-            $model->getQueryBuilder($row[UserCoinHistories::USER_ID])->insert($data);
+        DB::beginTransaction();
+        try {
+            foreach ($data as $row) {
+                $model->getQueryBuilder($row[UserCoinHistories::USER_ID])->insert($data);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
     }
 }
