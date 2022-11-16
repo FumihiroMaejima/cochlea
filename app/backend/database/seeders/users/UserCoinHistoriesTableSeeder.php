@@ -22,7 +22,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
 {
     protected const SEEDER_DATA_LENGTH = 5;
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
-    protected const SEEDER_DATA_DEVELOP_LENGTH = 100;
+    protected const SEEDER_DATA_DEVELOP_LENGTH = 500;
 
     // 終了日時として設定する加算日数
     private const END_DATE_ADDITIONAL_DAYS = 5;
@@ -153,9 +153,9 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     // 登録されていない場合は新規登録
                     $userCoinResource = UserCoinsResource::toArrayForCreate(
                         $userId,
-                        0,
-                        0,
-                        0
+                        UserCoins::DEFAULT_COIN_COUNT,
+                        UserCoins::DEFAULT_COIN_COUNT,
+                        UserCoins::DEFAULT_COIN_COUNT
                     );
                     $useCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
                 }
@@ -163,17 +163,24 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                 // ロックをかけて再取得
                 $userCoin = $this->getUserCoinByUserId($userId);
 
-                $freeCoin = $userCoin[UserCoins::FREE_COINS] + $row[UserCoinHistories::GET_FREE_COINS] +  $row[UserCoinHistories::USED_FREE_COINS];
-                $paidCoin = $userCoin[UserCoins::PAID_COINS] + $row[UserCoinHistories::GET_PAID_COINS] +  $row[UserCoinHistories::USED_PAID_COINS];
+                // 各コインいずれかが0より小さくなる場合は更新対象外とする
+                $freeCoin = $userCoin[UserCoins::FREE_COINS] + $row[UserCoinHistories::GET_FREE_COINS] - $row[UserCoinHistories::USED_FREE_COINS];
+                if ($freeCoin < UserCoins::DEFAULT_COIN_COUNT) {
+                    continue;
+                }
 
+                $paidCoin = $userCoin[UserCoins::PAID_COINS] + $row[UserCoinHistories::GET_PAID_COINS] - $row[UserCoinHistories::USED_PAID_COINS];
+                if ($paidCoin < UserCoins::DEFAULT_COIN_COUNT) {
+                    continue;
+                }
+
+                $limitedCoin = $userCoin[UserCoins::LIMITED_TIME_COINS]
+                    + $row[UserCoinHistories::GET_LIMITED_TIME_COINS]
+                    - $row[UserCoinHistories::USED_LIMITED_TIME_COINS]
+                    - $row[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS];
                 // ランダムで設定した期限切れコイン数が保有コイン数を超過する場合
-                if ($userCoin[UserCoins::LIMITED_TIME_COINS] < $row[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS]) {
-                    $limitedCoin = 0;
-                } else {
-                    $limitedCoin = $userCoin[UserCoins::LIMITED_TIME_COINS]
-                        + $row[UserCoinHistories::GET_LIMITED_TIME_COINS]
-                        + $row[UserCoinHistories::USED_LIMITED_TIME_COINS]
-                        - $row[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS];
+                if ($limitedCoin < UserCoins::DEFAULT_COIN_COUNT) {
+                    continue;
                 }
 
                 // ユーザーのコイン情報の更新
