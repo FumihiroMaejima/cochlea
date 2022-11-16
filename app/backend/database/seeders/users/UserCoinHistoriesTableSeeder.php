@@ -24,6 +24,8 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
     protected const SEEDER_DATA_TESTING_LENGTH = 5;
     protected const SEEDER_DATA_DEVELOP_LENGTH = 500;
 
+    // 履歴作成日として設定する現在日時からの減算日数
+    private const START_DATE_SUB_DAYS = 5;
     // 終了日時として設定する加算日数
     private const END_DATE_ADDITIONAL_DAYS = 5;
 
@@ -37,6 +39,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         $this->tableName = (new UserCoinHistories())->getTable();
 
         $now = TimeLibrary::getCurrentDateTime();
+        $targetDate = TimeLibrary::subDays($now, self::START_DATE_SUB_DAYS);
         $expiredDate = TimeLibrary::addDays($now, self::END_DATE_ADDITIONAL_DAYS);
         $tmpOrderId = RandomStringLibrary::getRandomShuffleString();
 
@@ -53,8 +56,8 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
             UserCoinHistories::EXPIRED_AT                 => null,
             UserCoinHistories::OEDER_ID                   => null,
             UserCoinHistories::PRODUCT_ID                 => 0,
-            UserCoinHistories::CREATED_AT                 => $now,
-            UserCoinHistories::UPDATED_AT                 => $now,
+            UserCoinHistories::CREATED_AT                 => $targetDate,
+            UserCoinHistories::UPDATED_AT                 => $targetDate,
         ];
 
         // insert用データ
@@ -67,8 +70,9 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            // 価格
-            $price = rand(100, 500) * $i;
+            // 価格(200~10000)
+            $priceBase = ($i % 10);
+            $price = (rand(200, 1000) * (($priceBase === 0) ? 10 : $priceBase));
 
             // 履歴の種類
             $historyType = rand(
@@ -157,6 +161,10 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                         UserCoins::DEFAULT_COIN_COUNT,
                         UserCoins::DEFAULT_COIN_COUNT
                     );
+                    // 日時の更新
+                    $userCoinResource[UserCoins::CREATED_AT] = $targetDate;
+                    $userCoinResource[UserCoins::UPDATED_AT] = $targetDate;
+
                     $useCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
                 }
 
