@@ -151,7 +151,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
                 // ユーザーの所持しているコインの更新
-                $userCoin = $this->getUserCoinByUserId($userId);
+                $userCoin = $useCoinModel->getRecordByUserId($userId);
 
                 if (is_null($userCoin)) {
                     // 登録されていない場合は新規登録
@@ -168,8 +168,8 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     $useCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
                 }
 
-                // ロックをかけて再取得
-                $userCoin = $this->getUserCoinByUserId($userId);
+                // 再取得
+                $userCoin =$useCoinModel->getRecordByUserId($userId);
 
                 // 各コインいずれかが0より小さくなる場合は更新対象外とする
                 $freeCoin = $userCoin[UserCoins::FREE_COINS] + $row[UserCoinHistories::GET_FREE_COINS] - $row[UserCoinHistories::USED_FREE_COINS];
@@ -210,17 +210,5 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
             DB::rollBack();
             throw $e;
         }
-    }
-
-    /**
-     * get user coins by user id.
-     *
-     * @param int $userId user id
-     * @param bool $isLock exec lock For Update
-     * @return array|null
-     */
-    private function getUserCoinByUserId(int $userId, bool $isLock = false): array|null
-    {
-        return (new UserCoins())->getRecordByUserId($userId, $isLock);
     }
 }
