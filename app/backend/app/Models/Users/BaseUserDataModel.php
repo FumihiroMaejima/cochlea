@@ -10,6 +10,8 @@ use App\Library\Database\ShardingLibrary;
 
 class BaseUserDataModel extends Model
 {
+    public const USER_ID = 'userId';
+
     /**
      * get connection name by user id.
      *
@@ -70,14 +72,17 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * get model table connetion by user id.
+     * get all record by user id.
      *
      * @param int $userId user id
-     * @return BaseUserDataModel
+     * @return array
      */
-    public function getConnectionByUserId(int $userId): BaseUserDataModel
+    public function getAllbyUserId(int $userId): array
     {
-        return $this->setConnection(self::getConnectionNameByUserId($userId))
-            ->setTable($this->getTableByUserId($userId));
+        return (new UserCoins())
+            ->getQueryBuilder($userId)
+            ->where(static::USER_ID, '=', $userId)
+            ->get()
+            ->toArray();
     }
 }
