@@ -68,4 +68,16 @@ class BaseUserDataModel extends Model
         return DB::connection(self::getConnectionNameByUserId($userId))
             ->table($this->getTableByUserId($userId));
     }
+
+    /**
+     * get model table connetion by user id.
+     *
+     * @param int $userId user id
+     * @return BaseUserDataModel
+     */
+    public function getConnectionByUserId(int $userId): BaseUserDataModel
+    {
+        return $this->setConnection(self::getConnectionNameByUserId($userId))
+            ->setTable($this->getTableByUserId($userId));
+    }
 }
