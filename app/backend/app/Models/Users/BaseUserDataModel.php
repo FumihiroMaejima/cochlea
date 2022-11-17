@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Database\ShardingLibrary;
 
 class BaseUserDataModel extends Model
@@ -77,12 +78,36 @@ class BaseUserDataModel extends Model
      * @param int $userId user id
      * @return array
      */
-    public function getAllbyUserId(int $userId): array
+    public function getAllByUserId(int $userId): array
     {
-        return (new UserCoins())
-            ->getQueryBuilder($userId)
+        return $this->getQueryBuilder($userId)
             ->where(static::USER_ID, '=', $userId)
             ->get()
             ->toArray();
+    }
+
+    /**
+     * get single Record record by user id.
+     *
+     * @param int $userId user id
+     * @param bool $isLock exec lock For Update
+     * @return array|null
+     */
+    public function getRecordByUserId(int $userId, bool $isLock = false): array|null
+    {
+        $query = $this->getQueryBuilder($userId)
+            ->where(static::USER_ID, '=', $userId);
+
+        if ($isLock) {
+            $query->lockForUpdate();
+        }
+
+        $record = $query->first();
+
+        if (empty($record)) {
+            return null;
+        }
+
+        return ArrayLibrary::toArray($record);
     }
 }

@@ -144,14 +144,14 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
             $data[] = $row;
         }
 
-        $model = (new UserCoinHistories());
+        $userCoinHistriesModel = (new UserCoinHistories());
         $useCoinModel = (new UserCoins());
         DB::beginTransaction();
         try {
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
                 // ユーザーの所持しているコインの更新
-                $userCoin = $this->getUserCoinByUserId($row[UserCoinHistories::USER_ID]);
+                $userCoin = $this->getUserCoinByUserId($userId);
 
                 if (is_null($userCoin)) {
                     // 登録されていない場合は新規登録
@@ -203,7 +203,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     ->update($userCoinResource);
 
                 // コイン履歴の更新
-                $model->getQueryBuilder($row[UserCoinHistories::USER_ID])->insert($row);
+                $userCoinHistriesModel->getQueryBuilder($userId)->insert($row);
             }
             DB::commit();
         } catch (Exception $e) {
@@ -221,17 +221,6 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
      */
     private function getUserCoinByUserId(int $userId, bool $isLock = false): array|null
     {
-        $userCoin = (new UserCoins())
-            ->getQueryBuilder($userId)
-            ->where(UserCoins::USER_ID, '=', $userId)
-            ->get();
-
-        if ($userCoin->count() === 0) {
-            return null;
-        }
-
-        // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoin->toArray()));
-        ;
+        return (new UserCoins())->getRecordByUserId($userId, $isLock);
     }
 }
