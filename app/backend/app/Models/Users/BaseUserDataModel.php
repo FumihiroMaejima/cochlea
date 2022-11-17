@@ -110,4 +110,16 @@ class BaseUserDataModel extends Model
 
         return ArrayLibrary::toArray($record);
     }
+
+    /**
+     * insert record.
+     *
+     * @param int $userId user id
+     * @param array $$resource resource
+     * @return bool
+     */
+    public function insert(int $userId, array $resource): bool
+    {
+        return $this->getQueryBuilder($userId)->insert($resource);
+    }
 }
