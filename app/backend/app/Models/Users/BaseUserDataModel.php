@@ -12,6 +12,7 @@ use App\Library\Database\ShardingLibrary;
 class BaseUserDataModel extends Model
 {
     public const USER_ID = 'userId';
+    public const DELETED_AT = 'deleted_at';
 
     /**
      * get connection name by user id.
@@ -115,11 +116,27 @@ class BaseUserDataModel extends Model
      * insert record.
      *
      * @param int $userId user id
-     * @param array $$resource resource
+     * @param array $resource resource
      * @return bool
      */
     public function insert(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
+    }
+
+    /**
+     * insert record.
+     *
+     * @param int $userId user id
+     * @param array $resource resource
+     * @return int
+     */
+    public function updateByUserId(int $userId, array $resource): int
+    {
+        return $this->getQueryBuilder($userId)
+            ->where(static::USER_ID, '=', $userId)
+            ->where(static::DELETED_AT, '=', null)
+            ->update($resource)
+            ;
     }
 }
