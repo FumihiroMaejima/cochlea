@@ -74,6 +74,20 @@ class BaseUserDataModel extends Model
     }
 
     /**
+     * group connectio by user ids.
+     *
+     * @param array $userIds user ids
+     * @return array
+     */
+    public static function groupConnectionByUserId(array $userIds): array
+    {
+        return array_reduce($userIds, function (array $groups, int $userId) {
+            $groups[self::getConnectionNameByUserId($userId)][] = $userId;
+            return $groups;
+        }, []);
+    }
+
+    /**
      * get all record by user id.
      *
      * @param int $userId user id
