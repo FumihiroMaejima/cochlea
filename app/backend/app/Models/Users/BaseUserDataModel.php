@@ -79,12 +79,31 @@ class BaseUserDataModel extends Model
      * @param array $userIds user ids
      * @return array
      */
-    public static function groupConnectionByUserId(array $userIds): array
+    public static function groupUserIdsByConnection(array $userIds): array
     {
         return array_reduce($userIds, function (array $groups, int $userId) {
             $groups[self::getConnectionNameByUserId($userId)][] = $userId;
             return $groups;
         }, []);
+    }
+
+    /**
+     * group connectio by user ids.
+     *
+     * @param array $userIds user ids
+     * @return array
+     */
+    public static function getConnectionAndShardIdGroupByUserIds(array $userIds): array
+    {
+        $result = [];
+        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
+        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds){
+            foreach($tmpUserIds as $userId) {
+                $result[$connection][self::getShardId($userId)][] = $userId;
+            }
+        }
+        return $result;
+
     }
 
     /**
