@@ -120,10 +120,10 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * get all record by user ids.
+     * get all records by user ids.
      *
      * @param int $userId user id
-     * @return array
+     * @return array<int, array>
      */
     public function getAllByUserIds(array $userIds): array
     {
@@ -141,7 +141,7 @@ class BaseUserDataModel extends Model
             }
         }
 
-        return $result;
+        return ArrayLibrary::toArray($result);
     }
 
     /**
