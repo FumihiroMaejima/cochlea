@@ -88,7 +88,7 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * group connectio by user ids.
+     * get connectio and shard id group by user ids.
      *
      * @param array $userIds user ids
      * @return array
@@ -103,7 +103,6 @@ class BaseUserDataModel extends Model
             }
         }
         return $result;
-
     }
 
     /**
@@ -118,6 +117,31 @@ class BaseUserDataModel extends Model
             ->where(static::USER_ID, '=', $userId)
             ->get()
             ->toArray();
+    }
+
+    /**
+     * get all record by user ids.
+     *
+     * @param int $userId user id
+     * @return array
+     */
+    public function getAllByUserIds(array $userIds): array
+    {
+        $connections = self::getConnectionAndShardIdGroupByUserIds($userIds);
+        $result = [];
+        foreach ($connections as $connection => $shardIds) {
+            foreach ($shardIds as $shardId => $tmpUserIds) {
+                $records = DB::connection($connection)
+                ->table($this->getTable() . $shardId)
+                ->whereIn(static::USER_ID, $tmpUserIds)
+                ->get()
+                ->toArray();
+
+                $result = array_merge($result, $records);
+            }
+        }
+
+        return $result;
     }
 
     /**
