@@ -145,13 +145,13 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         }
 
         $userCoinHistriesModel = (new UserCoinHistories());
-        $useCoinModel = (new UserCoins());
+        $userCoinModel = (new UserCoins());
         DB::beginTransaction();
         try {
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
                 // ユーザーの所持しているコインの更新
-                $userCoin = $useCoinModel->getRecordByUserId($userId);
+                $userCoin = $userCoinModel->getRecordByUserId($userId);
 
                 if (is_null($userCoin)) {
                     // 登録されていない場合は新規登録
@@ -165,11 +165,11 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     $userCoinResource[UserCoins::CREATED_AT] = $targetDate;
                     $userCoinResource[UserCoins::UPDATED_AT] = $targetDate;
 
-                    $useCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
+                    $userCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
                 }
 
                 // 再取得
-                $userCoin =$useCoinModel->getRecordByUserId($userId);
+                $userCoin =$userCoinModel->getRecordByUserId($userId);
 
                 // 各コインいずれかが0より小さくなる場合は更新対象外とする
                 $freeCoin = $userCoin[UserCoins::FREE_COINS] + $row[UserCoinHistories::GET_FREE_COINS] - $row[UserCoinHistories::USED_FREE_COINS];
@@ -198,7 +198,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     $paidCoin,
                     $limitedCoin
                 );
-                $useCoinModel->getQueryBuilder($userId)
+                $userCoinModel->getQueryBuilder($userId)
                     ->where(UserCoins::USER_ID, '=', $userId)
                     ->update($userCoinResource);
 
