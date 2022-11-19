@@ -176,7 +176,7 @@ class BaseUserDataModel extends Model
      * @param array $resource resource
      * @return bool
      */
-    public function insert(int $userId, array $resource): bool
+    public function insertByUserId(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }

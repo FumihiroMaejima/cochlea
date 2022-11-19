@@ -168,7 +168,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     $userCoinResource[UserCoins::CREATED_AT] = $targetDate;
                     $userCoinResource[UserCoins::UPDATED_AT] = $targetDate;
 
-                    $userCoinModel->getQueryBuilder($userId)->insert($userCoinResource);
+                    $userCoinModel->insertByUserId($userId, $userCoinResource);
 
                     // 再取得
                     $userCoin =$userCoinModel->getRecordByUserId($userId);
@@ -203,12 +203,10 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                     $paidCoin,
                     $limitedCoin
                 );
-                $userCoinModel->getQueryBuilder($userId)
-                    ->where(UserCoins::USER_ID, '=', $userId)
-                    ->update($userCoinResource);
+                $userCoinModel->updateByUserId($userId, $userCoinResource);
 
-                // コイン履歴の更新
-                $userCoinHistriesModel->getQueryBuilder($userId)->insert($row);
+                // コイン履歴の作成
+                $userCoinHistriesModel->insertByUserId($userId, $row);
             }
             DB::commit();
         } catch (Exception $e) {
