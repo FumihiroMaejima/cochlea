@@ -98,8 +98,8 @@ class BaseUserDataModel extends Model
     {
         $result = [];
         $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
-        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds){
-            foreach($tmpUserIds as $userId) {
+        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
+            foreach ($tmpUserIds as $userId) {
                 $result[$connection][self::getShardId($userId)][] = $userId;
             }
         }
@@ -116,8 +116,8 @@ class BaseUserDataModel extends Model
     {
         $result = [];
         $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
-        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds){
-            foreach($tmpUserIds as $userId) {
+        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
+            foreach ($tmpUserIds as $userId) {
                 if (empty($resources[$userId])) {
                     continue;
                 }
@@ -222,7 +222,7 @@ class BaseUserDataModel extends Model
                         ->insert($tmpResources);
                 }
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
 
@@ -242,6 +242,6 @@ class BaseUserDataModel extends Model
             ->where(static::USER_ID, '=', $userId)
             ->where(static::DELETED_AT, '=', null)
             ->update($resource)
-            ;
+        ;
     }
 }
