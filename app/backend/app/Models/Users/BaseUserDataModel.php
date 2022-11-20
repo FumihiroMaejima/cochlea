@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Database\ShardingLibrary;
+use Exception;
 
 class BaseUserDataModel extends Model
 {
@@ -106,6 +107,27 @@ class BaseUserDataModel extends Model
     }
 
     /**
+     * get connectio and shard id ans resources group by user ids.
+     *
+     * @param array $userIds user ids
+     * @return array
+     */
+    public static function getConnectionAndShardIdAndResourcesGroupByUserIds(array $userIds, array $resources): array
+    {
+        $result = [];
+        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
+        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds){
+            foreach($tmpUserIds as $userId) {
+                if (empty($resources[$userId])) {
+                    continue;
+                }
+                $result[$connection][self::getShardId($userId)][] = $resources[$userId];
+            }
+        }
+        return $result;
+    }
+
+    /**
      * get all record by user id.
      *
      * @param int $userId user id
@@ -179,6 +201,33 @@ class BaseUserDataModel extends Model
     public function insertByUserId(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
+    }
+
+    /**
+     * insert records.
+     *
+     * @param array $userIds user ids
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertByUserIds(array $userIds, array $resources): bool
+    {
+        $connections = self::getConnectionAndShardIdAndResourcesGroupByUserIds($userIds, $resources);
+        $result = [];
+        try {
+            foreach ($connections as $connection => $shardIds) {
+                foreach ($shardIds as $shardId => $tmpResources) {
+                    $result[] = DB::connection($connection)
+                        ->table($this->getTable() . $shardId)
+                        ->insert($tmpResources);
+                }
+            }
+            return ArrayLibrary::toArray($result);
+        } catch(Exception $e) {
+            throw $e;
+        }
+
+        return true;
     }
 
     /**
