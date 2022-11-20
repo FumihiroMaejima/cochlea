@@ -222,7 +222,6 @@ class BaseUserDataModel extends Model
                         ->insert($tmpResources);
                 }
             }
-            return ArrayLibrary::toArray($result);
         } catch(Exception $e) {
             throw $e;
         }

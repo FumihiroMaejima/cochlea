@@ -153,6 +153,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         $useCoins = array_column($useCoins, null, UserCoins::USER_ID);
         DB::beginTransaction();
         try {
+            $resouces = [];
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
                 // ユーザーの所持しているコインの更新
@@ -206,8 +207,10 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
                 $userCoinModel->updateByUserId($userId, $userCoinResource);
 
                 // コイン履歴の作成
-                $userCoinHistriesModel->insertByUserId($userId, $row);
+                // $userCoinHistriesModel->insertByUserId($userId, $row); // 個別にinsertする場合
+                $resouces[$userId] = $row;
             }
+            $userCoinHistriesModel->insertByUserIds($userIds, $resouces);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
