@@ -122,7 +122,7 @@ class BaseUserDataModel extends Model
     /**
      * get all records by user ids.
      *
-     * @param int $userId user id
+     * @param array $userIds user ids
      * @return array<int, array>
      */
     public function getAllByUserIds(array $userIds): array
