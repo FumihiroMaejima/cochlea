@@ -17,6 +17,9 @@ down-rmi:
 ps:
 	docker-compose ps
 
+rebuild: # 個別のコンテナを作り直し
+	docker-compose build --no-cache $(CONTAINER)
+
 dev:
 	sh ./scripts/container.sh && \
 	${SHELL} ./scripts/change-db-host.sh db-next db
