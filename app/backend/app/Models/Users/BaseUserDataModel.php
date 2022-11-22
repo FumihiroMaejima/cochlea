@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Database\ShardingLibrary;
-use Exception;
 
 class BaseUserDataModel extends Model
 {
@@ -214,16 +213,12 @@ class BaseUserDataModel extends Model
     {
         $connections = self::getConnectionAndShardIdAndResourcesGroupByUserIds($userIds, $resources);
         $result = [];
-        try {
-            foreach ($connections as $connection => $shardIds) {
-                foreach ($shardIds as $shardId => $tmpResources) {
-                    $result[] = DB::connection($connection)
-                        ->table($this->getTable() . $shardId)
-                        ->insert($tmpResources);
-                }
+        foreach ($connections as $connection => $shardIds) {
+            foreach ($shardIds as $shardId => $tmpResources) {
+                $result[] = DB::connection($connection)
+                    ->table($this->getTable() . $shardId)
+                    ->insert($tmpResources);
             }
-        } catch (Exception $e) {
-            throw $e;
         }
 
         return true;
