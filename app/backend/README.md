@@ -1595,6 +1595,30 @@ $ composer require predis/predis
     $test6 = Session::has('testKey'); // false
 ```
 
+## Cache DriverにRedisを利用する場合
+
+.envに下記の通り設定する。
+
+```shell
+CACHE_DRIVER=redis
+```
+
+`database.php`の`redis.cache`の項目の内容が参照されてredisにキャッシュが積まれる様になる。
+
+```php
+    'redis' => [
+        // ...
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
+        ],
+    ],
+```
+
 ---
 
 # 補足
