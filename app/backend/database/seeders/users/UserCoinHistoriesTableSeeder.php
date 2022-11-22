@@ -153,6 +153,8 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         $useCoins = array_column($useCoins, null, UserCoins::USER_ID);
         DB::beginTransaction();
         try {
+            // 購入の場合の購入ステータステーブルの設定は省略する
+
             $resouces = [];
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
