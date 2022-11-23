@@ -11,6 +11,11 @@ class Coins extends Model
     use HasFactory;
     use SoftDeletes;
 
+    // コインの形式
+    public const COIN_TYPE_FREE = 1; // 無料
+    public const COIN_TYPE_PAID = 2; // 有料
+    public const COIN_TYPE_LIMITED_TIME = 3; // 期間限定
+
     // カラム一覧
     public const ID          = 'id';
     public const NAME        = 'name';
