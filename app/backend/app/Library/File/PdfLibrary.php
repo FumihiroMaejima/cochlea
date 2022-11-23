@@ -7,6 +7,11 @@ use TCPDF;
 
 class PdfLibrary
 {
+    // font-family
+    public const FONT_FAMILY_KOZGOPROMEDIUM = 'kozgopromedium';
+    // font-size
+    public const FONT_SIZE_10 = 10;
+
     /**
      * サンプルPDFの出力(ファイルリソース)
      *
@@ -17,7 +22,7 @@ class PdfLibrary
     {
         $tcpdf = new TCPDF();
         $tcpdf->AddPage();
-        $tcpdf->SetFont("kozgopromedium", "", 10);
+        $tcpdf->SetFont(self::FONT_FAMILY_KOZGOPROMEDIUM, "", self::FONT_SIZE_10);
         $html = <<< EOF
         <style>
         body {

@@ -51,8 +51,11 @@ class ShardingLibrary
      */
     public static function getShardIdByUserId(int $userId): int
     {
-        // 除算の余り
-        return $userId % Config::get('myapp.database.users.shardCount');
+        // 除算の余りを求める
+        $shardCount = Config::get('myapp.database.users.shardCount');
+        $shardId = $userId % $shardCount;
+        // 割り切れる場合は$shardCount自体がshardIDとなる
+        return $shardId !== 0 ? $shardId : $shardCount;
     }
 
     /**
@@ -112,15 +115,5 @@ class ShardingLibrary
             // テスト用DB内のテーブルのコネクション
             return self::CONNECTION_NAME_FOR_TESTING;
         }
-    }
-
-    /**
-     * get single database connection name from config.
-     *
-     * @return string 単一DBで運用する用のDBコネクション名の配列
-     */
-    public static function getDatabaseNameByConnection($connection): string
-    {
-        return Config::get("database.connections.$connection.database");
     }
 }

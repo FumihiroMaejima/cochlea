@@ -17,6 +17,9 @@ down-rmi:
 ps:
 	docker-compose ps
 
+rebuild: # 個別のコンテナを作り直し
+	docker-compose build --no-cache $(CONTAINER)
+
 dev:
 	sh ./scripts/container.sh && \
 	${SHELL} ./scripts/change-db-host.sh db-next db
@@ -136,6 +139,9 @@ remove-logs-partitions:
 
 remove-users-partitions:
 	docker-compose exec app php artisan admins:remove-users-partitions
+
+debug-seed-user-coin-histories:
+	docker-compose exec app php artisan debug:seed-user-coin-histories
 
 ##############################
 # web server(nginx)

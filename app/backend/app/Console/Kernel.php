@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\Testing\Database\TrancateTables::class,
         Commands\Debug\TestCommand::class,
         Commands\Debug\TestCommandWithParam::class,
+        Commands\Debug\Seeder\UserCoinHistoriesSeedCommand::class,
     ];
 
     /**
