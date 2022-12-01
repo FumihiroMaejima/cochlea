@@ -110,6 +110,48 @@ mockサーバーの起動
 
 ---
 
+# AWSの設定
+
+## オプションの指定無しでプロファイルの確認
+
+```Shell-session
+$ aws configure list
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile          　　profile_name           manual    --profile
+access_key     ****************XXXX shared-credentials-file
+secret_key     ****************XXXX shared-credentials-file
+    region           xx-xxxxxxxxx-1      config-file    ~/.aws/config
+```
+
+## IAMユーザーやグループの確認
+
+```Shell-session
+$ aws iam list-users
+$ aws iam list-groups
+```
+
+## EC2の確認
+
+```Shell-session
+$ aws ec2 describe-vpcs --region ap-northeast-1
+```
+
+## S3の設定
+
+### S3の確認
+
+```Shell-session
+$ aws s3 ls
+```
+
+
+
+
+
+
+---
+
 # 構成
 
 
