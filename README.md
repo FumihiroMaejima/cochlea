@@ -114,7 +114,7 @@ mockサーバーの起動
 
 ## オプションの指定無しでプロファイルの確認
 
-```Shell-session
+```shell
 $ aws configure list
       Name                    Value             Type    Location
       ----                    -----             ----    --------
@@ -126,14 +126,14 @@ secret_key     ****************XXXX shared-credentials-file
 
 ## IAMユーザーやグループの確認
 
-```Shell-session
+```shell
 $ aws iam list-users
 $ aws iam list-groups
 ```
 
 ## EC2の確認
 
-```Shell-session
+```shell
 $ aws ec2 describe-vpcs --region ap-northeast-1
 ```
 
@@ -141,12 +141,41 @@ $ aws ec2 describe-vpcs --region ap-northeast-1
 
 ### S3の確認
 
-```Shell-session
+```shell
 $ aws s3 ls
 ```
 
+### バケットの作成
+
+```shell
+$ aws s3 mb s3://"$BUCKET_NAME"
 
 
+$ aws s3 mb s3://test-bucket-yyyymmdd-xxxx-ap-northeast-1
+make_bucket: test-bucket-yyyymmdd-xxxx-ap-northeast-1
+```
+
+### バケットのアクセスブロックの設定
+
+バケットのアクセスブロックを設定し、公開できる状態にする。
+
+```shell
+$ aws s3api put-public-access-block --bucket "$BUCKET_NAME" --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+```
+
+アクセスブロックの確認
+
+```shell
+$ aws s3api get-public-access-block --bucket "$BUCKET_NAME"
+{
+    "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+    }
+}
+```
 
 
 
