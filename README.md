@@ -263,6 +263,43 @@ $ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration f
 http://"$BUCKET_NAME".s3-website-"$REGION_NAME".amazonaws.com
 ```
 
+### ローカルとバケットの同期
+
+```shell
+$ aws s3 sync ./ s3://"$BUCKET_NAME"
+```
+
+### アップロードされているかの確認
+
+```shell
+$ aws s3 ls s3://"$BUCKET_NAME"
+$ aws s3 ls s3://"$BUCKET_NAME"/"$OBJECT_NAME"
+```
+
+### ディレクトリ内の全てのコピー
+
+```shell
+$ aws s3 cp . s3://"$BUCKET_NAME" --recursive
+```
+
+### ファイルの削除
+
+```shell
+$ aws s3 rm s3://"$BUCKET_NAME"/"$FILE_NAME"
+```
+
+### バケット内を空にする
+
+```shell
+$ aws s3 rm s3://"$BUCKET_NAME" --recursive
+```
+
+### バケットの削除
+
+```shell
+$ aws s3 rb s3://"$BUCKET_NAME"
+```
+
 ---
 
 # 構成
