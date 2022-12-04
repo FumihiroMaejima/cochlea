@@ -177,6 +177,32 @@ $ aws s3api get-public-access-block --bucket "$BUCKET_NAME"
 }
 ```
 
+### バケットポリシーを作成、S3バケットにアタッチする
+
+bucketPolicy.jsonの作成
+
+パブリックにアクセス可能になる為利用には注意が必要！
+
+```json
+{
+    "Version": "2022-12-03",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::for-test-page/*"
+        }
+    ]
+}
+```
+
+S3バケット作成したポリシーをアタッチする
+
+```shell
+$ aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy file://bucketPolicy.json
+```
+
 
 
 ---
