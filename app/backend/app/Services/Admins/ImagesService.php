@@ -136,7 +136,7 @@ class ImagesService
                     'data'    => [
                         'uuid'    => $resource[IMAGES::UUID],
                         'ver'     => $resource[IMAGES::VERSION],
-                        'query'   => '?uuid=' . $resource[IMAGES::UUID] . '?ver=' . $resource[IMAGES::VERSION],
+                        'query'   => '?uuid=' . $resource[IMAGES::UUID] . '&ver=' . $resource[IMAGES::VERSION],
                     ],
                 ],
                 $status
