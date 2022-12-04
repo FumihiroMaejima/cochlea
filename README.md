@@ -203,7 +203,65 @@ S3バケット作成したポリシーをアタッチする
 $ aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy file://bucketPolicy.json
 ```
 
+### S3バケットにファイルをアップロードする
 
+サンプルのファイル作成
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+            <title>Sample Page</title>
+    </head>
+    <body>
+        This is Sample Page:) Tada-!
+    </body>
+</html>
+
+```
+
+ファイルをS3にアップロード
+
+```shell
+$ aws s3 cp index.html s3://"$BUCKET_NAME"/index.html
+upload: ./index.html to s3://"$BUCKET_NAME"/index.html
+```
+
+
+### 静的ウェブサイトのホスティングの場合
+
+下記のいずれかで設定する。
+
+1. 指定したS3バケットにwebsiteの設定を行う
+
+```shell
+$ aws s3 website s3://"$BUCKET_NAME" --index-document index.html
+```
+
+2. 公開するウェブサイトの設定を記載し、バケットに設定する
+
+Jsonファイルで公開するウェブサイトの設定を記載します。
+
+```json
+{
+    "IndexDocument": {
+        "Suffix": "index.html"
+    }
+}
+```
+
+作成したファイルを元にインデックスドキュメントを設定。
+
+```shell
+$ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration file://webSite.json
+```
+
+### ブラウザで確認
+
+```shell
+http://"$BUCKET_NAME".s3-website-"$REGION_NAME".amazonaws.com
+```
 
 ---
 
