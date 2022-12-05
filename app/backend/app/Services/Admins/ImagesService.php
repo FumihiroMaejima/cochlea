@@ -70,6 +70,7 @@ class ImagesService
 
         // storageの存在確認
         $file = Storage::get($imagePath);
+        // TODO ローカル以外はS3から取得
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
@@ -125,6 +126,7 @@ class ImagesService
                     'store file failed.'
                 );
             }
+            // TODO ローカル以外はS3へのアップロード
 
             // ファイル名
             // $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
