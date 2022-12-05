@@ -66,17 +66,15 @@ class ImagesRepository implements ImagesRepositoryInterface
      * get Image by uuid.
      *
      * @param string $uuid
-     * @param int $version
      * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByUuid(string $uuid, int $version, bool $isLock = false): Collection|null
+    public function getByUuid(string $uuid, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
             ->where(Images::UUID, '=', $uuid)
-            ->where(Images::VERSION, '=', $version)
             ->where(Images::DELETED_AT, '=', null)
             ->get();
 
@@ -98,7 +96,6 @@ class ImagesRepository implements ImagesRepositoryInterface
             $collection = DB::table($this->getTable())
                 ->select(['*'])
                 ->where(Images::UUID, '=', $uuid)
-                ->where(Images::VERSION, '=', $version)
                 ->where(Images::DELETED_AT, '=', null)
                 ->lockForUpdate()
                 ->get();

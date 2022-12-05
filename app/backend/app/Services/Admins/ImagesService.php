@@ -22,6 +22,8 @@ use App\Repositories\Admins\Images\ImagesRepositoryInterface;
 use App\Http\Resources\Admins\ImagesResource;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+use function PHPUnit\Framework\isFalse;
+
 class ImagesService
 {
     protected ImagesRepositoryInterface $imagesRepository;
@@ -47,7 +49,7 @@ class ImagesService
      */
     public function getImage(string $uuid, int $version): BinaryFileResponse
     {
-        $collection = $this->imagesRepository->getByUuid($uuid, $version);
+        $collection = $this->imagesRepository->getByUuid($uuid);
 
         if (is_null($collection)) {
             throw new MyApplicationHttpException(
@@ -58,7 +60,8 @@ class ImagesService
 
         $resource = ImagesResource::toArrayForGetFirstByUuid($collection);
 
-        $name = $resource[IMAGES::UUID];
+        // $name = $resource[IMAGES::UUID];
+        $name = $resource[IMAGES::S3_KEY];
         $extention = $resource[IMAGES::EXTENTION];
 
         $directory = Config::get('myappFile.upload.storage.local.images.debug');
@@ -109,25 +112,32 @@ class ImagesService
             $insertCount = $this->imagesRepository->create($resource);
 
             // ファイル名
-            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
+            $storageFileName = $fileResource[Images::S3_KEY] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
 
-            $result = $file->storeAs($uploadDirectory, $fileName);
-
-            DB::commit();
+            $result = $file->storeAs($uploadDirectory, $storageFileName);
+            if (!$result) {
+                DB::rollBack();
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::MESSAGE_500,
+                    'store file failed.'
+                );
+            }
 
             // ファイル名
-            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
+            // $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
-            $result = $file->storeAs($uploadDirectory, $fileName);
+            // $result = $file->storeAs($uploadDirectory, $fileName);
 
             // 作成されている場合は304
             $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0 && $result) ? 201 : 401;
+
+            DB::commit();
 
             return response()->json(
                 [
