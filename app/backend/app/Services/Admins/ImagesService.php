@@ -78,7 +78,6 @@ class ImagesService
             // ローカルに保存をする
             Storage::disk('local')->put($directory, $file, 'local');
         }
-        // TODO ローカル以外はS3から取得
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
