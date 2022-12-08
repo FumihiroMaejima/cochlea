@@ -69,7 +69,8 @@ class ImagesService
         $imagePath = "{$directory}{$name}.{$extention}";
 
         // storageの存在確認
-        $file = Storage::get($imagePath);
+        // $file = Storage::get($imagePath);
+        $file = Storage::disk('local')->get($imagePath);
         // TODO ローカル以外はS3から取得
 
         if (is_null($file)) {
@@ -118,7 +119,8 @@ class ImagesService
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
 
-            $result = $file->storeAs($uploadDirectory, $storageFileName);
+            // $result = $file->storeAs($uploadDirectory, $storageFileName);
+            $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
             if (!$result) {
                 DB::rollBack();
                 throw new MyApplicationHttpException(
