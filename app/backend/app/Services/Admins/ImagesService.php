@@ -70,7 +70,14 @@ class ImagesService
 
         // storageの存在確認
         // $file = Storage::get($imagePath);
-        $file = Storage::disk('local')->get($imagePath);
+        if ((config('app.env') === 'local') || config('app.env') === 'testing') {
+            $file = Storage::disk('local')->get($imagePath);
+        } else {
+            // productionの時はenvでデフォルトのストレージを変更するのが適切
+            $file = Storage::disk('s3')->get($imagePath);
+            // ローカルに保存をする
+            Storage::disk('local')->put($directory, $file, 'local');
+        }
         // TODO ローカル以外はS3から取得
 
         if (is_null($file)) {
@@ -120,7 +127,13 @@ class ImagesService
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
 
             // $result = $file->storeAs($uploadDirectory, $storageFileName);
-            $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
+
+            if ((config('app.env') === 'local') || config('app.env') === 'testing') {
+                $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
+            } else {
+                $result = $file->storeAs($uploadDirectory, $storageFileName, 's3');
+            }
+            // $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
             if (!$result) {
                 DB::rollBack();
                 throw new MyApplicationHttpException(
