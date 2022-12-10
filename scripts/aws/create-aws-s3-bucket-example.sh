@@ -4,9 +4,6 @@
 DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='start getting database dump.'
 
-# dateコマンド結果を指定のフォーマットで出力
-TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
-
 # CHANGE Variable.
 BUCKET_NAME=bucket_name
 
