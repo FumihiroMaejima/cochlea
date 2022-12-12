@@ -25,15 +25,15 @@ class FileLibrary
     }
 
     /**
-     * get storage disk by env
+     * get file data in local by file path
      *
      * @param string $path file path
      * @return string|null
      */
     public static function getFileStoream(string $path): string|null
     {
-        // storageの存在確認
-        $file = Storage::disk('local')->get($path);
+        // ローカルにてstorageの存在確認
+        $file = Storage::disk(self::STORAGE_DISK_LOCAL)->get($path);
 
         // production向けなどS3から取得する時の設定
         if (!((config('app.env') === 'local') || config('app.env') === 'testing')) {

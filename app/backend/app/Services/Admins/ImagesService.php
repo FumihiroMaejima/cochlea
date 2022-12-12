@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
+use App\Library\File\FileLibrary;
 use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
@@ -70,17 +71,7 @@ class ImagesService
 
         // storageの存在確認
         // $file = Storage::get($imagePath);
-        $file = Storage::disk('local')->get($imagePath);
-
-        // production向けなどS3から取得する時の設定
-        if (!((config('app.env') === 'local') || config('app.env') === 'testing')) {
-            if (is_null($file)) {
-                // productionの時はenvでデフォルトのストレージを変更するのが適切
-                $file = Storage::disk('s3')->get($imagePath);
-                // ファイルデータそのものを別途レスポンスに返す時はローカルに保存する
-                Storage::disk('local')->put($directory, $file, 'local');
-            }
-        }
+        $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
@@ -130,12 +121,7 @@ class ImagesService
 
             // $result = $file->storeAs($uploadDirectory, $storageFileName);
 
-            if ((config('app.env') === 'local') || config('app.env') === 'testing') {
-                $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
-            } else {
-                $result = $file->storeAs($uploadDirectory, $storageFileName, 's3');
-            }
-            // $result = $file->storeAs($uploadDirectory, $storageFileName, 'local');
+            $result = $file->storeAs($uploadDirectory, $storageFileName, FileLibrary::getStorageDiskByEnv());
             if (!$result) {
                 DB::rollBack();
                 throw new MyApplicationHttpException(
