@@ -70,13 +70,16 @@ class ImagesService
 
         // storageの存在確認
         // $file = Storage::get($imagePath);
-        if ((config('app.env') === 'local') || config('app.env') === 'testing') {
-            $file = Storage::disk('local')->get($imagePath);
-        } else {
-            // productionの時はenvでデフォルトのストレージを変更するのが適切
-            $file = Storage::disk('s3')->get($imagePath);
-            // ローカルに保存をする
-            Storage::disk('local')->put($directory, $file, 'local');
+        $file = Storage::disk('local')->get($imagePath);
+
+        // production向けなどS3から取得する時の設定
+        if (!((config('app.env') === 'local') || config('app.env') === 'testing')) {
+            if (is_null($file)) {
+                // productionの時はenvでデフォルトのストレージを変更するのが適切
+                $file = Storage::disk('s3')->get($imagePath);
+                // ファイルデータそのものを別途レスポンスに返す時はローカルに保存する
+                Storage::disk('local')->put($directory, $file, 'local');
+            }
         }
 
         if (is_null($file)) {
