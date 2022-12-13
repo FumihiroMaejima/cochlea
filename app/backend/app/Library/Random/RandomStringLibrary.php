@@ -7,12 +7,14 @@ use App\Library\Message\StatusCodeMessages;
 
 class RandomStringLibrary
 {
+    public const DEFAULT_RANDOM_STRING_LENGTH = 12;
+    public const RANDOM_STRING_LENGTH_24 = 24;
+
     private const RANDOM_MIN_VALUE_97 = 97; // aの文字
     private const RANDOM_MAX_VALUE_122 = 122; // zの文字
 
     private const RANDOM_STRINGS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     private const RANDOM_SYMBOL_STRINGS = '!@#$%^&*()-_=+[{]}\|;:,<.>/?\'\"';
-    private const DEFAULT_RANDOM_STRING_LENGTH = 12;
 
     // hash algorithm
     private const HASH_ALGORITHM_256 = 'sha256';
