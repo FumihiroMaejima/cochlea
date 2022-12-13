@@ -40,8 +40,7 @@ class FileLibrary
         $file = Storage::disk(self::STORAGE_DISK_LOCAL)->get($path);
 
         // production向けなどS3から取得する時の設定
-        if (
-            !((config('app.env') === 'local') || config('app.env') === 'testing') &&
+        if (!((config('app.env') === 'local') || config('app.env') === 'testing') &&
             (config('filesystems.default') === self::STORAGE_DISK_S3)
         ) {
             if (is_null($file)) {
