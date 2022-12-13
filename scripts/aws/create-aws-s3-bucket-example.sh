@@ -2,7 +2,7 @@
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
 DELIMITER_LINE='------------------------------------------------------'
-START_MESSAGE='start getting database dump.'
+START_MESSAGE='start AWS S3 bucket.'
 
 # CHANGE Variable.
 BUCKET_NAME=bucket_name
@@ -16,7 +16,7 @@ showMessage() {
 }
 
 # process start
-showMessage ${START_MESSAGE}
+showMessage "$START_MESSAGE"
 
 # バケットの作成
 $AWS_CLI_PATH/aws s3 mb s3://"$BUCKET_NAME"

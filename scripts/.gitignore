@@ -2,3 +2,4 @@ check-partition.sh
 get-dump.sh
 restore-dump.sh
 create-aws-s3-bucket.sh
+remove-aws-s3-bucket.sh
