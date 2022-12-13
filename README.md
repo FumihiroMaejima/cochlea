@@ -110,6 +110,198 @@ mockサーバーの起動
 
 ---
 
+# AWSの設定
+
+## オプションの指定無しでプロファイルの確認
+
+```shell
+$ aws configure list
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile          　　profile_name           manual    --profile
+access_key     ****************XXXX shared-credentials-file
+secret_key     ****************XXXX shared-credentials-file
+    region           xx-xxxxxxxxx-1      config-file    ~/.aws/config
+```
+
+## IAMユーザーやグループの確認
+
+```shell
+$ aws iam list-users
+$ aws iam list-groups
+```
+
+## EC2の確認
+
+```shell
+$ aws ec2 describe-vpcs --region ap-northeast-1
+```
+
+## S3の設定
+
+### S3の確認
+
+```shell
+$ aws s3 ls
+```
+
+### バケットの作成
+
+```shell
+$ aws s3 mb s3://"$BUCKET_NAME"
+
+
+$ aws s3 mb s3://test-bucket-yyyymmdd-xxxx-ap-northeast-1
+make_bucket: test-bucket-yyyymmdd-xxxx-ap-northeast-1
+```
+
+### バケットのアクセスブロックの設定
+
+バケットのアクセスブロックを設定し、公開できる状態にする。
+
+```shell
+$ aws s3api put-public-access-block --bucket "$BUCKET_NAME" --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+```
+
+アクセスブロックの確認
+
+```shell
+$ aws s3api get-public-access-block --bucket "$BUCKET_NAME"
+{
+    "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+    }
+}
+```
+
+### バケットポリシーを作成、S3バケットにアタッチする
+
+bucketPolicy.jsonの作成
+
+パブリックにアクセス可能になる為利用には注意が必要！
+
+```json
+{
+    "Version": "2022-12-03",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::for-test-page/*"
+        }
+    ]
+}
+```
+
+S3バケット作成したポリシーをアタッチする
+
+```shell
+$ aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy file://bucketPolicy.json
+```
+
+### S3バケットにファイルをアップロードする
+
+サンプルのファイル作成
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+            <title>Sample Page</title>
+    </head>
+    <body>
+        This is Sample Page:) Tada-!
+    </body>
+</html>
+
+```
+
+ファイルをS3にアップロード
+
+```shell
+$ aws s3 cp index.html s3://"$BUCKET_NAME"/index.html
+upload: ./index.html to s3://"$BUCKET_NAME"/index.html
+```
+
+
+### 静的ウェブサイトのホスティングの場合
+
+下記のいずれかで設定する。
+
+1. 指定したS3バケットにwebsiteの設定を行う
+
+```shell
+$ aws s3 website s3://"$BUCKET_NAME" --index-document index.html
+```
+
+2. 公開するウェブサイトの設定を記載し、バケットに設定する
+
+Jsonファイルで公開するウェブサイトの設定を記載します。
+
+```json
+{
+    "IndexDocument": {
+        "Suffix": "index.html"
+    }
+}
+```
+
+作成したファイルを元にインデックスドキュメントを設定。
+
+```shell
+$ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration file://webSite.json
+```
+
+### ブラウザで確認
+
+```shell
+http://"$BUCKET_NAME".s3-website-"$REGION_NAME".amazonaws.com
+```
+
+### ローカルとバケットの同期
+
+```shell
+$ aws s3 sync ./ s3://"$BUCKET_NAME"
+```
+
+### アップロードされているかの確認
+
+```shell
+$ aws s3 ls s3://"$BUCKET_NAME"
+$ aws s3 ls s3://"$BUCKET_NAME"/"$OBJECT_NAME"
+```
+
+### ディレクトリ内の全てのコピー
+
+```shell
+$ aws s3 cp . s3://"$BUCKET_NAME" --recursive
+```
+
+### ファイルの削除
+
+```shell
+$ aws s3 rm s3://"$BUCKET_NAME"/"$FILE_NAME"
+```
+
+### バケット内を空にする
+
+```shell
+$ aws s3 rm s3://"$BUCKET_NAME" --recursive
+```
+
+### バケットの削除
+
+```shell
+$ aws s3 rb s3://"$BUCKET_NAME"
+```
+
+---
+
 # 構成
 
 

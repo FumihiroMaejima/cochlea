@@ -1716,6 +1716,16 @@ $ ./vendor/bin/phpstan analyze app tests
 ```
 
 ---
+
+## AWS S3へのアップロード手順について
+
+```shell
+$ composer require league/flysystem-aws-s3-v3
+```
+
+
+
+---
 ### backendのpackage.jsonのアップデート
 
 update対象の確認

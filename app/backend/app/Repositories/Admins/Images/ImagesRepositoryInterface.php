@@ -12,7 +12,7 @@ interface ImagesRepositoryInterface
 
     public function getLatestImage(): object;
 
-    public function getByUuid(string $uuid, int $version, bool $isLock = false): Collection|null;
+    public function getByUuid(string $uuid, bool $isLock = false): Collection|null;
 
     public function getByIds(array $ids, bool $isLock = false): Collection|null;
 

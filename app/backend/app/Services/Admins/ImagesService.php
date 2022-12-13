@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
+use App\Library\File\FileLibrary;
 use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
@@ -21,6 +22,8 @@ use App\Models\Masters\Images;
 use App\Repositories\Admins\Images\ImagesRepositoryInterface;
 use App\Http\Resources\Admins\ImagesResource;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+use function PHPUnit\Framework\isFalse;
 
 class ImagesService
 {
@@ -47,7 +50,7 @@ class ImagesService
      */
     public function getImage(string $uuid, int $version): BinaryFileResponse
     {
-        $collection = $this->imagesRepository->getByUuid($uuid, $version);
+        $collection = $this->imagesRepository->getByUuid($uuid);
 
         if (is_null($collection)) {
             throw new MyApplicationHttpException(
@@ -58,7 +61,8 @@ class ImagesService
 
         $resource = ImagesResource::toArrayForGetFirstByUuid($collection);
 
-        $name = $resource[IMAGES::UUID];
+        // $name = $resource[IMAGES::UUID];
+        $name = $resource[IMAGES::S3_KEY];
         $extention = $resource[IMAGES::EXTENTION];
 
         $directory = Config::get('myappFile.upload.storage.local.images.debug');
@@ -66,7 +70,8 @@ class ImagesService
         $imagePath = "{$directory}{$name}.{$extention}";
 
         // storageの存在確認
-        $file = Storage::get($imagePath);
+        // $file = Storage::get($imagePath);
+        $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
             throw new MyApplicationHttpException(
@@ -109,25 +114,35 @@ class ImagesService
             $insertCount = $this->imagesRepository->create($resource);
 
             // ファイル名
-            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
+            $storageFileName = $fileResource[Images::S3_KEY] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
 
-            $result = $file->storeAs($uploadDirectory, $fileName);
+            // $result = $file->storeAs($uploadDirectory, $storageFileName);
 
-            DB::commit();
+            $result = $file->storeAs($uploadDirectory, $storageFileName, FileLibrary::getStorageDiskByEnv());
+            if (!$result) {
+                DB::rollBack();
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::MESSAGE_500,
+                    'store file failed.'
+                );
+            }
+            // TODO ローカル以外はS3へのアップロード
 
             // ファイル名
-            $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
+            // $fileName = $fileResource[Images::UUID] . '.' . $fileResource[Images::EXTENTION];
             // ファイルの格納(公開する場合はオプションとして’public’を指定する。)
             // $request->file('image')->storeAs($uploadDirectory, $fileName, 'public');
             // $request->file('image')->storeAs($uploadDirectory, $fileName);
-            $result = $file->storeAs($uploadDirectory, $fileName);
+            // $result = $file->storeAs($uploadDirectory, $fileName);
 
             // 作成されている場合は304
             $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
             $status = ($insertCount > 0 && $result) ? 201 : 401;
+
+            DB::commit();
 
             return response()->json(
                 [
@@ -136,7 +151,7 @@ class ImagesService
                     'data'    => [
                         'uuid'    => $resource[IMAGES::UUID],
                         'ver'     => $resource[IMAGES::VERSION],
-                        'query'   => '?uuid=' . $resource[IMAGES::UUID] . '?ver=' . $resource[IMAGES::VERSION],
+                        'query'   => '?uuid=' . $resource[IMAGES::UUID] . '&ver=' . $resource[IMAGES::VERSION],
                     ],
                 ],
                 $status

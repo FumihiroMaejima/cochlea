@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\PdfLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Services\Admins\DebugService;
@@ -86,7 +87,7 @@ class AdminDebugController extends Controller
             $request->all(),
             [
                 'uuid' => ['required','uuid'],
-                'ver' => ['required','int'], // タイムスタンプ
+                'ver' => ['int', 'min:0'], // タイムスタンプ
             ]
         );
 
@@ -98,7 +99,10 @@ class AdminDebugController extends Controller
         }
 
         // サービスの実行
-        return $this->imagesService->getImage($request->uuid, $request->ver);
+        return $this->imagesService->getImage(
+            $request->uuid,
+            $request->ver ?? TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime())
+        );
     }
 
     /**

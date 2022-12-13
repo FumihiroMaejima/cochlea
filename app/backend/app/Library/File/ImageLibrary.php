@@ -12,9 +12,10 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Http\Requests\Admin\Debug\DebugFileUploadRequest;
 use App\Models\Masters\Images;
+use App\Library\Random\RandomStringLibrary;
 use App\Library\Stripe\StripeLibrary;
-use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
+use App\Library\Time\TimeLibrary;
 
 class ImageLibrary
 {
@@ -38,7 +39,8 @@ class ImageLibrary
         // mimeType
         $mimeType = $file->getMimeType();
 
-        // TODO S3へのアップロード設定
+        // S3キー
+        $s3key = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
 
 
         return [
@@ -46,7 +48,7 @@ class ImageLibrary
             Images::NAME      => $originalName,
             Images::EXTENTION => $extention,
             Images::MIME_TYPE => $mimeType,
-            Images::S3_KEY    => null,
+            Images::S3_KEY    => $s3key,
         ];
     }
 }
