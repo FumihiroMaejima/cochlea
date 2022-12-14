@@ -11,10 +11,8 @@ TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
 
 # CHANGE Variable.
 CONTAINER_NAME=app
-DOCKER_COMPOSE_PATH="/usr/local/bin/docker-compose"
-DOCKER_COMPOSE_COMMAND="$DOCKER_COMPOSE_PATH exec $CONTAINER_NAME ash"
-COMMAND_NAME=php
-FILE_NAME=/path/to/sample.php
+DOCKER_COMPOSE_PATH="/path/to/docker-compose"
+COMMAND_OPTION='/usr/bin/time -f "\n real:%e[sec]\n user:%U[sec]\n sys:%S[sec]\n Memory:%M[KB]" php ./path/to/example.php'
 
 # @param {string} message
 showMessage() {
@@ -25,7 +23,7 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE $TIME_STAMP"
 
-"$DOCKER_COMPOSE_COMMAND" /usr/bin/time -f "\n real:%e[sec]\n user:%U[sec]\n sys:%S[sec]\n Memory:%M[KB]" "$COMMAND_NAME" "$FILE_NAME"
+"$DOCKER_COMPOSE_PATH" exec "$CONTAINER_NAME" ash -c "$COMMAND_OPTION"
 
 showMessage 'finish check performance.'
 
