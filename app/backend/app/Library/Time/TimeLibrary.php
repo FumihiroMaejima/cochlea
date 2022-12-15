@@ -56,6 +56,18 @@ class TimeLibrary
     }
 
     /**
+     * convert timestamp to date time.
+     *
+     * @param string $timeStamp timestamp
+     * @param string $format datetime format
+     * @return string datetime
+     */
+    public static function timeStampToDate(int $timeStamp, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return date($format, $timeStamp);
+    }
+
+    /**
      * get formatted date time.
      *
      * @param string $dateTime 日時

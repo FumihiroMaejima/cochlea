@@ -51,6 +51,21 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test get current time stamp.
+     *
+     * @return void
+     */
+    public function testTimeStampToDate(): void
+    {
+        $timeStamp = TimeLibrary::getCurrentDateTimeTimeStamp();
+
+        $this->assertIsString(TimeLibrary::timeStampToDate($timeStamp));
+        $this->assertEquals(
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp), TimeLibrary::timeStampToDate($timeStamp)
+        );
+    }
+
+    /**
      * test current datetime format.
      *
      * @return void
