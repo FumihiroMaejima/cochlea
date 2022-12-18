@@ -82,6 +82,16 @@ MAIL_PORT=1025
 
 ## redisでLua scriptを実行させる場合
 
+`--eval`オプションを指定してファイルを実行させる
+
+キーと引数の間は` , `で区切る必要がある。(前後に半角スペースを入れる必要あり。)
+
+
+
+```shell
+$ redis-cli --eval /usr/local/share/redis/test1.lua key1 key2 , value1 value2 value3
+```
+
 ### Luaデバッガー
 
 ```shell
