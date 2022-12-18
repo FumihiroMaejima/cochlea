@@ -78,12 +78,37 @@ MAIL_PORT=1025
 
 ---
 
+# Redis
+
+## redisでLua scriptを実行させる場合
+
+### Luaデバッガー
+
+```shell
+$ redis-cli --ldb --eval /usr/local/share/redis/example-debug.lua
+Lua debugging session started, please use:
+quit    -- End the session.
+restart -- Restart the script in debug mode again.
+help    -- Show Lua script debugging commands.
+
+* Stopped at 1, stop reason = step over
+-> 1   local key = 'test'
+```
+
+#### オプションについて
+
+1. --ldb:スクリプトの実行結果はロールバックされる為サーバーに影響されない
+2. --ldb-sync-mode:スクリプトの実行結果はサーバーに実際に反映される
+
+
+---
+
 # Swaggerの設定
 
  ### ローカル環境にswagger-codegenのインストール(mockサーバーのコード出力)
 
 ```shell-session
- $ brew install swagger-codegen
+$ brew install swagger-codegen
 ```
 
 ### API仕様から出力するmockサーバーについて
