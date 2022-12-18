@@ -89,13 +89,13 @@ MAIL_PORT=1025
 
 
 ```shell
-$ redis-cli --eval /usr/local/share/redis/test1.lua key1 key2 , value1 value2 value3
+$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2 , value1 value2 value3
 ```
 
 ### Luaデバッガー
 
 ```shell
-$ redis-cli --ldb --eval /usr/local/share/redis/example-debug.lua
+$ redis-cli --ldb --eval /usr/local/share/lua/example-debug.lua
 Lua debugging session started, please use:
 quit    -- End the session.
 restart -- Restart the script in debug mode again.

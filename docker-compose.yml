@@ -78,7 +78,7 @@ services:
     container_name: ${PROJECT_NAME}_redis
     volumes:
       - redis-volume:/data
-      - ./redis:/usr/local/share/redis
+      - ./redis/lua:/usr/local/share/lua
     ports:
       - "${REDIS_PORT}:6379"
     environment:
