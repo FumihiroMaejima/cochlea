@@ -110,6 +110,42 @@ help    -- Show Lua script debugging commands.
 1. --ldb:スクリプトの実行結果はロールバックされる為サーバーに影響されない
 2. --ldb-sync-mode:スクリプトの実行結果はサーバーに実際に反映される
 
+### デバッグ方法について
+
+ファイルを展開し、ブレイクポイントを貼ることが出来る
+
+```shell
+lua debugger> l
+-> 1   local key = 'test'
+   2
+   3   redis.call('SET', key, 10)
+   4
+   5   local result = redis.call('INCR', key)
+   6
+lua debugger>
+lua debugger> b 5
+  4
+  #5   local result = redis.call('INCR', key)
+   6
+lua debugger> c
+* Stopped at 5, stop reason = break point
+->#5   local result = redis.call('INCR', key)
+lua debugger> s
+<redis> INCR test
+<reply> 11
+* Stopped at 7, stop reason = step over
+-> 7   return result
+lua debugger> p result
+<value> 11
+lua debugger> c
+
+(integer) 11
+
+(Lua debugging session ended -- dataset changes rolled back)
+
+127.0.0.1:6379> 
+```
+
 
 ---
 
