@@ -9,6 +9,7 @@ use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -199,22 +200,25 @@ class Admins extends Authenticatable implements JWTSubject
      */
     public function getRecordByCredential(string $credential, string $password, bool $isDevelopment): array|null
     {
-        $query = DB::table($this->getTable())
-            ->where(self::PASSWORD, '=', bcrypt($password));
+        $query = DB::table($this->getTable());
 
-            if ($isDevelopment) {
-                $query->where(self::NAME, '=', $credential);
-            } else {
-                $query->where(self::EMAIL, '=', $credential);
-            }
-
+        if ($isDevelopment) {
+            $query->where(self::NAME, '=', $credential);
+        } else {
+            $query->where(self::EMAIL, '=', $credential);
+        }
 
         $record = $query->get()->toArray();
 
         if (empty($record)) {
             return null;
+        } else {
+            $record = ArrayLibrary::getFirst(ArrayLibrary::toArray($record));
+            if (Hash::check($password, $record[self::PASSWORD])) {
+                return $record;
+            }
         }
 
-        return ArrayLibrary::toArray($record);
+        return null;
     }
 }
