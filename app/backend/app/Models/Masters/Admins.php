@@ -202,6 +202,7 @@ class Admins extends Authenticatable implements JWTSubject
     {
         $query = DB::table($this->getTable());
 
+        // 開発時はnameで検索
         if ($isDevelopment) {
             $query->where(self::NAME, '=', $credential);
         } else {

@@ -105,7 +105,7 @@ class RedisAuthController extends Controller
             ];
         }
 
-        $admin = (new Admins())->getRecordByCredential($credentials['name'], $credentials['password'], true);
+        $admin = (new Admins())->getRecordByCredential($credentials['email'], $credentials['password'], true);
 
         if (is_null($admin)) {
             throw new MyApplicationHttpException(
