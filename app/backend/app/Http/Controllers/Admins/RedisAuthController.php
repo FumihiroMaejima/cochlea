@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\Admins;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+// use Tymon\JWTAuth\JWT;
+// use Tymon\JWTAuth\Token;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
@@ -60,7 +62,7 @@ class RedisAuthController extends Controller
             ];
         }
 
-        $this->redisSessionLogin();
+        // $this->redisSessionLogin();
 
         // auth()がreturnするguard: /tymon/jwt-auth/src/JWTGuard
         if (!$token = auth('api-admins')->attempt($credentials)) {
@@ -84,8 +86,8 @@ class RedisAuthController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [
-                    'email' => ['required', 'string', 'email'],
-                    'password' => ['required', 'min:8'],
+                    'email' => ['required', 'string', 'between:1,50'],
+                    'password' => ['required', 'string', 'min:8', 'max:100'],
                 ]
             );
 
@@ -115,6 +117,7 @@ class RedisAuthController extends Controller
         }
 
         // TODO create token.
+        // $token = new Token('testsToken');
 
         // auth()がreturnするguard: /tymon/jwt-auth/src/JWTGuard
         /* if (!$token = auth('api-admins')->attempt($credentials)) {
