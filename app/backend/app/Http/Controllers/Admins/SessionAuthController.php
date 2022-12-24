@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
 
-class RedisAuthController extends Controller
+class SessionAuthController extends Controller
 {
     // login response
     private const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
