@@ -74,7 +74,7 @@ services:
       default:
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:7.0-alpine
     container_name: ${PROJECT_NAME}_redis
     volumes:
       - redis-volume:/data
