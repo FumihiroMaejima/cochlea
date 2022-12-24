@@ -82,7 +82,8 @@ services:
       - redis-volume:/data
       - ./redis/lua:/usr/local/share/lua
     ports:
-      - "${REDIS_PORT}:6379"
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    command: --port "${REDIS_PORT}" # TCP接続を考慮してredis-serverを起動するportを指定
     environment:
       TZ: "Asia/Tokyo"
     networks:
