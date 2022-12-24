@@ -48,10 +48,12 @@ services:
       - app-volume-store:/var/lib/mysql # データの永続化
       - ./mysql/sql:/docker-entrypoint-initdb.d
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_PORT}:${MYSQL_PORT}" # MYSQL_TCP_PORTによってコンテナ側の接続すべきportが変わる
     environment:
       DB_USER: ${DB_USER}
       DB_DATABASE: ${DB_DATABASE}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_TCP_PORT: ${MYSQL_PORT}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: "Asia/Tokyo"
     networks:
