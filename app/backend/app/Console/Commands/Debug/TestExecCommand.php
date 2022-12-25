@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Debug;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use App\Library\Time\TimeLibrary;
 
 class TestExecCommand extends Command
@@ -42,10 +43,36 @@ class TestExecCommand extends Command
         // 現在日時(タイムゾーン付き)
         echo date('c') . "\n";
 
+        $output = '';
+        $dabase = 'database_name';
 
-        # exec('ls', $output);
-        exec('ls storage/app', $output);
-        echo var_dump($output);
+        // 読み込みモードでファイルを開く
+        $fp = fopen("./storage/app/sql/sample.sql", "r");
+
+        if ($fp) {
+            // ファイルを1行ずつ取得する
+            while ($line = fgets($fp)) {
+                if(preg_match('/INSERT INTO/', $line)) {
+                    # DB名を指定
+                    $output .= str_replace('INSERT INTO ', "INSERT INTO $dabase.", $line);
+                } else if (!preg_match("/use $dabase/", $line) && !preg_match('/-- /', $line)) {
+                    // use宣言とコメントを省略
+                    $output .= $line;
+                }
+            }
+
+            // ファイルを閉じる
+            fclose($fp);
+
+            $sql = $output;
+
+            echo $sql; // SQLの出力
+
+            // SQLの実行
+            DB::statement(
+                $sql
+            );
+        }
 
         echo TimeLibrary::getCurrentDateTime() . "\n";
     }
