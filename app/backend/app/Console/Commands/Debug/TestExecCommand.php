@@ -43,7 +43,8 @@ class TestExecCommand extends Command
         echo date('c') . "\n";
 
 
-        exec('ls', $output);
+        # exec('ls', $output);
+        exec('ls storage/app', $output);
         echo var_dump($output);
 
         echo TimeLibrary::getCurrentDateTime() . "\n";
