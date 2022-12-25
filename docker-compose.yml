@@ -6,6 +6,8 @@ services:
     container_name: ${PROJECT_NAME}_app
     volumes:
       - ./app/backend:/var/www/html
+      # - ./mysql/sql:/var/www/html/storage/app/sql # プロジェクトのコンテナに個別にファイルを置きかつホストに影響を与えさせない場合
+      # - ./mysql/sql/sample.sql:/var/www/html/storage/app/sql/sample.sql# ファイルは直接マウントさせる必要がある
       - ./app/php.ini:/usr/local/etc/php/php.ini
       - ./app/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     ports:
