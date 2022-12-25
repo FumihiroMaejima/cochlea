@@ -61,7 +61,8 @@ class TimeLibraryTest extends TestCase
 
         $this->assertIsString(TimeLibrary::timeStampToDate($timeStamp));
         $this->assertEquals(
-            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp), TimeLibrary::timeStampToDate($timeStamp)
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp),
+            TimeLibrary::timeStampToDate($timeStamp)
         );
     }
 

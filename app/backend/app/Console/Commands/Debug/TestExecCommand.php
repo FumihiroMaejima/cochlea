@@ -52,10 +52,10 @@ class TestExecCommand extends Command
         if ($fp) {
             // ファイルを1行ずつ取得する
             while ($line = fgets($fp)) {
-                if(preg_match('/INSERT INTO/', $line)) {
+                if (preg_match('/INSERT INTO/', $line)) {
                     # DB名を指定
                     $output .= str_replace('INSERT INTO ', "INSERT INTO $dabase.", $line);
-                } else if (!preg_match("/use $dabase/", $line) && !preg_match('/-- /', $line)) {
+                } elseif (!preg_match("/use $dabase/", $line) && !preg_match('/-- /', $line)) {
                     // use宣言とコメントを省略
                     $output .= $line;
                 }
