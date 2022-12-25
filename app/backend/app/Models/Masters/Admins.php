@@ -8,11 +8,14 @@ use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Notifications\Admins\ResetPasswordNotification;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Random\RandomStringLibrary;
+use App\Notifications\Admins\ResetPasswordNotification;
 
 class Admins extends Authenticatable implements JWTSubject
 {
@@ -159,5 +162,64 @@ class Admins extends Authenticatable implements JWTSubject
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * get single Record record by user id.
+     *
+     * @param int $userId user id
+     * @param bool $isLock exec lock For Update
+     * @return array|null
+     */
+    public function getRecordById(int $id, bool $isLock = false): array|null
+    {
+        $query = DB::table($this->getTable())
+            ->where(static::ID, '=', $id);
+
+
+        if ($isLock) {
+            $query->lockForUpdate();
+        }
+
+        $record = $query->get()->toArray();
+
+        if (empty($record)) {
+            return null;
+        }
+
+        return ArrayLibrary::toArray($record);
+    }
+
+    /**
+     * get single Record record by user id.
+     *
+     * @param string $credential user email or name
+     * @param string $password password
+     * @param bool $isDevelopment whichever local development mode
+     * @return array|null
+     */
+    public function getRecordByCredential(string $credential, string $password, bool $isDevelopment): array|null
+    {
+        $query = DB::table($this->getTable());
+
+        // 開発時はnameで検索
+        if ($isDevelopment) {
+            $query->where(self::NAME, '=', $credential);
+        } else {
+            $query->where(self::EMAIL, '=', $credential);
+        }
+
+        $record = $query->get()->toArray();
+
+        if (empty($record)) {
+            return null;
+        } else {
+            $record = ArrayLibrary::getFirst(ArrayLibrary::toArray($record));
+            if (Hash::check($password, $record[self::PASSWORD])) {
+                return $record;
+            }
+        }
+
+        return null;
     }
 }

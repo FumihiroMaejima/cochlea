@@ -6,6 +6,8 @@ services:
     container_name: ${PROJECT_NAME}_app
     volumes:
       - ./app/backend:/var/www/html
+      # - ./mysql/sql:/var/www/html/storage/app/sql # プロジェクトのコンテナに個別にファイルを置きかつホストに影響を与えさせない場合
+      # - ./mysql/sql/sample.sql:/var/www/html/storage/app/sql/sample.sql# ファイルは直接マウントさせる必要がある
       - ./app/php.ini:/usr/local/etc/php/php.ini
       - ./app/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     ports:
@@ -48,10 +50,12 @@ services:
       - app-volume-store:/var/lib/mysql # データの永続化
       - ./mysql/sql:/docker-entrypoint-initdb.d
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_PORT}:${MYSQL_PORT}" # MYSQL_TCP_PORTによってコンテナ側の接続すべきportが変わる
     environment:
       DB_USER: ${DB_USER}
       DB_DATABASE: ${DB_DATABASE}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_TCP_PORT: ${MYSQL_PORT}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: "Asia/Tokyo"
     networks:
@@ -74,12 +78,14 @@ services:
       default:
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:7.0-alpine
     container_name: ${PROJECT_NAME}_redis
     volumes:
       - redis-volume:/data
+      - ./redis/lua:/usr/local/share/lua
     ports:
-      - "${REDIS_PORT}:6379"
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    command: --port "${REDIS_PORT}" # TCP接続を考慮してredis-serverを起動するportを指定
     environment:
       TZ: "Asia/Tokyo"
     networks:

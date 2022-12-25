@@ -127,7 +127,7 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * get all record by user id.
+     * get all records by user id.
      *
      * @param int $userId user id
      * @return array
