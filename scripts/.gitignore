@@ -1,4 +1,5 @@
 check-partition.sh
+check-performance.sh
 get-dump.sh
 restore-dump.sh
 create-aws-s3-bucket.sh

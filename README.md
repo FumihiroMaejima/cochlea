@@ -78,12 +78,83 @@ MAIL_PORT=1025
 
 ---
 
+# Redis
+
+## redisでLua scriptを実行させる場合
+
+`--eval`オプションを指定してファイルを実行させる
+
+キーと引数の間は` , `で区切る必要がある。(前後に半角スペースを入れる必要あり。)
+
+
+
+```shell
+$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2 , value1 value2 value3
+```
+
+### Luaデバッガー
+
+```shell
+$ redis-cli --ldb --eval /usr/local/share/lua/example-debug.lua
+Lua debugging session started, please use:
+quit    -- End the session.
+restart -- Restart the script in debug mode again.
+help    -- Show Lua script debugging commands.
+
+* Stopped at 1, stop reason = step over
+-> 1   local key = 'test'
+```
+
+#### オプションについて
+
+1. --ldb:スクリプトの実行結果はロールバックされる為サーバーに影響されない
+2. --ldb-sync-mode:スクリプトの実行結果はサーバーに実際に反映される
+
+### デバッグ方法について
+
+ファイルを展開し、ブレイクポイントを貼ることが出来る
+
+```shell
+lua debugger> l
+-> 1   local key = 'test'
+   2
+   3   redis.call('SET', key, 10)
+   4
+   5   local result = redis.call('INCR', key)
+   6
+lua debugger>
+lua debugger> b 5
+  4
+  #5   local result = redis.call('INCR', key)
+   6
+lua debugger> c
+* Stopped at 5, stop reason = break point
+->#5   local result = redis.call('INCR', key)
+lua debugger> s
+<redis> INCR test
+<reply> 11
+* Stopped at 7, stop reason = step over
+-> 7   return result
+lua debugger> p result
+<value> 11
+lua debugger> c
+
+(integer) 11
+
+(Lua debugging session ended -- dataset changes rolled back)
+
+127.0.0.1:6379> 
+```
+
+
+---
+
 # Swaggerの設定
 
  ### ローカル環境にswagger-codegenのインストール(mockサーバーのコード出力)
 
 ```shell-session
- $ brew install swagger-codegen
+$ brew install swagger-codegen
 ```
 
 ### API仕様から出力するmockサーバーについて
