@@ -17,11 +17,11 @@ class Kernel extends ConsoleKernel
         Commands\Admins\Database\AddUserDatabasePartitionsCommand::class,
         Commands\Admins\Database\RemoveLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\RemoveUserDatabasePartitionsCommand::class,
-        Commands\Testing\Database\TrancateTables::class,
         Commands\Debug\TestCommand::class,
         Commands\Debug\TestCommandWithParam::class,
         Commands\Debug\TestExecCommand::class,
         Commands\Debug\Seeder\UserCoinHistoriesSeedCommand::class,
+        Commands\Testing\Database\TrancateTables::class,
     ];
 
     /**
