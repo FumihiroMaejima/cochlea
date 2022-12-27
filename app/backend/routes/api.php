@@ -198,6 +198,8 @@ Route::group(['prefix' => 'v1'], function () {
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
+
+            Route::get('jwt/header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
         });
     }
 });

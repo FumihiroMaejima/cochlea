@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\PdfLibrary;
+use App\Library\JWT\JwtLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
@@ -189,5 +190,17 @@ class DebugController extends Controller
     public function getSamplePDF(): BinaryFileResponse|JsonResponse
     {
         return response()->file(PdfLibrary::getSamplePDF());
+    }
+
+    /**
+     * テスト用PDFファイルの表示
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decodeTokenHeader(Request $request): JsonResponse
+    {
+        return response()->json(JwtLibrary::decodeTokenHeader($request->tokenHeader ?? ''));
     }
 }
