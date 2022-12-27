@@ -8,32 +8,35 @@ class JwtLibrary
      * decode token header.
      *
      * @param string $value value
-     * @return string
+     * @return array
      */
-    public static function decodeTokenHeader(string $value): string
+    public static function decodeTokenHeader(string $value): array
     {
-        return exec("echo $value | base64 -D");
+        exec("echo $value | base64 -D", $output);
+        return $output;
     }
 
     /**
      * decode token payload.
      *
      * @param string $value value
-     * @return string
+     * @return array
      */
-    public static function decodeTokenPayload(string $value): string
+    public static function decodeTokenPayload(string $value): array
     {
-        return exec("echo $value | base64 -D");
+        exec("echo $value | base64 -D", $output);
+        return $output;
     }
 
     /**
      * decode token header.
      *
      * @param string $value value
-     * @return string
+     * @return array
      */
-    public static function encodeTokenHeader(string $value = '{"typ":"JWT","alg":"none"}'): string
+    public static function encodeTokenHeader(string $value = '{"typ":"JWT","alg":"none"}'): array
     {
-        return exec("echo $value | base64");
+        exec("echo $value | base64", $output);
+        return $output;
     }
 }
