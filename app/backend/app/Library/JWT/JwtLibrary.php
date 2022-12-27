@@ -12,7 +12,15 @@ class JwtLibrary
      */
     public static function decodeTokenHeader(string $value): array
     {
-        exec("echo $value | base64 -D", $output);
+        /* exec("echo \$SHELL", $shell);
+        if (preg_match('/ash/', current($shell))) {
+            exec("echo $value | base64 -d", $output);
+        } else {
+            exec("echo $value | base64 -D", $output);
+        } */
+        // ashだと小文字のdしか適用出来ない
+        exec("echo $value | base64 -d", $output);
+        // exec("echo $value | base64 -D", $output);
         return $output;
     }
 
@@ -24,7 +32,8 @@ class JwtLibrary
      */
     public static function decodeTokenPayload(string $value): array
     {
-        exec("echo $value | base64 -D", $output);
+        // exec("echo $value | base64 -D", $output);
+        exec("echo $value | base64 -d", $output);
         return $output;
     }
 
