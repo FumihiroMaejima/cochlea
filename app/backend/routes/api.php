@@ -199,7 +199,10 @@ Route::group(['prefix' => 'v1'], function () {
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
 
+            // JWTトークンヘッダーのデコード
             Route::get('jwt/header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
+            // JWTトークンペイロードのデコード
+            Route::get('jwt/payload/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenPayload'])->name('user.debug.jwt.payload.decode');
         });
     }
 });

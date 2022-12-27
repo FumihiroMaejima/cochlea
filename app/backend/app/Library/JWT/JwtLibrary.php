@@ -34,7 +34,8 @@ class JwtLibrary
     {
         // exec("echo $value | base64 -D", $output);
         exec("echo $value | base64 -d", $output);
-        return $output;
+        // 文字化けデータが含まれる為UTF-8へ変換をかける
+        return mb_convert_encoding($output, 'UTF-8');
     }
 
     /**

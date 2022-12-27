@@ -193,7 +193,7 @@ class DebugController extends Controller
     }
 
     /**
-     * テスト用PDFファイルの表示
+     * JWTトークンヘッダーのデコード
      *
      * @param Request $request
      * @return JsonResponse
@@ -202,5 +202,17 @@ class DebugController extends Controller
     public function decodeTokenHeader(Request $request): JsonResponse
     {
         return response()->json(JwtLibrary::decodeTokenHeader($request->tokenHeader ?? ''));
+    }
+
+    /**
+     * JWTトークンペイロードのデコード
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decodeTokenPayload(Request $request): JsonResponse
+    {
+        return response()->json(JwtLibrary::decodeTokenPayload($request->tokenPayload ?? ''));
     }
 }
