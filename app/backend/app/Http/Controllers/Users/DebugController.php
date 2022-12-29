@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\PdfLibrary;
+use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
@@ -214,5 +215,29 @@ class DebugController extends Controller
     public function decodeTokenPayload(Request $request): JsonResponse
     {
         return response()->json(JwtLibrary::decodeTokenPayload($request->tokenPayload ?? ''));
+    }
+
+    /**
+     * メールアドレスの暗号化
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function encryptMail(Request $request): JsonResponse
+    {
+        return response()->json(EncryptLibrary::encrypt($request->email ?? '', false));
+    }
+
+    /**
+     * メールアドレスの複合化
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decryptMail(Request $request): JsonResponse
+    {
+        return response()->json(EncryptLibrary::decrypt($request->email ?? '', false));
     }
 }

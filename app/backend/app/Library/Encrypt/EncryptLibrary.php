@@ -9,34 +9,85 @@ class EncryptLibrary
     // モード:ブロック暗号アルゴリズムの繰り返し方法
     // AES:通信データを区切り、置き換え・並べ替えのセットを複数回繰り返すアルゴリズム。(AESは128bitの平文をまとめて暗号化し、128bitの暗号文を作成する。)
     // 128:鍵長のこと。128bit
-    // ECB:ECBモード。平文ブロックを暗号化したものが暗号文ブロックとなる。(非推奨)
+    // ECB:ECBモード。平文ブロックを暗号化したものが暗号文ブロックとなる。(基本的には非推奨)
     // CBC(Cipher Block Chaining):CBCモード。直前の暗号文ブロックと平文ブロックのXOR(排他的論理和)の値を暗号化。初期化ベクトル(IV。暗号化の度に異なるランダム値)が必須。
-    /** @deprecated */
     private const MAIL_ENCRYPT_ALG_ECB = 'AES-128-ECB'; // ECBモード
     private const MAIL_ENCRYPT_ALG_CBC = 'AES-128-CBC'; // CBCモード
     private const MAIL_ENCRYPT_KEY = 'testXyZaBc159';
+
+    // CBCモード用のキー(キー&IV生成用。16桁の文字列である必要がある。)
+    private const ENCRYPT_CBC_KEY = '12F3D3F82E573FA5';
 
     /**
      * encrypt value
      *
      * @param string $value value
-     * @param string $iv initialization vector 初期化ベクトル
+     * @param bool $isCbc whichever using cbc mode
+     * @param string $key encrypt key
      * @return string encrypt value
      */
-    public static function encrypt(string $value, string $iv = self::MAIL_ENCRYPT_KEY): string
+    public static function encrypt(string $value, bool $isCbc = true, string $key = self::MAIL_ENCRYPT_KEY): string
     {
-        return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $iv);
+        // CBCモードで暗号化させる場合
+        if ($isCbc) {
+            [$cbcKey, $cbcIv] = self::generateCbcKeyAndIv();
+            $output = openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
+            return mb_convert_encoding($output, 'UTF-8');
+        } else {
+            // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
+            return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, $key);
+        }
     }
 
     /**
      * decrypt value
      *
      * @param string $value value
-     * @param string $iv initialization vector 初期化ベクトル
+     * @param bool $isCbc whichever using cbc mode
+     * @param string $key encrypt key
      * @return string encrypt value
      */
-    public static function decrypt(string $value, string $iv = self::MAIL_ENCRYPT_KEY): string
+    public static function decrypt(string $value, bool $isCbc = true, string $key = self::MAIL_ENCRYPT_KEY): string
     {
-        return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $iv);
+        // CBCモードで暗号化させる場合
+        if ($isCbc) {
+            [$cbcKey, $cbcIv] = self::generateCbcKeyAndIv();
+            $output = openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
+            return mb_convert_encoding($output, 'UTF-8');
+        } else {
+            // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
+            return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, $key);
+        }
+    }
+
+    /**
+     * create initialization vector
+     *
+     * @param string $value length of iv
+     * @return string initialization vector
+     */
+    public static function createIv(int $value = 16): string
+    {
+        return openssl_random_pseudo_bytes($value);
+    }
+
+    /**
+     * generate passphrase, initialization vector
+     *
+     * @return string initialization vector
+     */
+    public static function generateCbcKeyAndIv(): array
+    {
+        // salt and pass config
+        $salt   = hex2bin(self::ENCRYPT_CBC_KEY);
+        $pass   = self::MAIL_ENCRYPT_KEY;
+
+        // generate iv and key
+        $keyHash = md5($pass . $salt);
+        $IvHash = md5(hex2bin($keyHash) . $pass . $salt);
+        $key   = hex2bin($keyHash);
+        // IVは16文字である必要がある。
+        $iv    = hex2bin($IvHash);
+        return [$key, $iv];
     }
 }

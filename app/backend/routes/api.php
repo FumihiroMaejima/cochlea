@@ -203,6 +203,11 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('jwt/header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
             // JWTトークンペイロードのデコード
             Route::get('jwt/payload/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenPayload'])->name('user.debug.jwt.payload.decode');
+
+            // メールアドレスの暗号化
+            Route::get('email/encrypt', [\App\Http\Controllers\Users\DebugController::class, 'encryptMail'])->name('user.debug.email.encrypt');
+            // メールアドレスの複合化
+            Route::get('email/decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
         });
     }
 });
