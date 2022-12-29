@@ -2,185 +2,132 @@
 
 namespace App\Library\Session;
 
-use Illuminate\Http\Request;
+use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
+use Predis\Response\Status;
+use App\Library\Message\StatusCodeMessages;
+use App\Exceptions\MyApplicationHttpException;
 use App\Trait\CheckHeaderTrait;
 
 class SessionLibrary
 {
     use CheckHeaderTrait;
 
-    private const SESSION_KEY_NAME_USER_PREFIX = 'user_';
-    private const SESSION_HEADER_TOKEN_NAME = 'Authorization';
-    private const SESSION_HEADER_ID_NAME = 'X-Auth-ID';
+    private const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
 
-    // ヘッダーデータのkey名
-    private const HEADER_ARRAY_KEY_NAME_ID = 'userId';
-    private const HEADER_ARRAY_KEY_NAME_TOKEN = 'token';
+    private const SET_CACHE_RESULT_VALUE = 'OK';
+    private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
 
-    /**
-     * check session by request and exit session value.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param string $value
-     * @return bool
-     */
-    public static function checkSession(Request $request): bool
-    {
-        $headers = self::getHeaderData($request);
+    private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
+    private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
 
-        $sessionValue = json_decode(
-            self::getSessionByKey(self::getSessionKey($headers[self::HEADER_ARRAY_KEY_NAME_ID]))
-        )->{self::HEADER_ARRAY_KEY_NAME_TOKEN};
-
-        return Hash::check(
-            $headers[self::HEADER_ARRAY_KEY_NAME_TOKEN],
-            $sessionValue
-        );
-    }
+    private const REDIS_CONNECTION = 'session';
 
     /**
-     * check session has session key.
+     * get cache value by Key.
      *
      * @param string $key
-     * @param string $value
-     * @return bool
+     * @return mixed
      */
-    public static function checkSessionByKey(string $key, string $value): bool
+    public static function getByKey(string $key): mixed
     {
-        return Hash::check($value, Redis::get($key));
+        if (Config::get('app.env') === 'testing') {
+            return null;
+        }
+
+        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+
+        if (is_null($cache)) {
+            return $cache;
+        }
+
+        return json_decode($cache, true);
     }
 
     /**
-     * check session has session key.
+     * set cache to redis.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param int $expire
+     * @return void
+     */
+    public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHE_EXPIRE): void
+    {
+        // test時は時効しない
+        if (Config::get('app.env') !== 'testing') {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
+            /** @var Status $result redisへの設定処理結果 */
+            $result = Redis::connection(self::REDIS_CONNECTION)->set($key, $value);
+            $payload = $result->getPayload();
+
+            if ($payload !== self::SET_CACHE_RESULT_VALUE) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'set cache action is failure.'
+                );
+            }
+
+            // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
+            /** @var int $setExpireResult 期限設定処理結果 */
+            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)->expireAt($key, time() + $expire);
+
+            if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'set cache expire action is failure.'
+                );
+            }
+        }
+    }
+
+    /**
+     * remove cache by request header data.
+     *
+     * @param string $key
+     * @param bool $isIgnore ignore data check result.
+     * @return bool
+     */
+    public static function deleteCache(string $key, bool $isIgnore = false): void
+    {
+        $cache = self::getByKey($key);
+
+        if (empty($cache)) {
+            if ($isIgnore || (Config::get('app.env') === 'testing')) {
+                return;
+            }
+
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'cache is not exist.'
+            );
+        }
+
+        /** @var int $result 削除結果 */
+        $result = Redis::connection(self::REDIS_CONNECTION)->del($key);
+
+        if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'delete cache action is failure.'
+            );
+        }
+    }
+
+    /**
+     * check has cache by key.
      *
      * @param string $key
      * @return bool
      */
-    public static function hasSession(string $key): bool
+    public static function hasCache(string $key): bool
     {
-        $session = Redis::get($key);
+        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
 
-        return $session ? true : false;
-    }
-
-    /**
-     * get session value.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return bool
-     */
-    public static function getSession(Request $request): string
-    {
-        return self::getSessionByKey(
-            self::getSessionKey(
-                self::getHeaderData($request)[self::HEADER_ARRAY_KEY_NAME_ID]
-            )
-        );
-    }
-
-    /**
-     * get session value by Key.
-     *
-     * @param string $key
-     * @return string
-     */
-    public static function getSessionByKey(string $key): string
-    {
-        $session = Redis::get($key);
-
-        return $session ?? '';
-    }
-
-    /**
-     * remove session by request header data.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return bool
-     */
-    public static function removeSession(Request $request): void
-    {
-        $key = self::getSessionKey(
-            self::getHeaderData($request)[self::HEADER_ARRAY_KEY_NAME_ID]
-        );
-
-        Redis::del($key);
-    }
-
-    /**
-     * start session.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return bool
-     */
-    public static function startSession(Request $request): void
-    {
-        $headers = self::getHeaderData($request);
-
-        self::setSession(
-            self::getSessionKey($headers[self::HEADER_ARRAY_KEY_NAME_ID]),
-            $headers[self::HEADER_ARRAY_KEY_NAME_TOKEN]
-        );
-    }
-
-    /**
-     * set session to redis.
-     *
-     * @param string $key
-     * @param string $value
-     * @return bool
-     */
-    public static function setSession(string $key, string $value): void
-    {
-        $hashedValue = self::hashSession($value);
-        Redis::set($key, json_encode(
-            [
-                self::HEADER_ARRAY_KEY_NAME_TOKEN => $hashedValue
-            ]
-        ));
-    }
-
-    /**
-     * hash session data.
-     *
-     * @param string $value
-     * @return string
-     */
-    private static function hashSession(string $value): string
-    {
-        // hash化
-        return Hash::make(
-            $value,
-            [
-                'rounds' => 12,
-            ]
-        );
-    }
-
-    /**
-     * get session key strings.
-     *
-     * @param int $userId
-     * @return string
-     */
-    private static function getSessionKey(int $userId): string
-    {
-        return self::SESSION_KEY_NAME_USER_PREFIX . $userId;
-    }
-
-    /**
-     * get header data.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return array
-     */
-    private static function getHeaderData(Request $request): array
-    {
-        return [
-            self::HEADER_ARRAY_KEY_NAME_ID    => $request->header(self::SESSION_HEADER_ID_NAME),
-            self::HEADER_ARRAY_KEY_NAME_TOKEN => $request->header(self::SESSION_HEADER_TOKEN_NAME),
-        ];
+        return $cache ? true : false;
     }
 }
