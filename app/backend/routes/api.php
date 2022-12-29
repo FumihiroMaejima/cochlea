@@ -199,15 +199,22 @@ Route::group(['prefix' => 'v1'], function () {
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
 
-            // JWTトークンヘッダーのデコード
-            Route::get('jwt/header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
-            // JWTトークンペイロードのデコード
-            Route::get('jwt/payload/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenPayload'])->name('user.debug.jwt.payload.decode');
+            // JWT関係
+            Route::group(['prefix' => 'jwt'], function () {
+                // JWTトークンヘッダーのデコード
+                Route::get('header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
+                // JWTトークンペイロードのデコード
+                Route::get('payload/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenPayload'])->name('user.debug.jwt.payload.decode');
+            });
 
-            // メールアドレスの暗号化
-            Route::get('email/encrypt', [\App\Http\Controllers\Users\DebugController::class, 'encryptMail'])->name('user.debug.email.encrypt');
-            // メールアドレスの複合化
-            Route::get('email/decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
+            // メールアドレス関係
+            Route::group(['prefix' => 'email'], function () {
+                // メールアドレスの暗号化
+                Route::get('encrypt', [\App\Http\Controllers\Users\DebugController::class, 'encryptMail'])->name('user.debug.email.encrypt');
+                // メールアドレスの複合化
+                Route::get('decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
+            });
+
         });
     }
 });
