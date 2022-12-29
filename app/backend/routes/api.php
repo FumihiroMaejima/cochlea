@@ -214,7 +214,6 @@ Route::group(['prefix' => 'v1'], function () {
                 // メールアドレスの複合化
                 Route::get('decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
             });
-
         });
     }
 });

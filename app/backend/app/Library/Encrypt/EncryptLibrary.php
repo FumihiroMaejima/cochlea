@@ -30,7 +30,7 @@ class EncryptLibrary
             return mb_convert_encoding($output, 'UTF-8');
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
-            return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::_getEmailEBCEncryptKey());
+            return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::getEmailEBCEncryptKey());
         }
     }
 
@@ -50,7 +50,7 @@ class EncryptLibrary
             return mb_convert_encoding($output, 'UTF-8');
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
-            return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::_getEmailEBCEncryptKey());
+            return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::getEmailEBCEncryptKey());
         }
     }
 
@@ -73,8 +73,8 @@ class EncryptLibrary
     public static function generateCbcKeyAndIv(): array
     {
         // salt and pass config
-        $salt   = hex2bin(self::_getEmailCBCEncryptKey());
-        $pass   = self::_getEmailEBCEncryptKey();
+        $salt   = hex2bin(self::getEmailCBCEncryptKey());
+        $pass   = self::getEmailEBCEncryptKey();
 
         // generate iv and key
         $keyHash = md5($pass . $salt);
@@ -90,7 +90,7 @@ class EncryptLibrary
      *
      * @return string
      */
-    private static function _getEmailEBCEncryptKey(): string
+    private static function getEmailEBCEncryptKey(): string
     {
         return config('myappEncrypt.email.ecb');
     }
@@ -100,7 +100,7 @@ class EncryptLibrary
      *
      * @return string
      */
-    private static function _getEmailCBCEncryptKey(): string
+    private static function getEmailCBCEncryptKey(): string
     {
         // CBCモード用のキー(キー&IV生成用。16桁の文字列である必要がある。)
         return config('myappEncrypt.email.cbc');
