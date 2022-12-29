@@ -13,20 +13,15 @@ class EncryptLibrary
     // CBC(Cipher Block Chaining):CBCモード。直前の暗号文ブロックと平文ブロックのXOR(排他的論理和)の値を暗号化。初期化ベクトル(IV。暗号化の度に異なるランダム値)が必須。
     private const MAIL_ENCRYPT_ALG_ECB = 'AES-128-ECB'; // ECBモード
     private const MAIL_ENCRYPT_ALG_CBC = 'AES-128-CBC'; // CBCモード
-    private const MAIL_ENCRYPT_KEY = 'testXyZaBc159';
-
-    // CBCモード用のキー(キー&IV生成用。16桁の文字列である必要がある。)
-    private const ENCRYPT_CBC_KEY = '12F3D3F82E573FA5';
 
     /**
      * encrypt value
      *
      * @param string $value value
      * @param bool $isCbc whichever using cbc mode
-     * @param string $key encrypt key
      * @return string encrypt value
      */
-    public static function encrypt(string $value, bool $isCbc = true, string $key = self::MAIL_ENCRYPT_KEY): string
+    public static function encrypt(string $value, bool $isCbc = true): string
     {
         // CBCモードで暗号化させる場合
         if ($isCbc) {
@@ -35,7 +30,7 @@ class EncryptLibrary
             return mb_convert_encoding($output, 'UTF-8');
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
-            return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, $key);
+            return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::_getEmailEBCEncryptKey());
         }
     }
 
@@ -44,10 +39,9 @@ class EncryptLibrary
      *
      * @param string $value value
      * @param bool $isCbc whichever using cbc mode
-     * @param string $key encrypt key
      * @return string encrypt value
      */
-    public static function decrypt(string $value, bool $isCbc = true, string $key = self::MAIL_ENCRYPT_KEY): string
+    public static function decrypt(string $value, bool $isCbc = true): string
     {
         // CBCモードで暗号化させる場合
         if ($isCbc) {
@@ -56,7 +50,7 @@ class EncryptLibrary
             return mb_convert_encoding($output, 'UTF-8');
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
-            return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, $key);
+            return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::_getEmailEBCEncryptKey());
         }
     }
 
@@ -74,13 +68,13 @@ class EncryptLibrary
     /**
      * generate passphrase, initialization vector
      *
-     * @return string initialization vector
+     * @return array key & initialization vector
      */
     public static function generateCbcKeyAndIv(): array
     {
         // salt and pass config
-        $salt   = hex2bin(self::ENCRYPT_CBC_KEY);
-        $pass   = self::MAIL_ENCRYPT_KEY;
+        $salt   = hex2bin(self::_getEmailCBCEncryptKey());
+        $pass   = self::_getEmailEBCEncryptKey();
 
         // generate iv and key
         $keyHash = md5($pass . $salt);
@@ -89,5 +83,26 @@ class EncryptLibrary
         // IVは16文字である必要がある。
         $iv    = hex2bin($IvHash);
         return [$key, $iv];
+    }
+
+    /**
+     * get ecb key.
+     *
+     * @return string
+     */
+    private static function _getEmailEBCEncryptKey(): string
+    {
+        return config('myappEncrypt.email.ecb');
+    }
+
+    /**
+     * get cbc key.
+     *
+     * @return string
+     */
+    private static function _getEmailCBCEncryptKey(): string
+    {
+        // CBCモード用のキー(キー&IV生成用。16桁の文字列である必要がある。)
+        return config('myappEncrypt.email.cbc');
     }
 }
