@@ -214,6 +214,14 @@ Route::group(['prefix' => 'v1'], function () {
                 // メールアドレスの複合化
                 Route::get('decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
             });
+
+            // 日時関係
+            Route::group(['prefix' => 'datetimes'], function () {
+                // 日付からタイムスタンプ
+                Route::get('timestamp', [\App\Http\Controllers\Users\DebugController::class, 'getTimeStampByDateTime'])->name('user.debug.datetimes.timestamp');
+                // タイムスタンプから日付
+                Route::get('datetime', [\App\Http\Controllers\Users\DebugController::class, 'getDateTimeByTimeStamp'])->name('user.debug.datetimes.datetime');
+            });
         });
     }
 });

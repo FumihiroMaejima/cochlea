@@ -240,4 +240,26 @@ class DebugController extends Controller
     {
         return response()->json(EncryptLibrary::decrypt($request->email ?? '', false));
     }
+
+    /**
+     * 指定された日付からタイムスタンプを取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTimeStampByDateTime(Request $request): JsonResponse
+    {
+        return response()->json(TimeLibrary::strToTimeStamp($request->datetime ?? '', ));
+    }
+
+    /**
+     * 指定されたタイムスタンプから日付を取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDateTimeByTimeStamp(Request $request): JsonResponse
+    {
+        return response()->json(TimeLibrary::timeStampToDate($request->timestamp ?? 0, ));
+    }
 }
