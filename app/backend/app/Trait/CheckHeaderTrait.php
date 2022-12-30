@@ -25,7 +25,7 @@ trait CheckHeaderTrait
      * get session id from header
      *
      * @param Illuminate\Http\Request $request
-     * @return string|null
+     * @return ?string
      */
     public static function getSessionId(Request $request): ?string
     {
