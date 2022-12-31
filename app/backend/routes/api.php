@@ -198,6 +198,30 @@ Route::group(['prefix' => 'v1'], function () {
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
+
+            // JWT関係
+            Route::group(['prefix' => 'jwt'], function () {
+                // JWTトークンヘッダーのデコード
+                Route::get('header/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenHeader'])->name('user.debug.jwt.header.decode');
+                // JWTトークンペイロードのデコード
+                Route::get('payload/decode', [\App\Http\Controllers\Users\DebugController::class, 'decodeTokenPayload'])->name('user.debug.jwt.payload.decode');
+            });
+
+            // メールアドレス関係
+            Route::group(['prefix' => 'email'], function () {
+                // メールアドレスの暗号化
+                Route::get('encrypt', [\App\Http\Controllers\Users\DebugController::class, 'encryptMail'])->name('user.debug.email.encrypt');
+                // メールアドレスの複合化
+                Route::get('decrypt', [\App\Http\Controllers\Users\DebugController::class, 'decryptMail'])->name('user.debug.email.decrypt');
+            });
+
+            // 日時関係
+            Route::group(['prefix' => 'datetimes'], function () {
+                // 日付からタイムスタンプ
+                Route::get('timestamp', [\App\Http\Controllers\Users\DebugController::class, 'getTimeStampByDateTime'])->name('user.debug.datetimes.timestamp');
+                // タイムスタンプから日付
+                Route::get('datetime', [\App\Http\Controllers\Users\DebugController::class, 'getDateTimeByTimeStamp'])->name('user.debug.datetimes.datetime');
+            });
         });
     }
 });

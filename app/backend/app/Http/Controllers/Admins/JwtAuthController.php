@@ -2,20 +2,14 @@
 
 namespace App\Http\Controllers\Admins;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
-use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
-use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\Admins;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
-// use Tymon\JWTAuth\JWT;
-// use Tymon\JWTAuth\Token;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
 
-class SessionAuthController extends Controller
+class JwtAuthController extends Controller
 {
     // login response
     private const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
@@ -31,6 +25,9 @@ class SessionAuthController extends Controller
     // token prefix
     private const TOKEN_PREFIX = 'bearer';
 
+    // token prefix
+    private const GUARD_NAME = 'api-admins-jwt';
+
     /**
      * Create a new AuthController instance.
      *
@@ -39,7 +36,7 @@ class SessionAuthController extends Controller
     public function __construct()
     {
         // Illuminate\Routing\Controller
-        $this->middleware('auth:api-admins', ['except' => ['login']]);
+        $this->middleware('auth:' . self::GUARD_NAME, ['except' => ['login']]);
     }
 
     /**
@@ -62,69 +59,12 @@ class SessionAuthController extends Controller
             ];
         }
 
-        // $this->redisSessionLogin();
-
         // auth()がreturnするguard: /tymon/jwt-auth/src/JWTGuard
-        if (!$token = auth('api-admins')->attempt($credentials)) {
+        if (!$token = auth(self::GUARD_NAME)->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
-    }
-
-    /**
-     * redis セッションによるログイン
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function redisSessionLogin(Request $request)
-    {
-        $credentials = [];
-        if (Config::get('app.env') === 'production' || Config::get('app.env') === 'testing') {
-            // バリデーションチェック
-            $validator = Validator::make(
-                $request->all(),
-                [
-                    'email' => ['required', 'string', 'between:1,50'],
-                    'password' => ['required', 'string', 'min:8', 'max:100'],
-                ]
-            );
-
-            if ($validator->fails()) {
-                throw new MyApplicationHttpException(
-                    StatusCodeMessages::STATUS_422,
-                    'validation error.',
-                    $validator->errors()->toArray()
-                );
-            }
-            $credentials = [$request->email, $request->password];
-        } else {
-            // ローカル開発時はnameだけでログインする。
-            $credentials = [
-                'email'     => $request->email,
-                'password' => Config::get('myappSeeder.seeder.password.testadmin')
-            ];
-        }
-
-        $admin = (new Admins())->getRecordByCredential($credentials['email'], $credentials['password'], true);
-
-        if (is_null($admin)) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_404,
-                'not exist.'
-            );
-        }
-
-        // TODO create token.
-        // $token = new Token('testsToken');
-
-        // auth()がreturnするguard: /tymon/jwt-auth/src/JWTGuard
-        /* if (!$token = auth('api-admins')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        } */
-
-        // return $this->respondWithToken($token);
     }
 
     /**
@@ -136,7 +76,7 @@ class SessionAuthController extends Controller
      */
     public function getAuthUser()
     {
-        $user = auth('api-admins')->user();
+        $user = auth(self::GUARD_NAME)->user();
         return response()->json($this->getAdminResource($user));
     }
 
@@ -149,7 +89,7 @@ class SessionAuthController extends Controller
      */
     public function logout()
     {
-        auth('api-admins')->logout();
+        auth(self::GUARD_NAME)->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -162,7 +102,7 @@ class SessionAuthController extends Controller
     public function refresh()
     {
         // Tymon\JWTAuth\JWT
-        return $this->respondWithToken(auth('api-admins')->refresh());
+        return $this->respondWithToken(auth(self::GUARD_NAME)->refresh());
     }
 
     /**
@@ -175,7 +115,7 @@ class SessionAuthController extends Controller
     protected function respondWithToken($token)
     {
         /** @var Admins $user authenticated admin model */
-        $user = auth('api-admins')->user();
+        $user = auth(self::GUARD_NAME)->user();
 
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
@@ -183,7 +123,7 @@ class SessionAuthController extends Controller
         return response()->json([
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
             self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => self::TOKEN_PREFIX,
-            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth('api-admins')->factory()->getTTL() * 60,
+            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth(self::GUARD_NAME)->factory()->getTTL() * 60,
             self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
         ]);
     }

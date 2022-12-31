@@ -16,9 +16,21 @@ trait CheckHeaderTrait
      * @param array $targets
      * @return boolean
      */
-    public function checkRequestAuthority(Request $request, array $targets)
+    public function checkRequestAuthority(Request $request, array $targets): bool
     {
         return in_array($request->header(Config::get('myapp.headers.authority')), $targets, true);
+    }
+
+    /**
+     * get session id from header
+     *
+     * @param Illuminate\Http\Request $request
+     * @return ?string
+     */
+    public static function getSessionId(Request $request): ?string
+    {
+        $sessionId = $request->header(Config::get('myapp.headers.authorization'));
+        return (!is_string($sessionId) || empty($sessionId)) ? null : $sessionId;
     }
 
     /**

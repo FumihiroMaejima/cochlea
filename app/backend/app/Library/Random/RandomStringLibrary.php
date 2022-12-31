@@ -9,6 +9,9 @@ class RandomStringLibrary
 {
     public const DEFAULT_RANDOM_STRING_LENGTH = 12;
     public const RANDOM_STRING_LENGTH_24 = 24;
+    public const RANDOM_STRING_LENGTH_36 = 36;
+    public const RANDOM_STRING_LENGTH_48 = 48;
+    public const RANDOM_STRING_LENGTH_60 = 60;
 
     private const RANDOM_MIN_VALUE_97 = 97; // aの文字
     private const RANDOM_MAX_VALUE_122 = 122; // zの文字

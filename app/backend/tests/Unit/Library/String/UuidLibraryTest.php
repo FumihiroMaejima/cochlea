@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Config;
 class UuidLibraryTest extends TestCase
 {
     private const VERSION4_STRING = 4;
-    private const HEX_11 = 0b1011;
+    // dechex()やhexdec()などを使う時は文字列にする必要がある
+    private const BIN_11 = 0b1011; // 2進数の11。bit演算用
+    private const HEX_11 = 0xB; // 16進数の11。
+    private const HEX_125 = 0x7D; // 16進数の125。
+    private const HEX_255 = 0xFF; // 16進数の255。
 
     /**
      * setUpは各テストメソッドが実行される前に実行する

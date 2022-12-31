@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\PdfLibrary;
+use App\Library\Encrypt\EncryptLibrary;
+use App\Library\JWT\JwtLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
@@ -189,5 +191,75 @@ class DebugController extends Controller
     public function getSamplePDF(): BinaryFileResponse|JsonResponse
     {
         return response()->file(PdfLibrary::getSamplePDF());
+    }
+
+    /**
+     * JWTトークンヘッダーのデコード
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decodeTokenHeader(Request $request): JsonResponse
+    {
+        return response()->json(JwtLibrary::decodeTokenHeader($request->tokenHeader ?? ''));
+    }
+
+    /**
+     * JWTトークンペイロードのデコード
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decodeTokenPayload(Request $request): JsonResponse
+    {
+        return response()->json(JwtLibrary::decodeTokenPayload($request->tokenPayload ?? ''));
+    }
+
+    /**
+     * メールアドレスの暗号化
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function encryptMail(Request $request): JsonResponse
+    {
+        return response()->json(EncryptLibrary::encrypt($request->email ?? '', false));
+    }
+
+    /**
+     * メールアドレスの複合化
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function decryptMail(Request $request): JsonResponse
+    {
+        return response()->json(EncryptLibrary::decrypt($request->email ?? '', false));
+    }
+
+    /**
+     * 指定された日付からタイムスタンプを取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTimeStampByDateTime(Request $request): JsonResponse
+    {
+        return response()->json(TimeLibrary::strToTimeStamp($request->datetime ?? ''));
+    }
+
+    /**
+     * 指定されたタイムスタンプから日付を取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDateTimeByTimeStamp(Request $request): JsonResponse
+    {
+        return response()->json(TimeLibrary::timeStampToDate($request->timestamp ?? 0));
     }
 }
