@@ -48,7 +48,14 @@ return [
         ],
         'api-admins' => [
             // 'driver' => 'token',
-            'driver'   => 'jwt',
+            // 'driver'   => 'jwt', // tymon-jwtを使う場合
+            'driver'   => 'session',
+            'provider' => 'admins',
+            'hash'     => false,
+        ],
+        'api-admins-jwt' => [
+            // 'driver' => 'token',
+            'driver'   => 'jwt', // tymon-jwtを使う場合
             'provider' => 'admins',
             'hash'     => false,
         ],
