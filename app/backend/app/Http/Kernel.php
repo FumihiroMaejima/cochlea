@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
-            // Laravelセッションを利用する場合はStartSession,ShareErrorsFromSessionのコメントアウト外す
+            // Laravelセッションを利用する場合はStartSession,ShareErrorsFromSessionのコメントアウトを外す
             // \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
