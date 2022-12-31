@@ -25,6 +25,8 @@ class AuthController extends Controller
     // token prefix
     private const TOKEN_PREFIX = 'bearer';
 
+    private const SESSION_TTL = 60; // 60秒
+
     /**
      * Create a new AuthController instance.
      *
@@ -114,13 +116,15 @@ class AuthController extends Controller
         /** @var Admins $user authenticated admin model */
         $user = auth('api-admins')->user();
 
+        $ttl = self::SESSION_TTL * 60;
+
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
         // ユーザー情報を返す。
         return response()->json([
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
             self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => self::TOKEN_PREFIX,
-            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => auth('api-admins')->factory()->getTTL() * 60,
+            self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => $ttl,
             self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
         ]);
     }
