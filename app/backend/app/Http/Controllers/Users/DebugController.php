@@ -249,7 +249,7 @@ class DebugController extends Controller
      */
     public function getTimeStampByDateTime(Request $request): JsonResponse
     {
-        return response()->json(TimeLibrary::strToTimeStamp($request->datetime ?? '', ));
+        return response()->json(TimeLibrary::strToTimeStamp($request->datetime ?? ''));
     }
 
     /**
@@ -260,6 +260,6 @@ class DebugController extends Controller
      */
     public function getDateTimeByTimeStamp(Request $request): JsonResponse
     {
-        return response()->json(TimeLibrary::timeStampToDate($request->timestamp ?? 0, ));
+        return response()->json(TimeLibrary::timeStampToDate($request->timestamp ?? 0));
     }
 }

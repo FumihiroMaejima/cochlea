@@ -16,6 +16,7 @@ use App\Library\Session\SessionLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
 use App\Trait\CheckHeaderTrait;
+use DateTimeInterface;
 
 class StartRedisSession
 {
@@ -56,7 +57,7 @@ class StartRedisSession
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -84,7 +85,7 @@ class StartRedisSession
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Session\Session  $session
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
      */
     protected function handleRequestWhileBlocking(Request $request, $session, Closure $next)
@@ -119,7 +120,7 @@ class StartRedisSession
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Session\Session  $session
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
      */
     protected function handleStatefulRequest(Request $request, $session, Closure $next)
@@ -234,9 +235,15 @@ class StartRedisSession
     {
         if ($this->sessionIsPersistent($config = $this->manager->getSessionConfig())) {
             $response->headers->setCookie(new Cookie(
-                $session->getName(), $session->getId(), $this->getCookieExpirationDate(),
-                $config['path'], $config['domain'], $config['secure'] ?? false,
-                $config['http_only'] ?? true, false, $config['same_site'] ?? null
+                $session->getName(),
+                $session->getId(),
+                $this->getCookieExpirationDate(),
+                $config['path'],
+                $config['domain'],
+                $config['secure'] ?? false,
+                $config['http_only'] ?? true,
+                false,
+                $config['same_site'] ?? null
             ));
         }
     }
@@ -267,7 +274,7 @@ class StartRedisSession
     /**
      * Get the cookie lifetime in seconds.
      *
-     * @return \DateTimeInterface|int
+     * @return DateTimeInterface|int
      */
     protected function getCookieExpirationDate()
     {
