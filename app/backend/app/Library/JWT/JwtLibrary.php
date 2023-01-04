@@ -4,6 +4,9 @@ namespace App\Library\JWT;
 
 class JwtLibrary
 {
+    public const TOKEN_PREFIX = 'bearer';
+    public const TOKEN_PREFIX_WITH_WHITE_SPACE = 'bearer ';
+
     /**
      * decode token header.
      *
