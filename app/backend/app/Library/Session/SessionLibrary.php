@@ -14,6 +14,8 @@ class SessionLibrary
 {
     use CheckHeaderTrait;
 
+    public const SESSION_TTL_SECOND = 60; // 60秒
+
     private const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
 
     private const SET_CACHE_RESULT_VALUE = 'OK';

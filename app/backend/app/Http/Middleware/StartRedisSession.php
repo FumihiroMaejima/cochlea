@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Session\SessionLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Random\RandomStringLibrary;
 use App\Exceptions\MyApplicationHttpException;
 use App\Trait\CheckHeaderTrait;
 use DateTimeInterface;
@@ -70,7 +71,49 @@ class StartRedisSession
         // TODO セッションの有無チェックと新規作成と設定
         // ユーザーIDの照会、レスポンスヘッダーに設定
         $sessionId = self::getSessionId($request);
-        $userId = self::getUserId($request, true);
+
+        // true内の処理はcontrollerで適用させるmiddlewareで実行
+        if ($sessionId) {
+            $userId = self::getUserId($request, true);
+
+            // ユーザーIDが設定されていない場合
+            $sessionKey = empty($userId) ? 'no_auth_session_id:'.$sessionId : 'session_id:'.$sessionId . ':'. $userId;
+            $token = SessionLibrary::getByKey($sessionKey);
+
+
+            // トークンが設定されていない場合
+            if (empty($token)) {
+                // ユーザーIDが設定されていない場合
+                if (empty($userId)) {
+                    $newSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+                    $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+
+                    SessionLibrary::setCache('no_auth_session_id:'. $newSessionId, $token, 1800);
+                } else {
+                    // リフレッシュトークンの取得
+                    $refreshToken = SessionLibrary::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
+                    if (empty($refreshToken)) {
+                        // リフレッシュトークンも無いならセッション切れエラーとする
+                        throw new MyApplicationHttpException(
+                            StatusCodeMessages::STATUS_401,
+                            'Unauthorized. Session Failure Error.'
+                        );
+                    }
+
+                    $newSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+                    $newToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+                    $newRefreshToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+                    SessionLibrary::setCache('session_id:'.$newSessionId . ':'. $userId, $newToken, 1800);
+                    SessionLibrary::setCache('refresh_token_session_id:'.$newSessionId . ':'. $userId, $newRefreshToken, 1800);
+                }
+            }
+        } else {
+            // 未ログインユーザー用のセッションの作成
+            $noAuthSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+            $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+
+            SessionLibrary::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
+        }
 
         if ($this->manager->shouldBlock() ||
             ($request->route() instanceof Route && $request->route()->locksFor())) {
