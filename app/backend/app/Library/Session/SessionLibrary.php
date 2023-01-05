@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
 use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Random\RandomStringLibrary;
 use App\Trait\CheckHeaderTrait;
 
 class SessionLibrary
@@ -131,5 +132,23 @@ class SessionLibrary
         $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
 
         return $cache ? true : false;
+    }
+
+    /**
+     * generate session by user id.
+     *
+     * @param int $userId user id
+     * @return string
+     */
+    public static function generateSessionByUserId(int $userId): string
+    {
+        $sessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+        $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+        $refreshToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+
+        self::setCache('session_id:'.$sessionId . ':'. $userId, $token, 1800);
+        self::setCache('refresh_token_session_id:'.$sessionId . ':'. $userId, $refreshToken, 3600);
+
+        return $sessionId;
     }
 }

@@ -74,11 +74,8 @@ class CustomAuthenticate
                         );
                     }
 
-                    $newSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-                    $newToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-                    $newRefreshToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-                    SessionLibrary::setCache('session_id:'.$newSessionId . ':'. $userId, $newToken, 1800);
-                    SessionLibrary::setCache('refresh_token_session_id:'.$newSessionId . ':'. $userId, $newRefreshToken, 1800);
+                    // 新しいセッションの設定
+                    SessionLibrary::generateSessionByUserId($userId);
                 }
             }
         } else {
