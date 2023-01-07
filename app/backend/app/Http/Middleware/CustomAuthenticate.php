@@ -50,22 +50,16 @@ class CustomAuthenticate
         if ($sessionId) {
             $userId = self::getUserId($request, true);
 
-            // ユーザーIDが設定されていない場合
-            $sessionKey = empty($userId) ? 'no_auth_session_id:'.$sessionId : 'session_id:'.$sessionId . ':'. $userId;
-            $token = SessionLibrary::getByKey($sessionKey);
-
+            $token = SessionLibrary::getSssionTokenByUserIdAndSessionId($userId, $sessionId);
 
             // トークンが設定されていない場合
             if (empty($token)) {
                 // ユーザーIDが設定されていない場合
                 if (empty($userId)) {
-                    $newSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-                    $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-
-                    SessionLibrary::setCache('no_auth_session_id:'. $newSessionId, $token, 1800);
+                    SessionLibrary::generateNoAuthSession();
                 } else {
                     // リフレッシュトークンの取得
-                    $refreshToken = SessionLibrary::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
+                    $refreshToken = SessionLibrary::getRefreshTokenByUserIdAndSessionId($userId, $sessionId);
                     if (empty($refreshToken)) {
                         // リフレッシュトークンも無いならセッション切れエラーとする
                         throw new MyApplicationHttpException(
@@ -80,10 +74,7 @@ class CustomAuthenticate
             }
         } else {
             // 未ログインユーザー用のセッションの作成
-            $noAuthSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-            $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
-
-            SessionLibrary::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
+            SessionLibrary::generateNoAuthSession();
         }
 
         return $next($request);
