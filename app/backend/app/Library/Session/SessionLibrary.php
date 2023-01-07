@@ -135,6 +135,40 @@ class SessionLibrary
     }
 
     /**
+     * get token by user id and session id.
+     *
+     * @param int $userId user id
+     * @param ?string $sessionId session id
+     * @return ?string token
+     */
+    public static function getSssionTokenByUserIdAndSessionId(int $userId, ?string $sessionId): ?string
+    {
+        if (empty($sessionId)) {
+            return '';
+        }
+        // ユーザーIDが設定されていない場合
+        $sessionKey = empty($userId) ? 'no_auth_session_id:'.$sessionId : 'session_id:'.$sessionId . ':'. $userId;
+        $token = SessionLibrary::getByKey($sessionKey);
+
+        return $token;
+    }
+
+    /**
+     * get refresh token by user id and session id.
+     *
+     * @param int $userId user id
+     * @param ?string $sessionId session id
+     * @return ?string token
+     */
+    public static function getRefreshTokenByUserIdAndSessionId(int $userId, ?string $sessionId): ?string
+    {
+        if (empty($sessionId)) {
+            return '';
+        }
+        return SessionLibrary::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
+    }
+
+    /**
      * generate session by user id.
      *
      * @param int $userId user id
@@ -150,5 +184,21 @@ class SessionLibrary
         self::setCache('refresh_token_session_id:'.$sessionId . ':'. $userId, $refreshToken, 3600);
 
         return $sessionId;
+    }
+
+    /**
+     * generate no authenticated session.
+     *
+     * @return string
+     */
+    public static function generateNoAuthSession(): string
+    {
+        // 未ログインユーザー用のセッションの作成
+        $noAuthSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+        $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
+
+        SessionLibrary::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
+
+        return $noAuthSessionId;
     }
 }
