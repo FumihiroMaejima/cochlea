@@ -45,6 +45,10 @@ class SessionLibrary
             return $cache;
         }
 
+        if (is_string($cache)) {
+            return $cache;
+        }
+
         return json_decode($cache, true);
     }
 
@@ -148,7 +152,7 @@ class SessionLibrary
         }
         // ユーザーIDが設定されていない場合
         $sessionKey = empty($userId) ? 'no_auth_session_id:'.$sessionId : 'session_id:'.$sessionId . ':'. $userId;
-        $token = SessionLibrary::getByKey($sessionKey);
+        $token = self::getByKey($sessionKey);
 
         return $token;
     }
@@ -165,7 +169,7 @@ class SessionLibrary
         if (empty($sessionId)) {
             return '';
         }
-        return SessionLibrary::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
+        return self::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
     }
 
     /**
@@ -197,7 +201,7 @@ class SessionLibrary
         $noAuthSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
         $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
 
-        SessionLibrary::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
+        self::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
 
         return $noAuthSessionId;
     }
