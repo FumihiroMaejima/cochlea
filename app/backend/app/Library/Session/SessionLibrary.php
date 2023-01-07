@@ -213,7 +213,7 @@ class SessionLibrary
      * @param string $key session key
      * @return ?string token
      */
-    public static function getSssionTokenByUserIdAndSessionForTesting(string $key): ?string
+    private static function getSssionTokenForTesting(string $key): ?string
     {
         if (empty($key)) {
             return '';
@@ -236,7 +236,7 @@ class SessionLibrary
      * @param string $value
      * @return void
      */
-    public static function setCacheForTesting(string $key, mixed $value): void
+    private static function setCacheForTesting(string $key, mixed $value): void
     {
         $directory = Config::get('myappFile.upload.storage.local.teting.session');
 
