@@ -15,6 +15,9 @@ return [
                 'images'     => [
                     'debug' => '/images/debug/',
                 ],
+                'teting'     => [
+                    'session' => '/testing/session/',
+                ],
             ],
             'testing'    => 'file/',
             'staging'    => 'file/',

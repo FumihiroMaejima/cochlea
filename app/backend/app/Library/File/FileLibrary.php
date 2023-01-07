@@ -60,4 +60,16 @@ class FileLibrary
 
         return $file;
     }
+
+    /**
+     * save text to new file.
+     *
+     * @param string $path file path
+     * @param string $text text
+     * @return bool result
+     */
+    public static function setTextToFile(string $path, string $text): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->put($path, $text);
+    }
 }

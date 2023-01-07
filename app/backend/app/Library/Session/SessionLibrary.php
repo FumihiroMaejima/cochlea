@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
 use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\File\FileLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Trait\CheckHeaderTrait;
 
@@ -62,7 +63,7 @@ class SessionLibrary
      */
     public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHE_EXPIRE): void
     {
-        // test時は時効しない
+        // test時は実行しない
         if (Config::get('app.env') !== 'testing') {
             if (is_array($value)) {
                 $value = json_encode($value);
@@ -204,5 +205,43 @@ class SessionLibrary
         self::setCache('no_auth_session_id:'. $noAuthSessionId, $token, 1800);
 
         return $noAuthSessionId;
+    }
+
+    /**
+     * get token by user id and session id.
+     *
+     * @param string $key session key
+     * @return ?string token
+     */
+    public static function getSssionTokenByUserIdAndSessionForTesting(string $key): ?string
+    {
+        if (empty($key)) {
+            return '';
+        }
+
+        $directory = Config::get('myappFile.upload.storage.local.teting.session');
+
+        $path = "{$directory}{$key}.txt";
+
+        $file = FileLibrary::getFileStoream($path);
+        $token = $file;
+
+        return $token;
+    }
+
+    /**
+     * get token by user id and session id.
+     *
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    public static function setCacheForTesting(string $key, mixed $value): void
+    {
+        $directory = Config::get('myappFile.upload.storage.local.teting.session');
+
+        $path = "{$directory}{$key}.txt";
+
+        FileLibrary::setTextToFile($path, $value);
     }
 }
