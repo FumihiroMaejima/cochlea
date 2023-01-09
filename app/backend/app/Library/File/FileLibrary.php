@@ -76,11 +76,22 @@ class FileLibrary
     /**
      * delete file.
      *
-     * @param string $path file path
+     * @param string|array $paths file path
      * @return bool result
      */
-    public static function deleteFile(string $path): bool
+    public static function deleteFile(string|array $paths): bool
     {
-        return Storage::disk(self::getStorageDiskByEnv())->delete($path);
+        return Storage::disk(self::getStorageDiskByEnv())->delete($paths);
+    }
+
+    /**
+     * delete Delectory.
+     *
+     * @param string $directory file path
+     * @return bool result
+     */
+    public static function deleteDeletectory(string $directory): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->deleteDirectory($directory);
     }
 }
