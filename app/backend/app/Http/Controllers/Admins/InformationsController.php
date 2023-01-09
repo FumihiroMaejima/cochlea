@@ -28,7 +28,7 @@ class InformationsController extends Controller
      */
     public function __construct(InformationsService $service)
     {
-        $this->middleware('auth:api-admins');
+        $this->middleware('customAuth:api-admins');
         $this->service = $service;
     }
 

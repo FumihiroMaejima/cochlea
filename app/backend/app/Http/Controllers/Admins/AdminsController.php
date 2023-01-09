@@ -31,7 +31,7 @@ class AdminsController extends Controller
      */
     public function __construct(AdminsService $adminsService)
     {
-        $this->middleware('auth:api-admins', ['except' => ['forgotPassword', 'resetPassword']]);
+        $this->middleware('customAuth:api-admins', ['except' => ['forgotPassword', 'resetPassword']]);
         $this->service = $adminsService;
     }
 
