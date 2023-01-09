@@ -28,6 +28,7 @@ class SessionLibrary
     private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
 
+    // database.phpのキー名
     private const REDIS_CONNECTION = 'session';
 
     private const SESSION_ID_KEY = 'session_id';
