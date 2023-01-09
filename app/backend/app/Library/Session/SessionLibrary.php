@@ -37,7 +37,7 @@ class SessionLibrary
     public static function getByKey(string $key): mixed
     {
         if (Config::get('app.env') === 'testing') {
-            return null;
+            return self::getSssionTokenForTesting($key);
         }
 
         $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
@@ -90,6 +90,8 @@ class SessionLibrary
                     'set cache expire action is failure.'
                 );
             }
+        } else {
+            self::setCacheForTesting($key, $value);
         }
     }
 
@@ -241,6 +243,13 @@ class SessionLibrary
         $directory = Config::get('myappFile.upload.storage.local.teting.session');
 
         $path = "{$directory}{$key}.txt";
+
+        $files = FileLibrary::files($directory);
+        if (count($files) >= 2) {
+            // トークンとリフレッシュトークンが既に登録されている場合
+            // 既存ファイルの削除(ディレクトリごと削除)
+            FileLibrary::deleteDeletectory($directory);
+        }
 
         FileLibrary::setTextToFile($path, $value);
     }

@@ -77,7 +77,7 @@ class FileLibrary
      * get files in path.
      *
      * @param string $path file path
-     * @return bool array
+     * @return array files
      */
     public static function files(string $path): array
     {
