@@ -28,7 +28,6 @@ class CustomAuthenticate
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        // TODO セッションの有無チェックと新規作成と設定
         // ユーザーIDの照会、レスポンスヘッダーに設定
         $sessionId = self::getSessionId($request);
 
