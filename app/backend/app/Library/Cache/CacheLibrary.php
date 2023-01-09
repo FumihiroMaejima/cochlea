@@ -53,7 +53,7 @@ class CacheLibrary
      */
     public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHE_EXPIRE): void
     {
-        // test時は時効しない
+        // test時は実行しない
         if (Config::get('app.env') !== 'testing') {
             if (is_array($value)) {
                 $value = json_encode($value);
