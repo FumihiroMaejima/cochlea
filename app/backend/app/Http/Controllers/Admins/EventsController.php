@@ -28,7 +28,7 @@ class EventsController extends Controller
      */
     public function __construct(EventsService $service)
     {
-        $this->middleware('auth:api-admins');
+        $this->middleware('customAuth:api-admins');
         $this->service = $service;
     }
 

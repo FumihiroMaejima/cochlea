@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Masters\Admins;
+use App\Library\Session\SessionLibrary;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -35,7 +36,7 @@ class AuthController extends Controller
     public function __construct()
     {
         // Illuminate\Routing\Controller
-        $this->middleware('auth:api-admins', ['except' => ['login']]);
+        $this->middleware('customAuth:api-admins', ['except' => ['login']]);
     }
 
     /**
@@ -115,6 +116,8 @@ class AuthController extends Controller
     {
         /** @var Admins $user authenticated admin model */
         $user = auth('api-admins')->user();
+
+        $token = SessionLibrary::generateSessionByUserId($user->{Admins::ID}, SessionLibrary::SESSION_GUARD_ADMIN);
 
         $ttl = self::SESSION_TTL * 60;
 

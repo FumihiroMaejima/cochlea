@@ -27,7 +27,7 @@ class CoinsController extends Controller
      */
     public function __construct(CoinsService $coinsService)
     {
-        $this->middleware('auth:api-admins');
+        $this->middleware('customAuth:api-admins');
         $this->service = $coinsService;
     }
 
