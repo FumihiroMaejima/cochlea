@@ -39,18 +39,21 @@ class CustomAuthenticate
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        if (empty($guards)) {
-            $guards = [null];
-        }
-
         // TODO セッションの有無チェックと新規作成と設定
         // ユーザーIDの照会、レスポンスヘッダーに設定
         $sessionId = self::getSessionId($request);
 
-        if ($sessionId) {
+        if (!empty($guards) && $sessionId) {
             $userId = self::getUserId($request, true);
+            $guard = current($guards);
+            if (!is_string($guard)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'Server Error. Guard Setting Error.'
+                );
+            }
 
-            $token = SessionLibrary::getSssionTokenByUserIdAndSessionId($userId, $sessionId);
+            $token = SessionLibrary::getSssionTokenByUserIdAndSessionId($userId, $sessionId, $guard);
 
             // トークンが設定されていない場合
             if (empty($token)) {
@@ -59,7 +62,7 @@ class CustomAuthenticate
                     SessionLibrary::generateNoAuthSession();
                 } else {
                     // リフレッシュトークンの取得
-                    $refreshToken = SessionLibrary::getRefreshTokenByUserIdAndSessionId($userId, $sessionId);
+                    $refreshToken = SessionLibrary::getRefreshTokenByUserIdAndSessionId($userId, $sessionId, $guard);
                     if (empty($refreshToken)) {
                         // リフレッシュトークンも無いならセッション切れエラーとする
                         throw new MyApplicationHttpException(
@@ -69,7 +72,7 @@ class CustomAuthenticate
                     }
 
                     // 新しいセッションの設定
-                    SessionLibrary::generateSessionByUserId($userId);
+                    SessionLibrary::generateSessionByUserId($userId, $guard);
                 }
             }
         } else {

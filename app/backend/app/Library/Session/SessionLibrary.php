@@ -16,6 +16,9 @@ class SessionLibrary
 {
     use CheckHeaderTrait;
 
+    public const SESSION_GUARD_ADMIN = 'api-admins';
+    public const SESSION_GUARD_USER = 'api-users';
+
     public const SESSION_TTL_SECOND = 60; // 60秒
 
     private const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
@@ -146,15 +149,21 @@ class SessionLibrary
      *
      * @param int $userId user id
      * @param ?string $sessionId session id
+     * @param string $guard session guard
      * @return ?string token
      */
-    public static function getSssionTokenByUserIdAndSessionId(int $userId, ?string $sessionId): ?string
+    public static function getSssionTokenByUserIdAndSessionId(int $userId, ?string $sessionId, string $guard = ''): ?string
     {
         if (empty($sessionId)) {
             return '';
         }
+
         // ユーザーIDが設定されていない場合
-        $sessionKey = empty($userId) ? 'no_auth_session_id:'.$sessionId : 'session_id:'.$sessionId . ':'. $userId;
+        if (empty($userId)) {
+            $sessionKey ='no_auth_session_id:'.$sessionId;
+        } else {
+            $sessionKey = $guard . '-' . 'session_id:'.$sessionId . ':'. $userId;
+        }
         $token = self::getByKey($sessionKey);
 
         return $token;
@@ -165,30 +174,39 @@ class SessionLibrary
      *
      * @param int $userId user id
      * @param ?string $sessionId session id
+     * @param string $guard session guard
      * @return ?string token
      */
-    public static function getRefreshTokenByUserIdAndSessionId(int $userId, ?string $sessionId): ?string
+    public static function getRefreshTokenByUserIdAndSessionId(int $userId, ?string $sessionId, string $guard = ''): ?string
     {
         if (empty($sessionId)) {
             return '';
         }
-        return self::getByKey('refresh_token_session_id:'.$sessionId . ':'. $userId);
+
+        // ユーザーIDが設定されていない場合
+        if (empty($userId)) {
+            $sessionKey ='no_auth_refresh_token_session_id:'.$sessionId;
+        } else {
+            $sessionKey = $guard . '-' . 'refresh_token_session_id:'.$sessionId . ':'. $userId;
+        }
+        return self::getByKey($sessionKey);
     }
 
     /**
      * generate session by user id.
      *
      * @param int $userId user id
+     * @param string $guard session guard
      * @return string
      */
-    public static function generateSessionByUserId(int $userId): string
+    public static function generateSessionByUserId(int $userId, string $guard = ''): string
     {
         $sessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
         $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
         $refreshToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
 
-        self::setCache('session_id:'.$sessionId . ':'. $userId, $token, 1800);
-        self::setCache('refresh_token_session_id:'.$sessionId . ':'. $userId, $refreshToken, 3600);
+        self::setCache($guard . '-'  . 'session_id:'.$sessionId . ':'. $userId, $token, 1800);
+        self::setCache($guard . '-'  . 'refresh_token_session_id:'.$sessionId . ':'. $userId, $refreshToken, 3600);
 
         return $sessionId;
     }
