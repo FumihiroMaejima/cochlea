@@ -74,6 +74,17 @@ class FileLibrary
     }
 
     /**
+     * get files in path.
+     *
+     * @param string $path file path
+     * @return bool array
+     */
+    public static function files(string $path): array
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->files($path);
+    }
+
+    /**
      * delete file.
      *
      * @param string|array $paths file path
