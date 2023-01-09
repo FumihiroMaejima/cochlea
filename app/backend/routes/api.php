@@ -43,7 +43,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
     // \App\Http\Controllers\Admins\AdminsController
 
     // admin auth
-    Route::middleware(['middleware' => 'auth:api-admins'])
+    Route::middleware(['middleware' => 'customAuth:api-admins'])
     ->group(function () {
         Route::group(['prefix' => 'auth'], function () {
             Route::post('logout', [\App\Http\Controllers\Admins\AuthController::class, 'logout'])->name('auth.admin.logout');

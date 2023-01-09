@@ -5,6 +5,7 @@ namespace App\Trait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\JWT\JwtLibrary;
 use App\Library\Message\StatusCodeMessages;
 
 trait CheckHeaderTrait
@@ -30,7 +31,12 @@ trait CheckHeaderTrait
     public static function getSessionId(Request $request): ?string
     {
         $sessionId = $request->header(Config::get('myapp.headers.authorization'));
-        return (!is_string($sessionId) || empty($sessionId)) ? null : $sessionId;
+        if (!is_string($sessionId) || empty($sessionId)) {
+            return null;
+        }
+
+        // ヘッダー値のprefixを削除して返す
+        return mb_substr($sessionId, mb_strlen(JwtLibrary::TOKEN_PREFIX_WITH_WHITE_SPACE));
     }
 
     /**

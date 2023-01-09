@@ -60,4 +60,49 @@ class FileLibrary
 
         return $file;
     }
+
+    /**
+     * save text to new file.
+     *
+     * @param string $path file path
+     * @param string $text text
+     * @return bool result
+     */
+    public static function setTextToFile(string $path, string $text): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->put($path, $text);
+    }
+
+    /**
+     * get files in path.
+     *
+     * @param string $path file path
+     * @return array files
+     */
+    public static function files(string $path): array
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->files($path);
+    }
+
+    /**
+     * delete file.
+     *
+     * @param string|array $paths file path
+     * @return bool result
+     */
+    public static function deleteFile(string|array $paths): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->delete($paths);
+    }
+
+    /**
+     * delete Delectory.
+     *
+     * @param string $directory file path
+     * @return bool result
+     */
+    public static function deleteDeletectory(string $directory): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->deleteDirectory($directory);
+    }
 }
