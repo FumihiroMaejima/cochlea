@@ -2,7 +2,6 @@
 
 namespace App\Library\Session;
 
-use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
