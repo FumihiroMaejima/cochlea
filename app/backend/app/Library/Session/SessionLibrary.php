@@ -164,9 +164,9 @@ class SessionLibrary
 
         // ユーザーIDが設定されていない場合
         if (empty($userId)) {
-            $sessionKey = self::SESSION_ID_NO_AUTH_KEY . ':'.$sessionId;
+            $sessionKey = self::SESSION_ID_NO_AUTH_KEY . ":$sessionId";
         } else {
-            $sessionKey = $guard . '-' . self::SESSION_ID_KEY . ':'.$sessionId . ':'. $userId;
+            $sessionKey = "$guard-" . self::SESSION_ID_KEY . ":$sessionId:$userId";
         }
         $token = self::getByKey($sessionKey);
 
@@ -187,12 +187,7 @@ class SessionLibrary
             return '';
         }
 
-        // ユーザーIDが設定されていない場合
-        if (empty($userId)) {
-            $sessionKey ='no_auth_refresh_token_session_id:'.$sessionId;
-        } else {
-            $sessionKey = $guard . '-' . self::SESSION_ID_REFRESH_TOKEN_KEY . ':'.$sessionId . ':'. $userId;
-        }
+        $sessionKey = "$guard-" . self::SESSION_ID_REFRESH_TOKEN_KEY . ":$sessionId:$userId";
         return self::getByKey($sessionKey);
     }
 
@@ -209,8 +204,8 @@ class SessionLibrary
         $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
         $refreshToken = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
 
-        self::setCache($guard . '-'  . self::SESSION_ID_KEY . ':'.$sessionId . ':'. $userId, $token, 1800);
-        self::setCache($guard . '-'  . self::SESSION_ID_REFRESH_TOKEN_KEY . ':'.$sessionId . ':'. $userId, $refreshToken, 3600);
+        self::setCache("$guard-" . self::SESSION_ID_KEY . ":$sessionId:$userId", $token, 1800);
+        self::setCache("$guard-" . self::SESSION_ID_REFRESH_TOKEN_KEY . ":$sessionId:$userId", $refreshToken, 3600);
 
         return $sessionId;
     }
@@ -226,7 +221,7 @@ class SessionLibrary
         $noAuthSessionId = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
         $token = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_60);
 
-        self::setCache(self::SESSION_ID_NO_AUTH_KEY . ':'. $noAuthSessionId, $token, 1800);
+        self::setCache(self::SESSION_ID_NO_AUTH_KEY . ":$noAuthSessionId", $token, 1800);
 
         return $noAuthSessionId;
     }
@@ -243,8 +238,8 @@ class SessionLibrary
             return '';
         }
 
+        // テスト環境ではredisを使わずファイルからセッションを参照する
         $directory = Config::get('myappFile.upload.storage.local.teting.session');
-
         $path = "{$directory}{$key}.txt";
 
         $file = FileLibrary::getFileStoream($path);
@@ -262,8 +257,8 @@ class SessionLibrary
      */
     private static function setCacheForTesting(string $key, mixed $value): void
     {
+        // テスト環境ではredisを使わずファイルでセッションを管理する
         $directory = Config::get('myappFile.upload.storage.local.teting.session');
-
         $path = "{$directory}{$key}.txt";
 
         $files = FileLibrary::files($directory);
