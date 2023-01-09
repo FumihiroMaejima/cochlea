@@ -72,4 +72,15 @@ class FileLibrary
     {
         return Storage::disk(self::getStorageDiskByEnv())->put($path, $text);
     }
+
+    /**
+     * delete file.
+     *
+     * @param string $path file path
+     * @return bool result
+     */
+    public static function deleteFile(string $path): bool
+    {
+        return Storage::disk(self::getStorageDiskByEnv())->delete($path);
+    }
 }
