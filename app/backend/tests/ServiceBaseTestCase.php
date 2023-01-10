@@ -97,10 +97,7 @@ class ServiceBaseTestCase extends TestCase
         }
 
         // ログインリクエスト
-        $response = $this->json('POST', route('auth.admin.login'), [
-            'email'    => Config::get('myappTest.test.admin.login.email'),
-            'password' => Config::get('myappTest.test.admin.login.password')
-        ], ['Content-Type' => 'application/json'])->json();
+        $response = $this->login();
 
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
@@ -128,5 +125,19 @@ class ServiceBaseTestCase extends TestCase
                 Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
             ]);
         }
+    }
+
+    /**
+     * login request.
+     *
+     * @return array
+     */
+    protected function login(): array
+    {
+        // ログインリクエスト
+        return $this->json('POST', route('auth.admin.login'), [
+            'email'    => Config::get('myappTest.test.admin.login.email'),
+            'password' => Config::get('myappTest.test.admin.login.password')
+        ], ['Content-Type' => 'application/json'])->json();
     }
 }
