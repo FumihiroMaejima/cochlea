@@ -44,7 +44,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testGetAdminss(): void
+    public function testGetAdmins(): void
     {
         $response = $this->get(route('admin.admins.index'));
         $response->assertStatus(StatusCodeMessages::STATUS_200)
