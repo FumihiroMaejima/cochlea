@@ -4,7 +4,7 @@ namespace Tests\Feature\Service\Admins;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
+use Tests\AdminServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,7 +14,7 @@ use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RolesServiceTest extends ServiceBaseTestCase
+class RolesServiceTest extends AdminServiceBaseTestCase
 {
     /**
      * roles get request test.
@@ -23,7 +23,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      */
     public function testGetRoles(): void
     {
-        $response = $this->get(route('admin.roles.index'));
+        $response = $this->get(route('admin.roles.index'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, RoleBaseRequest::RESPONSE_KEY_DATA);
     }
@@ -35,7 +35,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      */
     public function testGetRolesList(): void
     {
-        $response = $this->get(route('admin.roles.list'));
+        $response = $this->get(route('admin.roles.list'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, RoleBaseRequest::RESPONSE_KEY_DATA);
     }
@@ -65,7 +65,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             RoleBaseRequest::KEY_CODE        => $code,
             RoleBaseRequest::KEY_DETAIL      => $detail,
             RoleBaseRequest::KEY_PERMISSIONS => $permissions
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 
@@ -105,7 +105,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             RoleBaseRequest::KEY_CODE        => $code,
             RoleBaseRequest::KEY_DETAIL      => $detail,
             RoleBaseRequest::KEY_PERMISSIONS => $permissions
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -117,7 +117,7 @@ class RolesServiceTest extends ServiceBaseTestCase
      */
     public function testDownloadRolesCsvFile(): void
     {
-        $response = $this->get(route('admin.roles.download'));
+        $response = $this->get(route('admin.roles.download'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
@@ -135,7 +135,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             RoleBaseRequest::KEY_CODE        => 'test_code1',
             RoleBaseRequest::KEY_DETAIL      => 'test detail',
             RoleBaseRequest::KEY_PERMISSIONS => [2]
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -151,7 +151,7 @@ class RolesServiceTest extends ServiceBaseTestCase
             RoleBaseRequest::KEY_CODE        => 'test_code1',
             RoleBaseRequest::KEY_DETAIL      => 'test detail',
             RoleBaseRequest::KEY_PERMISSIONS => []
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -163,7 +163,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [
             RoleBaseRequest::KEY_ROLES => [1]
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -190,7 +190,7 @@ class RolesServiceTest extends ServiceBaseTestCase
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [
             RoleBaseRequest::KEY_ROLES => $roles
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }
