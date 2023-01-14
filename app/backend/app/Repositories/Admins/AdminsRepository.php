@@ -104,9 +104,10 @@ class AdminsRepository implements AdminsRepositoryInterface
     public function getLatestAdmin(): object
     {
         return DB::table($this->getTable())
-            ->latest()
-            // ->where('deleted_at', '=', null)
-            ->first();
+            ->where(Admins::DELETED_AT, '=', null)
+            ->orderBy(Admins::ID, 'DESC')
+            ->limit(1)
+            ->get();
         // ->get();
     }
 

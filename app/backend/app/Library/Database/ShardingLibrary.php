@@ -108,7 +108,7 @@ class ShardingLibrary
         $logsConnectionName = Config::get('myapp.database.logs.baseConnectionName');
         $userConnectionName = Config::get('myapp.database.users.baseConnectionName');
 
-        // CI用ののコネクション
+        // CI用のコネクション
         if (($logsConnectionName === self::CONNECTION_NAME_FOR_CI) && ($userConnectionName === self::CONNECTION_NAME_FOR_CI)) {
             return self::CONNECTION_NAME_FOR_CI;
         } else {

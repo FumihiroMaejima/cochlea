@@ -4,8 +4,7 @@ namespace Tests\Feature\Service\Users;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
-use Tests\Feature\Service\Users\UserServiceBaseTestCase;
+use Tests\UserServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;

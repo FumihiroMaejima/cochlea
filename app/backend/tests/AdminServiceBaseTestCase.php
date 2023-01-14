@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Library\Database\ShardingLibrary;
+use App\Library\File\FileLibrary;
 use App\Trait\HelperTrait;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
@@ -19,9 +20,9 @@ use Database\Seeders\Masters\RolePermissionsTableSeeder;
 use Database\Seeders\Masters\RolesTableSeeder;
 
 /**
- * Serviceクラスのテスト用Baseクラス
+ * 管理用Serviceクラスのテスト用Baseクラス
  */
-class ServiceBaseTestCase extends TestCase
+class AdminServiceBaseTestCase extends TestCase
 {
     use HelperTrait;
 
@@ -66,8 +67,29 @@ class ServiceBaseTestCase extends TestCase
         AdminsRolesTableSeeder::class,
     ];
 
-    /** @var bool $initialized whichever initialized.  */
-    protected $initialized = false;
+    /** @var static bool $initialized whichever initialized.  */
+    protected static bool $initialized = false;
+
+    /** @var static int $id user id.  */
+    protected static int $id = 0;
+    /** @var static string $authority autorities.  */
+    protected static string $authority = '';
+    /** @var static string $authorization session.  */
+    protected static string $authorization = '';
+
+    /**
+     * This method is called before the first test of this test class is run.
+     * Can't using Laravel methods.
+     */
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        // 初期化済みフラグの解消
+        static::$initialized = false;
+        // セッション等の初期化
+        self::setHeaders(0, '', '');
+    }
 
     /**
      * setup初期化処理
@@ -96,6 +118,10 @@ class ServiceBaseTestCase extends TestCase
             Artisan::call('db:seed', ['--class' => $className, '--no-interaction' => true]);
         }
 
+        // 既存ファイルの削除(ディレクトリごと削除)
+        $directory = Config::get('myappFile.upload.storage.local.teting.session');
+        FileLibrary::deleteDeletectory($directory);
+
         // ログインリクエスト
         $response = $this->login();
 
@@ -115,15 +141,16 @@ class ServiceBaseTestCase extends TestCase
         parent::setUp();
 
         // 各クラスで1回だけ行たい処理
-        if (!$this->initialized) {
+        if (!static::$initialized) {
             $loginUser         = $this->setUpInit(true);
-            $this->initialized = true;
 
-            $this->withHeaders([
-                Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-                Config::get('myapp.headers.authority') => $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY],
-                Config::get('myapp.headers.authorization') => self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN],
-            ]);
+            self::setHeaders(
+                $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
+                implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY]),
+                self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN]
+            );
+
+            static::$initialized = true;
         }
     }
 
@@ -139,5 +166,35 @@ class ServiceBaseTestCase extends TestCase
             'email'    => Config::get('myappTest.test.admin.login.email'),
             'password' => Config::get('myappTest.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();
+    }
+
+    /**
+     * get headers.
+     *
+     * @return array
+     */
+    protected static function getHeaders(): array
+    {
+        // ログインリクエスト
+        return [
+            Config::get('myapp.headers.id')        => static::$id,
+            Config::get('myapp.headers.authority') => static::$authority,
+            Config::get('myapp.headers.authorization') => static::$authorization,
+        ];
+    }
+
+    /**
+     * set headers.
+     *
+     * @param int $id
+     * @param string $authority
+     * @param string $authorization
+     * @return void
+     */
+    protected static function setHeaders(int $id, string $authority, string $authorization): void
+    {
+        static::$id        = $id;
+        static::$authority = $authority;
+        static::$authorization = $authorization;
     }
 }

@@ -4,7 +4,7 @@ namespace Tests\Feature\Service\Admins;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
+use Tests\AdminServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
@@ -13,7 +13,7 @@ use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AdminsServiceTest extends ServiceBaseTestCase
+class AdminsServiceTest extends AdminServiceBaseTestCase
 {
     // use DatabaseMigrations;
     // use RefreshDatabase;
@@ -44,9 +44,9 @@ class AdminsServiceTest extends ServiceBaseTestCase
      *
      * @return void
      */
-    public function testGetAdminss(): void
+    public function testGetAdmins(): void
     {
-        $response = $this->get(route('admin.admins.index'));
+        $response = $this->get(route('admin.admins.index'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, AdminBaseRequest::RESPONSE_KEY_DATA);
     }
@@ -91,7 +91,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             AdminBaseRequest::KEY_ROLE_ID               => $roleId,
             AdminBaseRequest::KEY_PASSWORD              => $password,
             AdminBaseRequest::KEY_PASSWORD_CONFIRMATION => $password_confirmation
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 
@@ -136,7 +136,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             AdminBaseRequest::KEY_ROLE_ID               => $roleId,
             AdminBaseRequest::KEY_PASSWORD              => $password,
             AdminBaseRequest::KEY_PASSWORD_CONFIRMATION => $password_confirmation
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -149,7 +149,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testDownloadAdminsCsvFile(): void
     {
-        $response = $this->get(route('admin.admins.download'));
+        $response = $this->get(route('admin.admins.download'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
@@ -165,7 +165,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             AdminBaseRequest::KEY_NAME    => 'test name',
             AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
             AdminBaseRequest::KEY_ROLE_ID => 1
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -180,7 +180,7 @@ class AdminsServiceTest extends ServiceBaseTestCase
             AdminBaseRequest::KEY_NAME    => '',
             AdminBaseRequest::KEY_EMAIL   => Config::get('myappTest.test.admin.login.email'),
             AdminBaseRequest::KEY_ROLE_ID => 1
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -204,7 +204,8 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testRemoveAdminsSuccess(int $id): void
     {
-        $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]));
+        // $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
+        $response = $this->delete(route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -229,7 +230,8 @@ class AdminsServiceTest extends ServiceBaseTestCase
      */
     public function testRemoveAdminsValidationError(int $id): void
     {
-        $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]));
+        // $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
+        $response = $this->delete(route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }

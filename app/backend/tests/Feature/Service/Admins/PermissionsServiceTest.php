@@ -4,7 +4,7 @@ namespace Tests\Feature\Service\Admins;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
+use Tests\AdminServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,7 +14,7 @@ use App\Http\Requests\BaseRequest;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class PermissionsServiceTest extends ServiceBaseTestCase
+class PermissionsServiceTest extends AdminServiceBaseTestCase
 {
     /**
      * roles get request test.
@@ -23,7 +23,7 @@ class PermissionsServiceTest extends ServiceBaseTestCase
      */
     public function testGetPermissionsList(): void
     {
-        $response = $this->get(route('admin.permissions.list'));
+        $response = $this->get(route('admin.permissions.list'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(4, BaseRequest::RESPONSE_KEY_DATA);
     }

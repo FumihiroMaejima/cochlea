@@ -22,6 +22,9 @@ class CacheLibrary
     private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
 
+    // database.phpのキー名
+    private const REDIS_CONNECTION = 'cache';
+
     /**
      * get cache value by Key.
      *
@@ -34,7 +37,7 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::get($key);
+        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
 
         if (is_null($cache)) {
             return $cache;
@@ -60,7 +63,7 @@ class CacheLibrary
             }
 
             /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::set($key, $value);
+            $result = Redis::connection(self::REDIS_CONNECTION)->set($key, $value);
             $payload = $result->getPayload();
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
@@ -72,7 +75,7 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::expireAt($key, time() + $expire);
+            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)->expireAt($key, time() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
                 throw new MyApplicationHttpException(
@@ -106,7 +109,7 @@ class CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::del($key);
+        $result = Redis::connection(self::REDIS_CONNECTION)->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
