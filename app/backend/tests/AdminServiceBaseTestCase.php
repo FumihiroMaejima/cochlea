@@ -88,7 +88,7 @@ class AdminServiceBaseTestCase extends TestCase
         // 初期化済みフラグの解消
         static::$initialized = false;
         // セッション等の初期化
-        self::setHeaders(0,'','');
+        self::setHeaders(0, '', '');
     }
 
     /**
