@@ -11,14 +11,12 @@ use Illuminate\Database\Schema\MySqlSchemaState;
 
 class DumpLibrary
 {
-    // keys
-    public const KEY_TABLE_SCHEMA = 'TABLE_SCHEMA';
-    public const KEY_TABLE_NAME = 'TABLE_NAME';
-    public const KEY_PARTITION_NAME = 'PARTITION_NAME';
-    public const KEY_PARTITION_ORDINAL_POSITION = 'PARTITION_ORDINAL_POSITION';
-    public const KEY_TABLE_ROWS = 'TABLE_ROWS';
-    public const KEY_CREATE_TIME = 'CREATE_TIME';
-    public const KEY_PARTITION_DESCRIPTION = 'PARTITION_DESCRIPTION';
+    // WARNING
+    // database.phpのconnection設定に下記の設定を追加する必要がある。
+    // mysqldumpコマンドを叩く事になる為mysqlコマンドだけ実行出来ても利用出来ない
+    // 'dump' => [
+    //     'dump_binary_path' => 'mysql関連のCLIのPATH'
+    // ]
 
     /**
      * dump database.
