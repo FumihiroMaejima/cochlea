@@ -15,7 +15,7 @@ class DumpLibrary
     // database.phpのconnection設定に下記の設定を追加する必要がある。
     // mysqldumpコマンドを叩く事になる為mysqlコマンドだけ実行出来ても利用出来ない
     // 'dump' => [
-    //     'dump_binary_path' => 'mysql関連のCLIのPATH'
+    //     'dump_binary_path' => 'mysql-clientのPATH'
     // ]
 
     /**
