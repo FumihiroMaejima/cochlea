@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
+use App\Models\Masters\Admins;
 
 class AdminsRolesResource extends JsonResource
 {
@@ -35,16 +36,16 @@ class AdminsRolesResource extends JsonResource
      * Transform the resource into an array for create.
      *
      * @param Request $request
-     * @param object $admin
+     * @param array $admin
      * @return array
      */
-    public static function toArrayForCreate(Request $request, object $admin): array
+    public static function toArrayForCreate(Request $request, array $admin): array
     {
         return [
             self::RESOURCE_KEY_ROLE_ID    => $request->roleId,
-            self::RESOURCE_KEY_ADMIN_ID   => $admin->id,
-            self::RESOURCE_KEY_CREATED_AT => $admin->created_at,
-            self::RESOURCE_KEY_UPDATED_AT => $admin->updated_at
+            self::RESOURCE_KEY_ADMIN_ID   => $admin[Admins::ID],
+            self::RESOURCE_KEY_CREATED_AT => $admin[Admins::CREATED_AT],
+            self::RESOURCE_KEY_UPDATED_AT => $admin[Admins::UPDATED_AT],
             // self::RESOURCE_KEY_ADMIN_ID   => $this->resource->id,
             // self::RESOURCE_KEY_CREATED_AT => $this->resource->created_at,
             // self::RESOURCE_KEY_UPDATED_AT => $this->resource->updated_at

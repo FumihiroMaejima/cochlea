@@ -4,7 +4,7 @@ namespace Tests\Feature\Service\Admins;
 
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
-use Tests\ServiceBaseTestCase;
+use Tests\AdminServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,7 +24,7 @@ use Database\Seeders\Masters\RolesTableSeeder;
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CoinsServiceTest extends ServiceBaseTestCase
+class CoinsServiceTest extends AdminServiceBaseTestCase
 {
     // target seeders.
     protected const SEEDER_CLASSES = [
@@ -43,7 +43,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
      */
     public function testGetCoins(): void
     {
-        $response = $this->get(route('admin.coins.index'));
+        $response = $this->get(route('admin.coins.index'), self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(5, RoleBaseRequest::RESPONSE_KEY_DATA);
     }
@@ -83,7 +83,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
             CoinBaseRequest::KEY_START_AT => $startAt,
             CoinBaseRequest::KEY_END_AT   => $endAt,
             // CoinBaseRequest::KEY_IMAGE    => $image,
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
 
@@ -150,7 +150,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
             CoinBaseRequest::KEY_START_AT => $startAt,
             CoinBaseRequest::KEY_END_AT   => $endAt,
             // CoinBaseRequest::KEY_IMAGE    => $image,
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -162,7 +162,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
      */
     public function testDownloadCoinsCsvFile(): void
     {
-        $response = $this->get(route('admin.coins.download.csv'));
+        $response = $this->get(route('admin.coins.download.csv'), self::getHeaders());
         $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
@@ -175,7 +175,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
      */
     public function testDownloadCoinsTemplateFile(): void
     {
-        $response = $this->get(route('admin.coins.download.template'));
+        $response = $this->get(route('admin.coins.download.template'), self::getHeaders());
         $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_APPLICATION_EXCEL);
     }
@@ -199,7 +199,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
 
         $response = $this->json('POST', route('admin.coins.upload.template'), [
             'file' => $file
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(201);
     }
 
@@ -219,7 +219,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
             CoinBaseRequest::KEY_START_AT => '2022/08/20 00:00:00',
             CoinBaseRequest::KEY_END_AT   => '2022/08/21 23:59:59',
             // CoinBaseRequest::KEY_IMAGE    => null,
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -238,7 +238,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
             CoinBaseRequest::KEY_START_AT => '2022/08/20 00:00:00',
             CoinBaseRequest::KEY_END_AT   => '2022/08/21 23:59:59',
             CoinBaseRequest::KEY_IMAGE    => null,
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 
@@ -250,7 +250,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->json('DELETE', route('admin.coins.delete'), [
             CoinBaseRequest::KEY_COINS => [1]
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_200);
     }
 
@@ -277,7 +277,7 @@ class CoinsServiceTest extends ServiceBaseTestCase
     {
         $response = $this->json('DELETE', route('admin.coins.delete'), [
             CoinBaseRequest::KEY_COINS => $coins
-        ]);
+        ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
     }
 }

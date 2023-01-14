@@ -105,6 +105,7 @@ class AdminsService
 
             $insertCount = $this->adminsRepository->create($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
+            $latestAdmin = ArrayLibrary::toArray(ArrayLibrary::getFirst($latestAdmin->toArray()));
 
             // 権限情報の作成
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);

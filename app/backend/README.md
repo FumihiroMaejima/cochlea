@@ -281,6 +281,10 @@ vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resour
 vendor/bin/phpunit tests/Unit/ExampleTest --testdox
 vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
+
+# Dockerコンテナ内で実行する場合
+docker-compose exec app vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
+docker-compose exec app vendor/bin/phpunit tests/Feature/Service/Admins/AdminsServiceTest.php --testdox
 ```
 
 カバレッジ出力
