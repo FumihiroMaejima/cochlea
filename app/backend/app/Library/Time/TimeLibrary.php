@@ -31,7 +31,8 @@ class TimeLibrary
         // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
 
         // return Carbon::now()->format(self::DEFAULT_DATE_TIME_FORMAT);
-        return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
+        // return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
+        return (new Carbon())->timezone(Config::get('app.timezone'))->format($format);
     }
 
     /**
