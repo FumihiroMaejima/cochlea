@@ -42,7 +42,8 @@ class TimeLibrary
      */
     public static function getCurrentDateTimeTimeStamp(): int|float|string
     {
-        return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
+        // return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
+        return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
     }
 
     /**
