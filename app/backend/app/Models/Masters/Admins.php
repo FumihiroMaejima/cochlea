@@ -11,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Random\RandomStringLibrary;
@@ -22,8 +21,6 @@ class Admins extends Authenticatable implements JWTSubject
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
-    protected $carbon;
-    protected $now;
 
     // カラム一覧
     public const ID = 'id';
@@ -98,12 +95,6 @@ class Admins extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $appends = [];
-
-    public function __construct()
-    {
-        $this->carbon = new Carbon();
-        $this->now = $this->carbon->now()->timestamp;
-    }
 
     public function getUserId()
     {
