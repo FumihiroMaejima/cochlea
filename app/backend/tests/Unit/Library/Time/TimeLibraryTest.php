@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 use DateTime;
 
-// use Illuminate\Foundation\Testing\DatabaseMigrations;
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-
 class TimeLibraryTest extends TestCase
 {
     /**
@@ -107,7 +104,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${days} days")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+$days days")),
             TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
@@ -128,7 +125,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${months} month")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+$months month")),
             TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
@@ -169,7 +166,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${days} days")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-$days days")),
             TimeLibrary::subDays($dateTime, $days, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
@@ -190,7 +187,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${months} month")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-$months month")),
             TimeLibrary::subMonths($dateTime, $months, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
@@ -211,7 +208,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-${years} year")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("-$years year")),
             TimeLibrary::subYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }
@@ -247,7 +244,7 @@ class TimeLibraryTest extends TestCase
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
         $days = 3;
-        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("-${days} days"));
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("-$days days"));
 
         // echo $interval->format('%d days');
 
@@ -266,7 +263,7 @@ class TimeLibraryTest extends TestCase
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
         $days = 3;
-        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("+${days} days"));
+        $targetDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime("+$days days"));
 
         $this->assertEquals(
             (strtotime($dateTime) < strtotime($targetDateTime)),
