@@ -275,6 +275,27 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test faker time current date time.
+     *
+     * @return void
+     */
+    public function testFakerTimeCurrentDateTime(): void
+    {
+        // 検証値
+        $timeStamp = 1672327993; // 2022-12-30 00:33:13
+        TimeLibrary::setFakerTimeStamp($timeStamp);
+
+        $currentDateTime = TimeLibrary::getCurrentDateTime();
+        $currentDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT);
+        $fakerDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp);
+
+        // 現在日時とは異なる
+        $this->assertNotSame($currentDateTimeExpect, $currentDateTime);
+        // 偽装時刻として設定した日時と合致する
+        $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
+    }
+
+    /**
      * member crerate data
      * @return array
      */
