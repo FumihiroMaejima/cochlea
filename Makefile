@@ -97,7 +97,7 @@ phpunit:
 	docker-compose exec app vendor/bin/phpunit --testdox
 
 phpunit-cov:
-	docker-compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
+	docker-compose exec app php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
 
 phpcsfix:
 	docker-compose exec app vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.php
