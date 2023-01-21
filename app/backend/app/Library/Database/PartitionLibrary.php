@@ -29,9 +29,9 @@ class PartitionLibrary
     {
         DB::statement(
             "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY RANGE COLUMNS(${columnName}) (
-                    ${partitions}
+                ALTER TABLE $databaseName.$tableName
+                PARTITION BY RANGE COLUMNS($columnName) (
+                    $partitions
                 )
             "
         );
@@ -57,9 +57,9 @@ class PartitionLibrary
     ): void {
         DB::statement(
             "
-                ALTER TABLE ${databaseName}.${tableName}
-                PARTITION BY HASH(${columnName} div ${divCount})
-                PARTITIONS ${count};
+                ALTER TABLE $databaseName.$tableName
+                PARTITION BY HASH($columnName div $divCount)
+                PARTITIONS $count;
             "
         );
     }
@@ -76,9 +76,9 @@ class PartitionLibrary
     {
         DB::statement(
             "
-                ALTER TABLE ${databaseName}.${tableName}
+                ALTER TABLE $databaseName.$tableName
                 ADD PARTITION (
-                    ${partitions}
+                    $partitions
                 )
             "
         );
