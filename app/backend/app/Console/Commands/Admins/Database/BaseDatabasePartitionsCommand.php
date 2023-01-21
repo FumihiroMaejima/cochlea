@@ -277,8 +277,16 @@ class BaseDatabasePartitionsCommand extends Command
             // 保存期間が切れたパーティションを取得
             $expiredPartions = self::filteringPartitionsByDateTime($partions, $dateTime);
 
-            // TODO　delete paririonの実行
+            echo "Target Partitions is Here. \n";
             echo var_dump($expiredPartions);
+
+            foreach($expiredPartions as $partion) {
+                PartitionLibrary::deletePartition(
+                    $partion[PartitionLibrary::KEY_TABLE_SCHEMA],
+                    $partion[PartitionLibrary::KEY_TABLE_NAME],
+                    $partion[PartitionLibrary::KEY_PARTITION_NAME]
+                );
+            }
         }
     }
 

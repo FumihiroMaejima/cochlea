@@ -96,7 +96,7 @@ class PartitionLibrary
     {
         DB::statement(
             "
-                ALTER TABLE ${databaseName}.${tableName} DROP PARTITION ${partitionName};
+                ALTER TABLE $databaseName.$tableName DROP PARTITION $partitionName;
             "
         );
     }
