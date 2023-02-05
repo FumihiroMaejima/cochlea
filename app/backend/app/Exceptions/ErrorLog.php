@@ -35,7 +35,7 @@ class ErrorLog
         $this->message         = $error->getMessage();
         $this->pid             = getmypid();
         $this->memory = (string)memory_get_peak_usage();
-        $this->stackTrace      = $error->getTraceAsString();
+        $this->stackTrace      = str_replace("\n", '', $error->getTraceAsString()); // １行で表示させる
         $this->parameter       = $parameter;
 
         $this->outputLog();
