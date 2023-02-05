@@ -222,6 +222,11 @@ Route::group(['prefix' => 'v1'], function () {
                 // タイムスタンプから日付
                 Route::get('datetime', [\App\Http\Controllers\Users\DebugController::class, 'getDateTimeByTimeStamp'])->name('user.debug.datetimes.datetime');
             });
+
+            // ログ関係
+            Route::group(['prefix' => 'logs'], function () {
+                Route::get('access', [\App\Http\Controllers\Users\DebugController::class, 'getLog'])->name('user.debug.logs.access');
+            });
         });
     }
 });

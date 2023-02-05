@@ -51,4 +51,40 @@ class LogLibrary
 
         return $fileContents;
     }
+
+    /**
+     * get logfile contents as Associative array(連想配列).
+     *
+     * @param string|null $date
+     * @param string $name
+     * @return array
+     */
+    public static function getLogFileContentAsAssociative(?string $date = null, string $name = self::FILE_NAME_ACCESS): array
+    {
+        $response = [];
+        $logFileContetsList = self::getLogFileContentsList($date ?? null, $name ?? null);
+
+        foreach ($logFileContetsList as $logRow) {
+            $tmp = explode(' ', $logRow);
+            if (!empty($tmp) && (count($tmp) >= 6)) {
+                // 日時をkeyとして設定
+                $head = $tmp[0] . ' ' . $tmp[1];
+                $mainRowLog = $tmp[4] . $tmp[5];
+                $rowItemList = explode(',', $mainRowLog);
+
+                foreach($rowItemList as $item) {
+                    $keyValues = explode(':', $item);
+                    if (!empty($keyValues) && (count($keyValues) >= 2)) {
+                        $value = '';
+                        for ($i = 1; $i < count($keyValues); $i++) {
+                            $value .= $keyValues[$i];
+                        }
+                        $response[$head][$keyValues[0]] = $value;
+                    }
+                }
+            }
+        }
+
+        return $response;
+    }
 }
