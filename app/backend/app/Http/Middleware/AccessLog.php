@@ -33,6 +33,7 @@ class AccessLog
     private string $plathome;
     private int|false $pid;
     private string $memory;
+    private string $peakMemory;
 
     private array $excludes = [
         '_debugbar',
@@ -64,7 +65,8 @@ class AccessLog
         $response = $next($request);
 
         $this->responseTime = microtime(true) - $startTime;
-        $this->memory = (string)memory_get_peak_usage();
+        $this->memory = (string)memory_get_usage();
+        $this->peakMemory = (string)memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
 
@@ -167,7 +169,8 @@ class AccessLog
             'request_content'  => $this->requestContent,
             'plathome'         => $this->plathome,
             'process_id'       => $this->pid,
-            'peak_memory'      => $this->memory,
+            'memory'           => $this->memory,
+            'peak_memory'      => $this->peakMemory,
         ];
 
         // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);
