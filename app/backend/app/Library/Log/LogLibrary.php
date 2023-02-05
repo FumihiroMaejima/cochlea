@@ -70,18 +70,9 @@ class LogLibrary
                 // 日時をkeyとして設定
                 $head = $tmp[0] . ' ' . $tmp[1];
                 $mainRowLog = $tmp[4] . $tmp[5];
-                $rowItemList = explode(',', $mainRowLog);
 
-                foreach($rowItemList as $item) {
-                    $keyValues = explode(':', $item);
-                    if (!empty($keyValues) && (count($keyValues) >= 2)) {
-                        $value = '';
-                        for ($i = 1; $i < count($keyValues); $i++) {
-                            $value .= $keyValues[$i];
-                        }
-                        $response[$head][$keyValues[0]] = $value;
-                    }
-                }
+                $rowDictionary = json_decode($mainRowLog, true);
+                $response[$head] = $rowDictionary;
             }
         }
 
