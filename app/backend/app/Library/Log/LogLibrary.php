@@ -69,7 +69,10 @@ class LogLibrary
             if (!empty($tmp) && (count($tmp) >= 6)) {
                 // 日時をkeyとして設定
                 $head = $tmp[0] . ' ' . $tmp[1];
-                $mainRowLog = $tmp[4] . $tmp[5];
+                $mainRowLog = '';
+                for ($i = 4; $i < count($tmp); $i++) {
+                    $mainRowLog .= $tmp[$i];
+                }
 
                 $rowDictionary = json_decode($mainRowLog, true);
                 $response[$head] = $rowDictionary;
