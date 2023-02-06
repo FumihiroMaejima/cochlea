@@ -1728,6 +1728,15 @@ $ composer require league/flysystem-aws-s3-v3
 ```
 
 
+---
+
+## php.iniで設定しているメモリ上限の確認(スクリプトが確保できる最大メモリのバイト数)
+
+```shell
+php -i | grep memory_limit
+memory_limit => 128M => 128M
+```
+
 
 ---
 ### backendのpackage.jsonのアップデート
