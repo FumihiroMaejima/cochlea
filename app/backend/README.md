@@ -16,7 +16,7 @@ Laravel環境をDockerで構築する為の手順書
 
 ## PHPのバージョン更新
 
-```shell-session
+```shell
 $ brew search php@7
 ==> Formulae
 php@7.2                    php@7.3                    php@7.4
@@ -27,7 +27,7 @@ $ brew install php@7.4
 インストール中に下記のメッセージがある。
 下記のメッセージを頼りに$PATHと設定する。
 
-```shell-session
+```shell
 If you need to have apr first in your PATH run:
   echo 'export PATH="/usr/local/opt/apr/bin:$PATH"' >> ~/.bash_profile
 ```
@@ -35,21 +35,21 @@ If you need to have apr first in your PATH run:
 「~/.bash_profile」にPATHの設定を追記。
 「~/.bash_profile」の読み込み。
 
-```shell-session
+```shell
 $ echo 'export PATH="/usr/local/opt/apr/bin:$PATH"' >> ~/.bash_profile
 $ source ~/.bash_profile
 ```
 
 PHPのサービスの起動。
 
-```shell-session
+```shell
 $ brew services start php
 ==> Successfully started `php` (label: homebrew.mxcl.php)
 ```
 
 更新の確認。
 
-```shell-session
+```shell
 $ php -v
 PHP 7.4.4 (cli) (built: Mar 19 2020 20:14:52) ( NTS )
 Copyright (c) The PHP Group
@@ -59,7 +59,7 @@ Zend Engine v3.4.0, Copyright (c) Zend Technologies
 
 PHPのマイナーアップデートをかける場合(git等もアップデートされる。)
 
-```shell-session
+```shell
 $ brew upgrade php
 
 ~ $ php -v
@@ -75,19 +75,19 @@ Zend Engine v3.4.0, Copyright (c) Zend Technologies
 
 opensslのインストール
 
-```shell-session
+```shell
 $ brew install openssl
 ```
 
 Composerのインストール
 
-```shell-session
+```shell
 $ curl -sS https://getcomposer.org/installer | php
 ```
 
 インストールしたファイルを「/usr/local/bin/」に移動させる。
 
-```shell-session
+```shell
 $ ls
 composer.phar
 $ mv composer.phar /usr/local/bin/composer
@@ -95,7 +95,7 @@ $ mv composer.phar /usr/local/bin/composer
 
 インストールの確認
 
-```shell-session
+```shell
 $ composer --version
 Composer version 1.10.4 2020-04-09 17:05:50
 ```
@@ -105,13 +105,13 @@ Composer version 1.10.4 2020-04-09 17:05:50
 
 Dockerfileで下記の通りにxdebugをインストールする。
 
-```shell-session
+```shell
 $  docker-php-ext-enable xdebug
 ```
 
 コンテナにマウントするphp.iniに下記の通り、xdebugの設定を行う。(v3の書き方)
 
-```shell-session
+```shell
 [xdebug]
 # version 3
 xdebug.mode=debug
@@ -150,7 +150,7 @@ xdebug.discover_client_host=0
 
 ### laravel_dockerリポジトリのclone
 
-```shell-session
+```shell
 $ git clone https://github.com/FumihiroMaejima/laravel_docker your_project
 ```
 
@@ -158,13 +158,13 @@ $ git clone https://github.com/FumihiroMaejima/laravel_docker your_project
 
 デフォルトブランチがdevelopの為、masterブランチをチェックアウトする。
 
-```shell-session
+```shell
 $ git checkout -b master remotes/origin/master
 ```
 
 ### 現在のremoteのURLの確認
 
-```shell-session
+```shell
 $ git remote -v
 origin	https://github.com/FumihiroMaejima/laravel_docker (fetch)
 origin	https://github.com/FumihiroMaejima/laravel_docker (push)
@@ -172,7 +172,7 @@ origin	https://github.com/FumihiroMaejima/laravel_docker (push)
 
 ### remoteリポジトリのURLの変更
 
-```shell-session
+```shell
 $ git remote set-url origin https://github.com/Your_Name/your_project
 $ git remote -v
 origin	https://github.com/Your_Name/your_project (fetch)
@@ -184,14 +184,14 @@ git のコミットログを初期化もしくは削除すること。もしく�
 
 ### masterとdevelopブランチをremoteにpushする。
 
-```shell-session
+```shell
 $ git push origin master
 $ git push origin develop
 ```
 
 ### git-flowの初期化を行う。
 
-```shell-session
+```shell
 $ git flow init
 ```
 
@@ -205,7 +205,7 @@ nginxのポート設定は要注意が必要。
 
 既存の「backend」ディレクトリをリネームして新しく作成する
 
-```shell-session
+```shell
 $ composer create-project laravel/laravel=7.* --prefer-dist backend
 ```
 
@@ -213,7 +213,7 @@ $ composer create-project laravel/laravel=7.* --prefer-dist backend
 
 ＊コンテナイメージの作り直し時も同様
 
-```shell-session
+```shell
 $ docker-compose down --rmi all
 $ docker-compose down
 $ docker-compose up -d
@@ -232,7 +232,7 @@ dockerコンテナとマウントする為の「backend」ディレクトリは�
 
 *(フロントエンドとの連携を考慮しての命名)
 
-```shell-session
+```shell
 $ cd app
 $ composer create-project laravel/laravel=8.* --prefer-dist backend
 ```
@@ -260,7 +260,7 @@ $ composer require --dev nunomaduro/phpinsights barryvdh/laravel-debugbar friend
 
 php-cs-fixer,phpcs,phpmdの設定ファイルを格納する
 
-```shell-session
+```shell
 backend/.php-cs-fixer.php
 backend/phpcs.xml
 backend/ruleset.xml
@@ -268,7 +268,7 @@ backend/ruleset.xml
 
 CI関係のコマンド
 
-```shell-session
+```shell
 vendor/bin/phpunit --testdox
 vendor/bin/php-cs-fixer fix -v --diff ./src
 vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
@@ -277,7 +277,7 @@ vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resour
 
 単体のファイルにphpunitをかける場合(通信しないのであればローカルで直接実行が可能)
 
-```shell-session
+```shell
 vendor/bin/phpunit tests/Unit/ExampleTest --testdox
 vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
@@ -291,7 +291,7 @@ docker-compose exec app vendor/bin/phpunit tests/Feature/Service/Admins/AdminsSe
 
 docker コマンド経由で実行する場合は相対パスが変わる。
 
-```shell-session
+```shell
 vendor/bin/phpunit --coverage-text --colors=never > storage/logs/coverage.log
 docker-compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
 ```
@@ -300,13 +300,13 @@ docker-compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/
 
 コンソールには出力されない。
 
-```shell-session
+```shell
 vendor/bin/phpunit --testdox --coverage-text --colors=never > storage/logs/coverage.log
 ```
 
 カバレッジの出力には、ENVかphp.iniに下記の設定が必要。
 
-```shell-session
+```shell
 XDEBUG_MODE=coverage or xdebug.mode=coverage
 ```
 
@@ -316,7 +316,7 @@ XDEBUG_MODE=coverage or xdebug.mode=coverage
 backend/.envの値はプロジェクトrootの.envの値に合わせること。
 DB_HOSTはdocker.compose.ymlのmysqlコンテナの名前と同様になる。
 
-```shell-session
+```shell
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
@@ -327,7 +327,7 @@ DB_PASSWORD=
 
 マイグレーションは必ずコンテナの内部で実行すること
 
-```shell-session
+```shell
 $ docker-compose exec app php artisan migrate
 Migration table created successfully.
 Migrating: 2014_10_12_000000_create_users_table
@@ -354,13 +354,13 @@ Migrated:  2019_08_19_000000_create_failed_jobs_table (0.03 seconds)
 
 データベースをリフレッシュし、全データベースシードを実行する
 
-```shell-session
+```shell
 $ php artisan migrate:refresh --seed
 ```
 
 データベースから全テーブルをドロップする。
 
-```shell-session
+```shell
 $ php artisan migrate:fresh (--seed)
 ```
 
@@ -388,33 +388,33 @@ laravel/uiのインストール(Larevel 8以降は不要。)
 
 メモリ消費量が大きい為、コンテナ側で実行する。(php.iniの設定)
 
-```shell-session
+```shell
 $ docker-compose exec app composer require laravel/ui
 ```
 
 認証系のファイルの作成
 
-```shell-session
+```shell
 $ php artisan ui vue --auth
 ```
 
 Laravel8からlaravel/uiで認証を使わなくなった。(上記は不要)
 `jetstream`を使う
 
-```shell-session
+```shell
 $ composer require laravel/jetstream
 $ php artisan jetstream:install livewire
 ```
 
 マイグレーションの実行
 
-```shell-session
+```shell
 $ docker-compose exec app php artisan migrate
 ```
 
 アセットのコンパイル
 
-```shell-session
+```shell
 $ npm install
 $ npm run dev or npm run production
 ```
@@ -428,19 +428,19 @@ $ npm run dev or npm run production
 
 `tymon/jwt-auth`のインストール。(バージョン指定必須)
 
-```shell-session
+```shell
 $ composer require tymon/jwt-auth ^1.0.2
 ```
 
 config/jwt.phpの作成
 
-```shell-session
+```shell
 $ php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
 ```
 
 JWTで用いる秘密鍵の作成
 
-```shell-session
+```shell
 $ php artisan jwt:secret
 ```
 
@@ -545,7 +545,7 @@ Userモデルの位置を変更した為、修正する。
 
 composer dump-autoloadの実行
 
-```shell-session
+```shell
 $ composer dump-autoload
 ```
 
@@ -584,13 +584,13 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
 
 *ディレクトリ名は随時変更
 
-```shell-session
+```shell
  $ php artisan make:controller Users/AuthController
 ```
 
 各CRUD処理のメソッドを予め作成しておきたい場合は`--resource`オプションをつける
 
-```shell-session
+```shell
  $ php artisan make:controller Users/AuthController --resource
 ```
 
@@ -629,7 +629,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
 テストユーザーの作成
 
 
-```shell-session
+```shell
  $ php artisan make:seeder UsersTableSeeder
 ```
 
@@ -687,7 +687,7 @@ class DatabaseSeeder extends Seeder
 
 シーディングの実行
 
-```shell-session
+```shell
  $ php artisan db:seed
 ```
 
@@ -696,7 +696,7 @@ class DatabaseSeeder extends Seeder
 
 PostmanなどのAPIクライアントで下記のURLでPOSTリクエストを実行する。
 
-```shell-session
+```shell
 localhost/api/auth/login
 ```
 
@@ -745,25 +745,25 @@ ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstre
 
 ### テーブル作成(マイグレーションファイル作成)
 
-```shell-session
+```shell
  $ php artisan make:migration create_test_table
 ```
 
 ### Model作成
 
-```shell-session
+```shell
  $ php artisan make:model Models/Test
 ```
 
 `v8`では`Models`ディレクトリがある為、Model名のみを指定すれば良い。
 
-```shell-session
+```shell
  $ php artisan make:model Test
 ```
 
 ### シーディングファイル作成
 
-```shell-session
+```shell
  $ php artisan make:seeder TestTableSeeder
 ```
 
@@ -771,13 +771,13 @@ ServiceProviderで利用している`App\Actions\Fortify`、`App\Actions\Jetstre
 
 ### ファクトリーファイル作成
 
-```shell-session
+```shell
  $ php artisan make:factory TestFactory
 ```
 
 ### ポリシーの作成
 
-```shell-session
+```shell
 $ php artisan make:policy TestPolicy
 ```
 
@@ -785,7 +785,7 @@ $ php artisan make:policy TestPolicy
 
 ### テストコードの作成
 
-```shell-session
+```shell
 $ php artisan make:test SampleTest --unit
 ```
 
@@ -794,7 +794,7 @@ $ php artisan make:test SampleTest --unit
 ※日付ごとにログを出力する方法
 `.env`の`LOG_CHANNEL`を下記の通りに設定する。(defaultが`stack`)
 
-```shell-session
+```shell
 # LOG_CHANNEL=stack
 LOG_CHANNEL=daily
 ```
@@ -813,24 +813,24 @@ Log::info(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' .'log test
 ※日付ごとにログを出力する方法
 `.env`の`LOG_CHANNEL`を下記の通りに設定する。(defaultが`stack`)
 
-```shell-session
+```shell
 $ php artisan make:listener TestHandler
 ```
 
 ### サービスプロパイダーの作成
 
-```shell-session
+```shell
 $ php artisan make:provider TestServiceProvider
 ```
 
 ### リソースの作成
 
-```shell-session
+```shell
 $ php artisan make:resource Test
 ```
 ### コレクションリソースの作成
 
-```shell-session
+```shell
 $ php artisan make:resource Test --collection
 or
 $ php artisan make:resource TestCollection
@@ -838,13 +838,13 @@ $ php artisan make:resource TestCollection
 
 ### ミドルウェアの作成
 
-```shell-session
+```shell
 $ php artisan make:middleware TestMiddleWare
 ```
 
 ### フォームリクエストの作成(バリデーションルール)
 
-```shell-session
+```shell
 $ php artisan make:request TestPostRequest
 ```
 
@@ -852,7 +852,7 @@ $ php artisan make:request TestPostRequest
 
 - Laravel-Excelのインストール
 
-```shell-session
+```shell
 $ composer require maatwebsite/excel
 
 # php8+Laravel9から、「psr/simple-cache」もインストールする必要がある。(上記でエラーが発生するなら下記で対応。)
@@ -881,13 +881,13 @@ Maatwebsite\Excel\ExcelServiceProvider::class,
 
 - stubの作成
 
-```shell-session
+```shell
 $ php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
 ```
 
 - エクスポートクラスとインポートクラスの作成
 
-```shell-session
+```shell
 $ php artisan make:export TestExport --model=App\\Models\\Admins
 $ php artisan make:import TestImport --model=App\\Models\\Admins
 # 子ディレクトリ内に作成する場合
@@ -907,7 +907,7 @@ return Excel::download(new TestExport($collection), 'filename_' . Carbon::now()-
 
 - TCPDFのインストール
 
-```shell-session
+```shell
 $ composer require tecnickcom/tcpdf
 ```
 
@@ -943,11 +943,11 @@ use TCPDF;
 
 slack通知の場合は`slack-notification-channel`をインストールする。
 
-```shell-session
+```shell
 $ composer require laravel/slack-notification-channel
 ```
 
-```shell-session
+```shell
 $ php artisan make:notification TestNotification
 ```
 
@@ -984,7 +984,7 @@ DB接続の都合上、Dockerコンテナ上で実行する必要がある。
 
 CollectionをToArray()すると、時間のフォーマットが変わる。
 
-```shell-session
+```shell
 $ docker exec -it app-container-name ash
 $ php artisan tinker
 Psy Shell v0.10.12 (PHP 8.0.15 — cli) by Justin Hileman
@@ -1258,7 +1258,7 @@ Modelでの利用例
 
 下記のコマンドで`App\Console\Commands`内にコマンド作成用のファイルが作成される。
 
-```shell-session
+```shell
 php artisan make:command TestCommand
 ```
 
@@ -1631,7 +1631,7 @@ CACHE_DRIVER=redis
 
 下記のコマンドで`yarn upgrade`と同様の要領でパッケージの更新を掛けられる。
 
-```shell-session
+```shell
 $ composer update
 ```
 
@@ -1639,7 +1639,7 @@ $ composer update
 
 下記のコマンドでパッケージの削除が行える。`composer.lock`は更新される為、`composer install`を改めてかける。
 
-```shell-session
+```shell
 $ composer remove packageName
 
 # composer.lockの更新
@@ -1653,13 +1653,13 @@ $ composer install
 
 ### StripeのPHP用パッケージの追加
 
-```shell-session
+```shell
 $ composer require stripe/stripe-php
 ```
 
 .envに環境変数としてpublic keyとprivate keyを設定する。(configで参照出来る様にする。)
 
-```shell-session
+```shell
 STRIPE_PUBLIC_KEY=test_public_key
 STRIPE_SECRET_KEY=test_private_key
 ```
@@ -1734,13 +1734,13 @@ $ composer require league/flysystem-aws-s3-v3
 
 update対象の確認
 
-```shell-session
+```shell
 $ npm audit
 ```
 
 fixをかける。
 
-```shell-session
+```shell
 $ npm audit fix
 ```
 
@@ -1748,7 +1748,7 @@ $ npm audit fix
 
 `--force`オプションでアップグレードを掛けられる。
 
-```shell-session
+```shell
 $ npm audit fix --force
 ```
 
