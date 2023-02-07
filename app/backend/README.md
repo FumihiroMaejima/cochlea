@@ -1727,6 +1727,15 @@ $ ./vendor/bin/phpstan analyze app tests
 $ composer require league/flysystem-aws-s3-v3
 ```
 
+---
+
+## ソーシャルログイン
+
+`laravel/socialite`のインストール
+
+```shell
+composer require laravel/socialite
+```
 
 ---
 
