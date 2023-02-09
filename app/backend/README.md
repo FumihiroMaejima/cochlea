@@ -1737,6 +1737,46 @@ $ composer require league/flysystem-aws-s3-v3
 composer require laravel/socialite
 ```
 
+configの設定
+
+`config/services.php`に下記の様なSNSごとの設定を追加する
+
+```php
+return [
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => env('APP_URL') . '/login/github/callback',
+    ],
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('APP_URL') . '/login/google/callback',
+    ],
+    'facebook' => [
+        'client_id' =>  env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' =>  env('APP_URL') . '/login/facebook/callback',
+    ],
+];
+```
+
+
+`config/app.php`にproviderの登録とalias設定を追加する
+
+```php
+    'providers' => [
+        // 追加
+        Laravel\Socialite\SocialiteServiceProvider::class,
+    ],
+
+    'aliases' => [
+        // 追加
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    ],
+```
+
+
 ---
 
 ## php.iniで設定しているメモリ上限の確認(スクリプトが確保できる最大メモリのバイト数)
