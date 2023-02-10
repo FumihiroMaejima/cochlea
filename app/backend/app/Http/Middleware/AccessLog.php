@@ -169,8 +169,8 @@ class AccessLog
             'request_content'  => $this->requestContent,
             'plathome'         => $this->plathome,
             'process_id'       => $this->pid,
-            'memory'           => $this->memory . 'Byte',
-            'peak_memory'      => $this->peakMemory . 'Byte',
+            'memory'           => $this->memory . ' Byte',
+            'peak_memory'      => $this->peakMemory . ' Byte',
         ];
 
         // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);
