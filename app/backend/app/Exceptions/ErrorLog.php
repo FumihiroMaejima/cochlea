@@ -53,8 +53,8 @@ class ErrorLog
             'request_datetime'  => $this->requestDateTime,
             'message'           => $this->message,
             'process_id'        => $this->pid,
-            'memory'           => $this->memory . 'Byte',
-            'peak_memory'      => $this->peakMemory . 'Byte',
+            'memory'           => $this->memory . ' Byte',
+            'peak_memory'      => $this->peakMemory . ' Byte',
             'stackTrace'        => $this->stackTrace,
             'request_parameter' => $this->parameter,
         ];
