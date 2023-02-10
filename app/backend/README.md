@@ -1776,6 +1776,15 @@ return [
     ],
 ```
 
+### Githubアカウントでログインさせる場合
+
+GithubのClientId,Secretを取得する為にApplicationを作る必要がある。
+
+「Settings」→「Developer Settings」→「OAuth Apps」を選択。
+
+「Register a new OAuth application」のフォームが表示される為必要情報を入力する
+
+`CallBack URL`は特に注意。
 
 ---
 
