@@ -176,6 +176,15 @@ Route::group(['prefix' => 'v1'], function () {
         });
     });
 
+
+    // oauth auth
+    Route::middleware(['middleware' => 'oauth_api'])->group(function () {
+        Route::group(['prefix' => 'oauth'], function () {
+            Route::get('github', [\App\Http\Controllers\Admins\SocialLoginController::class, 'redirectToGitHub'])->name('oauth.github.redirectProvider');
+            Route::get('github/callback', [\App\Http\Controllers\Admins\SocialLoginController::class, 'callBackOfGitHub'])->name('oauth.github.callBack');
+        });
+    });
+
     // debug API
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
