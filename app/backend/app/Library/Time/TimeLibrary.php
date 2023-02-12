@@ -18,6 +18,9 @@ class TimeLibrary
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
     public const DATE_TIME_FORMAT_YMDHIS = 'YmdHis'; // ex: 20220101125959
 
+    // 偽装時刻
+    private static ?int $fakerTimeStamp = null;
+
     /**
      * get current date time.
      *
@@ -31,7 +34,15 @@ class TimeLibrary
         // $dateTime = Carbon::now()->format('Y-m-d H:i:s');
 
         // return Carbon::now()->format(self::DEFAULT_DATE_TIME_FORMAT);
-        return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
+        // return Carbon::now()->timezone(Config::get('app.timezone'))->format($format);
+
+        $dateTime = null;
+        // 偽装時刻が設定されている場合
+        if (!is_null(static::$fakerTimeStamp)) {
+            $dateTime = static::$fakerTimeStamp;
+        }
+
+        return (new Carbon($dateTime))->timezone(Config::get('app.timezone'))->format($format);
     }
 
     /**
@@ -41,7 +52,8 @@ class TimeLibrary
      */
     public static function getCurrentDateTimeTimeStamp(): int|float|string
     {
-        return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
+        // return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
+        return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
     }
 
     /**
@@ -205,5 +217,19 @@ class TimeLibrary
     public static function lesser(string $dateTime, string $targetDateTime): bool
     {
         return (new Carbon($dateTime))->lessThan($targetDateTime);
+    }
+
+    /**
+     * setFaker time stamp.
+     *
+     * @param int $timeStamp timestamp
+     * @return void
+     */
+    public static function setFakerTimeStamp(int $timeStamp): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'productinon') {
+            static::$fakerTimeStamp = $timeStamp;
+        }
     }
 }

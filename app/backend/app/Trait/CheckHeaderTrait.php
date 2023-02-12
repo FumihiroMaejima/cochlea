@@ -81,4 +81,22 @@ trait CheckHeaderTrait
         }
         return $sessionId;
     }
+
+    /**
+     * get user id from header
+     *
+     * @param Illuminate\Http\Request $request
+     * @param bool $ignoreNoData ignore if no user id.
+     * @return ?int
+     */
+    public static function getFakerTimeStamp(Request $request): ?int
+    {
+        // ヘッダーから取得した時は文字列になっている。
+        $timeStamp = (int)$request->header(Config::get('myapp.headers.fakerTime'));
+
+        if (!is_integer($timeStamp) || ($timeStamp <= 0)) {
+            return null;
+        }
+        return $timeStamp;
+    }
 }

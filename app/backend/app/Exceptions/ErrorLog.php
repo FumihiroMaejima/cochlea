@@ -17,6 +17,7 @@ class ErrorLog
     private string $message;
     private int|false $pid;
     private string $memory;
+    private string $peakMemory;
     private string $stackTrace;
     private array $parameter;
 
@@ -34,8 +35,9 @@ class ErrorLog
         $this->requestDateTime = TimeLibrary::getCurrentDateTime();
         $this->message         = $error->getMessage();
         $this->pid             = getmypid();
-        $this->memory = (string)memory_get_peak_usage();
-        $this->stackTrace      = $error->getTraceAsString();
+        $this->memory = (string)memory_get_usage();
+        $this->peakMemory = (string)memory_get_peak_usage();
+        $this->stackTrace      = str_replace("\n", '', $error->getTraceAsString()); // １行で表示させる
         $this->parameter       = $parameter;
 
         $this->outputLog();
@@ -51,7 +53,8 @@ class ErrorLog
             'request_datetime'  => $this->requestDateTime,
             'message'           => $this->message,
             'process_id'        => $this->pid,
-            'peak_memory'       => $this->memory,
+            'memory'           => $this->memory . ' Byte',
+            'peak_memory'      => $this->peakMemory . ' Byte',
             'stackTrace'        => $this->stackTrace,
             'request_parameter' => $this->parameter,
         ];

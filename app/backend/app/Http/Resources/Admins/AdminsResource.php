@@ -45,8 +45,6 @@ class AdminsResource extends JsonResource
      */
     public static function toArrayForCreate(AdminCreateRequest $request): array
     {
-        /* $carbon = new Carbon();
-        $test = $carbon->now()->format('Y-m-d H:i:s'); */
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [

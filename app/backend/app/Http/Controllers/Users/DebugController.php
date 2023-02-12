@@ -10,6 +10,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\PdfLibrary;
 use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
+use App\Library\Log\LogLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
@@ -261,5 +262,18 @@ class DebugController extends Controller
     public function getDateTimeByTimeStamp(Request $request): JsonResponse
     {
         return response()->json(TimeLibrary::timeStampToDate($request->timestamp ?? 0));
+    }
+
+    /**
+     * ログファイルの取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getLog(Request $request): JsonResponse
+    {
+        return response()->json(
+            LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)
+        );
     }
 }
