@@ -120,10 +120,15 @@ class AdminServiceBaseTestCase extends TestCase
 
         // 既存ファイルの削除(ディレクトリごと削除)
         $directory = Config::get('myappFile.upload.storage.local.teting.session');
-        FileLibrary::deleteDeletectory($directory);
+        $result = FileLibrary::deleteDeletectory($directory);
 
         // ログインリクエスト
         $response = $this->login();
+
+        echo 'delete result:' . "\n";
+        echo var_dump($result) . "\n";
+        echo 'login:' . "\n";
+        echo var_dump($response) . "\n";
 
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
@@ -147,7 +152,7 @@ class AdminServiceBaseTestCase extends TestCase
             ? implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
             : '';
 
-            echo var_dump($loginUser);
+            echo var_dump($loginUser) . "\n";
 
             self::setHeaders(
                 $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
