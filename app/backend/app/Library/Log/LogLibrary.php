@@ -114,9 +114,14 @@ class LogLibrary
     public static function maskingSecretKeys(array $requestContent): array
     {
         $response = [];
+
+        if (empty($requestContent)) {
+            return $response;
+        }
         foreach ($requestContent as $key => $value) {
             if (!is_string($value)) {
-                return $response[$key] = $value;
+                $response[$key] = $value;
+                continue;
             }
 
             // if (in_array($value, self::SECRET_KEYS, true)) {
