@@ -147,6 +147,8 @@ class AdminServiceBaseTestCase extends TestCase
             ? implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
             : '';
 
+            echo var_dump($loginUser);
+
             self::setHeaders(
                 $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
                 $loginAuthoriey,
