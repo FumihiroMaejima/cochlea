@@ -22,6 +22,9 @@ class LogLibrary
     public const FILE_NAME_ACCESS = 'access';
     public const FILE_NAME_ERROR = 'error';
 
+    // リクエストパラメーターがログ出力可能なContent-type(ファイルアップロードなど'form'になっている場合はリクエストパラメーターはログに出力しない)
+    public const LOG_OUTPUTABLE_CONTENT_TYPE = [null, 'json'];
+
     /**
      * get logfile contents.
      *
@@ -80,5 +83,16 @@ class LogLibrary
         }
 
         return $response;
+    }
+
+    /**
+     * whichever content type is able to output to log.
+     *
+     * @param ?string $contentType
+     * @return bool
+     */
+    public static function isLoggableContentType(?string $contentType): bool
+    {
+        return in_array($contentType, self::LOG_OUTPUTABLE_CONTENT_TYPE, true);
     }
 }

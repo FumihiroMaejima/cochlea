@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Library\Log\LogLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -96,14 +97,15 @@ class AccessLog
      */
     private function getLogParameterByRequest(Request $request): void
     {
+        $contentType = $request->getContentType();
         $this->host            = $request->getHost();
         $this->ip              = $request->getClientIp();
         $this->method          = $request->getMethod();
         $this->uri             = $request->getRequestUri();
-        $this->contentType     = $request->getContentType();
+        $this->contentType     = $contentType;
         $this->plathome        = $request->userAgent() ?? '';
         $this->headers         = self::getRequestHeader($request->header());
-        $this->requestContent  = $request->getContent();
+        $this->requestContent  = LogLibrary::isLoggableContentType($contentType) ? $request->getContent() : '';
     }
 
     /**
