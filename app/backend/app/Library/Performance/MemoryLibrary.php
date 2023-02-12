@@ -27,7 +27,7 @@ class MemoryLibrary
     public static function convert(int $size): string
     {
         // この場合のlogは自然対数のこと。log(base)numを返す
-        return round($size/pow(self::BASE_BIT,($i=floor(log($size,self::BASE_BIT)))),2) . ' ' . self::MEMORY_UNIT[$i];
+        return round($size/pow(self::BASE_BIT, ($i=floor(log($size, self::BASE_BIT)))), 2) . ' ' . self::MEMORY_UNIT[$i];
     }
 
     /**

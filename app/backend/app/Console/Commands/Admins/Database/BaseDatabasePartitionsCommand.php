@@ -280,7 +280,7 @@ class BaseDatabasePartitionsCommand extends Command
             echo "Target Partitions is Here. \n";
             echo var_dump($expiredPartions);
 
-            foreach($expiredPartions as $partion) {
+            foreach ($expiredPartions as $partion) {
                 PartitionLibrary::deletePartition(
                     $partion[PartitionLibrary::KEY_TABLE_SCHEMA],
                     $partion[PartitionLibrary::KEY_TABLE_NAME],

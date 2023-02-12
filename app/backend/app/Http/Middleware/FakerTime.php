@@ -31,6 +31,5 @@ class FakerTime
             }
             return $next($request);
         }
-
     }
 }

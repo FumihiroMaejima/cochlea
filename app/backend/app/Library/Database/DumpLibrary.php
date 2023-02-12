@@ -29,7 +29,7 @@ class DumpLibrary
     {
         // \Illuminate\Contracts\Foundation\Application をパラメーターとして渡す必要がある
         $app = app();
-        $connectionInstance = (new DatabaseManager($app,new ConnectionFactory($app)))->connection($connection);
+        $connectionInstance = (new DatabaseManager($app, new ConnectionFactory($app)))->connection($connection);
         // sqliteを使う場合の設定は現状考慮外
         (new MySqlSchemaState($connectionInstance))->dump($connectionInstance, $path);
     }
