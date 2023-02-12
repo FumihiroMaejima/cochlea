@@ -176,6 +176,15 @@ Route::group(['prefix' => 'v1'], function () {
         });
     });
 
+
+    // oauth auth
+    Route::middleware(['middleware' => 'oauth_api'])->group(function () {
+        Route::group(['prefix' => 'oauth'], function () {
+            Route::get('github', [\App\Http\Controllers\Admins\SocialLoginController::class, 'redirectToGitHub'])->name('oauth.github.redirectProvider');
+            Route::get('github/callback', [\App\Http\Controllers\Admins\SocialLoginController::class, 'callBackOfGitHub'])->name('oauth.github.callBack');
+        });
+    });
+
     // debug API
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
@@ -221,6 +230,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('timestamp', [\App\Http\Controllers\Users\DebugController::class, 'getTimeStampByDateTime'])->name('user.debug.datetimes.timestamp');
                 // タイムスタンプから日付
                 Route::get('datetime', [\App\Http\Controllers\Users\DebugController::class, 'getDateTimeByTimeStamp'])->name('user.debug.datetimes.datetime');
+            });
+
+            // ログ関係
+            Route::group(['prefix' => 'logs'], function () {
+                Route::get('access', [\App\Http\Controllers\Users\DebugController::class, 'getLog'])->name('user.debug.logs.access');
             });
         });
     }

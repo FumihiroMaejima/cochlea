@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\PasswordForgotNotificationService;
+use Closure;
 
 // vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.phpをコピーして作成
 class ResetPasswordNotification extends Notification
@@ -119,7 +120,7 @@ class ResetPasswordNotification extends Notification
     /**
      * Set a callback that should be used when creating the reset password button URL.
      *
-     * @param  \Closure(mixed, string): string  $callback
+     * @param  Closure(mixed, string): string  $callback
      * @return void
      */
     public static function createUrlUsing($callback)
@@ -130,7 +131,7 @@ class ResetPasswordNotification extends Notification
     /**
      * Set a callback that should be used when building the notification mail message.
      *
-     * @param  \Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage  $callback
+     * @param  Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage  $callback
      * @return void
      */
     public static function toMailUsing($callback)

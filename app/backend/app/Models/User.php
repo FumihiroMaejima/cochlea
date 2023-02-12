@@ -12,7 +12,6 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject
@@ -26,8 +25,6 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
-    protected $carbon;
-    protected $now;
 
     // カラム一覧
     public const ID = 'id';
@@ -96,12 +93,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $appends = [];
-
-    public function __construct()
-    {
-        $this->carbon = new Carbon();
-        $this->now = $this->carbon->now()->timestamp;
-    }
 
     public function getUserId()
     {

@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\AccessLog::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\FakerTime::class,
     ];
 
     /**
@@ -45,6 +46,15 @@ class Kernel extends HttpKernel
             // Laravelセッションを利用する場合はStartSession,ShareErrorsFromSessionのコメントアウトを外す
             // \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+
+        // OAuthをAPIで利用する為にはLaravelのキャッシュが必要
+        'oauth_api' => [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];

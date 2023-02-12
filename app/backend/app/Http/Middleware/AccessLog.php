@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Library\Log\LogLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class AccessLog
     private string $plathome;
     private int|false $pid;
     private string $memory;
+    private string $peakMemory;
 
     private array $excludes = [
         '_debugbar',
@@ -64,7 +66,8 @@ class AccessLog
         $response = $next($request);
 
         $this->responseTime = microtime(true) - $startTime;
-        $this->memory = (string)memory_get_peak_usage();
+        $this->memory = (string)memory_get_usage();
+        $this->peakMemory = (string)memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
 
@@ -94,14 +97,15 @@ class AccessLog
      */
     private function getLogParameterByRequest(Request $request): void
     {
+        $contentType = $request->getContentType();
         $this->host            = $request->getHost();
         $this->ip              = $request->getClientIp();
         $this->method          = $request->getMethod();
         $this->uri             = $request->getRequestUri();
-        $this->contentType     = $request->getContentType();
+        $this->contentType     = $contentType;
         $this->plathome        = $request->userAgent() ?? '';
         $this->headers         = self::getRequestHeader($request->header());
-        $this->requestContent  = $request->getContent();
+        $this->requestContent  = LogLibrary::maskingSecretKeys($request->all());
     }
 
     /**
@@ -167,7 +171,8 @@ class AccessLog
             'request_content'  => $this->requestContent,
             'plathome'         => $this->plathome,
             'process_id'       => $this->pid,
-            'peak_memory'      => $this->memory,
+            'memory'           => $this->memory . ' Byte',
+            'peak_memory'      => $this->peakMemory . ' Byte',
         ];
 
         // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);

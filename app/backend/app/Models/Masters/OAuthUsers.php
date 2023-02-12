@@ -2,21 +2,20 @@
 
 namespace App\Models\Masters;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\PasswordBroker;
-use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Query\Builder;
+use App\Library\Array\ArrayLibrary;
+use App\Library\Database\ShardingLibrary;
+
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Library\Array\ArrayLibrary;
-use App\Library\Random\RandomStringLibrary;
-use App\Notifications\Admins\ResetPasswordNotification;
 
-class Admins extends Authenticatable implements JWTSubject
+class OAuthUsers extends Authenticatable implements JWTSubject
 {
     use HasFactory;
     use Notifiable;
@@ -29,19 +28,14 @@ class Admins extends Authenticatable implements JWTSubject
     public const EMAIL_VERIFIED_AT = 'email_verified_at';
     public const PASSWORD = 'password';
     public const REMEMBER_TOKEN = 'remember_token';
+    public const GITT_HUB_ID = 'github_id';
+    public const GIT_HUB_TOKEN = 'github_token';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'admins';
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
+    protected $table = 'oauth_users';
 
     /**
      * used in initializeSoftDeletes()
@@ -57,36 +51,35 @@ class Admins extends Authenticatable implements JWTSubject
      */
     protected $primaryKey = self::ID;
 
-
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         self::NAME,
         self::EMAIL,
         self::PASSWORD,
-        self::UPDATED_AT
+        self::GIT_HUB_TOKEN,
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token'
+        self::PASSWORD,
+        self::REMEMBER_TOKEN
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        self::EMAIL_VERIFIED_AT => 'datetime',
     ];
 
     /**
@@ -133,26 +126,13 @@ class Admins extends Authenticatable implements JWTSubject
     }
 
     /**
-     * sent password reset mail.
+     * get query builder by user id.
      *
-     * @return void
+     * @return Builder
      */
-    public function sentPasswordResetMail(): void
+    public function getQueryBuilder(): Builder
     {
-        $token = RandomStringLibrary::getRandomStringValue();
-        $this->getEmailForPasswordReset();
-        $this->sendPasswordResetNotification($token);
-    }
-
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token));
+        return DB::table($this->getTable());
     }
 
     /**
@@ -162,17 +142,15 @@ class Admins extends Authenticatable implements JWTSubject
      * @param bool $isLock exec lock For Update
      * @return array|null
      */
-    public function getRecordById(int $id, bool $isLock = false): array|null
+    public function getRecordByUserId(int $userId, bool $isLock = false): array|null
     {
-        $query = DB::table($this->getTable())
-            ->where(static::ID, '=', $id);
-
+        $query = DB::table($this->getTable())->where(self::ID, '=', $userId);
 
         if ($isLock) {
             $query->lockForUpdate();
         }
 
-        $record = $query->get()->toArray();
+        $record = $query->first();
 
         if (empty($record)) {
             return null;
@@ -184,33 +162,35 @@ class Admins extends Authenticatable implements JWTSubject
     /**
      * get single Record record by user id.
      *
-     * @param string $credential user email or name
-     * @param string $password password
-     * @param bool $isDevelopment whichever local development mode
+     * @param int $userId user id
+     * @param bool $isLock exec lock For Update
      * @return array|null
      */
-    public function getRecordByCredential(string $credential, string $password, bool $isDevelopment): array|null
+    public function getRecordByGitHubUserId(int $userId, bool $isLock = false): array|null
     {
-        $query = DB::table($this->getTable());
+        $query = DB::table($this->getTable())->where(self::GITT_HUB_ID, '=', $userId);
 
-        // 開発時はnameで検索
-        if ($isDevelopment) {
-            $query->where(self::NAME, '=', $credential);
-        } else {
-            $query->where(self::EMAIL, '=', $credential);
+        if ($isLock) {
+            $query->lockForUpdate();
         }
 
-        $record = $query->get()->toArray();
+        $record = $query->first();
 
         if (empty($record)) {
             return null;
-        } else {
-            $record = ArrayLibrary::getFirst(ArrayLibrary::toArray($record));
-            if (Hash::check($password, $record[self::PASSWORD])) {
-                return $record;
-            }
         }
 
-        return null;
+        return ArrayLibrary::toArray($record);
+    }
+
+    /**
+     * insert record.
+     *
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertByUserId(array $resource): bool
+    {
+        return DB::table($this->getTable())->insert($resource);
     }
 }

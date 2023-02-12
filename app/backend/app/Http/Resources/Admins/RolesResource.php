@@ -92,8 +92,6 @@ class RolesResource extends JsonResource
      */
     public static function toArrayForCreate(RoleCreateRequest $request): array
     {
-        /* $carbon = new Carbon();
-        $test = $carbon->now()->format('Y-m-d H:i:s'); */
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [

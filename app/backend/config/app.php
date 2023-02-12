@@ -207,6 +207,7 @@ return [
         App\Providers\DataBaseQueryServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
     /*
@@ -224,6 +225,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         // add
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ])->toArray(),
 
 ];

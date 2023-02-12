@@ -24,7 +24,6 @@ class UsersTableSeeder extends BaseSeeder
     {
         $this->tableName = (new User())->getTable();
 
-        // $now = Carbon::now()->timezone(Config::get('app.timezone'));
         $now = TimeLibrary::getCurrentDateTime();
 
         $template = [
