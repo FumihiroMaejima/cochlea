@@ -24,6 +24,15 @@ class LogLibrary
 
     // リクエストパラメーターがログ出力可能なContent-type(ファイルアップロードなど'form'になっている場合はリクエストパラメーターはログに出力しない)
     public const LOG_OUTPUTABLE_CONTENT_TYPE = [null, 'json'];
+    public const SECRET_KEYS = [
+        'email' => 'email',
+        'password' => 'password',
+        'password_confirmation' => 'password_confirmation',
+        'email' => 'email',
+        'token' => 'token',
+        'tokenPayload' => 'tokenPayload',
+        'tokenHeader' => 'tokenHeader',
+    ];
 
     /**
      * get logfile contents.
@@ -94,5 +103,30 @@ class LogLibrary
     public static function isLoggableContentType(?string $contentType): bool
     {
         return in_array($contentType, self::LOG_OUTPUTABLE_CONTENT_TYPE, true);
+    }
+
+    /**
+     * masking secret value in log.
+     *
+     * @param array $requestContent
+     * @return array
+     */
+    public static function maskingSecretKeys(array $requestContent): array
+    {
+        $response = [];
+        foreach($requestContent as $key => $value) {
+
+            if (!is_string($value)) {
+                return $value;
+            }
+
+            // if (in_array($value, self::SECRET_KEYS, true)) {
+            if (isset(self::SECRET_KEYS[$key])) {
+                $response[$key] = 'secretValue:(' . mb_strlen($value) . ')';
+            } else {
+                $response[$key] = $value;
+            }
+        }
+        return $response;
     }
 }
