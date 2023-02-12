@@ -135,7 +135,7 @@ class ServiceBaseTestCase extends TestCase
     protected function login(): array
     {
         // ログインリクエスト
-        return $this->json('POST', route('auth.admin.login'), [
+        return $this->json('POST', route('auth.user.login'), [
             'email'    => Config::get('myappTest.test.admin.login.email'),
             'password' => Config::get('myappTest.test.admin.login.password')
         ], ['Content-Type' => 'application/json'])->json();

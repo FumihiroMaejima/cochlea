@@ -125,11 +125,6 @@ class AdminServiceBaseTestCase extends TestCase
         // ログインリクエスト
         $response = $this->login();
 
-        echo 'delete result:' . "\n";
-        echo var_dump($result) . "\n";
-        echo 'login:' . "\n";
-        echo var_dump($response) . "\n";
-
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
             self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
@@ -151,8 +146,6 @@ class AdminServiceBaseTestCase extends TestCase
             $loginAuthoriey = is_array($loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
             ? implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
             : '';
-
-            echo var_dump($loginUser) . "\n";
 
             self::setHeaders(
                 $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
