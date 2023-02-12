@@ -142,11 +142,14 @@ class AdminServiceBaseTestCase extends TestCase
 
         // 各クラスで1回だけ行たい処理
         if (!static::$initialized) {
-            $loginUser         = $this->setUpInit(true);
+            $loginUser = $this->setUpInit(true);
+            $loginAuthoriey = is_array($loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
+            ? implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY])
+            : '';
 
             self::setHeaders(
                 $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
-                implode(',', $loginUser[self::INIT_REQUEST_RESPONSE_USER_AUTHORITY]),
+                $loginAuthoriey,
                 self::TOKEN_PREFIX . $loginUser[self::INIT_REQUEST_RESPONSE_TOKEN]
             );
 
