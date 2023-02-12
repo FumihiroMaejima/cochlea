@@ -105,7 +105,7 @@ class AccessLog
         $this->contentType     = $contentType;
         $this->plathome        = $request->userAgent() ?? '';
         $this->headers         = self::getRequestHeader($request->header());
-        $this->requestContent  = LogLibrary::isLoggableContentType($contentType) ? LogLibrary::maskingSecretKeys($request->all()) : '';
+        $this->requestContent  = LogLibrary::maskingSecretKeys($request->all());
     }
 
     /**
