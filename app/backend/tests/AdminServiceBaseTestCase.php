@@ -125,9 +125,6 @@ class AdminServiceBaseTestCase extends TestCase
         // ログインリクエスト
         $response = $this->login();
 
-        echo 'delete result:' . "\n";
-        echo var_dump($result) . "\n";
-
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN          => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
             self::INIT_REQUEST_RESPONSE_USER_ID        => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
@@ -167,8 +164,6 @@ class AdminServiceBaseTestCase extends TestCase
      */
     protected function login(): array
     {
-        echo 'login email:' . Config::get('myappTest.test.admin.login.email') . "\n";
-        echo 'login password:' . Config::get('myappTest.test.admin.login.password') . "\n";
         // ログインリクエスト
         return $this->json('POST', route('auth.admin.login'), [
             'email'    => Config::get('myappTest.test.admin.login.email'),
