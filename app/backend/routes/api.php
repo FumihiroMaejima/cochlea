@@ -165,6 +165,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('/cancel', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'cancel'])->name('user.coins.payment.cancel');
                 Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
             });
+
+            // coin history
+            Route::group(['prefix' => 'history'], function () {
+                Route::get('/list', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistoryList'])->name('user.coins.history.list');
+            });
         });
 
         // informations

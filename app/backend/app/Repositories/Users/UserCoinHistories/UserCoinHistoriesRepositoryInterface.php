@@ -9,6 +9,8 @@ interface UserCoinHistoriesRepositoryInterface
 {
     public function getByUserId(int $userId, bool $isLock = false): Collection|null;
 
+    public function getListByUserId(int $userId): Collection;
+
     public function create(int $userId, array $resource): int;
 
     public function update(int $userId, string $createdAt, array $resource): int;

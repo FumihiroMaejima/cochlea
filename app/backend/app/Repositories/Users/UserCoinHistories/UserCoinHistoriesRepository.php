@@ -62,6 +62,23 @@ class UserCoinHistoriesRepository extends BaseUserRepository implements UserCoin
     }
 
     /**
+     * get list by user id.
+     *
+     * @param int $userId user id
+     * @return Collection
+     * @throws MyApplicationHttpException
+     */
+    public function getListByUserId(int $userId): Collection
+    {
+        $query = $this->getQueryBuilder($userId)
+            ->select(['*'])
+            ->where(UserCoinHistories::USER_ID, '=', $userId)
+            ->where(UserCoinHistories::DELETED_AT, '=', null);
+
+        return $query->get();
+    }
+
+    /**
      * create record.
      *
      * @param int $userId user id
