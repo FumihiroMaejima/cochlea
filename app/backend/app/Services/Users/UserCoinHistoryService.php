@@ -2,7 +2,6 @@
 
 namespace App\Services\Users;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
@@ -10,29 +9,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
-use App\Http\Resources\Admins\CoinsResource;
-use App\Http\Resources\Logs\UserCoinPaymentLogResource;
-use App\Http\Resources\Users\UserCoinHistoriesResource;
-use App\Http\Resources\Users\UserCoinPaymentStatusResource;
-use App\Http\Resources\Users\UserCoinsResource;
+use App\Http\Resources\Users\UserCoinHistoryResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
-use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
-use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
+use App\Repositories\Users\UserCoins\UserCoinsRepository;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
-use App\Library\Stripe\CheckoutLibrary;
-use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
-use App\Models\Users\UserCoinPaymentStatus;
 use App\Models\Users\UserCoins;
-use App\Repositories\Users\UserCoins\UserCoinsRepository;
-use Exception;
 
 class UserCoinHistoryService
 {
@@ -41,32 +27,24 @@ class UserCoinHistoryService
 
     protected CoinsRepositoryInterface $coinsRepository;
     protected UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface;
-    protected UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository;
     protected UserCoinsRepositoryInterface $userCoinsRepository;
-    protected UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository;
 
     /**
      * create instance
      *
      * @param CoinsRepositoryInterface $coinsRepository
      * @param UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface
-     * @param UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository
      * @param UserCoinsRepositoryInterface $userCoinsRepository
-     * @param UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
      * @return void
      */
     public function __construct(
         CoinsRepositoryInterface $coinsRepository,
         UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface,
-        UserCoinPaymentStatusRepositoryInterface $userCoinPaymentStatusRepository,
-        UserCoinsRepositoryInterface $userCoinsRepository,
-        UserCoinPaymentLogRepositoryInterface $userCoinPaymentLogRepository
+        UserCoinsRepositoryInterface $userCoinsRepository
     ) {
         $this->coinsRepository = $coinsRepository;
         $this->userCoinHistoriesRepositoryInterface = $userCoinHistoriesRepositoryInterface;
-        $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
-        $this->userCoinPaymentLogRepository = $userCoinPaymentLogRepository;
     }
 
     /**
@@ -78,62 +56,16 @@ class UserCoinHistoryService
      */
     public function getCoinHistory(int $userId): JsonResponse
     {
-        $coin = $this->userCoinHistoriesRepositoryInterface->getListByUserId($userId);
+        $coinHistories = $this->userCoinHistoriesRepositoryInterface->getListByUserId($userId);
+        $coinHistoryResources = UserCoinHistoryResource::toArrayForList(ArrayLibrary::toArray($coinHistories->toArray()));
 
         return response()->json(
             [
                 'code' => 200,
                 'message' => 'Success',
-                'data' => $coin->toArray(),
+                'data' => $coinHistoryResources,
             ]
         );
-    }
-
-    /**
-     * get coins data.
-     *
-     * @return array
-     */
-    private function getCoins(): array
-    {
-        $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_COIN_COLLECTION_LIST);
-
-        // キャッシュチェック
-        if (is_null($cache)) {
-            $collection = $this->coinsRepository->getRecords();
-            $resourceCollection = CoinsResource::toArrayForGetCoinsCollection($collection);
-
-            if (!empty($resourceCollection)) {
-                CacheLibrary::setCache(self::CACHE_KEY_USER_COIN_COLLECTION_LIST, $resourceCollection);
-            }
-        } else {
-            $resourceCollection = $cache;
-        }
-
-        return $resourceCollection;
-    }
-
-    /**
-     * get coins by coin id.
-     *
-     * @param int $coinId coin id
-     * @return array
-     */
-    private function getCoinByCoinId(int $coinId): array
-    {
-        $coins = $this->coinsRepository->getById($coinId);
-
-        if (is_null($coins)) {
-            // $validator->errors()->toArray();
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_404,
-                'not exitst coin.'
-            );
-        }
-
-        // 複数チェックはrepository側で実施済み
-        // $coin = json_decode(json_encode($coins->toArray()[0]), true);
-        return ArrayLibrary::toArray(ArrayLibrary::getFirst($coins->toArray()));
     }
 
     /**
