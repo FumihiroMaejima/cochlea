@@ -52,7 +52,7 @@ class UserCoinHistoryResource extends JsonResource
         foreach ($records as  $record) {
             $response[] = [
                 UserCoinHistories::USER_ID => $record[UserCoinHistories::USER_ID],
-                UserCoinHistories::TYPE => $record[UserCoinHistories::TYPE],
+                UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$record[UserCoinHistories::TYPE]],
                 UserCoinHistories::GET_FREE_COINS => $record[UserCoinHistories::GET_FREE_COINS],
                 UserCoinHistories::GET_PAID_COINS => $record[UserCoinHistories::GET_PAID_COINS],
                 UserCoinHistories::GET_LIMITED_TIME_COINS => $record[UserCoinHistories::GET_LIMITED_TIME_COINS],
