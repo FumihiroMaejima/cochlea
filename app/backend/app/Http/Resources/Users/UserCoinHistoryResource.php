@@ -11,6 +11,7 @@ class UserCoinHistoryResource extends JsonResource
     public const RESOURCE_KEY_DATA = 'data';
     public const RESOURCE_KEY_TEXT = 'text';
     public const RESOURCE_KEY_VALUE = 'value';
+    public const RESOURCE_KEY_HISTORY_VALUE = 'history_value';
 
     public const RESOURCE_KEY_NAME = 'name';
     public const RESOURCE_KEY_DETAIL = 'detail';
@@ -51,7 +52,7 @@ class UserCoinHistoryResource extends JsonResource
 
         foreach ($records as  $record) {
             $response[] = [
-                UserCoinHistories::USER_ID => $record[UserCoinHistories::USER_ID],
+                self::RESOURCE_KEY_HISTORY_VALUE => $record[UserCoinHistories::TYPE],
                 UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$record[UserCoinHistories::TYPE]],
                 UserCoinHistories::GET_FREE_COINS => $record[UserCoinHistories::GET_FREE_COINS],
                 UserCoinHistories::GET_PAID_COINS => $record[UserCoinHistories::GET_PAID_COINS],
