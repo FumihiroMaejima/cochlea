@@ -57,7 +57,9 @@ class UserCoinHistoryService
     public function getCoinHistory(int $userId): JsonResponse
     {
         $coinHistories = $this->userCoinHistoriesRepositoryInterface->getListByUserId($userId);
-        $coinHistoryResources = UserCoinHistoryResource::toArrayForList(ArrayLibrary::toArray($coinHistories->toArray()));
+        $coinHistoryResources = UserCoinHistoryResource::toArrayForList(
+            UserCoinHistories::sortByUpdatedAt(ArrayLibrary::toArray($coinHistories->toArray()), SORT_DESC)
+        );
 
         return response()->json(
             [
