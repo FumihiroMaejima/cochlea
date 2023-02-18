@@ -3,16 +3,56 @@
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use App\Library\Array\ArrayLibrary;
+
 
 class DatabaseLibrary
 {
+    private const DEFAULT_CONNECTION_NAME = 'mysql';
+
     /**
      * get single database connection name from config.
      *
-     * @return string 単一DBで運用する用のDBコネクション名の配列
+     * @param string $connection connection name
+     * @return string database name
      */
     public static function getDatabaseNameByConnection($connection): string
     {
         return Config::get("database.connections.$connection.database");
+    }
+
+    /**
+     * get single database connection name from replication database config.
+     *
+     * @param string $connection connection name
+     * @return string database name
+     */
+    public static function getDatabaseNameByConnectionForReplication($connection): string
+    {
+        return Config::get("database.connections.$connection.read.database");
+    }
+
+    /**
+     * get scema name list in single connection.
+     *
+     * @param ?string $connection connection name
+     * @return array
+     */
+    public static function getSchemaListByConnection(?string $connection = null): array
+    {
+        // デフォルトのコネクション設定
+        if (is_null($connection)) {
+            $connection = self::DEFAULT_CONNECTION_NAME;
+            $database = self::getDatabaseNameByConnectionForReplication($connection);
+        } else {
+            $database = self::getDatabaseNameByConnection($connection);
+        }
+
+        // objectの配列を変換
+        $tmpSchemaList = DB::connection($connection)->select("SHOW TABLES");
+        $schemaList = array_column(ArrayLibrary::toArray($tmpSchemaList), "Tables_in_$database");
+
+        return array_values($schemaList);
     }
 }

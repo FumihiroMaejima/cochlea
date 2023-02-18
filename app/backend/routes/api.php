@@ -241,6 +241,11 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'logs'], function () {
                 Route::get('dateLog', [\App\Http\Controllers\Users\DebugController::class, 'getDateLog'])->name('user.debug.logs.api');
             });
+
+            // 関係
+            Route::group(['prefix' => 'databases'], function () {
+                Route::get('schema', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaList'])->name('user.debug.databases.schema');
+            });
         });
     }
 });

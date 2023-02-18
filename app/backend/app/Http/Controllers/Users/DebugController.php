@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Database\DatabaseLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
@@ -273,7 +274,20 @@ class DebugController extends Controller
     public function getDateLog(Request $request): JsonResponse
     {
         return response()->json(
-            LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)
+            ['data' => LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)]
+        );
+    }
+
+    /**
+     * テーブル一覧の取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getSchemaList(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => DatabaseLibrary::getSchemaListByConnection($request->connection ?? null)]
         );
     }
 }
