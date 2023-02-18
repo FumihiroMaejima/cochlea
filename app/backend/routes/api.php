@@ -244,7 +244,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('dateLog', [\App\Http\Controllers\Users\DebugController::class, 'getDateLog'])->name('user.debug.logs.api');
             });
 
-            // 関係
+            // DB関係
             Route::group(['prefix' => 'databases'], function () {
                 Route::get('schema', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaList'])->name('user.debug.databases.schema');
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
