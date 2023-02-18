@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Database\DatabaseLibrary;
 use App\Library\File\PdfLibrary;
+use App\Library\File\QRCodeLibrary;
 use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
@@ -193,6 +195,19 @@ class DebugController extends Controller
     public function getSamplePDF(): BinaryFileResponse|JsonResponse
     {
         return response()->file(PdfLibrary::getSamplePDF());
+    }
+
+    /**
+     * テスト用QRLコードの表示
+     *
+     * @param DebugFileUploadRequest $request
+     * @return Response
+     * @throws MyApplicationHttpException
+     */
+    public function getSampleQRCode(): Response
+    {
+        // SVGのQRコードをHTMLとして返却
+        return response(QRCodeLibrary::getSampleQrCode());
     }
 
     /**

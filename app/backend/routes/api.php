@@ -212,6 +212,8 @@ Route::group(['prefix' => 'v1'], function () {
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
+            // QRコード出力
+            Route::get('sample-qr', [\App\Http\Controllers\Users\DebugController::class, 'getSampleQRCode'])->name('user.debug.sampleQrCode.get');
 
             // JWT関係
             Route::group(['prefix' => 'jwt'], function () {

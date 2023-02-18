@@ -1795,8 +1795,24 @@ php -i | grep memory_limit
 memory_limit => 128M => 128M
 ```
 
+---
+
+## QRコードの実装
+
+ライブラリを使って実装。色々あるが一旦下記をインストールする
+
+### chillerlan/php-qrcodeのインストール
+
+```shell
+composer require chillerlan/php-qrcode
+```
+
+今のところSVG形式しか使えない。(他のパッケージをインストールする必要がある。)
+
+HTMLとして出力するのが無難。
 
 ---
+
 ### backendのpackage.jsonのアップデート
 
 update対象の確認
