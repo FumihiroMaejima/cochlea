@@ -265,12 +265,12 @@ class DebugController extends Controller
     }
 
     /**
-     * ログファイルの取得
+     * APIログファイルの取得
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function getLog(Request $request): JsonResponse
+    public function getApiLog(Request $request): JsonResponse
     {
         return response()->json(
             LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)

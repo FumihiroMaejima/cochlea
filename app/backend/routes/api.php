@@ -239,7 +239,7 @@ Route::group(['prefix' => 'v1'], function () {
 
             // ログ関係
             Route::group(['prefix' => 'logs'], function () {
-                Route::get('access', [\App\Http\Controllers\Users\DebugController::class, 'getLog'])->name('user.debug.logs.access');
+                Route::get('api', [\App\Http\Controllers\Users\DebugController::class, 'getLog'])->name('user.debug.logs.api');
             });
         });
     }
