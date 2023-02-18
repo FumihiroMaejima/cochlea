@@ -179,6 +179,28 @@ mockサーバーの起動
  $ npm run start
 ```
 
+### Dockerコンテナの利用について
+
+Dockerコンテナを用意した為もうnpmコマンドを利用する必要が無い。
+
+下記でSwaggerエディターとSwaggerUIのコンテナを立ち上げる。(UI,Mockコンテナはやや立ち上がりに時間がかかる(1分ほど？))
+
+```shell
+docker-compose -f ./docker-compose.swagger.yml up -d
+
+# editor
+http://localhost:8100
+# ui
+http://localhost:8200
+# mock server
+http://localhost:3200
+
+### example
+http://localhost:3200/user/coins
+http://localhost:3200/user/events
+http://localhost:3200/user/informations
+```
+
 ---
 
 # AWSの設定
