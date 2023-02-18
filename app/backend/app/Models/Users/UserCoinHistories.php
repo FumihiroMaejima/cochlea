@@ -47,6 +47,7 @@ class UserCoinHistories extends BaseUserDataModel
 
     // カラム一覧
     public const USER_ID = 'user_id';
+    public const UUID = 'uuid';
     public const TYPE = 'type';
     public const GET_FREE_COINS = 'get_free_coins';
     public const GET_PAID_COINS = 'get_paid_coins';
@@ -54,8 +55,8 @@ class UserCoinHistories extends BaseUserDataModel
     public const USED_FREE_COINS = 'used_free_coins';
     public const USED_PAID_COINS = 'used_paid_coins';
     public const USED_LIMITED_TIME_COINS = 'used_limited_time_coins';
-    public const EXPIRED_LIMITED_TIME_COINS = 'exipired_limited_time_coins';
-    public const EXPIRED_AT = 'exipired_at';
+    public const EXPIRED_LIMITED_TIME_COINS = 'expired_limited_time_coins';
+    public const EXPIRED_AT = 'expired_at';
     public const OEDER_ID = 'order_id';
     public const PRODUCT_ID = 'product_id';
     public const CREATED_AT = 'created_at';
@@ -92,6 +93,7 @@ class UserCoinHistories extends BaseUserDataModel
     // 更新可能なカラムリスト
     protected $fillable = [
         self::USER_ID,
+        self::UUID,
         self::TYPE,
         self::GET_FREE_COINS,
         self::GET_PAID_COINS,

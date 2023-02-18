@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Resources\Users\UserCoinHistoryResource;
+use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
@@ -57,7 +57,7 @@ class UserCoinHistoryService
     public function getCoinHistory(int $userId): JsonResponse
     {
         $coinHistories = $this->userCoinHistoriesRepositoryInterface->getListByUserId($userId);
-        $coinHistoryResources = UserCoinHistoryResource::toArrayForList(
+        $coinHistoryResources = UserCoinHistoriesResource::toArrayForList(
             UserCoinHistories::sortByUpdatedAt(ArrayLibrary::toArray($coinHistories->toArray()), SORT_DESC)
         );
 

@@ -176,6 +176,7 @@ class DebugService
             // コイン履歴の設定(補填)
             $userCoinHistoriesResource = UserCoinHistoriesResource::toArrayForCreate(
                 $userId,
+                UuidLibrary::uuidVersion4(),
                 UserCoinHistories::USER_COINS_HISTORY_TYPE_COMPENSATION,
                 $freeCoins,
                 $paidCoins,
