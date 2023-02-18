@@ -55,4 +55,25 @@ class DatabaseLibrary
 
         return array_values($schemaList);
     }
+
+    /**
+     * get table status.
+     *
+     * @param string $table table name
+     * @param ?string $connection connection name
+     * @return array
+     */
+    public static function getTableStatusByConnection(string $table, ?string $connection = null): array
+    {
+        // デフォルトのコネクション設定
+        if (is_null($connection)) {
+            $connection = self::DEFAULT_CONNECTION_NAME;
+        }
+
+        // objectの配列を変換
+        $tmpSchemaList = DB::connection($connection)->select("SHOW FULL COLUMNS FROM $table");
+        $tableColumnList = ArrayLibrary::toArray($tmpSchemaList);
+
+        return array_values($tableColumnList);
+    }
 }

@@ -290,4 +290,17 @@ class DebugController extends Controller
             ['data' => DatabaseLibrary::getSchemaListByConnection($request->connection ?? null)]
         );
     }
+
+    /**
+     * テーブル情報の取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTableStatus(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => DatabaseLibrary::getTableStatusByConnection($request->table, $request->connection ?? null)]
+        );
+    }
 }
