@@ -198,6 +198,28 @@ class DebugController extends Controller
     }
 
     /**
+     * テスト用PDFファイルの表示(コイン履歴用)
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $uuid uuid
+     * @return BinaryFileResponse
+     */
+    public function getSampleCoinHistoryDesignPDF(Request $request, string $uuid): BinaryFileResponse
+    {
+        if ($uuid === '') {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        // テストユーザーIDの取得
+        $userId = 1;
+
+        // サービスの実行
+        return $this->service->getCoinHistoryPdfByUuid($userId, $request->uuid);
+    }
+
+    /**
      * テスト用QRLコードの表示
      *
      * @param DebugFileUploadRequest $request

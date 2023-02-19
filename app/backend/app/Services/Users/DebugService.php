@@ -10,10 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Stripe\CheckoutLibrary;
+use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
@@ -24,6 +26,7 @@ use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepository
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
 
 class DebugService
@@ -239,5 +242,32 @@ class DebugService
 
         // 複数チェックはrepository側で実施済み
         return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoin->toArray()));
+    }
+
+    /**
+     * get user coin history pdf by uuid.
+     *
+     * @param int $userId user id
+     * @param string $uuid uuid
+     * @return BinaryFileResponse
+     */
+    public function getCoinHistoryPdfByUuid(int $userId, string $uuid): BinaryFileResponse
+    {
+        $coinHistory = $this->userCoinHistoriesRepositoryInterface->getByUserIdAndUuId($userId, $uuid);
+
+        if (is_null($coinHistory)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'not exitst coin history.'
+            );
+        }
+
+        $coinHistoryResource = UserCoinHistoriesResource::toArrayForSingleRecord(
+            ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()))
+        );
+
+        $file = PdfLibrary::getSamplePDF();
+
+        return response()->file($file);
     }
 }
