@@ -262,12 +262,38 @@ class DebugService
             );
         }
 
-        $coinHistoryResource = UserCoinHistoriesResource::toArrayForSingleRecord(
-            ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()))
-        );
+        $coinHistory = ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()));
 
-        $file = PdfLibrary::getSamplePDF();
+        $updatedAt = $coinHistory[UserCoinHistories::UPDATED_AT];
+        $type = UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$coinHistory[UserCoinHistories::TYPE]];
+        $expireCoin = $coinHistory[UserCoinHistories::GET_LIMITED_TIME_COINS];
+        $freeCoin = $coinHistory[UserCoinHistories::GET_FREE_COINS];
+        $paidCoin = $coinHistory[UserCoinHistories::GET_PAID_COINS];
+        $fileName = 'コイン履歴_' . TimeLibrary::strToTimeStamp($updatedAt) . '.pdf';
 
-        return response()->file($file);
+        $html = <<< EOF
+        <style>
+        body {
+            color: #212121;
+        }
+        </style>
+        <body>
+        <h1>コイン履歴 $updatedAt</h1>
+        <p>
+        種類: $type
+        </p>
+        <p>
+        期限付きコイン: $expireCoin
+        </p>
+        <p>
+        無料コイン: $freeCoin
+        </p>
+        <p>
+        有料コイン: $paidCoin
+        </p>
+        </body>
+        EOF;
+
+        return response()->file(PdfLibrary::getPdfByHtmlString($fileName, $html));
     }
 }

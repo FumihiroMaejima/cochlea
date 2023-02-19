@@ -44,4 +44,21 @@ class PdfLibrary
         $tcpdf->writeHTML($html);
         return $tcpdf->Output('sample.pdf', 'I');
     }
+
+    /**
+     * HTMLを文字列として指定してPDFの出力
+     *
+     * @param string $name file name
+     * @param string $html file contents
+     * @return string
+     * @throws Exception
+     */
+    public static function getPdfByHtmlString(string $name, string $html): string
+    {
+        $tcpdf = new TCPDF();
+        $tcpdf->AddPage();
+        $tcpdf->SetFont(self::FONT_FAMILY_KOZGOPROMEDIUM, "", self::FONT_SIZE_10);
+        $tcpdf->writeHTML($html);
+        return $tcpdf->Output($name, 'I');
+    }
 }
