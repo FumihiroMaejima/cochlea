@@ -42,7 +42,7 @@ class DatabaseLibrary
     public static function getSchemaListByConnection(?string $connection = null): array
     {
         // デフォルトのコネクション設定
-        if (is_null($connection)) {
+        if (is_null($connection) || ($connection === self::DEFAULT_CONNECTION_NAME)) {
             $connection = self::DEFAULT_CONNECTION_NAME;
             $database = self::getDatabaseNameByConnectionForReplication($connection);
         } else {
