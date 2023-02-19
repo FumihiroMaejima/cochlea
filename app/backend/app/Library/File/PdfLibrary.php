@@ -29,6 +29,7 @@ class PdfLibrary
             color: #212121;
         }
         </style>
+        <body>
         <h1>header</h1>
         <p>
         sample text.
@@ -36,6 +37,8 @@ class PdfLibrary
         <p>
         contents.
         </p>
+        </body>
+
         EOF;
 
         $tcpdf->writeHTML($html);

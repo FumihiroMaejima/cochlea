@@ -16,9 +16,11 @@ use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepository;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\File\PdfLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserCoinHistoryService
 {
@@ -87,8 +89,6 @@ class UserCoinHistoryService
             );
         }
 
-        $a = $coinHistory->toArray();
-
         $coinHistoryResource = UserCoinHistoriesResource::toArrayForSingleRecord(
             ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()))
         );
@@ -100,6 +100,33 @@ class UserCoinHistoryService
                 'data' => $coinHistoryResource,
             ]
         );
+    }
+
+    /**
+     * get user coin history pdf by uuid.
+     *
+     * @param int $userId user id
+     * @param string $uuid uuid
+     * @return BinaryFileResponse
+     */
+    public function getCoinHistoryPdfByUuid(int $userId, string $uuid): BinaryFileResponse
+    {
+        $coinHistory = $this->userCoinHistoriesRepositoryInterface->getByUserIdAndUuId($userId, $uuid);
+
+        if (is_null($coinHistory)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'not exitst coin history.'
+            );
+        }
+
+        $coinHistoryResource = UserCoinHistoriesResource::toArrayForSingleRecord(
+            ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()))
+        );
+
+        $file = PdfLibrary::getSamplePDF();
+
+        return response()->file($file);
     }
 
     /**
