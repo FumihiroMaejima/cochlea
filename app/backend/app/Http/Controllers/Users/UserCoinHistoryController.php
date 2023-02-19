@@ -30,7 +30,7 @@ class UserCoinHistoryController extends Controller
     }
 
     /**
-     * Create Stipe Checkout Session.
+     * get user coin history list.
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
@@ -42,5 +42,27 @@ class UserCoinHistoryController extends Controller
 
         // サービスの実行
         return $this->service->getCoinHistory($userId);
+    }
+
+    /**
+     * get user coin history single record by uuid.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $uuid uuid
+     * @return JsonResponse
+     */
+    public function getCoinHistory(Request $request, string $uuid): JsonResponse
+    {
+        if ($uuid === '') {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
+
+        // サービスの実行
+        return $this->service->getCoinHistoryByUuid($userId, $request->uuid);
     }
 }

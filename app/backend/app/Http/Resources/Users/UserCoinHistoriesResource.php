@@ -49,6 +49,30 @@ class UserCoinHistoriesResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
+     * @param array $record レコードリスト
+     * @param string $serviceId 決済サービスの決済ID
+     * @return array
+     */
+    public static function toArrayForSingleRecord(array $record): array
+    {
+        return [
+            UserCoinHistories::UUID => $record[UserCoinHistories::UUID],
+            self::RESOURCE_KEY_HISTORY_VALUE => $record[UserCoinHistories::TYPE],
+            UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$record[UserCoinHistories::TYPE]],
+            UserCoinHistories::GET_FREE_COINS => $record[UserCoinHistories::GET_FREE_COINS],
+            UserCoinHistories::GET_PAID_COINS => $record[UserCoinHistories::GET_PAID_COINS],
+            UserCoinHistories::GET_LIMITED_TIME_COINS => $record[UserCoinHistories::GET_LIMITED_TIME_COINS],
+            UserCoinHistories::USED_FREE_COINS => $record[UserCoinHistories::USED_FREE_COINS],
+            UserCoinHistories::USED_PAID_COINS => $record[UserCoinHistories::USED_PAID_COINS],
+            UserCoinHistories::USED_LIMITED_TIME_COINS => $record[UserCoinHistories::USED_LIMITED_TIME_COINS],
+            UserCoinHistories::EXPIRED_LIMITED_TIME_COINS => $record[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS],
+            UserCoinHistories::UPDATED_AT => $record[UserCoinHistories::UPDATED_AT],
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for create.
+     *
      * @param array $records レコードリスト
      * @param string $serviceId 決済サービスの決済ID
      * @return array

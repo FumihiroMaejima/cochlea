@@ -169,6 +169,7 @@ Route::group(['prefix' => 'v1'], function () {
             // coin history
             Route::group(['prefix' => 'history'], function () {
                 Route::get('/list', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistoryList'])->name('user.coins.history.list');
+                Route::get('/{uuid}', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistory'])->name('user.coins.history.uuid');
             });
         });
 

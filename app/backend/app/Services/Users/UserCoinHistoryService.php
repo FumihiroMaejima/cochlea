@@ -48,10 +48,9 @@ class UserCoinHistoryService
     }
 
     /**
-     * get stripe chceckout session.
+     * get user coin history list.
      *
      * @param int $userId user id
-     * @param int $coinId coin id
      * @return JsonResponse
      */
     public function getCoinHistory(int $userId): JsonResponse
@@ -66,6 +65,39 @@ class UserCoinHistoryService
                 'code' => 200,
                 'message' => 'Success',
                 'data' => $coinHistoryResources,
+            ]
+        );
+    }
+
+    /**
+     * get user coin history by uuid.
+     *
+     * @param int $userId user id
+     * @param string $uuid uuid
+     * @return JsonResponse
+     */
+    public function getCoinHistoryByUuid(int $userId, string $uuid): JsonResponse
+    {
+        $coinHistory = $this->userCoinHistoriesRepositoryInterface->getByUserIdAndUuId($userId, $uuid);
+
+        if (is_null($coinHistory)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'not exitst coin history.'
+            );
+        }
+
+        $a = $coinHistory->toArray();
+
+        $coinHistoryResource = UserCoinHistoriesResource::toArrayForSingleRecord(
+            ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()))
+        );
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success',
+                'data' => $coinHistoryResource,
             ]
         );
     }
