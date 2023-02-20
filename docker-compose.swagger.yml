@@ -34,3 +34,5 @@ services:
     # command: mock -h 0.0.0.0 /tmp/openapi.yaml
     # -dオプションでレスポンスが動的に変わる
     command: mock -h 0.0.0.0 -d /tmp/openapi.yaml
+    # proxy setting
+    # command: proxy --host 0.0.0.0 /tmp/openapi.yaml http://localhost:3200/api/v1
