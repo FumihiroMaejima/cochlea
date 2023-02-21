@@ -12,7 +12,7 @@ my Next.js application.
 | node | 18.14.1 |
 | yarn | 1.22.17 |
 | react | 17.0.2 |
-| TypeScript | 4.9.3 |
+| TypeScript | 4.9.5 |
 
 ---
 
