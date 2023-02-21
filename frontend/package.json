@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint --fix",
     "lint:css": "stylelint src/**/*.scss",
-    "test:unit": "jest --config jest.config.js"
+    "test:unit": "jest --config jest.config.js",
+    "prepare": "cd .. && husky install frontend/.husky",
+    "create-precommit": "cd .. && husky add frontend/.husky/pre-commit \"cd frontend && yarn lint-staged\"",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -26,10 +29,19 @@
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
     "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.3",
     "jest": "^28.0.3",
+    "lint-staged": "^13.1.2",
     "sass": "^1.51.0",
     "stylelint": "^14.8.2",
     "ts-jest": "^28.0.1",
     "typescript": "4.6.4"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.tsx": "eslint --cache --fix",
+    "*.js": "eslint --cache --fix",
+    "*.jsx": "eslint --cache --fix",
+    "*.css": "stylelint --fix"
   }
 }

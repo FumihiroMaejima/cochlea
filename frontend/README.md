@@ -8,11 +8,11 @@ my Next.js application.
 
 | 名前 | バージョン |
 | :--- | :---: |
-| npm | 8.1.0 |
-| node | 16.13.0 |
+| npm | 9.3.1 |
+| node | 18.14.1 |
 | yarn | 1.22.17 |
 | react | 17.0.2 |
-| TypeScript | 4.5.2 |
+| TypeScript | 4.9.3 |
 
 ---
 
