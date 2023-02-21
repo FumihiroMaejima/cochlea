@@ -33,3 +33,18 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local env files
+.env
+.env.test
+# .eslintcache
+.eslintcache
+
+# coverage directory
+/coverage
+
+# cypress directory
+/cypress
+
+# build output directory
+/dist
