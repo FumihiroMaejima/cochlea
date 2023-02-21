@@ -3,6 +3,7 @@
 // import { render } from '@testing-library/react'
 // import { GlobalHeader } from '@/components/_global/GlobalHeader'
 
+// コンポーネントをimportしてテスト内で用いないとエラーとなる。
 describe('GlobalHeader.tsx', () => {
   it('test message', () => {
     /* const renderResult = render(<GlobalFooter />)
@@ -10,7 +11,7 @@ describe('GlobalHeader.tsx', () => {
     // const msg = 'new message'
     // const wrapper = GlobalHeader
     // createRenderer()
-    const testValue = true;
+    const testValue = true
     expect(testValue).toBe(true)
   })
 })
