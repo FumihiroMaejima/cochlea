@@ -1,0 +1,17 @@
+.global-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgba(75, 85, 99, 0.1);
+  // padding: 0 1.5rem 0 1.5rem;
+  width: 100%;
+
+  address {
+    display: block;
+    margin: 0 5px 0 5px;
+    font-style: italic;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgba(107, 114, 128, 1.0);
+  }
+}

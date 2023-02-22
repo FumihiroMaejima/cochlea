@@ -1,0 +1,11 @@
+@import '../../../_variables.scss';
+
+.parts-label-heading {
+  margin: initial;
+  padding: 0.25em 0.5em;
+  color: $util-color-dark-grey defalut;
+  background: transparent;// 透明
+  border-left: solid 5px $util-color-blue defalut;
+  text-align: left;
+  font-weight: 400;
+}

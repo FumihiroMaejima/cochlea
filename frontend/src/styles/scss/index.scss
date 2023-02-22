@@ -1,0 +1,76 @@
+/* components */
+// global
+@import './components/_global/GlobalBackToPageTopButton.scss';
+@import './components/_global/GlobalFooter.scss';
+@import './components/_global/GlobalHeader.scss';
+
+// parts
+
+@import './components/parts/box/PartsContentsBoard.scss';
+@import './components/parts/box/PartsMessageBoard.scss';
+@import './components/parts/box/PartsSimpleBox.scss';
+@import './components/parts/box/PartsTitleBox.scss';
+@import './components/parts/button/PartsCircleButton.scss';
+@import './components/parts/button/PartsSimpleButton.scss';
+@import './components/parts/button/PartsSimpleFlatButton.scss';
+@import './components/parts/carousel/PartsSimpleCarousel.scss';
+@import './components/parts/chip/PartsSimpleChip.scss';
+@import './components/parts/form/PartsSimpleSelectBox.scss';
+@import './components/parts/form/PartsSimpleTextField.scss';
+@import './components/parts/form/PartsTextChipBox.scss';
+@import './components/parts/heading/PartsLabelHeader.scss';
+@import './components/parts/heading/PartsLabelHeading.scss';
+@import './components/parts/heading/PartsSimpleHeading.scss';
+@import './components/parts/list/PartsSimpleList.scss';
+@import './components/parts/list/PartsStickyNoteList.scss';
+@import './components/parts/loading/PartsCircleLoading.scss';
+@import './components/parts/loading/PartsLinerLoading.scss';
+@import './components/parts/loading/PartsLinerLoadingWrapper.scss';
+@import './components/parts/menu/PartsSimpleMenu.scss';
+@import './components/parts/modal/PartsSimpleModal.scss';
+@import './components/parts/table/PartsLabelTable.scss';
+@import './components/parts/table/PartsSimpleTable.scss';
+@import './components/parts/table/PartsSimpleEditTable.scss';
+@import './components/parts/toast/PartsSimpleToast.scss';
+
+
+/* plugins */
+// @import './plugins/amplify.scss';
+
+/* util */
+@import './util/border.scss';
+@import './util/colors.scss';
+@import './util/layout.scss';
+@import './util/index.scss';
+@import './util/text.scss';
+
+/* current */
+// @import './tailwind';
+@import './_variables';
+// @import './mixins.scss';
+
+.app {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+  text-align: center;  //TODO 削除
+}
+
+.app-content {
+  flex: 1;
+}
+
+
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */

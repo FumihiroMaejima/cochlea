@@ -1,0 +1,83 @@
+@import '../_variables.scss';
+
+
+@each $name, $color in $basic-color-code {
+  // full
+  .util-border-full-solid-2p__color--#{"" + $name} {
+    border: solid 2px $color;
+  }
+
+  .util-border-full-double-2p__color--#{"" + $name} {
+    border: double 2px $color;
+  }
+
+  .util-border-full-solid-3p__color--#{"" + $name} {
+    border: solid 3px $color;
+  }
+
+  .util-border-full-double-3p__color--#{"" + $name} {
+    border: double 3px $color;
+  }
+
+  // border-bottom
+  .util-border-bottom-solid-2p__color--#{"" + $name} {
+    border-bottom: solid 2px $color;
+  }
+
+  .util-border-bottom-double-2p__color--#{"" + $name} {
+    border-bottom: double 2px $color;
+  }
+
+  .util-border-bottom-solid-3p__color--#{"" + $name} {
+    border-bottom: solid 3px $color;
+  }
+
+  .util-border-bottom-double-3p__color--#{"" + $name} {
+    border-bottom: double 3px $color;
+  }
+
+  // border-left
+  .util-border-left-solid-2p__color--#{"" + $name} {
+    border-left: solid 2px $color;
+  }
+
+  .util-border-left-double-2p__color--#{"" + $name} {
+    border-left: double 2px $color;
+  }
+
+  .util-border-left-solid-3p__color--#{"" + $name} {
+    border-left: solid 3px $color;
+  }
+
+  .util-border-left-double-3p__color--#{"" + $name} {
+    border-left: double 3px $color;
+  }
+
+  .util-border-left-solid-5p__color--#{"" + $name} {
+    border-left: solid 5px $color;
+  }
+
+  .util-border-left-double-5p__color--#{"" + $name} {
+    border-left: double 5px $color;
+  }
+
+  // dashed
+  .util-border-full-dash__color--#{"" + $name} {
+    color: $util-color-dark-grey;
+    border: dashed $color;
+  }
+
+  .util-border-bottom-dash__color--#{"" + $name} {
+    border-bottom: dashed $color;
+  }
+
+  .util-border-left-dash__color--#{"" + $name} {
+    border-left: dashed $color;
+  }
+}
+
+@each $name, $point in $border-radius-points {
+  .util-border-radius__round--#{$name} {
+    border-radius: $point;
+  }
+}
