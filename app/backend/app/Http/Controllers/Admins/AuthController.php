@@ -84,7 +84,7 @@ class AuthController extends Controller
     {
         // ユーザーIDの照会、レスポンスヘッダーに設定
         $sessionId = self::getSessionId($request);
-        $userId = self::getUserId($request, true);
+        $userId = self::getUserId($request);
 
         $token = SessionLibrary::getSssionTokenByUserIdAndSessionId($userId, $sessionId, 'api-admins');
 
