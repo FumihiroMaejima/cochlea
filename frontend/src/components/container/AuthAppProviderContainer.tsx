@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { createContext } from 'react'
+import React, { createContext, ReactElement } from 'react'
 
 import {
   useAuthApp,
   UseAuthAppType,
   initialHeaderOptions,
 } from '@/hooks/auth/useAuthApp'
+
+type Props = {
+  children: ReactElement
+}
 
 const defaultContextValue: UseAuthAppType = {
   getAuthId: () => {
@@ -38,7 +42,7 @@ const defaultContextValue: UseAuthAppType = {
 // export const NotificationContext = createContext(defaultContextValue)
 export const AuthAppContext = createContext(defaultContextValue)
 
-export const AuthAppProviderContainer: React.FC = (props) => {
+export const AuthAppProviderContainer: React.FC<Props> = (props) => {
   // const { state, updateState } = useAuthApp()
   const {
     getAuthId,

@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext } from 'react'
+import React, { createContext, ReactElement } from 'react'
 import { useToast, StatusType, UseToastType } from '@/hooks/global/useToast'
+
+type Props = {
+  children: ReactElement
+}
 
 const defaultContextValue: UseToastType = {
   toastState: { message: '', status: 'success', isDisplay: false },
@@ -13,7 +17,7 @@ const defaultContextValue: UseToastType = {
 }
 export const ToastContext = createContext(defaultContextValue)
 
-export const ToastProviderContainer: React.FC = (props) => {
+export const ToastProviderContainer: React.FC<Props> = (props) => {
   const { toastState, updateToastState } = useToast()
   return (
     <ToastContext.Provider value={{ toastState, updateToastState }}>

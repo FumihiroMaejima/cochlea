@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext } from 'react'
+import React, { createContext, ReactElement } from 'react'
 import {
   useNotificationCore,
   StatusType,
   UseNotificationCoreType,
 } from '@/hooks/global/useNotification'
+
+type Props = {
+  children: ReactElement
+}
 
 const defaultContextValue: UseNotificationCoreType = {
   state: { message: '', status: 'success', isDisplay: false },
@@ -13,7 +17,7 @@ const defaultContextValue: UseNotificationCoreType = {
 }
 export const NotificationContext = createContext(defaultContextValue)
 
-export const NotificationProviderContainer: React.FC = (props) => {
+export const NotificationProviderContainer: React.FC<Props> = (props) => {
   const { state, updateState } = useNotificationCore()
   return (
     <NotificationContext.Provider value={{ state, updateState }}>

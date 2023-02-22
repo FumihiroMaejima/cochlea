@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 type ColorType = 'black' | 'dark-grey' | 'blue' | 'green' | 'red' | 'white'
 type ItemType = number | string | Record<'key', number | string>
 type Props = {
-  items: ItemType[]
+  items: ReactNode[]
   // color?: ColorType
   textColor?: ColorType
 }
@@ -18,7 +18,7 @@ export const PartsStickyNoteList: React.VFC<Props> = ({
       // className={`parts-simple-button util-color__bg--${color} util-color__text--${textColor}`}
       className={`parts-sticky-note-list util-border-radius__round--5p util-color__text--${textColor}`}
     >
-      {items.map((item: ItemType, i) => (
+      {items.map((item: ReactNode, i) => (
         <li key={i}>{item}</li>
       ))}
     </ul>

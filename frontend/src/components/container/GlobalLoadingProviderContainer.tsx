@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext } from 'react'
+import React, { createContext, ReactElement } from 'react'
 import {
   useGlobalLoading,
   UseGlobalLoadingType,
 } from '@/hooks/global/useGlobalLoading'
+
+type Props = {
+  children: ReactElement
+}
 
 const defaultContextValue: UseGlobalLoadingType = {
   isOpenLoading: false,
@@ -13,7 +17,7 @@ const defaultContextValue: UseGlobalLoadingType = {
 
 export const GlobalLoadingContext = createContext(defaultContextValue)
 
-export const GlobalLoadingProviderContainer: React.FC = (props) => {
+export const GlobalLoadingProviderContainer: React.FC<Props> = (props) => {
   const { isOpenLoading, updateGlobalLoading } = useGlobalLoading()
   return (
     <GlobalLoadingContext.Provider

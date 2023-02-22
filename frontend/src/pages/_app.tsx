@@ -20,14 +20,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         <GlobalLoadingProviderContainer>
           <AuthAppProviderContainer>
             <ToastProviderContainer>
-              <GlobalContextWrapper />
-              <GlobalBackToPageTopButton />
-              <div className="app-content">
-                <Layout {...pageProps}>
-                  <Component {...pageProps} />
-                </Layout>
+              <div>
+                <GlobalContextWrapper />
+                <GlobalBackToPageTopButton />
+                <div className="app-content">
+                  <Layout {...pageProps}>
+                    <Component {...pageProps} />
+                  </Layout>
+                </div>
+                <GlobalFooter />
               </div>
-              <GlobalFooter />
             </ToastProviderContainer>
           </AuthAppProviderContainer>
         </GlobalLoadingProviderContainer>
