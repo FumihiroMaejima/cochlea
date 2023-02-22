@@ -37,6 +37,7 @@
     "husky": "^8.0.3",
     "jest": "^28.0.3",
     "lint-staged": "^13.1.2",
+    "next-http-proxy-middleware": "^1.2.5",
     "prettier": "^2.8.4",
     "sass": "^1.51.0",
     "stylelint": "^14.8.2",
