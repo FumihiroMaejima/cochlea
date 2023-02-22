@@ -4,6 +4,7 @@
 // import { GlobalHeader } from '@/components/_global/GlobalHeader'
 
 // コンポーネントをimportしてテスト内で用いないとエラーとなる。
+// コンポーネントファイルがいくつかないとエラーになる。
 describe('GlobalHeader.tsx', () => {
   it('test message', () => {
     /* const renderResult = render(<GlobalFooter />)
