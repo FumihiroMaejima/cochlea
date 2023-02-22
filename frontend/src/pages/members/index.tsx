@@ -1,19 +1,18 @@
-import React, { useContext, useEffect } from 'react'
-import type {
-  NextPage,
-  // GetServerSideProps,
-  // GetServerSidePropsContext,
-} from 'next'
-
-import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
+import React, { useEffect, useContext } from 'react'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
-import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
 
-export const Home: NextPage = () => {
+import { useMembers } from '@/hooks/modules/members/useMembers'
+import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProviderContainer'
+import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
+import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
+
+export const Members: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { getAuthId } = useContext(AuthAppContext)
+  const { membersState, getMembersRequest } = useMembers()
+  const { updateGlobalLoading } = useContext(GlobalLoadingContext)
+  const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
   // mount後に実行する処理
   const onDidMount = (): void => {
@@ -22,8 +21,11 @@ export const Home: NextPage = () => {
       await navigationGuardHandler()
 
       if (getAuthId() !== null) {
-        // TODO 認証情報取得後の処理
-        // xxxxx
+        updateGlobalLoading(true)
+        await getMembersRequest(getHeaderOptions()).then((res) => {
+          // console.log('response: ' + JSON.stringify(res, null, 2))
+          updateGlobalLoading(false)
+        })
       }
     }
     asyncInitPageHandler()
@@ -31,8 +33,8 @@ export const Home: NextPage = () => {
   useEffect(onDidMount, [])
 
   return (
-    <div className="home page-container page-container__mx-auto">
-      <PartsSimpleHeading text="サンプル ページ" color="dark-grey" />
+    <div className="members page-container page-container__mx-auto">
+      <PartsSimpleHeading text="メンバー ページ" color="dark-grey" />
       <div className="mx-2">
         <PartsLabelHeading text="サブヘッダー1" color="blue" />
         <div className="util-text__contents-area util-border-full-solid-2p__color--dark-grey util-border-radius__round--5p util-color__text--dark-grey">
@@ -64,15 +66,8 @@ export const Home: NextPage = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="">
-        <Link to={`/about`}>Go To About</Link>
-      </div>
-      <div className="">
-        <Link to={`/sample`}>Go To Sample</Link>
-      </div> */}
     </div>
   )
 }
 
-export default Home
+export default Members
