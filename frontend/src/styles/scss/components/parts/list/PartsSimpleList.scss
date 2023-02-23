@@ -1,0 +1,16 @@
+@import '../../../_variables.scss';
+
+$parts-simple-list-default-background-color: #fcfcfc;
+
+.parts-simple-list {
+  background: $parts-simple-list-default-background-color default;
+  text-align: left;
+  padding: 0.5em 0.5em 0.5em 2em;
+  border: solid 2px $util-color-dark-grey;
+  border-radius: 3px;
+
+  li {
+    line-height: 1.5;
+    padding: 0.5em 0;
+  }
+}

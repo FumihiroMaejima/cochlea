@@ -1,0 +1,141 @@
+$btn-border-radius: 0px;
+$gbl-background-opacity: 0.1;
+
+// tailwind breakpoint
+$tailwind-breakpoint-pc: 980px;
+$tailwind-breakpoint-tablet: 768px;
+$tailwind-breakpoint-mobile: 640px;
+
+
+// opacity
+$max-opacity: 1.0;
+
+
+// header
+$header-change-breakpont: 1024px;
+
+// page layout breakpoint
+$page-container-pc-breakpont: 1024px;
+$page-container-tablet-breakpont: 768;
+$page-container-mobile-breakpont: 640px;
+
+// TODO 検証用
+$breakpoints: (
+  xs: 0,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+);
+
+$layout-points: (
+  2: 4px,
+  4: 8px,
+  6: 12px,
+  8: 16px,
+  10: 20px,
+);
+
+$layout-base-points: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 20px,
+  6: 24px,
+);
+
+$layout-width-points: (
+  1: 10%,
+  2: 20%,
+  3: 30%,
+  4: 40%,
+  5: 50%,
+  6: 60%,
+  7: 70%,
+  8: 80%,
+  9: 90%,
+  10: 100%,
+);
+
+$layout-directions: (
+  left: left,
+  center: center,
+  right: right
+);
+
+$layout-align-directions: (
+  top: top,
+  center: center,
+  bottom: bottom
+);
+
+/* $basic-color-code: (
+  black: black,
+  dark-grey: dark-grey,
+  blue: blue,
+  green: green,
+  red: red,
+  white: white
+); */
+
+/* $basic-color-code2: (
+  black: (0, 0, 0),
+  dark-grey: (117, 117, 117),
+  blue: (0, 66, 109),
+  green: (0, 111, 95),
+  red: (172, 41, 30),
+  white: (255, 255, 255)
+); */
+
+// opacity
+$util-opacity-nomal: 1.0;
+$util-opacity-dark: 0.8;
+$util-opacity-light: 0.4;
+
+// util colors
+$util-color-black: rgb(0, 0, 0, $util-opacity-nomal);
+$util-color-dark-grey: rgb(117, 117, 117, $util-opacity-nomal);
+$util-color-blue: rgb(0, 66, 109, $util-opacity-nomal);
+$util-color-green: rgb(0, 111, 95, $util-opacity-nomal);
+$util-color-red: rgb(172, 41, 30, $util-opacity-nomal);
+$util-color-white: rgb(255, 255, 255, $util-opacity-nomal);
+
+// util light color
+$util-color-dark-black: rgb(17, 17, 17, $util-opacity-nomal);
+$util-color-dark-dark-grey: rgb(59, 59, 59, $util-opacity-nomal);
+$util-color-dark-blue: rgb(0, 74, 58, $util-opacity-nomal);
+$util-color-dark-green: rgb(0, 85, 72, $util-opacity-nomal);
+$util-color-dark-red: rgb(145, 12, 0, $util-opacity-nomal);
+$util-color-dark-white: rgb(210, 210, 210, $util-opacity-nomal);
+
+// util dark color
+$util-color-light-black: rgb(0, 0, 0, $util-opacity-light);
+$util-color-light-dark-grey: rgb(117, 117, 117, $util-opacity-light);
+$util-color-light-blue: rgb(0, 66, 109, $util-opacity-light);
+$util-color-light-green: rgb(0, 111, 95, $util-opacity-light);
+$util-color-light-red: rgb(172, 41, 30, $util-opacity-light);
+$util-color-light-white: rgb(255, 255, 255, $util-opacity-light);
+
+$basic-color-code: (
+  black: $util-color-black,
+  dark-grey: $util-color-dark-grey,
+  blue: $util-color-blue,
+  green: $util-color-green,
+  red: $util-color-red,
+  white: $util-color-white
+);
+
+/* $basic-color-code: (
+  black: rgb(0, 0, 0, 1.0),
+  dark-grey: rgb(117, 117, 117, 1.0),
+  blue: rgb(0, 66, 109, 1.0),
+  green: rgb(0, 111, 95, 1.0),
+  red: rgb(172, 41, 30, 1.0),
+  white: rgb(255, 255, 255, 1.0)
+); */
+
+$border-radius-points: (
+  5p: 5px,
+  8p: 8px,
+  10p: 10px
+);

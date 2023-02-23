@@ -242,6 +242,7 @@ class UserCoinPaymentService
             // コイン履歴の設定(購入)
             $userCoinHistoriesResource = UserCoinHistoriesResource::toArrayForCreate(
                 $userId,
+                UuidLibrary::uuidVersion4(),
                 UserCoinHistories::USER_COINS_HISTORY_TYPE_PURCHASED,
                 UserCoins::DEFAULT_COIN_COUNT,
                 $$coin[Coins::PRICE],

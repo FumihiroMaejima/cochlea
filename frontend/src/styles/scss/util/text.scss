@@ -1,0 +1,22 @@
+@import '../mixins.scss';
+@import '../_variables.scss';
+
+.util-text {
+  &__contents-area {
+    padding: 0.5em 1em;
+    margin: 1em 0;
+    font-weight: 400;
+    // color: #6091d3;
+    background: $util-color-white;
+    // border: solid 3px #6091d3;
+    color: $util-color-black defalut;
+    text-align: left;
+    border: solid 3px $util-color-black defalut;
+    border-radius: 10px defalut;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}

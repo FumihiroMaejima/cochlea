@@ -1,0 +1,24 @@
+@import '../../../_variables.scss';
+
+$parts-simple-button-default-color: #85fd35;
+$parts-simple-button-default-border-bottom-color: #00d21c;
+
+.parts-simple-auto-complete {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 3px;
+  border: 2px solid #757575;
+  box-sizing: border-box;
+
+  &:hover {
+    border: 2px solid rgb(0, 0, 0, 0.42);
+    cursor: pointer;
+  }
+
+  &:focus {
+    border: 2px solid $util-color-dark-blue;
+    // z-index: 10;
+    // outline: 0; outline は CSS の一括指定プロパティで、輪郭線 (outline) に関する様々なプロパティを単一の宣言で設定する。
+  }
+}

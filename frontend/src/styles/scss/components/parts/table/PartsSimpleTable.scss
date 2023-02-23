@@ -1,0 +1,78 @@
+// label color
+$parts-simple-table-default-label-color: #52c2d0;
+$parts-simple-table-second-label-color: #84d052;
+
+// header-background-color
+// $parts-simple-table-default-header-color: #e9faeb;
+// $parts-simple-table-default-header-color: #dddddd;
+$parts-simple-table-default-header-color: #e6e6e6;
+
+// table-contents-header-background-color
+$parts-simple-table-default-contents-header-color: #eeeeee;
+
+// header-font-weight
+$parts-simple-table-default-header-font-weight: 500;
+
+// border-color
+$parts-simple-table-default-border-color: #adadad;
+// $parts-simple-table-default-border-color: #757575;
+// $parts-simple-table-default-border-color: #aaaaaa;
+
+// border-radius
+$parts-simple-table-default-border-radius: 4px;
+$parts-simple-table-default--outline-border-radius: 5px;
+
+.parts-simple-table {
+  &.parts-simple-table__table-element {
+    width: 100%;
+    text-align: center;
+    // border-collapse: collapse; // border-radius無効
+    border-collapse: separate;
+    border-spacing: 0;
+    border: solid 1px $parts-simple-table-default-border-color;
+    border-radius: 6px;
+
+    thead th,
+    tbody th,
+    tbody td {
+      padding: .6em 3em;
+      border-bottom: 1px solid $parts-simple-table-default-border-color;
+    }
+    thead th {
+      background-color: $parts-simple-table-default-header-color;
+      font-weight: $parts-simple-table-default-header-font-weight;
+    }
+    tbody th {
+      background-color: $parts-simple-table-default-contents-header-color;
+    }
+    tbody td {
+      // 1つ目のtdタグ以外
+      &:not(:first-child) {
+        border-left: 1px solid $parts-simple-table-default-border-color;
+      }
+    }
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    thead tr:first-child th {
+      &:not(:first-child) {
+        border-left: 1px solid $parts-simple-table-default-border-color;
+      }
+    }
+
+    thead tr:first-child th:first-child {
+      border-radius: $parts-simple-table-default--outline-border-radius 0 0 0;
+    }
+    thead tr:first-child th:last-child {
+      border-radius: 0 $parts-simple-table-default--outline-border-radius 0 0;
+    }
+    tbody tr:last-child th:first-child {
+      border-radius: 0 0 0 $parts-simple-table-default--outline-border-radius;
+    }
+    tbody tr:last-child th:last-child {
+      border-radius: 0 0 $parts-simple-table-default--outline-border-radius 0;
+    }
+  }
+}

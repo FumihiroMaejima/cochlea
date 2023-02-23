@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
 use App\Models\Masters\Admins;
 use App\Library\Session\SessionLibrary;
+use App\Library\Message\StatusCodeMessages;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Trait\CheckHeaderTrait;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
 
 class AuthController extends Controller
 {
+    use CheckHeaderTrait;
+
     // login response
     private const LOGIN_RESEPONSE_KEY_ACCESS_TOKEN = 'access_token';
     private const LOGIN_RESEPONSE_KEY_TOKEN_TYPE = 'token_type';
@@ -72,11 +77,32 @@ class AuthController extends Controller
      * @header Accept application/json
      * @header Authorization Bearer
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAuthUser()
+    public function getAuthUser(Request $request)
     {
-        $user = auth('api-admins')->user();
+        // ユーザーIDの照会、レスポンスヘッダーに設定
+        $sessionId = self::getSessionId($request);
+        $userId = self::getUserId($request);
+
+        $token = SessionLibrary::getSssionTokenByUserIdAndSessionId($userId, $sessionId, 'api-admins');
+
+        if (empty($token)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                'Unauthorized. Session Failure Error.'
+            );
+        }
+
+        $user = (new Admins())->getRecordById($userId);
+        if (is_null($user)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'Unauthorized. No User Exist.'
+            );
+        }
+        // $user = auth('api-admins')->user();
         return response()->json($this->getAdminResource($user));
     }
 
@@ -128,7 +154,7 @@ class AuthController extends Controller
             self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN => $token,
             self::LOGIN_RESEPONSE_KEY_TOKEN_TYPE => self::TOKEN_PREFIX,
             self::LOGIN_RESEPONSE_KEY_EXPIRES_IN => $ttl,
-            self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user)
+            self::LOGIN_RESEPONSE_KEY_USER => $this->getAdminResource($user->toArray())
         ]);
     }
 
@@ -149,15 +175,15 @@ class AuthController extends Controller
     /**
      * 管理者情報のリソースを取得
      *
-     * @param Authenticatable $user
+     * @param array $user
      * @return array
      */
-    protected function getAdminResource(Authenticatable $user): array
+    protected function getAdminResource(array $user): array
     {
         return [
-            self::ADMIN_RESOURCE_KEY_ID        => $user->id,
-            self::ADMIN_RESOURCE_KEY_NAME      => $user->name,
-            self::ADMIN_RESOURCE_KEY_AUTHORITY => $this->getRoleCode($user->id)
+            self::ADMIN_RESOURCE_KEY_ID        => $user[Admins::ID],
+            self::ADMIN_RESOURCE_KEY_NAME      => $user[Admins::NAME],
+            self::ADMIN_RESOURCE_KEY_AUTHORITY => $this->getRoleCode($user[Admins::ID])
         ];
     }
 }

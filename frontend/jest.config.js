@@ -1,5 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
+  roots: ['<rootDir>/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^~/(.*)$': '<rootDir>/src/$1',
@@ -16,8 +17,8 @@ module.exports = {
   },
   collectCoverage: false, // no check coverage
   globals: {
-    "ts-jest": {
-      tsconfig: './tests/unit/tsconfig.json'
-    }
-  }
+    'ts-jest': {
+      tsconfig: './tsconfig.json',
+    },
+  },
 }

@@ -1,0 +1,64 @@
+@import '../../../_variables.scss';
+
+.parts-title-box {
+  position: relative;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  font-weight: 400;
+  background: $util-color-white;
+  color: $util-color-black defalut;
+  border: solid 3px $util-color-black defalut;
+  border-radius: 10px default;
+
+  &__title {
+    position: absolute;
+    display: inline-block;
+    padding: 0 9px;
+    font-size: 20px;
+    background: $util-color-white;
+    font-weight: 500;
+
+    &--over {
+      top: -13px;
+      left: 10px;
+      line-height: 1;
+    }
+
+    &--label {
+      top: -27px;
+      left: -3px;
+      height: 25px;
+      line-height: 25px;
+      background: #62c1ce;
+      color: $util-color-white;
+      border-radius: 5px 5px 0 0;
+    }
+
+    &-color {
+      &--black {
+        color: $util-color-black;
+      }
+
+      &--dark-grey {
+        color: $util-color-dark-grey;
+      }
+
+      &--blue {
+        color: $util-color-blue;
+      }
+
+      &--green {
+        color: $util-color-green;
+      }
+
+      &--red {
+        color: $util-color-red;
+      }
+    }
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+}

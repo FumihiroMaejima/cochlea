@@ -1,0 +1,120 @@
+@import '../mixins.scss';
+@import '../_variables.scss';
+
+.page-container {
+  width: 100%;
+
+  @include min-screen($page-container-mobile-breakpont) {
+    max-width: $page-container-mobile-breakpont;
+  }
+
+  @include min-screen($page-container-tablet-breakpont) {
+    max-width: $page-container-tablet-breakpont;
+  }
+
+  @include min-screen($page-container-pc-breakpont) {
+    max-width: $page-container-pc-breakpont;
+  }
+
+  &__mx-auto {
+    margin: 0 auto 0 auto;
+  }
+}
+
+// 1point = 4px
+@each $name, $point in $layout-base-points {
+  // margin-y
+  .my-#{$name} {
+    margin: $point 0 $point 0;
+  }
+
+  // margin-x
+  .mx-#{$name} {
+    margin: 0 $point 0 $point;
+  }
+
+  // margin-r
+  .mr-#{$name} {
+    margin: 0 $point 0 0 ;
+  }
+
+  // margin-l
+  .ml-#{$name} {
+    margin: 0 0 0 $point;
+  }
+
+  // margin-xy
+  .mxy-#{$name} {
+    margin: $point $point $point $point;
+  }
+
+  // padding-y
+  .py-#{$name} {
+    padding: $point 0 $point 0;
+  }
+
+  // padding-x
+  .px-#{$name} {
+    padding: 0 $point 0 $point;
+  }
+
+  // padding-r
+  .pr-#{$name} {
+    padding: 0 $point 0 0 ;
+  }
+
+  // padding-l
+  .pl-#{$name} {
+    padding: 0 0 0 $point;
+  }
+
+  // padding-xy
+  .pxy-#{$name} {
+    padding: $point $point $point $point;
+  }
+}
+
+@each $name, $point in $layout-width-points {
+  .width-#{$name} {
+    width: $point;
+  }
+}
+
+.d-flex {
+  display: flex;
+}
+
+// @each key, value in $map の順
+@each $name, $direction in $layout-directions {
+  .flex-justify-#{$name} {
+    justify-content: $direction;
+  }
+
+  .text-#{$name} {
+    text-align: $direction;
+  }
+}
+
+@each $name, $direction in $layout-align-directions {
+  .flex-align-#{$name} {
+    // align-content: $direction;
+    align-items: $direction;
+  }
+}
+
+/* .flex-justify-left {
+  justify-content: map-get($direction, left);
+} */
+
+/* .flex-justify-left {
+  justify-content: left;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-justify-right {
+  justify-content: right;
+} */
+

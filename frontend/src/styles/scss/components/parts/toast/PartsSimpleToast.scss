@@ -1,0 +1,53 @@
+@import '../../../_variables.scss';
+
+$parts-simple-button-default-color: #85fd35;
+$parts-simple-button-default-border-bottom-color: #00d21c;
+
+.parts-simple-toast {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  // right: -220px;
+  box-sizing: border-box;
+  max-width: 200px;
+  padding: 10px;
+  color: $util-color-white;
+  border-radius: 2px;
+  transform: translateX(220px);
+  z-index: 1010;
+
+  &.parts-simple-toast__status--normal {
+    // background-color: #28a746;
+    background-color: $util-color-dark-grey;
+  }
+
+  &.parts-simple-toast__status--success {
+    // background-color: #28a746;
+    background-color: $util-color-green;
+  }
+
+  &.parts-simple-toast__status--warning {
+    background-color: #dcbd34;
+  }
+
+  &.parts-simple-toast__status--error {
+    background-color: #dc3446;
+  }
+
+  &.parts-simple-toast__display {
+    animation: showAnimation 3s ease 1 normal;
+  }
+
+  &:hover {
+    background-color: $util-color-dark-green;
+  }
+
+  &__none {
+    display: none;
+  }
+}
+
+@keyframes showAnimation {
+  16.666% { transform: translateX(0); } // 0.5秒
+  83.333% { transform: translateX(0); } // 2.5秒
+}

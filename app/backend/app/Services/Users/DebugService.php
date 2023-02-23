@@ -10,10 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Stripe\CheckoutLibrary;
+use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
@@ -24,6 +26,7 @@ use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepository
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
 
 class DebugService
@@ -176,6 +179,7 @@ class DebugService
             // コイン履歴の設定(補填)
             $userCoinHistoriesResource = UserCoinHistoriesResource::toArrayForCreate(
                 $userId,
+                UuidLibrary::uuidVersion4(),
                 UserCoinHistories::USER_COINS_HISTORY_TYPE_COMPENSATION,
                 $freeCoins,
                 $paidCoins,
@@ -238,5 +242,58 @@ class DebugService
 
         // 複数チェックはrepository側で実施済み
         return ArrayLibrary::toArray(ArrayLibrary::getFirst($userCoin->toArray()));
+    }
+
+    /**
+     * get user coin history pdf by uuid.
+     *
+     * @param int $userId user id
+     * @param string $uuid uuid
+     * @return BinaryFileResponse
+     */
+    public function getCoinHistoryPdfByUuid(int $userId, string $uuid): BinaryFileResponse
+    {
+        $coinHistory = $this->userCoinHistoriesRepositoryInterface->getByUserIdAndUuId($userId, $uuid);
+
+        if (is_null($coinHistory)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'not exitst coin history.'
+            );
+        }
+
+        $coinHistory = ArrayLibrary::getFirst(ArrayLibrary::toArray($coinHistory->toArray()));
+
+        $updatedAt = $coinHistory[UserCoinHistories::UPDATED_AT];
+        $type = UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$coinHistory[UserCoinHistories::TYPE]];
+        $expireCoin = $coinHistory[UserCoinHistories::GET_LIMITED_TIME_COINS];
+        $freeCoin = $coinHistory[UserCoinHistories::GET_FREE_COINS];
+        $paidCoin = $coinHistory[UserCoinHistories::GET_PAID_COINS];
+        $fileName = 'コイン履歴_' . TimeLibrary::strToTimeStamp($updatedAt) . '.pdf';
+
+        $html = <<< EOF
+        <style>
+        body {
+            color: #212121;
+        }
+        </style>
+        <body>
+        <h1>コイン履歴 $updatedAt</h1>
+        <p>
+        種類: $type
+        </p>
+        <p>
+        期限付きコイン: $expireCoin
+        </p>
+        <p>
+        無料コイン: $freeCoin
+        </p>
+        <p>
+        有料コイン: $paidCoin
+        </p>
+        </body>
+        EOF;
+
+        return response()->file(PdfLibrary::getPdfByHtmlString($fileName, $html));
     }
 }

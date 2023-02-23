@@ -1,0 +1,107 @@
+// label color
+$parts-simple-edit-table-default-label-color: #52c2d0;
+$parts-simple-table-second-label-color: #84d052;
+
+// header-background-color
+// $parts-simple-edit-table-default-header-color: #e9faeb;
+// $parts-simple-edit-table-default-header-color: #dddddd;
+$parts-simple-edit-table-default-header-color: #e6e6e6;
+
+// table-contents-header-background-color
+$parts-simple-edit-table-default-contents-header-color: #eeeeee;
+
+// header-font-weight
+$parts-simple-edit-table-default-header-font-weight: 500;
+
+// border-color
+$parts-simple-edit-table-default-border-color: #adadad;
+// $parts-simple-edit-table-default-border-color: #757575;
+// $parts-simple-edit-table-default-border-color: #aaaaaa;
+
+// border-radius
+$parts-simple-edit-table-default-border-radius: 4px;
+$parts-simple-edit-table-default--outline-border-radius: 5px;
+
+.parts-simple-edit-table {
+  &.parts-simple-edit-table__table-element {
+    width: 100%;
+    text-align: center;
+    // border-collapse: collapse; // border-radius無効
+    border-collapse: separate;
+    border-spacing: 0;
+    border: solid 1px $parts-simple-edit-table-default-border-color;
+    border-radius: 6px;
+
+    thead th,
+    tbody th {
+      padding: .6em 3em;
+      border-bottom: 1px solid $parts-simple-edit-table-default-border-color;
+    }
+
+    tbody td {
+      // 子要素が特定のクラスを持っている場合は除外
+      &:not(:has(.parts-simple-edit-table__text-field)) {
+        padding: .6em 3em;
+      }
+      border-bottom: 1px solid $parts-simple-edit-table-default-border-color;
+    }
+    thead th {
+      background-color: $parts-simple-edit-table-default-header-color;
+      font-weight: $parts-simple-edit-table-default-header-font-weight;
+    }
+    tbody th {
+      background-color: $parts-simple-edit-table-default-contents-header-color;
+    }
+    tbody td {
+      // 1つ目のtdタグ以外
+      &:not(:first-child) {
+        border-left: 1px solid $parts-simple-edit-table-default-border-color;
+      }
+    }
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    thead tr:first-child th {
+      &:not(:first-child) {
+        border-left: 1px solid $parts-simple-edit-table-default-border-color;
+      }
+    }
+
+    thead tr:first-child th:first-child {
+      border-radius: $parts-simple-edit-table-default--outline-border-radius 0 0 0;
+    }
+    thead tr:first-child th:last-child {
+      border-radius: 0 $parts-simple-edit-table-default--outline-border-radius 0 0;
+    }
+    tbody tr:last-child th:first-child {
+      border-radius: 0 0 0 $parts-simple-edit-table-default--outline-border-radius;
+    }
+    tbody tr:last-child th:last-child {
+      border-radius: 0 0 $parts-simple-edit-table-default--outline-border-radius 0;
+    }
+  }
+
+  .parts-simple-edit-table__text-field {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    // border-radius: 3px;
+    // border: 2px solid #757575;
+    border-radius: 5px;
+    border: 2px solid #ececec;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover {
+      border: 2px solid rgb(0, 0, 0, 0.42);
+    }
+
+    &:focus {
+      border: 2px solid $util-color-dark-blue;
+      // z-index: 10;
+      // outline: 0; outline は CSS の一括指定プロパティで、輪郭線 (outline) に関する様々なプロパティを単一の宣言で設定する。
+    }
+  }
+}
