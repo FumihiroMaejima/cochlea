@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   // return <Component {...pageProps} />
 
   return (
-    <div className="app">
+    <div className="app app-dark-mode">
       <GlobalLinerLoadingProviderContainer>
         <GlobalLoadingProviderContainer>
           <AuthAppProviderContainer>
