@@ -14,7 +14,7 @@
             "port": 9010,
             "pathMappings": {
                 // {docker上のdocument root}: {ローカルのdocument root}
-                "/var/www/html": "/Users/user-name/path/laravel-project"
+                "/var/www/html": "${workspaceFolder}/laravel-project"
             },
             // "env": {},
             // コマンドラインパラメーターを渡す場合
