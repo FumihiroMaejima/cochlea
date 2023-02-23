@@ -2,6 +2,7 @@
 
 namespace App\Library\Database;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
 class ShardingLibrary
@@ -115,5 +116,38 @@ class ShardingLibrary
             // テスト用DB内のテーブルのコネクション
             return self::CONNECTION_NAME_FOR_TESTING;
         }
+    }
+
+    /**
+     * begin transaction in sharding table.
+     *
+     * @param string $connection connection name
+     * @return void
+     */
+    public static function beginTransaction(string $connection): void
+    {
+        DB::connection($connection)->beginTransaction();
+    }
+
+    /**
+     * commit active database transaction.
+     *
+     * @param string $connection connection name
+     * @return void
+     */
+    public static function commit(string $connection): void
+    {
+        DB::connection($connection)->commit();
+    }
+
+    /**
+     * rollback active database transaction.
+     *
+     * @param string $connection connection name
+     * @return void
+     */
+    public static function rollback(string $connection): void
+    {
+        DB::connection($connection)->rollback();
     }
 }

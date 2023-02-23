@@ -1,0 +1,39 @@
+@import '../_variables.scss';
+
+// util color class
+@each $name, $color in $basic-color-code {
+  // .util-basic-color-#{$name} {
+  // .util-basic-color-#{"" + $name} {
+
+  .util-color__text--#{"" + $name} {
+    color: $color;
+  }
+
+  .util-color__bg--#{"" + $name} {
+    background: $color;
+  }
+}
+
+/* // util colors
+$util-color-black: #000000;
+$util-color-dark-grey: #757575;
+$util-color-blue: #1565c0;
+$util-color-green: #006f5f;
+$util-color-red: #ac291d;
+$util-color-white: #ffffff;
+
+// util light color
+$util-color-light-black: #000000;
+$util-color-light-dark-grey: #f1f3ffea;
+$util-color-light-blue: #f1f8ff;
+$util-color-light-green: #f2fff1;
+$util-color-light-red: #fff1f1;
+$util-color-light-white: #f1f8ff;
+
+// util dark color
+$util-color-dark-black: #111111;
+$util-color-dark-dark-grey: #3b3b3b;
+$util-color-dark-blue: #004a9e;
+$util-color-dark-green: #005548;
+$util-color-dark-red: #910c00;
+$util-color-dark-white: #d2d2d2; */

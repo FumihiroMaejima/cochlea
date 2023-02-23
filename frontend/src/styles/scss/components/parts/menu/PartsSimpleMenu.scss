@@ -1,0 +1,75 @@
+@import '../../../_variables.scss';
+
+$parts-simple-button-default-color: #85fd35;
+$parts-simple-button-default-border-bottom-color: #00d21c;
+
+.parts-simple-menu {
+  position: absolute;
+  width: 100%;
+  padding: 10px 15px;
+  color: #757575;
+  font-size: 16px;
+  border-radius: 3px;
+  border: 2px solid #757575;
+  box-sizing: border-box;
+  max-height: 300px;
+  overflow: scroll;
+  background-color: $util-color-white;
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__none {
+    display: none;
+  }
+
+  &:hover {
+    // border: 2px solid rgb(0, 0, 0, 0.42);
+    // border: 2px solid $util-color-blue;
+    border: 2px solid $util-color-dark-blue;
+    cursor: pointer;
+  }
+
+  &:focus {
+    // border: 2px solid $util-color-dark-blue;
+    border: 2px solid $util-color-dark-blue;
+    // z-index: 10;
+    // outline: 0; outline は CSS の一括指定プロパティで、輪郭線 (outline) に関する様々なプロパティを単一の宣言で設定する。
+  }
+
+  option {
+    padding: 4px 8px;
+    text-align: left;
+
+    // 特定のクラスが設定されている場合は除外
+    &:not(&.parts-simple-menu__item--selected) {
+      &:hover {
+        // background-color:rgb(0, 0, 0, 0.42);
+        background-color:$util-color-light-blue;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  div {
+    padding: 4px 8px;
+    text-align: left;
+
+    &:hover {
+      // background-color:rgb(0, 0, 0, 0.42);
+      background-color:$util-color-light-blue;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  }
+
+  &__item {
+    &--selected {
+      background-color: $util-color-light-blue;
+      border-radius: 2px;
+      cursor: not-allowed;
+    }
+  }
+}

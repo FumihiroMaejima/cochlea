@@ -165,6 +165,13 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('/cancel', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'cancel'])->name('user.coins.payment.cancel');
                 Route::get('complete', [\App\Http\Controllers\Users\UserCoinPaymentController::class, 'complete'])->name('user.coins.payment.complete');
             });
+
+            // coin history
+            Route::group(['prefix' => 'history'], function () {
+                Route::get('/list', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistoryList'])->name('user.coins.history.list');
+                Route::get('/{uuid}', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistory'])->name('user.coins.history.uuid');
+                Route::get('/pdf/{uuid}', [\App\Http\Controllers\Users\UserCoinHistoryController::class, 'getCoinHistoryPdf'])->name('user.coins.history.pdf.uuid');
+            });
         });
 
         // informations
@@ -207,6 +214,9 @@ Route::group(['prefix' => 'v1'], function () {
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
+            Route::get('sample-pdf/coinHistory/{uuid}', [\App\Http\Controllers\Users\DebugController::class, 'getSampleCoinHistoryDesignPDF'])->name('user.debug.samplePdf.coinHistory');
+            // QRコード出力
+            Route::get('sample-qr', [\App\Http\Controllers\Users\DebugController::class, 'getSampleQRCode'])->name('user.debug.sampleQrCode.get');
 
             // JWT関係
             Route::group(['prefix' => 'jwt'], function () {
@@ -234,7 +244,13 @@ Route::group(['prefix' => 'v1'], function () {
 
             // ログ関係
             Route::group(['prefix' => 'logs'], function () {
-                Route::get('access', [\App\Http\Controllers\Users\DebugController::class, 'getLog'])->name('user.debug.logs.access');
+                Route::get('dateLog', [\App\Http\Controllers\Users\DebugController::class, 'getDateLog'])->name('user.debug.logs.api');
+            });
+
+            // DB関係
+            Route::group(['prefix' => 'databases'], function () {
+                Route::get('schema', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaList'])->name('user.debug.databases.schema');
+                Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
             });
         });
     }

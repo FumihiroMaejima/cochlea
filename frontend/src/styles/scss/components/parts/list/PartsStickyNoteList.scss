@@ -1,0 +1,20 @@
+@import '../../../_variables.scss';
+
+$parts-sticky-note-list-default-border-left-color: #2d8fdd;
+$parts-sticky-note-list-default-background-color: #f1f8ff;
+
+.parts-sticky-note-list {
+  padding: 0;
+  position: relative;
+  text-align: left;
+
+  li {
+    color: $util-color-blue;
+    border-left: solid 6px $parts-sticky-note-list-default-border-left-color;
+    background: $parts-sticky-note-list-default-background-color;
+    margin-bottom: 3px;
+    line-height: 1.5;
+    padding: 0.5em;
+    list-style-type: none!important;
+  }
+}

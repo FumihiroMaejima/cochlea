@@ -12,6 +12,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
+use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
@@ -45,6 +46,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
 
         $template = [
             UserCoinHistories::USER_ID                    => 0,
+            UserCoinHistories::UUID                       => '',
             UserCoinHistories::TYPE                       => 0,
             UserCoinHistories::GET_FREE_COINS             => 0,
             UserCoinHistories::GET_PAID_COINS             => 0,
@@ -69,6 +71,7 @@ class UserCoinHistoriesTableSeeder extends BaseSeeder
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
             $row = $template;
+            $row[UserCoinHistories::UUID] = UuidLibrary::uuidVersion4();
 
             // 価格(200~10000)
             $priceBase = ($i % 10);

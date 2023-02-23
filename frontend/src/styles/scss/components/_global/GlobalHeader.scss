@@ -1,0 +1,120 @@
+@import '../../mixins.scss';
+@import '../../_variables.scss';
+
+.global-header {
+  background-color: rgba(75, 85, 99, 0.1);
+  // TODO tempolary
+  // background-color: rgba(75, 85, 99, 0.5);
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+
+  &__navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__title-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin: 0 1.5rem 0 0;
+    color: rgba(255, 255, 255, 1.0);
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    // letter-spacing: -0.025em;
+  }
+
+  &__blok-button-area {
+    @include min-screen($header-change-breakpont) {
+      display: none;
+    }
+  }
+
+  &__blok-button-left {
+    @include max-screen($header-change-breakpont) {
+      display: none;
+    }
+  }
+
+  &__blok-button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    border-style: solid;
+    cursor: pointer;
+    background-color: transparent;
+    -webkit-appearance: button;
+    border-color: rgba(255, 255, 255, 1.0);
+
+    &:hover {
+      color: rgba(255, 255, 255, 1.0);
+      border-color: rgba(255, 255, 255, 1.0);
+    }
+  }
+
+  &__blok-button-image {
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: currentColor;
+  }
+
+  &__navigation-menu-block {
+    display: block;
+    width: 100%;
+
+    @include min-screen($header-change-breakpont) {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      width: auto;
+    }
+  }
+
+  &__navigation-menu-hidden {
+    display: none;
+    width: 100%;
+
+    @include min-screen($header-change-breakpont) {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      width: auto;
+    }
+  }
+
+  &__navigation-item {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  &__navigation-item-button {
+    text-decoration: none;
+    color: rgba(107, 114, 128, 1.0);
+    &:hover {
+      color: rgba(255, 255, 255, 1.0);
+      border-color: rgba(255, 255, 255, 1.0);
+    }
+
+    @include max-screen($header-change-breakpont - 1) {
+      display: block;
+      // margin: 1rem 1rem 0 0;
+      padding: 0.5rem 0 0.5rem 0;
+      &:hover {
+        border-radius: 2px;
+        background-color: rgba(75, 85, 99, 0.3);
+      }
+    }
+
+    @include min-screen($header-change-breakpont) {
+      display: inline-block;
+      margin: 0 1rem 0 0;
+    }
+  }
+}

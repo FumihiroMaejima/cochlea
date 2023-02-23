@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Database\ShardingLibrary;
+use App\Library\Time\TimeLibrary;
 
 class BaseUserDataModel extends Model
 {
@@ -238,5 +239,23 @@ class BaseUserDataModel extends Model
             ->where(static::DELETED_AT, '=', null)
             ->update($resource)
         ;
+    }
+
+    /**
+     * sort records by updated at.
+     *
+     * @param int $userId user id
+     * @param array $resource resource
+     * @return array
+     */
+    public static function sortByUpdatedAt(array $records, int $order = SORT_ASC): array
+    {
+        $timeStamps = array_map(function ($record) {
+            return  TimeLibrary::strToTimeStamp($record[self::UPDATED_AT]);
+        }, $records);
+
+        // ソート
+        array_multisort($timeStamps, $order, $records);
+        return $records;
     }
 }

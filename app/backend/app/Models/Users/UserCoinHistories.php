@@ -22,6 +22,13 @@ class UserCoinHistories extends BaseUserDataModel
     public const USER_COINS_HISTORY_TYPE_EXPIRED = 4; // 期限切れ
     public const USER_COINS_HISTORY_TYPE_COMPENSATION = 5; // 補填
 
+    // 履歴の種類(文字列)
+    public const USER_COINS_HISTORY_TYPE_STRING_PURCHASED = '購入';
+    public const USER_COINS_HISTORY_TYPE_STRING_GAIN = '獲得';
+    public const USER_COINS_HISTORY_TYPE_STRING_CONSUME = '消費';
+    public const USER_COINS_HISTORY_TYPE_STRING_EXPIRED = '期限切れ';
+    public const USER_COINS_HISTORY_TYPE_STRING_COMPENSATION = '補填';
+
     public const USER_COINS_HISTORY_TYPE_VALUES = [
         self::USER_COINS_HISTORY_TYPE_PURCHASED,
         self::USER_COINS_HISTORY_TYPE_GAIN,
@@ -30,8 +37,17 @@ class UserCoinHistories extends BaseUserDataModel
         self::USER_COINS_HISTORY_TYPE_COMPENSATION,
     ];
 
+    public const USER_COINS_HISTORY_TYPE_VALUE_LIST = [
+        self::USER_COINS_HISTORY_TYPE_PURCHASED => self::USER_COINS_HISTORY_TYPE_STRING_PURCHASED,
+        self::USER_COINS_HISTORY_TYPE_GAIN => self::USER_COINS_HISTORY_TYPE_STRING_GAIN,
+        self::USER_COINS_HISTORY_TYPE_CONSUME => self::USER_COINS_HISTORY_TYPE_STRING_CONSUME,
+        self::USER_COINS_HISTORY_TYPE_EXPIRED => self::USER_COINS_HISTORY_TYPE_STRING_EXPIRED,
+        self::USER_COINS_HISTORY_TYPE_COMPENSATION => self::USER_COINS_HISTORY_TYPE_STRING_COMPENSATION,
+    ];
+
     // カラム一覧
     public const USER_ID = 'user_id';
+    public const UUID = 'uuid';
     public const TYPE = 'type';
     public const GET_FREE_COINS = 'get_free_coins';
     public const GET_PAID_COINS = 'get_paid_coins';
@@ -39,8 +55,8 @@ class UserCoinHistories extends BaseUserDataModel
     public const USED_FREE_COINS = 'used_free_coins';
     public const USED_PAID_COINS = 'used_paid_coins';
     public const USED_LIMITED_TIME_COINS = 'used_limited_time_coins';
-    public const EXPIRED_LIMITED_TIME_COINS = 'exipired_limited_time_coins';
-    public const EXPIRED_AT = 'exipired_at';
+    public const EXPIRED_LIMITED_TIME_COINS = 'expired_limited_time_coins';
+    public const EXPIRED_AT = 'expired_at';
     public const OEDER_ID = 'order_id';
     public const PRODUCT_ID = 'product_id';
     public const CREATED_AT = 'created_at';
@@ -77,6 +93,7 @@ class UserCoinHistories extends BaseUserDataModel
     // 更新可能なカラムリスト
     protected $fillable = [
         self::USER_ID,
+        self::UUID,
         self::TYPE,
         self::GET_FREE_COINS,
         self::GET_PAID_COINS,

@@ -1,0 +1,97 @@
+@import '../../../_variables.scss';
+
+$parts-simple-button-default-color: #85fd35;
+$parts-simple-button-default-border-bottom-color: #00d21c;
+
+.parts-simple-button {
+  position: relative;
+  display: inline-block;
+  padding: 0.5em 0.5em;
+  text-decoration: none;
+  color: $util-color-white default;
+  background: $parts-simple-button-default-color;
+  border: initial;
+  border-bottom: solid 2px $parts-simple-button-default-border-bottom-color;
+  border-radius: 5px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 2px 2px rgba(0, 0, 0, 0.19);
+  font-weight: 400;
+  font-size: initial;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    border-bottom: solid 2px $parts-simple-button-default-color;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+  }
+
+  &__color {
+    &--black {
+      background: $util-color-black;
+      border-bottom: solid 2px $util-color-dark-black;
+
+      &:active {
+        border-bottom: solid 2px $util-color-black;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+
+    &--dark-grey {
+      background: $util-color-dark-grey;
+      border-bottom: solid 2px $util-color-dark-dark-grey;
+
+      &:active {
+        border-bottom: solid 2px $util-color-dark-grey;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+
+    &--blue {
+      background: $util-color-blue;
+      border-bottom: solid 2px $util-color-dark-blue;
+
+      &:active {
+        border-bottom: solid 2px $util-color-blue;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+
+    &--green {
+      background: $util-color-green;
+      border-bottom: solid 2px $util-color-dark-green;
+
+      &:active {
+        border-bottom: solid 2px $util-color-green;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+
+    &--red {
+      background: $util-color-red;
+      border-bottom: solid 2px $util-color-dark-red;
+
+      &:active {
+        border-bottom: solid 2px $util-color-red;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+
+    &--white {
+      color: $util-color-dark-grey !important;
+      background: $util-color-white;
+      border-bottom: solid 2px $util-color-dark-white;
+
+      &:active {
+        border-bottom: solid 2px $util-color-white;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+      }
+    }
+  }
+
+  &__disabled {
+    color: $util-color-dark-grey !important;
+    background: $util-color-dark-dark-grey;
+    cursor: not-allowed !important;
+  }
+}

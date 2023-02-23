@@ -18,6 +18,7 @@ class UserCoinHistoriesResource extends JsonResource
     public const RESOURCE_KEY_DATA = 'data';
     public const RESOURCE_KEY_TEXT = 'text';
     public const RESOURCE_KEY_VALUE = 'value';
+    public const RESOURCE_KEY_HISTORY_VALUE = 'history_value';
 
     public const RESOURCE_KEY_NAME = 'name';
     public const RESOURCE_KEY_DETAIL = 'detail';
@@ -48,7 +49,62 @@ class UserCoinHistoriesResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
+     * @param array $record レコードリスト
+     * @param string $serviceId 決済サービスの決済ID
+     * @return array
+     */
+    public static function toArrayForSingleRecord(array $record): array
+    {
+        return [
+            UserCoinHistories::UUID => $record[UserCoinHistories::UUID],
+            self::RESOURCE_KEY_HISTORY_VALUE => $record[UserCoinHistories::TYPE],
+            UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$record[UserCoinHistories::TYPE]],
+            UserCoinHistories::GET_FREE_COINS => $record[UserCoinHistories::GET_FREE_COINS],
+            UserCoinHistories::GET_PAID_COINS => $record[UserCoinHistories::GET_PAID_COINS],
+            UserCoinHistories::GET_LIMITED_TIME_COINS => $record[UserCoinHistories::GET_LIMITED_TIME_COINS],
+            UserCoinHistories::USED_FREE_COINS => $record[UserCoinHistories::USED_FREE_COINS],
+            UserCoinHistories::USED_PAID_COINS => $record[UserCoinHistories::USED_PAID_COINS],
+            UserCoinHistories::USED_LIMITED_TIME_COINS => $record[UserCoinHistories::USED_LIMITED_TIME_COINS],
+            UserCoinHistories::EXPIRED_LIMITED_TIME_COINS => $record[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS],
+            UserCoinHistories::UPDATED_AT => $record[UserCoinHistories::UPDATED_AT],
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for create.
+     *
+     * @param array $records レコードリスト
+     * @param string $serviceId 決済サービスの決済ID
+     * @return array
+     */
+    public static function toArrayForList(array $records): array
+    {
+        $response = [];
+
+        foreach ($records as $record) {
+            $response[] = [
+                UserCoinHistories::UUID => $record[UserCoinHistories::UUID],
+                self::RESOURCE_KEY_HISTORY_VALUE => $record[UserCoinHistories::TYPE],
+                UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_VALUE_LIST[$record[UserCoinHistories::TYPE]],
+                UserCoinHistories::GET_FREE_COINS => $record[UserCoinHistories::GET_FREE_COINS],
+                UserCoinHistories::GET_PAID_COINS => $record[UserCoinHistories::GET_PAID_COINS],
+                UserCoinHistories::GET_LIMITED_TIME_COINS => $record[UserCoinHistories::GET_LIMITED_TIME_COINS],
+                UserCoinHistories::USED_FREE_COINS => $record[UserCoinHistories::USED_FREE_COINS],
+                UserCoinHistories::USED_PAID_COINS => $record[UserCoinHistories::USED_PAID_COINS],
+                UserCoinHistories::USED_LIMITED_TIME_COINS => $record[UserCoinHistories::USED_LIMITED_TIME_COINS],
+                UserCoinHistories::EXPIRED_LIMITED_TIME_COINS => $record[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS],
+                UserCoinHistories::UPDATED_AT => $record[UserCoinHistories::UPDATED_AT],
+            ];
+        }
+
+        return $response;
+    }
+
+    /**
+     * Transform the resource into an array for create.
+     *
      * @param int $userId ユーザーID
+     * @param string $uuid UUID
      * @param int $type 履歴の種類
      * @param int $getFreeCoins 獲得無料コイン数
      * @param int $getPaidCoins 購入・獲得有料コイン数
@@ -65,6 +121,7 @@ class UserCoinHistoriesResource extends JsonResource
      */
     public static function toArrayForCreate(
         int $userId,
+        string $uuid,
         int $type,
         int $getFreeCoins = 0,
         int $getPaidCoins = 0,
@@ -81,6 +138,7 @@ class UserCoinHistoriesResource extends JsonResource
 
         return [
             UserCoinHistories::USER_ID => $userId,
+            UserCoinHistories::UUID => $uuid,
             UserCoinHistories::TYPE => $type,
             UserCoinHistories::GET_FREE_COINS => $getFreeCoins,
             UserCoinHistories::GET_PAID_COINS => $getPaidCoins,

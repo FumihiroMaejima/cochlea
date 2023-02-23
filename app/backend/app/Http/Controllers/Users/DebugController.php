@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Database\DatabaseLibrary;
 use App\Library\File\PdfLibrary;
+use App\Library\File\QRCodeLibrary;
 use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
@@ -195,6 +198,41 @@ class DebugController extends Controller
     }
 
     /**
+     * テスト用PDFファイルの表示(コイン履歴用)
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $uuid uuid
+     * @return BinaryFileResponse
+     */
+    public function getSampleCoinHistoryDesignPDF(Request $request, string $uuid): BinaryFileResponse
+    {
+        if ($uuid === '') {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        // テストユーザーIDの取得
+        $userId = 1;
+
+        // サービスの実行
+        return $this->service->getCoinHistoryPdfByUuid($userId, $request->uuid);
+    }
+
+    /**
+     * テスト用QRLコードの表示
+     *
+     * @param DebugFileUploadRequest $request
+     * @return Response
+     * @throws MyApplicationHttpException
+     */
+    public function getSampleQRCode(): Response
+    {
+        // SVGのQRコードをHTMLとして返却
+        return response(QRCodeLibrary::getSampleQrCode());
+    }
+
+    /**
      * JWTトークンヘッダーのデコード
      *
      * @param Request $request
@@ -265,15 +303,41 @@ class DebugController extends Controller
     }
 
     /**
-     * ログファイルの取得
+     * ログファイルの取得(1日ごと)
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function getLog(Request $request): JsonResponse
+    public function getDateLog(Request $request): JsonResponse
     {
         return response()->json(
-            LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)
+            ['data' => LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)]
+        );
+    }
+
+    /**
+     * テーブル一覧の取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getSchemaList(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => DatabaseLibrary::getSchemaListByConnection($request->connection ?? null)]
+        );
+    }
+
+    /**
+     * テーブル情報の取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTableStatus(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => DatabaseLibrary::getTableStatusByConnection($request->table, $request->connection ?? null)]
         );
     }
 }

@@ -1,0 +1,17 @@
+@import '../../../_variables.scss';
+
+.parts-simple-heading {
+  text-align: left;
+  padding: 2px 0 2px 8px;
+  font-weight: 400;
+  color: $util-color-black defalut;
+  border: solid 3px $util-color-black defalut;
+
+  &__up-down {
+    border-bottom: double 3px $util-color-dark-grey;
+    color: $util-color-dark-grey;
+    padding: 0.5em 0; // tb, rl
+    border-top: solid 3px $util-color-dark-grey;
+    border-bottom: solid 3px $util-color-dark-grey;
+  }
+}

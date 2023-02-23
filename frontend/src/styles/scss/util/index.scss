@@ -1,0 +1,34 @@
+@import '../mixins.scss';
+@import '../_variables.scss';
+
+.page-header {
+  text-align: left;
+  // margin: 0.5rem 0 0.5rem 0;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: italic;
+}
+
+.page-text-contents {
+  display: grid;
+  gap: 0.5rem;
+
+  @include min-screen($page-container-tablet-breakpont) {
+    padding: 0 1rem 0 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  @include min-screen($page-container-pc-breakpont) {
+    // padding: 0 1rem 0 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  &__area {
+    text-align: start;
+    margin: 0 0 0 1rem;
+
+    p {
+      margin: 0.25rem 0 0.25rem 0;
+    }
+  }
+}

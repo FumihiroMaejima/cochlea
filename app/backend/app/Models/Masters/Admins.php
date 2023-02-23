@@ -178,7 +178,7 @@ class Admins extends Authenticatable implements JWTSubject
             return null;
         }
 
-        return ArrayLibrary::toArray($record);
+        return ArrayLibrary::getFirst(ArrayLibrary::toArray($record));
     }
 
     /**
