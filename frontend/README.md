@@ -564,3 +564,45 @@ module.exports = (phase, { defaultConfig }) => {
 
 ---
 
+### Debug設定
+
+`launch.json`に下記の設定を追加
+
+```json
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Next.js Clinet Side Debug",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/frontend",
+            "sourceMaps": true, // sourceMapを有効にするか無効にするか選択。SourceMap：コンパイル前後の対応関係を記録したファイル。
+            "sourceMapPathOverrides": {
+              "webpack://_N_E/*": "${webRoot}/*"
+            }
+        }
+    ]
+}
+
+```
+
+`package.json`の`scripts`に記載されている`next dev`のスクリプトに`NODE_OPTIONS='--inspect'`を追加。
+
+```json
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "debug": "NODE_OPTIONS='--inspect' next dev -p 3001",
+  },
+
+```
+
+```shell
+yarn debug
+```
+
+---

@@ -19,6 +19,17 @@
             // "env": {},
             // コマンドラインパラメーターを渡す場合
             // "args": ["10", "20"]
+        },
+        {
+            "name": "Next.js Clinet Side Debug",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/next-project",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+              "webpack://_N_E/*": "${webRoot}/*"
+            }
         }
     ]
 }

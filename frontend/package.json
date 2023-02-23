@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
+    "debug": "NODE_OPTIONS='--inspect' next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
