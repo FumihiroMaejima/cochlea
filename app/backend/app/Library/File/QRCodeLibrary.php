@@ -27,7 +27,7 @@ class QRCodeLibrary
               'outputType' => QRCode::OUTPUT_MARKUP_SVG,
               'version' => 5,
             ]
-          );
+        );
 
         $qrcode = (new QRCode($options))->render('http://localhost');
 

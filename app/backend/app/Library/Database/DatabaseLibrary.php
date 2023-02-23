@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use App\Library\Array\ArrayLibrary;
 
-
 class DatabaseLibrary
 {
     private const DEFAULT_CONNECTION_NAME = 'mysql';
