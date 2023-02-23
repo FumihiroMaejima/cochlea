@@ -81,7 +81,7 @@ class UserCoinHistoriesResource extends JsonResource
     {
         $response = [];
 
-        foreach ($records as  $record) {
+        foreach ($records as $record) {
             $response[] = [
                 UserCoinHistories::UUID => $record[UserCoinHistories::UUID],
                 self::RESOURCE_KEY_HISTORY_VALUE => $record[UserCoinHistories::TYPE],
