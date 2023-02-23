@@ -576,6 +576,13 @@ module.exports = (phase, { defaultConfig }) => {
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Next.js Server Side Debug",
+            "type": "node",
+            "request": "attach",
+            "skipFiles": ["<node_internals>/**"],
+            "port": 9229
+        },
+        {
             "name": "Next.js Clinet Side Debug",
             "type": "chrome",
             "request": "launch",
