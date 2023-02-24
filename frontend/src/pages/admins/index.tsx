@@ -2,11 +2,33 @@ import React, { useEffect, useContext } from 'react'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
+import {
+  PartsSimpleTable,
+  TableHeaderType,
+  SimpleTableDataType,
+} from '@/components/parts/table/PartsSimpleTable'
 
-import { useAdmins } from '@/hooks/modules/admins/useAdmins'
+import { useAdmins, AdminType } from '@/hooks/modules/admins/useAdmins'
 import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProviderContainer'
 import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
 import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
+
+/* const simpleTableHeaderData: TableHeaderType[] = [
+  { label: 'label1' },
+  { label: 'label2' },
+  { label: 'label3' },
+] */
+const simpleTableHeaderData: TableHeaderType[] = [
+  { label: 'id' },
+  { label: 'name' },
+  { label: 'email' },
+  { label: 'roleId' },
+]
+const simpleTableData: SimpleTableDataType[] = [
+  { label1: 'v1', label2: 'v2', label3: 'v3' },
+  { label1: 'v4', label2: 'v5', label3: 'v6' },
+  { label1: 'v7', label2: 'v8', label3: 'v9' },
+]
 
 export const Admins: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
@@ -64,6 +86,14 @@ export const Admins: React.VFC = () => {
             <PartsSimpleButton text="red" color="red" />
             <PartsSimpleButton text="green" color="green" />
           </div>
+        </div>
+
+        <PartsLabelHeading text="管理者一覧" color="dark-grey" />
+        <div className="mxy-2">
+          <PartsSimpleTable
+            headers={simpleTableHeaderData}
+            items={adminsState.admins}
+          />
         </div>
       </div>
     </div>

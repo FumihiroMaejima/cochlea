@@ -129,9 +129,8 @@ export function useAdmins() {
    * @return {void}
    */
   const setAdmins = (admins: AdminType[]) => {
-    dispatch({
-      admins: [...admins],
-    })
+    adminsState.admins = admins
+    dispatch(adminsState)
   }
 
   /**
@@ -144,14 +143,19 @@ export function useAdmins() {
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
-      .getRequest<ServerRequestType<any>>(config.endpoint.admins.admins, {
-        headers: options.headers,
-      })
+      .getRequest<ServerRequestType<AdminType[]>>(
+        config.endpoint.admins.admins,
+        {
+          headers: options.headers,
+        }
+      )
       .then((response) => {
         // TODO remove comment out
         // setAdmins(response.data.data)
         // TODO fix to above
-        setAdmins(response.data as unknown as AdminType[])
+        // setAdmins(response.data as unknown as AdminType[])
+        const data = response.data as ServerRequestType<AdminType[]>
+        setAdmins(data.data as AdminType[])
         return { data: response.data, status: 200 }
         // setAdmins(response.data.data)
         // return { data: response.data.data, status: response.status }
