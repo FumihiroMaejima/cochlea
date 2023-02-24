@@ -17,9 +17,9 @@ const adminRoutes: AppRouteType[] = [
     permissions: ['master', 'administrator'],
   },
   {
-    title: 'メンバー | 管理システム',
-    shortTitle: 'メンバー',
-    path: '/members',
+    title: '管理者 | 管理システム',
+    shortTitle: '管理者',
+    path: '/admins',
     // element: <Members />,
     requiredAuth: true,
     permissions: ['master', 'administrator'],
