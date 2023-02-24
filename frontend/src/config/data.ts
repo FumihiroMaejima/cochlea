@@ -29,6 +29,13 @@ export const appConfig: IAppConfig = {
     authSelf: '/api/v1/admin/auth/self',
   },
   endpoint: {
+    admins: {
+      admins: '/api/v1/admin/admins',
+      csv: '/api/v1/admin/admins/csv',
+      admin: '/api/v1/admin/admins/admin/:id',
+      create: '/api/v1/admin/admins/admin',
+      roles: '/api/v1/admin/roles/list',
+    },
     members: {
       members: '/api/v1/admin/members',
       csv: '/api/v1/admin/members/csv',
