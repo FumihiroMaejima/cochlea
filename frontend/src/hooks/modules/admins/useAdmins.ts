@@ -37,11 +37,11 @@ export type AdminTextKeys = Exclude<AdminTypeKeys, 'roleId' | 'id'>
 export type AdminSelectKeys = Exclude<AdminTypeKeys, AdminTextKeys | 'id'>
 
 export type StateType = {
-  members: AdminType[]
+  admins: AdminType[]
 }
 
 export const initialData: StateType = {
-  members: [...[]],
+  admins: [...[]],
 }
 
 /* type ReducerActionType = {
@@ -59,7 +59,7 @@ export const initialData: StateType = {
 /* const reducer = (currentValue: StateType, action: ReducerActionType) => {
   return {
     ...currentValue,
-    members: currentValue.members.map((member, i) => {
+    admins: currentValue.admins.map((member, i) => {
       if (i === action.index) {
         if (typeof action.value === 'string') {
           member[action.type as AdminTextKeys] = action.value
@@ -80,7 +80,7 @@ export function useAdmins() {
   const [adminsState, dispatch] = useState({ ...initialData })
 
   /**
-   * update member's text value.
+   * update admin's text value.
    * @param {number} index
    * @param {AdminTextKeys} key
    * @param {string} value
@@ -92,7 +92,7 @@ export function useAdmins() {
     value: string
   ) => {
     dispatch({
-      members: adminsState.members.map((member, i) => {
+      admins: adminsState.admins.map((member, i) => {
         if (i === index) {
           member[key as AdminTextKeys] = value
         }
@@ -102,7 +102,7 @@ export function useAdmins() {
   }
 
   /**
-   * update member's number value.
+   * update admin's number value.
    * @param {number} index
    * @param {AdminSelectKeys} key
    * @param {number} value
@@ -114,7 +114,7 @@ export function useAdmins() {
     value: number
   ) => {
     dispatch({
-      members: adminsState.members.map((member, i) => {
+      admins: adminsState.admins.map((member, i) => {
         if (i === index) {
           member[key as AdminSelectKeys] = value
         }
@@ -124,18 +124,18 @@ export function useAdmins() {
   }
 
   /**
-   * set member's data.
-   * @param {AdminType[]} members
+   * set admin's data.
+   * @param {AdminType[]} admins
    * @return {void}
    */
-  const setMembers = (members: AdminType[]) => {
+  const setAdmins = (admins: AdminType[]) => {
     dispatch({
-      members: [...members],
+      admins: [...admins],
     })
   }
 
   /**
-   * get members data.
+   * get admins data.
    * @param {BaseAddHeaderResponse} header
    * @return {void}
    */
@@ -149,11 +149,11 @@ export function useAdmins() {
       })
       .then((response) => {
         // TODO remove comment out
-        // setMembers(response.data.data)
+        // setAdmins(response.data.data)
         // TODO fix to above
-        setMembers(response.data as unknown as AdminType[])
+        setAdmins(response.data as unknown as AdminType[])
         return { data: response.data, status: 200 }
-        // setMembers(response.data.data)
+        // setAdmins(response.data.data)
         // return { data: response.data.data, status: response.status }
       })
       .catch((error) => {
@@ -171,7 +171,7 @@ export function useAdmins() {
   // ------------------ useReducer() version
 
   /**
-   * update member's text value.
+   * update admin's text value.
    * @param {number} index
    * @param {AdminTextKeys} key
    * @param {string} value
@@ -185,7 +185,7 @@ export function useAdmins() {
   ) */
 
   /**
-   * update member's number value.
+   * update admin's number value.
    * @param {number} index
    * @param {AdminSelectKeys} key
    * @param {number} value
