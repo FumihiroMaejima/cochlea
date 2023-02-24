@@ -58,27 +58,6 @@ export const Admins: React.VFC = () => {
     <div className="admins page-container page-container__mx-auto">
       <PartsSimpleHeading text="管理者一覧 ページ" color="dark-grey" />
       <div className="mx-2">
-        <PartsLabelHeading text="サブヘッダー1" color="blue" />
-        <div className="util-text__contents-area util-border-full-solid-2p__color--dark-grey util-border-radius__round--5p util-color__text--dark-grey">
-          <p>test1</p>
-          <p>test2</p>
-          <p>test3</p>
-        </div>
-
-        <PartsLabelHeading text="サブヘッダー2" color="red" />
-        <div className="util-text__contents-area util-border-full-solid-2p__color--dark-grey util-border-radius__round--5p util-color__text--dark-grey">
-          <p>test1</p>
-          <p>test2</p>
-          <p>test3</p>
-        </div>
-
-        <PartsLabelHeading text="サブヘッダー3" color="green" />
-        <div className="util-text__contents-area util-border-full-solid-2p__color--dark-grey util-border-radius__round--5p util-color__text--dark-grey">
-          <p>test1</p>
-          <p>test2</p>
-          <p>test3</p>
-        </div>
-
         <PartsLabelHeading text="サンプルボタン" color="dark-grey" />
         <div className="my-2">
           <div className="util-text__contents-area util-border-full-solid-2p__color--dark-grey util-border-radius__round--5p util-color__text--dark-grey">
@@ -89,7 +68,7 @@ export const Admins: React.VFC = () => {
         </div>
 
         <PartsLabelHeading text="管理者一覧" color="dark-grey" />
-        <div className="mxy-2">
+        <div className="mxy-2 util-color__text--dark-grey">
           <PartsSimpleTable
             headers={simpleTableHeaderData}
             items={adminsState.admins}
