@@ -178,6 +178,46 @@ export function useCoins() {
       })
   }
 
+  /**
+   * update coins request.
+   * @param {CoinType} coin coin record
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const updateCoinRequest = async (
+    coin: CoinType,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+    const body = {
+      name: coin.name,
+      detail: coin.detail,
+      price: coin.price,
+      cost: coin.cost,
+      start_at: coin.start_at,
+      end_at: coin.end_at,
+    }
+    return await useRequest()
+      .patchRequest<ServerRequestType<CoinType[]>>(
+        config.endpoint.coins.coin.replace(':id', String(coin.id)),
+        body,
+        {
+          headers: options.headers,
+        }
+      )
+      .then((response) => {
+        // const data = response.data as ServerRequestType<CoinType[]>
+        // setCoins(data.data as CoinType[])
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
   // ------------------ useReducer() version
 
   /**
@@ -213,6 +253,7 @@ export function useCoins() {
     updateCoinTextData,
     updateCoinNumberData,
     getCoinsRequest,
+    updateCoinRequest,
   } as const
 }
 

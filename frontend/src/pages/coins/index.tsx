@@ -34,7 +34,8 @@ const simpleTableHeaderData: TableHeaderType[] = [
 
 export const Coins: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { coinsState, getCoinsRequest } = useCoins()
+  const { coinsState, getCoinsRequest, updateCoinTextData, updateCoinRequest } =
+    useCoins()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -60,6 +61,38 @@ export const Coins: React.VFC = () => {
   }
   useEffect(onDidMount, [])
 
+  /**
+   * edit data handler
+   * @param {number} index
+   * @param {Extract<keyof CoinType, 'name' | 'detail'>} key
+   * @param {string} value
+   * @return {void}
+   */
+  const editToDoHandler = (
+    index: number,
+    key: Extract<keyof CoinType, 'name' | 'detail'>,
+    value: string
+  ): void => {
+    // TODO remove
+    // 追加になる。
+    // setTodo([...todos, { ...todos[index], ...{ [key]: value } }])
+    // setTodo([...todos, { ...todos[index], [key]: value }])
+    updateCoinTextData(index, key, value)
+  }
+
+  /**
+   * update request handler
+   * @param {number} index
+   * @return {Promise<void>}
+   */
+  const updateToDoRequestHandler = async (index: number): Promise<void> => {
+    const coin = coinsState.coins[index]
+    updateGlobalLoading(true)
+    await updateCoinRequest(coin, getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
   return (
     <div className="admins page-container page-container__mx-auto">
       <PartsSimpleHeading text="コイン一覧 ページ" color="dark-grey" />
@@ -81,6 +114,17 @@ export const Coins: React.VFC = () => {
             items={coinsState.coins}
             editable={true}
             editableKeys={['name', 'detail']}
+            onInput={(index, key, value) => {
+              /* console.log('form edit1 index:', index)
+              console.log('form edit2 key:', key)
+              console.log('form edit3 value:', value) */
+              editToDoHandler(
+                index,
+                key as Extract<keyof CoinType, 'name' | 'detail'>,
+                value as unknown as string
+              )
+            }}
+            onClickUpdate={updateToDoRequestHandler}
           />
         </div>
       </div>
