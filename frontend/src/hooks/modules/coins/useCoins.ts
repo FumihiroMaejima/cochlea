@@ -47,11 +47,11 @@ export type CoinTextKeys = Extract<
 export type CoinSelectKeys = Extract<CoinTypeKeys, 'price' | 'cost'>
 
 export type StateType = {
-  admins: CoinType[]
+  coins: CoinType[]
 }
 
 export const initialData: StateType = {
-  admins: [...[]],
+  coins: [...[]],
 }
 
 /* type ReducerActionType = {
@@ -69,7 +69,7 @@ export const initialData: StateType = {
 /* const reducer = (currentValue: StateType, action: ReducerActionType) => {
   return {
     ...currentValue,
-    admins: currentValue.admins.map((coin, i) => {
+    coins: currentValue.coins.map((coin, i) => {
       if (i === action.index) {
         if (typeof action.value === 'string') {
           coin[action.type as CoinTextKeys] = action.value
@@ -101,7 +101,7 @@ export function useCoins() {
     value: string
   ) => {
     dispatch({
-      admins: coinsState.admins.map((coin, i) => {
+      coins: coinsState.coins.map((coin, i) => {
         if (i === index) {
           coin[key as CoinTextKeys] = value
         }
@@ -123,7 +123,7 @@ export function useCoins() {
     value: number
   ) => {
     dispatch({
-      admins: coinsState.admins.map((coin, i) => {
+      coins: coinsState.coins.map((coin, i) => {
         if (i === index) {
           coin[key as CoinSelectKeys] = value
         }
@@ -134,16 +134,16 @@ export function useCoins() {
 
   /**
    * set coin's data.
-   * @param {CoinType[]} admins
+   * @param {CoinType[]} coins
    * @return {void}
    */
-  const setAdmins = (admins: CoinType[]) => {
-    coinsState.admins = admins
+  const setCoins = (coins: CoinType[]) => {
+    coinsState.coins = coins
     dispatch(coinsState)
   }
 
   /**
-   * get admins data.
+   * get coins data.
    * @param {BaseAddHeaderResponse} header
    * @return {void}
    */
@@ -157,13 +157,13 @@ export function useCoins() {
       })
       .then((response) => {
         // TODO remove comment out
-        // setAdmins(response.data.data)
+        // setCoins(response.data.data)
         // TODO fix to above
-        // setAdmins(response.data as unknown as CoinType[])
+        // setCoins(response.data as unknown as CoinType[])
         const data = response.data as ServerRequestType<CoinType[]>
-        setAdmins(data.data as CoinType[])
+        setCoins(data.data as CoinType[])
         return { data: response.data, status: 200 }
-        // setAdmins(response.data.data)
+        // setCoins(response.data.data)
         // return { data: response.data.data, status: response.status }
       })
       .catch((error) => {

@@ -25,6 +25,14 @@ const adminRoutes: AppRouteType[] = [
     permissions: ['master', 'administrator'],
   },
   {
+    title: 'コイン | 管理システム',
+    shortTitle: 'コイン',
+    path: '/coins',
+    // element: <Members />,
+    requiredAuth: true,
+    permissions: ['master', 'administrator'],
+  },
+  {
     title: 'サンプル | 管理システム',
     shortTitle: 'サンプル',
     path: '/sample',
