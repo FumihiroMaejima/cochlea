@@ -6,6 +6,7 @@ import {
   PartsSimpleTable,
   TableHeaderType,
 } from '@/components/parts/table/PartsSimpleTable'
+import { PartsSimpleEditTable } from '@/components/parts/table/PartsSimpleEditTable'
 
 import { useCoins, CoinType } from '@/hooks/modules/coins/useCoins'
 import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProviderContainer'
@@ -68,6 +69,18 @@ export const Coins: React.VFC = () => {
           <PartsSimpleTable
             headers={simpleTableHeaderData}
             items={coinsState.coins}
+          />
+        </div>
+      </div>
+
+      <div className="mx-2">
+        <PartsLabelHeading text="コイン一覧 編集可能" color="dark-grey" />
+        <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
+          <PartsSimpleEditTable
+            headers={simpleTableHeaderData}
+            items={coinsState.coins}
+            editable={true}
+            editableKeys={['name', 'detail']}
           />
         </div>
       </div>
