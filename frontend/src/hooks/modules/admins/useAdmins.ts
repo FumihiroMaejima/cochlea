@@ -59,15 +59,15 @@ export const initialData: StateType = {
 /* const reducer = (currentValue: StateType, action: ReducerActionType) => {
   return {
     ...currentValue,
-    admins: currentValue.admins.map((member, i) => {
+    admins: currentValue.admins.map((admin, i) => {
       if (i === action.index) {
         if (typeof action.value === 'string') {
-          member[action.type as AdminTextKeys] = action.value
+          admin[action.type as AdminTextKeys] = action.value
         } else if (typeof action.value === 'number') {
-          member[action.type as AdminSelectKeys] = action.value
+          admin[action.type as AdminSelectKeys] = action.value
         }
       }
-      return member
+      return admin
     }),
   }
 } */
@@ -92,11 +92,11 @@ export function useAdmins() {
     value: string
   ) => {
     dispatch({
-      admins: adminsState.admins.map((member, i) => {
+      admins: adminsState.admins.map((admin, i) => {
         if (i === index) {
-          member[key as AdminTextKeys] = value
+          admin[key as AdminTextKeys] = value
         }
-        return member
+        return admin
       }),
     })
   }
@@ -114,11 +114,11 @@ export function useAdmins() {
     value: number
   ) => {
     dispatch({
-      admins: adminsState.admins.map((member, i) => {
+      admins: adminsState.admins.map((admin, i) => {
         if (i === index) {
-          member[key as AdminSelectKeys] = value
+          admin[key as AdminSelectKeys] = value
         }
-        return member
+        return admin
       }),
     })
   }
