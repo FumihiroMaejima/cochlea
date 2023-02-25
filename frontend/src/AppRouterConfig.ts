@@ -40,6 +40,22 @@ const adminRoutes: AppRouteType[] = [
     requiredAuth: true,
     permissions: ['master', 'administrator'],
   },
+  {
+    title: 'サンプル画像 | 管理システム',
+    shortTitle: 'サンプル画像',
+    path: '/sample/picsum',
+    // element: <Sample />,
+    requiredAuth: true,
+    permissions: ['master', 'administrator'],
+  },
+  {
+    title: 'サンプルテスト | 管理システム',
+    shortTitle: 'サンプルテスト',
+    path: '/sample/test1',
+    // element: <Sample />,
+    requiredAuth: true,
+    permissions: ['master', 'administrator'],
+  },
 ]
 
 const normalRoutes: AppRouteType[] = [
