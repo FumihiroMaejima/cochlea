@@ -59,6 +59,9 @@ export const appConfig: IAppConfig = {
       delete: '/api/v1/admin/roles/role',
       permissions: '/api/v1/admin/permissions/list',
     },
+    debugs: {
+      status: '/api/v1/admin/debug/status',
+    },
   },
 }
 

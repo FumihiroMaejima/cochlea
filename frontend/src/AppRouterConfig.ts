@@ -33,6 +33,14 @@ const adminRoutes: AppRouteType[] = [
     permissions: ['master', 'administrator'],
   },
   {
+    title: 'デバッグページ | 管理システム',
+    shortTitle: 'デバッグ',
+    path: '/debug',
+    // element: <Sample />,
+    requiredAuth: true,
+    permissions: ['master', 'administrator'],
+  },
+  {
     title: 'サンプル | 管理システム',
     shortTitle: 'サンプル',
     path: '/sample',

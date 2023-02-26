@@ -32,6 +32,7 @@ export type EndpointType = {
   coins: CoinsServiceEndipont
   members: MembersServiceEndipont
   roles: RolesServiceEndipont
+  debugs: DebugsServiceEndipont
   // game: GameTotalEndipont
 }
 
@@ -67,4 +68,8 @@ export type RolesServiceEndipont = {
   create: string
   delete: string
   permissions: string
+}
+
+export type DebugsServiceEndipont = {
+  status: string
 }
