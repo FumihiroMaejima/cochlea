@@ -206,8 +206,37 @@ export function useCoins() {
         }
       )
       .then((response) => {
-        // const data = response.data as ServerRequestType<CoinType[]>
-        // setCoins(data.data as CoinType[])
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
+   * delete coins request.
+   * @param {number[]} coinIds coin id list
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const deleteCoinRequest = async (
+    coinIds: number[],
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+    const body = { coins: coinIds }
+    return await useRequest()
+      .deleteRequest<ServerRequestType<CoinType[]>>(
+        config.endpoint.coins.delete,
+        {
+          headers: options.headers,
+          data: body,
+        }
+      )
+      .then((response) => {
         return { data: response.data, status: 200 }
       })
       .catch((error) => {
@@ -254,6 +283,7 @@ export function useCoins() {
     updateCoinNumberData,
     getCoinsRequest,
     updateCoinRequest,
+    deleteCoinRequest,
   } as const
 }
 

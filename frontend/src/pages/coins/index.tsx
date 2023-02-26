@@ -34,8 +34,13 @@ const simpleTableHeaderData: TableHeaderType[] = [
 
 export const Coins: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { coinsState, getCoinsRequest, updateCoinTextData, updateCoinRequest } =
-    useCoins()
+  const {
+    coinsState,
+    getCoinsRequest,
+    updateCoinTextData,
+    updateCoinRequest,
+    deleteCoinRequest,
+  } = useCoins()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -93,6 +98,19 @@ export const Coins: React.VFC = () => {
     })
   }
 
+  /**
+   * delete request handler
+   * @param {number} index
+   * @return {Promise<void>}
+   */
+  const deleteToDoRequestHandler = async (index: number): Promise<void> => {
+    const coin = coinsState.coins[index]
+    updateGlobalLoading(true)
+    await deleteCoinRequest([coin.id], getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
   return (
     <div className="admins page-container page-container__mx-auto">
       <PartsSimpleHeading text="コイン一覧 ページ" color="dark-grey" />
@@ -125,6 +143,7 @@ export const Coins: React.VFC = () => {
               )
             }}
             onClickUpdate={updateToDoRequestHandler}
+            onClickDelete={deleteToDoRequestHandler}
           />
         </div>
       </div>

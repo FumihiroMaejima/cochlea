@@ -41,6 +41,7 @@ export const appConfig: IAppConfig = {
       csv: '/api/v1/admin/coins/csv',
       coin: '/api/v1/admin/coins/coin/:id',
       create: '/api/v1/admin/coins/coin',
+      delete: '/api/v1/admin/coins/coin',
       fileTemplate: '/api/v1/admin/file/template',
     },
     members: {

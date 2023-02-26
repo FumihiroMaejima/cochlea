@@ -48,6 +48,7 @@ export type CoinsServiceEndipont = {
   csv: string
   coin: string
   create: string
+  delete: string
   fileTemplate: string
 }
 
