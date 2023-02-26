@@ -72,6 +72,7 @@ class DebugService
         $response = [
             'userId' => $userId,
             'sessionId' => $sessionId,
+            'email' => $admin[Admins::EMAIL],
             'fakerTimeStamp' => $fakerTimeStamp,
             'host' => config('app.url'),
             'clinetIp' => $clinetIp,
