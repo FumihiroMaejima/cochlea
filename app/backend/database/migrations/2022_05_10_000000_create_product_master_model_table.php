@@ -33,6 +33,31 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
+         * banners table
+         */
+        Schema::create('banners', function (Blueprint $table) {
+            $table->id();
+            $table->uuid()->unique()->comment('uuid');
+            $table->string('name', 255)->comment('バナー名');
+            $table->text('detail')->comment('詳細');
+            $table->string('location', 255)->comment('配置場所');
+            $table->integer('pc_height')->unsigned()->comment('PCサイズの高さ');
+            $table->integer('pc_width')->unsigned()->comment('PCサイズの幅');
+            $table->integer('sp_height')->unsigned()->comment('SPサイズの高さ');
+            $table->integer('sp_width')->unsigned()->comment('SPサイズの幅');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            // index設定
+            $table->index('location');
+
+            $table->comment('banners table');
+        });
+
+        /**
          * events table
          */
         Schema::create('events', function (Blueprint $table) {
