@@ -79,6 +79,6 @@ class DebugService
             'userAgent' => $userAgent,
         ];
 
-        return response()->json($response);
+        return response()->json(['data' => $response, 'status' => 200]);
     }
 }
