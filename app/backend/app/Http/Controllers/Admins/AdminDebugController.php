@@ -67,7 +67,6 @@ class AdminDebugController extends Controller
             $userId,
             $sessionId,
             $fakerTimeStamp,
-            $request->getHost(),
             $request->getClientIp(),
             $request->userAgent()
         );

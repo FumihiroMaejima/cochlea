@@ -48,7 +48,6 @@ class DebugService
      * @param int $userId
      * @param string $sessionId
      * @param ?int $fakerTimeStamp
-     * @param string $host
      * @param ?string $clinetIp
      * @param ?string $userAgent
      * @return JsonResponse
@@ -58,7 +57,6 @@ class DebugService
         int $userId,
         string $sessionId,
         ?int $fakerTimeStamp,
-        string $host,
         ?string $clinetIp,
         ?string $userAgent
     ): JsonResponse
@@ -70,11 +68,12 @@ class DebugService
                 'not admin exist.'
             );
         }
+
         $response = [
             'userId' => $userId,
             'sessionId' => $sessionId,
             'fakerTimeStamp' => $fakerTimeStamp,
-            'host' => $host,
+            'host' => config('app.url'),
             'clinetIp' => $clinetIp,
             'userAgent' => $userAgent,
         ];
