@@ -16,6 +16,16 @@ class Banners extends Model
     public const LOCATION_TYPE_BLOCK = 'block'; // ブロック
     public const LOCATION_TYPE_KEY_VISUAL = 'keyVisual'; // キービジュアル
 
+    public const LOCATION_VALUE_HOME = 1; // ホーム
+    public const LOCATION_VALUE_BLOCK = 2; // ブロック
+    public const LOCATION_VALUE_KEY_VISUAL = 3; // キービジュアル
+
+    public const LOCATION_VALUE_LIST = [
+        self::LOCATION_VALUE_HOME => self::LOCATION_TYPE_HOME,
+        self::LOCATION_VALUE_BLOCK => self::LOCATION_TYPE_BLOCK,
+        self::LOCATION_VALUE_KEY_VISUAL => self::LOCATION_TYPE_KEY_VISUAL,
+    ];
+
     // カラム一覧
     public const ID         = 'id';
     public const UUID       = 'uuid';

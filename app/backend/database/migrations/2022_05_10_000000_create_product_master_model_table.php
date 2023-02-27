@@ -175,6 +175,7 @@ class CreateProductMasterModelTable extends Migration
     public function down()
     {
         Schema::dropIfExists('coins');
+        Schema::dropIfExists('banners');
         Schema::dropIfExists('events');
         Schema::dropIfExists('images');
         Schema::dropIfExists('informations');
