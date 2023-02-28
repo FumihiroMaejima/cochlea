@@ -57,6 +57,9 @@ export const Debug: React.VFC = () => {
               <b>email</b> : {debugsState.status.email}
             </p>
             <p>
+              <b>name</b> : {debugsState.status.name}
+            </p>
+            <p>
               <b>fakerTimeStamp</b> : {debugsState.status.fakerTimeStamp}
             </p>
             <p>

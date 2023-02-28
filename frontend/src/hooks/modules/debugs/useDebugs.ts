@@ -18,6 +18,7 @@ export const debugData = {
   userId: 0,
   sessionId: '',
   email: '',
+  name: '',
   fakerTimeStamp: 0,
   host: '',
   clinetIp: '',
