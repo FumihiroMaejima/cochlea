@@ -47,6 +47,7 @@ class CreateProductMasterModelTable extends Migration
             $table->integer('sp_width')->unsigned()->comment('SPサイズの幅');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
+            $table->string('url', 255)->comment('遷移先URL');
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');

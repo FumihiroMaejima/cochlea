@@ -38,6 +38,7 @@ class Banners extends Model
     public const SP_WIDTH   = 'sp_width';
     public const START_AT   = 'start_at';
     public const END_AT     = 'end_at';
+    public const URL        = 'url';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';

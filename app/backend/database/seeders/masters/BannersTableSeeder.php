@@ -42,6 +42,7 @@ class BannersTableSeeder extends BaseSeeder
             Banners::SP_WIDTH   => 300,
             Banners::START_AT   => $now,
             Banners::END_AT     => $endDate,
+            Banners::URL        => '',
             Banners::CREATED_AT => $now,
             Banners::UPDATED_AT => $now
         ];
@@ -60,6 +61,7 @@ class BannersTableSeeder extends BaseSeeder
             $row[Banners::NAME]   = 'banner_' . (string)($i);
             $row[Banners::DETAIL] = 'testBanner' . (string)($i) . '';
             $row[Banners::LOCATION]   = Banners::LOCATION_VALUE_LIST[(($i % 3) + 1)];
+            $row[Banners::URL] = config('app.url') . '/image/banner/' . $i;
 
             $data[] = $row;
         }
