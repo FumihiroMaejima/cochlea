@@ -4,6 +4,7 @@ import React, {
   FocusEventHandler,
   useRef,
   useState,
+  FormEvent,
 } from 'react'
 import {
   checkFileSize,
@@ -92,12 +93,18 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       return
     }
 
-    Object.keys(files).forEach((key) => {
+    // 下記の形で配列にも出来る
+    // const fileList = Array.from(files)
+    Object.keys(files).forEach((key: string) => {
+      let accepts: undefined | string[]
+      if (accept.includes(',')) {
+        accepts = accept.split(',')
+      }
       const file = files[parseInt(key)]
       if (!checkFileSize(file.size, fileSize)) {
         setIsError(true)
         setTextValue('invalid file size')
-      } else if (!checkFileType(file.type, accept)) {
+      } else if (!checkFileType(file.type, accepts ?? accept)) {
         setIsError(true)
         setTextValue('invalid file type')
       } else {
