@@ -60,7 +60,8 @@ export const Debug: React.VFC = () => {
               <b>name</b> : {debugsState.status.name}
             </p>
             <p>
-              <b>fakerTimeStamp</b> : {debugsState.status.fakerTimeStamp}
+              <b>fakerTimeStamp</b> :{' '}
+              {debugsState.status.fakerTimeStamp ?? '時間偽装設定無し'}
             </p>
             <p>
               <b>host</b> : {debugsState.status.host}
