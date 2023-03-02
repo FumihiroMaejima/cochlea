@@ -1,0 +1,15 @@
+@import '../mixins.scss';
+@import '../_variables.scss';
+
+.grid-container-auto {
+  display: grid;
+  grid-template-rows: 200px 100px;
+  grid-template-columns: 200px 100px 100px;
+}
+
+.grid-container-auto-flow {
+  display: grid;
+  grid-template-rows: 200px 100px;
+  grid-template-columns: 200px 100px 100px;
+  grid-auto-flow: column;
+}
