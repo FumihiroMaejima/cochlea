@@ -2,6 +2,7 @@
 
 $parts-simple-file-input-default-color: #85fd35;
 $parts-simple-file-input-default-border-bottom-color: #00d21c;
+$parts-simple-file-input-default-text-color: rgb(117, 117, 117);
 
 .parts-simple-file-input {
   label {
@@ -17,9 +18,14 @@ $parts-simple-file-input-default-border-bottom-color: #00d21c;
     display: none;
   }
 
+  &__form-label {
+    color: $parts-simple-file-input-default-text-color;
+  }
+
   &__file-name {
     font-size: 14px;
     margin-left: 20px;
+    color: $parts-simple-file-input-default-text-color;
   }
 
   &__reset-file-icon {
