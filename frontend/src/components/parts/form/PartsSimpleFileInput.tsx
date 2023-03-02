@@ -6,6 +6,8 @@ import React, {
   useState,
   FormEvent,
   DragEvent,
+  MouseEvent,
+  MouseEventHandler,
 } from 'react'
 import {
   checkFileSize,
@@ -17,11 +19,11 @@ import { HTMLElementEvent } from '@/types/'
 type Props = {
   value: undefined | File
   className?: string
-  formLabel: string
-  accept: string
-  enablePreview: boolean
-  fileSize: number
-  fileLength: number
+  formLabel?: string
+  accept?: string
+  enablePreview?: boolean
+  fileSize?: number
+  fileLength?: number
 
   id?: string
   onInput?: FormEventHandler<HTMLInputElement>
@@ -66,28 +68,11 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   disabled = false,
   readOnly = false,
 }) => {
-  // const [imageData, setImageData] = useState<string | ArrayBuffer | null>('')
   const [imageData, setImageData] = useState<string | undefined>('')
   const [errorText, setTextValue] = useState('')
   const [isError, setIsError] = useState<boolean>(false)
   const [isDraged, setIdDraged] = useState<boolean>(false)
-  // const refElement = useRef<HTMLDivElement>(null) // reference to container
   const refElement = useRef<HTMLInputElement>(null) // reference to container
-
-  /* const imageData = ref<string | ArrayBuffer | null>('')
-  const fileRef = ref<HTMLInputElement>()
-  const errorText = ref<string>('')
-  const isError = ref<boolean>(false)
-  const isDraged = ref<boolean>(false)
-
-  // computed
-  const inputValue = computed((): undefined | File => props.value)
-  const imageDataValue = computed(
-    (): string | ArrayBuffer | null => imageData.value
-  )
-  const errorTextValue = computed((): string => errorText.value)
-  const isInputError = computed((): boolean => isError.value)
-  const isDragedState = computed((): boolean => isDraged.value) */
 
   // methods
   /**
@@ -172,7 +157,10 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {Event} event
    * @return {void}
    */
-  const resetFile = (event: Event) => {
+  const resetFile: MouseEventHandler<HTMLSpanElement> = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _: MouseEvent<HTMLSpanElement>
+  ) => {
     // reset emit
     onResetFile()
     setIsError(false)
@@ -271,10 +259,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
             />
             <span
               className="parts-simple-file-input__reset-file-icon"
-              onClick={(e) => {
-                // resetFile(e)
-                resetFile
-              }}
+              onClick={resetFile}
             >
               ×
             </span>
@@ -286,10 +271,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
               <span>{value.name}</span>
               <span
                 className="parts-simple-file-input__reset-file-icon"
-                onClick={(e) => {
-                  // resetFile(e)
-                  resetFile
-                }}
+                onClick={resetFile}
               >
                 ×
               </span>
