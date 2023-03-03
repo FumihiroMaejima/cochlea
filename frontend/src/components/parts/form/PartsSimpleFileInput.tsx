@@ -4,7 +4,6 @@ import React, {
   FocusEventHandler,
   useRef,
   useState,
-  FormEvent,
   DragEvent,
   MouseEvent,
   MouseEventHandler,
@@ -18,24 +17,14 @@ import { HTMLElementEvent } from '@/types/'
 
 type Props = {
   value: undefined | File
+  onUpdateFile: (v: File) => void
+  onResetFile: () => void
   className?: string
   formLabel?: string
   accept?: string
   enablePreview?: boolean
   fileSize?: number
   fileLength?: number
-
-  id?: string
-  onInput?: FormEventHandler<HTMLInputElement>
-  onFocus?: FocusEventHandler<HTMLInputElement>
-  onBlur?: FocusEventHandler<HTMLInputElement>
-
-  onInputFile?: FormEventHandler<HTMLInputElement>
-  onUpdateFile: (v: File) => void
-  onResetFile: () => void
-  type?: React.HTMLInputTypeAttribute
-  placeholder?: string
-  maxLength?: number
   required?: boolean
   disabled?: boolean
   readOnly?: boolean
@@ -46,27 +35,17 @@ type Props = {
 
 export const PartsSimpleFileInput: React.VFC<Props> = ({
   value = undefined,
+  onUpdateFile = (v) => console.log(JSON.stringify(v)),
+  onResetFile = () => console.log(''),
   className = undefined,
   formLabel = 'ファイルの選択',
   accept = 'image/png,image/jpeg,image/gif',
   enablePreview = false,
   fileSize = 1000000, // byte size
   fileLength = 1,
-
-  id = undefined,
-  onInput = undefined,
-  onFocus = undefined,
-  onBlur = undefined,
-
-  onInputFile = undefined,
-  onUpdateFile = (v) => console.log(JSON.stringify(v)),
-  onResetFile = () => console.log(''),
-  type = 'text',
-  placeholder = undefined,
-  maxLength = undefined,
   required = undefined,
-  disabled = false,
-  readOnly = false,
+  disabled = undefined,
+  readOnly = undefined,
 }) => {
   const [imageData, setImageData] = useState<string | undefined>('')
   const [errorText, setTextValue] = useState('')
@@ -80,7 +59,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {FileList} files
    * @return {void}
    */
-  const checkFileValidation = (files: FileList) => {
+  const checkFileValidation = (files: FileList): void => {
     if (!checkFileLength(files.length, fileLength)) {
       setIsError(true)
       setTextValue('invalid file length')
@@ -113,7 +92,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {File} file
    * @return {void}
    */
-  const createImage = (file: File) => {
+  const createImage = (file: File): void => {
     const reader = new FileReader()
     // reader.onload = (e: ProgressEvent) => {
     reader.onload = () => {
@@ -131,11 +110,8 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @return {void}
    */
   const inputEventHandler = (
-    // event: HTMLElementEvent<HTMLInputElement> | FormEvent<HTMLFormElement>
-    // event: HTMLElementEvent<HTMLInputElement> extends FormEvent<HTMLInputElement>
     event: HTMLElementEvent<HTMLInputElement>
-    // event: FormEvent<HTMLInputElement>
-  ) => {
+  ): void => {
     const data = event.target.files ? event.target.files : undefined
 
     if (data) {
@@ -160,7 +136,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   const resetFile: MouseEventHandler<HTMLSpanElement> = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _: MouseEvent<HTMLSpanElement>
-  ) => {
+  ): void => {
     // reset emit
     onResetFile()
     setIsError(false)
@@ -172,7 +148,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const changeFileByDragEvent = (event: DragEvent) => {
+  const changeFileByDragEvent = (event: DragEvent): void => {
     if (event.dataTransfer?.files) {
       const files = event.dataTransfer?.files
       checkFileValidation(files)
@@ -195,7 +171,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {boolean} value
    * @return {void}
    */
-  const changeDragedState = (dragEvent: DragEvent, value = false) => {
+  const changeDragedState = (dragEvent: DragEvent, value = false): void => {
     // prevent設定
     const event = dragEvent as unknown as Event
     event.stopPropagation()
@@ -208,7 +184,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const dropFile = (event: DragEvent) => {
+  const dropFile = (event: DragEvent): void => {
     changeFileByDragEvent(event as DragEvent)
     changeDragedState(event)
   }
@@ -228,10 +204,6 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       onDragEnd={(e) => {
         changeDragedState(e, false)
       }}
-      /* @dragover.prevent={changeDragedState(true)}
-      @drop.prevent="dropFile"
-      @dragleave.prevent="changeDragedState(false)"
-      @dragend.prevent="changeDragedState(false)" */
     >
       <div
         className={`parts-simple-file-input__drop-area ${
@@ -247,10 +219,6 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
         onDragEnd={(e) => {
           changeDragedState(e, false)
         }}
-        /* @dragover.prevent="changeDragedState(true)"
-        @drop.prevent="dropFile"
-        @dragleave.prevent="changeDragedState(false)"
-        @dragend.prevent="changeDragedState(false)" */
       >
         {value && enablePreview && (
           <div className="parts-simple-file-input__selected-image-file">
@@ -299,15 +267,9 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
                   e as unknown as HTMLElementEvent<HTMLInputElement>
                 )
               }
-              // onInput={inputEventHandler}
-              /* onInput={onInput}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              placeholder={placeholder}
-              maxLength={maxLength}
               required={required}
               disabled={disabled}
-              readOnly={readOnly} */
+              readOnly={readOnly}
             />
           </label>
         )}
