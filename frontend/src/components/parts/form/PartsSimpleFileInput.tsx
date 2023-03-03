@@ -47,7 +47,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   disabled = undefined,
   readOnly = undefined,
 }) => {
-  const [imageData, setImageData] = useState<string | undefined>('')
+  const [imageData, setImageData] = useState<string | undefined>(undefined)
   const [errorText, setErrorText] = useState('')
   const [isFileValidationError, setIsFileValidationError] =
     useState<boolean>(false)
@@ -100,7 +100,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       // const target = e.target as FileReader
       // setImageData(e.target.result)
       // setImageData(reader.result)
-      setImageData(reader.result?.toString)
+      setImageData(reader.result?.toString())
     }
     reader.readAsDataURL(file)
   }
