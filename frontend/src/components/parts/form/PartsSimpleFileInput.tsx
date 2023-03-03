@@ -148,7 +148,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const changeFileByDropEventHandler = (event: DragEvent): void => {
+  const changeFileByDropEvent = (event: DragEvent): void => {
     if (event.dataTransfer?.files) {
       const files = event.dataTransfer?.files
       checkFileValidationHandler(files)
@@ -175,10 +175,11 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
     dragEvent: DragEvent,
     value = false
   ): void => {
-    // prevent設定
+    // イベントの伝播の中断とデフォルトアクションの抑制
     const event = dragEvent as unknown as Event
     event.stopPropagation()
     event.preventDefault()
+
     setIsDraged(value)
   }
 
@@ -187,9 +188,14 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const dropFileHandler = (event: DragEvent): void => {
-    changeFileByDropEventHandler(event as DragEvent)
-    changeDragedStateHandler(event)
+  const dropFileHandler = (dropEvent: DragEvent): void => {
+    // イベントの伝播の中断とデフォルトアクションの抑制
+    const event = dropEvent as unknown as Event
+    event.stopPropagation()
+    event.preventDefault()
+
+    changeFileByDropEvent(dropEvent)
+    changeDragedStateHandler(dropEvent)
   }
 
   return (
