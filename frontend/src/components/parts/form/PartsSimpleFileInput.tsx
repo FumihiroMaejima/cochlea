@@ -71,7 +71,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   const [imageData, setImageData] = useState<string | undefined>('')
   const [errorText, setTextValue] = useState('')
   const [isError, setIsError] = useState<boolean>(false)
-  const [isDraged, setIdDraged] = useState<boolean>(false)
+  const [isDraged, setIsDraged] = useState<boolean>(false)
   const refElement = useRef<HTMLInputElement>(null) // reference to container
 
   // methods
@@ -167,7 +167,12 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
     setTextValue('')
   }
 
-  const changeFileDrag = (event: DragEvent) => {
+  /**
+   * change file data by drag event
+   * @param {DragEvent} event
+   * @return {void}
+   */
+  const changeFileByDragEvent = (event: DragEvent) => {
     if (event.dataTransfer?.files) {
       const files = event.dataTransfer?.files
       checkFileValidation(files)
@@ -185,12 +190,17 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   }
 
   /**
-   * draged status
+   * change draged status
+   * @param {DragEvent} dragEvent
    * @param {boolean} value
    * @return {void}
    */
-  const changeDragedState = (value = false) => {
-    setIdDraged(value)
+  const changeDragedState = (dragEvent: DragEvent, value = false) => {
+    // prevent設定
+    const event = dragEvent as unknown as Event
+    event.stopPropagation()
+    event.preventDefault()
+    setIsDraged(value)
   }
 
   /**
@@ -199,8 +209,8 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @return {void}
    */
   const dropFile = (event: DragEvent) => {
-    changeFileDrag(event as DragEvent)
-    changeDragedState()
+    changeFileByDragEvent(event as DragEvent)
+    changeDragedState(event)
   }
 
   return (
@@ -208,18 +218,15 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       className={`parts-simple-file-input ${className ? ' ' + className : ''}${
         isDraged ? ' ' + 'parts-simple-file-input__drag_on' : ''
       }`}
-      onDragOver={() => {
-        changeDragedState(true)
+      onDragOver={(e) => {
+        changeDragedState(e, true)
       }}
-      onDrag={(e) => {
-        // dropFile(e)
-        dropFile()
+      onDrop={dropFile}
+      onDragLeave={(e) => {
+        changeDragedState(e, false)
       }}
-      onDragLeave={() => {
-        changeDragedState(false)
-      }}
-      onDragEnd={() => {
-        changeDragedState(false)
+      onDragEnd={(e) => {
+        changeDragedState(e, false)
       }}
       /* @dragover.prevent={changeDragedState(true)}
       @drop.prevent="dropFile"
@@ -230,18 +237,15 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
         className={`parts-simple-file-input__drop-area ${
           isDraged ? ' parts-simple-file-input__drag_on' : ''
         }`}
-        onDragOver={() => {
-          changeDragedState(true)
+        onDragOver={(e) => {
+          changeDragedState(e, true)
         }}
-        onDrop={(e) => {
-          // dropFile(e)
-          dropFile
+        onDrop={dropFile}
+        onDragLeave={(e) => {
+          changeDragedState(e, false)
         }}
-        onDragLeave={() => {
-          changeDragedState(false)
-        }}
-        onDragEnd={() => {
-          changeDragedState(false)
+        onDragEnd={(e) => {
+          changeDragedState(e, false)
         }}
         /* @dragover.prevent="changeDragedState(true)"
         @drop.prevent="dropFile"
