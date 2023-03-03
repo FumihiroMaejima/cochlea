@@ -22,7 +22,7 @@ type Props = {
   className?: string
   formLabel?: string
   accept?: string
-  enablePreview?: boolean
+  isOpenPreview?: boolean
   fileSize?: number
   fileLength?: number
   required?: boolean
@@ -40,7 +40,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   className = undefined,
   formLabel = 'ファイルの選択',
   accept = 'image/png,image/jpeg,image/gif',
-  enablePreview = false,
+  isOpenPreview = false,
   fileSize = 1000000, // byte size
   fileLength = 1,
   required = undefined,
@@ -59,7 +59,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {FileList} files
    * @return {void}
    */
-  const checkFileValidation = (files: FileList): void => {
+  const checkFileValidationHandler = (files: FileList): void => {
     if (!checkFileLength(files.length, fileLength)) {
       setIsError(true)
       setTextValue('invalid file length')
@@ -92,7 +92,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {File} file
    * @return {void}
    */
-  const createImage = (file: File): void => {
+  const createPreviewImage = (file: File): void => {
     const reader = new FileReader()
     // reader.onload = (e: ProgressEvent) => {
     reader.onload = () => {
@@ -115,14 +115,14 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
     const data = event.target.files ? event.target.files : undefined
 
     if (data) {
-      checkFileValidation(data)
+      checkFileValidationHandler(data)
 
       if (!isError) {
         // update emit
         onUpdateFile(data[0])
 
-        if (enablePreview) {
-          createImage(data[0])
+        if (isOpenPreview) {
+          createPreviewImage(data[0])
         }
       }
     }
@@ -133,7 +133,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {Event} event
    * @return {void}
    */
-  const resetFile: MouseEventHandler<HTMLSpanElement> = (
+  const resetFileHandler: MouseEventHandler<HTMLSpanElement> = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _: MouseEvent<HTMLSpanElement>
   ): void => {
@@ -148,18 +148,18 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const changeFileByDragEvent = (event: DragEvent): void => {
+  const changeFileByDropEventHandler = (event: DragEvent): void => {
     if (event.dataTransfer?.files) {
       const files = event.dataTransfer?.files
-      checkFileValidation(files)
+      checkFileValidationHandler(files)
       // const data = event.target.files ? event.target.files![0] : undefined
 
       if (!isError) {
         // update emit
         onUpdateFile(files[0])
 
-        if (enablePreview) {
-          createImage(files[0])
+        if (isOpenPreview) {
+          createPreviewImage(files[0])
         }
       }
     }
@@ -171,7 +171,10 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {boolean} value
    * @return {void}
    */
-  const changeDragedState = (dragEvent: DragEvent, value = false): void => {
+  const changeDragedStateHandler = (
+    dragEvent: DragEvent,
+    value = false
+  ): void => {
     // prevent設定
     const event = dragEvent as unknown as Event
     event.stopPropagation()
@@ -184,9 +187,9 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @param {DragEvent} event
    * @return {void}
    */
-  const dropFile = (event: DragEvent): void => {
-    changeFileByDragEvent(event as DragEvent)
-    changeDragedState(event)
+  const dropFileHandler = (event: DragEvent): void => {
+    changeFileByDropEventHandler(event as DragEvent)
+    changeDragedStateHandler(event)
   }
 
   return (
@@ -195,14 +198,14 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
         isDraged ? ' ' + 'parts-simple-file-input__drag_on' : ''
       }`}
       onDragOver={(e) => {
-        changeDragedState(e, true)
+        changeDragedStateHandler(e, true)
       }}
-      onDrop={dropFile}
+      onDrop={dropFileHandler}
       onDragLeave={(e) => {
-        changeDragedState(e, false)
+        changeDragedStateHandler(e, false)
       }}
       onDragEnd={(e) => {
-        changeDragedState(e, false)
+        changeDragedStateHandler(e, false)
       }}
     >
       <div
@@ -210,17 +213,17 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
           isDraged ? ' parts-simple-file-input__drag_on' : ''
         }`}
         onDragOver={(e) => {
-          changeDragedState(e, true)
+          changeDragedStateHandler(e, true)
         }}
-        onDrop={dropFile}
+        onDrop={dropFileHandler}
         onDragLeave={(e) => {
-          changeDragedState(e, false)
+          changeDragedStateHandler(e, false)
         }}
         onDragEnd={(e) => {
-          changeDragedState(e, false)
+          changeDragedStateHandler(e, false)
         }}
       >
-        {value && enablePreview && (
+        {value && isOpenPreview && (
           <div className="parts-simple-file-input__selected-image-file">
             <img
               src={imageData}
@@ -231,19 +234,19 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
             />
             <span
               className="parts-simple-file-input__reset-file-icon"
-              onClick={resetFile}
+              onClick={resetFileHandler}
             >
               ×
             </span>
           </div>
         )}
-        {value && !enablePreview && (
+        {value && !isOpenPreview && (
           <div className="parts-simple-file-input__selected-file">
             <span className="parts-simple-file-input__file-name">
               <span>{value.name}</span>
               <span
                 className="parts-simple-file-input__reset-file-icon"
-                onClick={resetFile}
+                onClick={resetFileHandler}
               >
                 ×
               </span>
