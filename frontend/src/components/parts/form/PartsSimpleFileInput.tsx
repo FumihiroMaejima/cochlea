@@ -48,8 +48,9 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   readOnly = undefined,
 }) => {
   const [imageData, setImageData] = useState<string | undefined>('')
-  const [errorText, setTextValue] = useState('')
-  const [isError, setIsError] = useState<boolean>(false)
+  const [errorText, setErrorText] = useState('')
+  const [isFileValidationError, setIsFileValidationError] =
+    useState<boolean>(false)
   const [isDraged, setIsDraged] = useState<boolean>(false)
   const refElement = useRef<HTMLInputElement>(null) // reference to container
 
@@ -61,8 +62,8 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    */
   const checkFileValidationHandler = (files: FileList): void => {
     if (!checkFileLength(files.length, fileLength)) {
-      setIsError(true)
-      setTextValue('invalid file length')
+      setIsFileValidationError(true)
+      setErrorText('invalid file length')
       return
     }
 
@@ -75,14 +76,14 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       }
       const file = files[parseInt(key)]
       if (!checkFileSize(file.size, fileSize)) {
-        setIsError(true)
-        setTextValue('invalid file size')
+        setIsFileValidationError(true)
+        setErrorText('invalid file size')
       } else if (!checkFileType(file.type, accepts ?? accept)) {
-        setIsError(true)
-        setTextValue('invalid file type')
+        setIsFileValidationError(true)
+        setErrorText('invalid file type')
       } else {
-        setIsError(false)
-        setTextValue('')
+        setIsFileValidationError(false)
+        setErrorText('')
       }
     })
   }
@@ -117,7 +118,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
     if (data) {
       checkFileValidationHandler(data)
 
-      if (!isError) {
+      if (!isFileValidationError) {
         // update emit
         onUpdateFile(data[0])
 
@@ -139,8 +140,8 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
   ): void => {
     // reset emit
     onResetFile()
-    setIsError(false)
-    setTextValue('')
+    setIsFileValidationError(false)
+    setErrorText('')
   }
 
   /**
@@ -154,7 +155,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
       checkFileValidationHandler(files)
       // const data = event.target.files ? event.target.files![0] : undefined
 
-      if (!isError) {
+      if (!isFileValidationError) {
         // update emit
         onUpdateFile(files[0])
 
@@ -283,7 +284,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
           </label>
         )}
       </div>
-      {isError && (
+      {isFileValidationError && (
         <p className="parts-simple-file-input__error-text">{errorText}</p>
       )}
     </div>
