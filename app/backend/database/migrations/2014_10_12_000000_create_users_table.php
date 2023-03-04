@@ -13,6 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
+        /**
+         * users table
+         */
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('ユーザー名');
@@ -31,6 +34,34 @@ return new class extends Migration
 
             $table->comment('users table');
         });
+
+        /**
+         * oauth_users table
+         */
+        Schema::create('oauth_users', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned()->comment('ユーザーID');
+            $table->tinyInteger('type')->unsigned()->comment('SNSタイプ');
+            $table->integer('github_id')->unsigned()->nullable()->default(null)->comment('GithubID');
+            $table->string('github_token')->nullable()->default(null)->comment('Githubトークン');
+            $table->integer('twitter_id')->unsigned()->nullable()->default(null)->comment('TwitterID');
+            $table->string('twitter_token')->nullable()->default(null)->comment('Twitterトークン');
+            $table->integer('facebook_id')->unsigned()->nullable()->default(null)->comment('FaceBookID');
+            $table->string('facebook_token')->nullable()->default(null)->comment('FaceBookトークン');
+            $table->string('code')->nullable()->default(null)->comment('認証コード');
+            $table->string('state')->nullable()->default(null)->comment('認証ステータス');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            // プライマリキー設定
+            $table->primary(['user_id']);
+            // ユニークキー設定
+            $table->unique(['github_id']);
+            $table->unique(['twitter_id']);
+            $table->unique(['facebook_id']);
+
+            $table->comment('oauth_users table');
+        });
     }
 
     /**
@@ -40,6 +71,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('oauth_users');
         Schema::dropIfExists('users');
     }
 };
