@@ -28,7 +28,7 @@ class OAuthUsers extends Authenticatable implements JWTSubject
     public const EMAIL_VERIFIED_AT = 'email_verified_at';
     public const PASSWORD = 'password';
     public const REMEMBER_TOKEN = 'remember_token';
-    public const GITT_HUB_ID = 'github_id';
+    public const GIT_HUB_ID = 'github_id';
     public const GIT_HUB_TOKEN = 'github_token';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
@@ -168,7 +168,7 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      */
     public function getRecordByGitHubUserId(int $userId, bool $isLock = false): array|null
     {
-        $query = DB::table($this->getTable())->where(self::GITT_HUB_ID, '=', $userId);
+        $query = DB::table($this->getTable())->where(self::GIT_HUB_ID, '=', $userId);
 
         if ($isLock) {
             $query->lockForUpdate();

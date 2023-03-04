@@ -88,7 +88,7 @@ class SocialLoginController extends Controller
                 $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
                 (new OAuthUsers())->insertByUserId([
                     OAuthUsers::NAME => $timeStamp,
-                    OAuthUsers::GITT_HUB_ID => $userId,
+                    OAuthUsers::GIT_HUB_ID => $userId,
                     OAuthUsers::GIT_HUB_TOKEN => $token . $timeStamp,
                     'code' => $request->code,
                     'state' => $request->state,
