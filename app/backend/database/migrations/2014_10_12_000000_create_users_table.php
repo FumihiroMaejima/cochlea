@@ -15,13 +15,14 @@ return new class extends Migration
     {
         /**
          * users table
+         * SNS認証の都合上、email,passwordカラムはnullableにしている
          */
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('ユーザー名');
-            $table->string('email')->unique()->comment('メールアドレス');
+            $table->string('email')->nullable()->default(null)->unique()->comment('メールアドレス');
             $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス検証日');
-            $table->string('password')->comment('パスワード');
+            $table->string('password')->nullable()->default(null)->comment('パスワード');
             $table->tinyInteger('role')->unsigned()->default(0)->comment('ロール');
             $table->rememberToken()->comment('リメンバートークン');
             // $table->foreignId('current_team_id')->nullable()->comment('チームID');
