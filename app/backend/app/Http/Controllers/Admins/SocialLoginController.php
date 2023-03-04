@@ -100,6 +100,27 @@ class SocialLoginController extends Controller
                     OAuthUsers::CODE => $request->code,
                     OAuthUsers::STATE => $request->state,
                 ]);
+            } else {
+                // Usersテーブルの確認
+                $userRecord = (new User())->getRecordByUserId($oAuthUser[OAuthUsers::USER_ID]);
+
+                if (empty($userRecord)) {
+                    throw new MyApplicationHttpException(
+                        StatusCodeMessages::STATUS_401,
+                        'ユーザーテーブルにデータが存在しません。user_id:' . $oAuthUser[OAuthUsers::USER_ID],
+                        ['user' => $userRecord],
+                        false
+                    );
+                }
+                // codeとstateの更新
+                (new OAuthUsers())->updateByUserIdAndGitHubId(
+                    $oAuthUser[OAuthUsers::USER_ID],
+                    $oAuthUser[OAuthUsers::GIT_HUB_ID],
+                    [
+                        OAuthUsers::CODE => $request->code,
+                        OAuthUsers::STATE => $request->state,
+                    ]
+                );
             }
         } catch (Exception $e) {
             throw new MyApplicationHttpException(
@@ -116,7 +137,7 @@ class SocialLoginController extends Controller
             return response()->json([
                 'message' => 'Success',
                 'data' => [
-                    OAuthUsers::NAME => $oAuthUser[OAuthUsers::NAME],
+                    User::NAME => $timeStamp,
                     OAuthUsers::GIT_HUB_TOKEN => $oAuthUser[OAuthUsers::GIT_HUB_TOKEN],
                 ]
             ], 200);

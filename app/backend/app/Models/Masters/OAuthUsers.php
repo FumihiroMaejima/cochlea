@@ -193,4 +193,20 @@ class OAuthUsers extends Model
     {
         return DB::table($this->getTable())->insert($resource);
     }
+
+    /**
+     * update record by userId & githubId(code & state).
+     *
+     * @param int $userId user id
+     * @param int $gitHubId github id
+     * @param array $resource resource
+     * @return bool
+     */
+    public function updateByUserIdAndGitHubId(int $userId, int $gitHubId, array $resource): bool
+    {
+        return DB::table($this->getTable())
+            ->where(self::USER_ID, '=', $userId)
+            ->where(self::GIT_HUB_ID, '=', $gitHubId)
+            ->update($resource);
+    }
 }
