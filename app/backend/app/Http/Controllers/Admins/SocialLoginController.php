@@ -10,6 +10,7 @@ use App\Library\Session\SessionLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Admins;
 use App\Models\Masters\OAuthUsers;
+use App\Models\User;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -86,12 +87,18 @@ class SocialLoginController extends Controller
             if (is_null($oAuthUser)) {
                 $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
                 $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
-                (new OAuthUsers())->insertByUserId([
-                    OAuthUsers::NAME => $timeStamp,
+
+                $userRecordId = (new User())->insertUserAndGetId([
+                    User::NAME => $timeStamp,
+                ]);
+
+                (new OAuthUsers())->insertUser([
+                    OAuthUsers::USER_ID => $userRecordId,
+                    OAuthUsers::TYPE => OAuthUsers::PROVIDER_TYPE_GIT_HUB,
                     OAuthUsers::GIT_HUB_ID => $userId,
                     OAuthUsers::GIT_HUB_TOKEN => $token . $timeStamp,
-                    'code' => $request->code,
-                    'state' => $request->state,
+                    OAuthUsers::CODE => $request->code,
+                    OAuthUsers::STATE => $request->state,
                 ]);
             }
         } catch (Exception $e) {

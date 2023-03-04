@@ -189,7 +189,7 @@ class OAuthUsers extends Model
      * @param array $resource resource
      * @return bool
      */
-    public function insertByUserId(array $resource): bool
+    public function insertUser(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }
