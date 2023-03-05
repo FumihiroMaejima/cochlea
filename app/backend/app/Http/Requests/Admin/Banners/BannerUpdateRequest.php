@@ -22,7 +22,7 @@ class BannerUpdateRequest extends BannerBaseRequest
     protected function prepareForValidation()
     {
         // ルーティングで設定しているidパラメーターをリクエストデータとして設定する
-        $this->merge(['id' => $this->route('id')]);
+        $this->merge(['uuid' => $this->route('uuid')]);
     }
 
     /**
@@ -33,13 +33,14 @@ class BannerUpdateRequest extends BannerBaseRequest
     public function rules()
     {
         return [
-            'id'          => 'required|integer|min:4',  // master~developmentは更新不可
+            // 'id'          => 'required|integer|min:4',  // master~developmentは更新不可
+            'uuid'        => 'required|uuid',
             'name'        => 'required|string|between:1,50',
             'detail'      => 'required|string|between:1,100',
             'location'    => 'required|integer|min:1|max:3',
-            'pc_height'    => 'required|integer|min:1|max:3',
+            'pc_height'   => 'required|integer|min:1|max:3',
             'pc_width'    => 'required|integer|min:1|max:3',
-            'sp_height'    => 'required|integer|min:1|max:3',
+            'sp_height'   => 'required|integer|min:1|max:3',
             'sp_width'    => 'required|integer|min:1|max:3',
             'start_at'    => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
             'end_at'      => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH.'|after:start_at',
@@ -69,7 +70,8 @@ class BannerUpdateRequest extends BannerBaseRequest
             'file'        => ':attributeはファイル形式で入力してください。',
             'image'       => ':attributeは画像ファイルで入力してください。',
             'image.max'   => ':attributeは最大:max KBで入力してください。',
-            'exists'      => '指定した:attributeは存在しません。'
+            'exists'      => '指定した:attributeは存在しません。',
+            'uuid'        => '指定した:attributeの形式が不正です。'
         ];
     }
 }
