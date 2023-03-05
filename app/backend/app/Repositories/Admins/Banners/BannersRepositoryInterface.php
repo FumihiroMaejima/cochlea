@@ -18,6 +18,10 @@ interface BannersRepositoryInterface
 
     public function getByIds(array $ids, bool $isLock = false): Collection|null;
 
+    public function getByUuid(string $uuid, bool $isLock = false): Collection|null;
+
+    public function getByUuids(array $uuids, bool $isLock = false): Collection|null;
+
     public function create(array $resource): int;
 
     public function update(int $id, array $resource): int;

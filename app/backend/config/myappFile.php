@@ -26,6 +26,22 @@ return [
     ],
     'service' => [
         'admins' => [
+            'banners' => [
+                'template' => [
+                    (object)[
+                        'name'      => 'test name',
+                        'detail'    => 'test detail',
+                        'location'  => 1,
+                        'pc_height' => 100,
+                        'pc_width'  => 100,
+                        'sp_height' => 100,
+                        'sp_width'  => 100,
+                        'start_at'  => '2022/05/10 00:00:00',
+                        'end_at'    => '2030/12/31 23:59:59',
+                        'url'       => '',
+                    ]
+                ],
+            ],
             'coins' => [
                 'template' => [
                     (object)[

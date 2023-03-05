@@ -159,6 +159,82 @@ class BannersRepository implements BannersRepositoryInterface
     }
 
     /**
+     * get Image by uuid.
+     *
+     * @param string $uuid
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByUuid(string $uuid, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->where(Banners::UUID, '=', $uuid)
+            ->where(Banners::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        // 複数ある場合
+        if ($collection->count() > self::FIRST_DATA_COUNT) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'has deplicate collections,'
+            );
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+                ->select(['*'])
+                ->where(Banners::UUID, '=', $uuid)
+                ->where(Banners::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
+     * get by uuids.
+     *
+     * @param array $ids rocord uuid list
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByUuids(array $uuids, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(Banners::UUID, $uuids)
+            ->where(Banners::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+                ->select(['*'])
+                ->whereIn(Banners::UUID, $uuids)
+                ->where(Banners::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
+        }
+
+        return $collection;
+    }
+
+    /**
      * create recode.
      *
      * @param array $resource create data
