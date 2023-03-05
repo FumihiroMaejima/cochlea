@@ -277,9 +277,9 @@ class CoinsService
     private function getCoinsByIds(array $coinIds): array
     {
         // 更新用途で使う為lockをかける
-        $roles = $this->coinsRepository->getByIds($coinIds, true);
+        $coins = $this->coinsRepository->getByIds($coinIds, true);
 
-        if (empty($roles)) {
+        if (empty($coins)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
                 'not exist coins.'
@@ -287,6 +287,6 @@ class CoinsService
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($roles->toArray());
+        return ArrayLibrary::toArray($coins->toArray());
     }
 }
