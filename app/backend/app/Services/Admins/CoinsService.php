@@ -13,9 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Exports\Masters\Coins\CoinsExport;
@@ -139,7 +136,7 @@ class CoinsService
     }
 
     /**
-     * update coin data service
+     * create coin data service
      *
      * @param string $name name
      * @param string $detail detail
