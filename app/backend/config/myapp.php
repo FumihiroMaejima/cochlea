@@ -13,6 +13,7 @@ return [
             'admins'       => ['master', 'administrator', 'develop'],
             'permissions'  => ['master', 'administrator', 'develop'],
             'roles'        => ['master', 'administrator', 'develop'],
+            'banners'      => ['master', 'administrator', 'develop'],
             'coins'        => ['master', 'administrator', 'develop'],
             'events'       => ['master', 'administrator', 'develop'],
             'informations' => ['master', 'administrator', 'develop'],
