@@ -19,6 +19,7 @@ class BannerBaseRequest extends BaseRequest
     public const KEY_SP_WIDTH  = 'sp_width';
     public const KEY_START_AT  = 'start_at';
     public const KEY_END_AT    = 'end_at';
+    public const KEY_URL       = 'url';
     public const KEY_IMAGE     = 'image';
     public const KEY_BANNERS   = 'banners';
 
@@ -55,6 +56,7 @@ class BannerBaseRequest extends BaseRequest
             self::KEY_SP_WIDTH  => 'SPでの幅',
             self::KEY_START_AT  => '公開開始日時',
             self::KEY_END_AT    => '公開終了日時',
+            self::KEY_URL       => 'url',
             self::KEY_IMAGE     => 'イメージ',
             self::KEY_FILE      => 'ファイル',
         ];
