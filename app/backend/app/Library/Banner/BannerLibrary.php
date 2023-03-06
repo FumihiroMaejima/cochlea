@@ -40,11 +40,17 @@ class BannerLibrary
     /**
      * get banner default image path.
      *
+     * @param bool $isRand is random default image
      * @return string
      */
-    public static function getDefaultBannerPath(): string
+    public static function getDefaultBannerPath(bool $isRand = false): string
     {
-        $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
+        if ($isRand) {
+            $value = rand(1, 3);
+            $path = self::DIRECTORY . 'default/' . "200x600px_default$value" . '.' . self::EXTENTION;
+        } else {
+            $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
+        }
         return storage_path($path);
     }
 }
