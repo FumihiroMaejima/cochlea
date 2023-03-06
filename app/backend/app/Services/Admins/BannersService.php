@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -19,9 +20,12 @@ use App\Exports\Masters\Banners\BannersExport;
 use App\Exports\Masters\Banners\BannersBulkInsertTemplateExport;
 use App\Imports\Masters\Banners\BannersImport;
 use App\Library\Array\ArrayLibrary;
+use App\Library\Banner\BannerLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\String\UuidLibrary;
+use App\Library\File\FileLibrary;
 use App\Models\Masters\Banners;
+use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
 
 class BannersService
@@ -64,6 +68,41 @@ class BannersService
         }
 
         return response()->json($resourceCollection, 200);
+    }
+
+    /**
+     * 画像ファイルのダウンロード
+     *
+     * @param string $uuid
+     * @param int $version
+     * @return BinaryFileResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getImage(string $uuid, int $version): BinaryFileResponse
+    {
+        // 更新用途で使う為lockをかける
+        $banners = $this->bannersRepository->getByUuid($uuid, true);
+
+        if (empty($banners)) {
+            return response()->file(BannerLibrary::getDefaultBannerPath());
+        }
+
+        // 複数チェックはrepository側で実施済み
+        $banner = ArrayLibrary::toArray(ArrayLibrary::getFirst($banners->toArray()));
+
+        $extention = 'png';
+
+        $directory = Config::get('myappFile.upload.storage.local.images.banner');
+
+        $imagePath = "{$directory}{$uuid}.{$extention}";
+
+        $file = FileLibrary::getFileStoream($imagePath);
+
+        if (is_null($file)) {
+            return response()->file(BannerLibrary::getDefaultBannerPath());
+        }
+
+        return response()->file(Storage::path($imagePath));
     }
 
     /**

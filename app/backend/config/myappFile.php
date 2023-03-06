@@ -13,6 +13,7 @@ return [
         'storage' => [
             'local'      => [
                 'images'     => [
+                    'banner' => '/images/banner/',
                     'debug' => '/images/debug/',
                 ],
                 'teting'     => [

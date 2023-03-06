@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library\Log;
+namespace App\Library\Banner;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -15,21 +15,6 @@ class BannerLibrary
     public const DEFAULT_FILE_IMAGE_NAME_2 = '200x600px_default2';
     public const DEFAULT_FILE_IMAGE_NAME_3 = '200x600px_default3';
 
-    public const FILE_NAME_ACCESS = 'access';
-    public const FILE_NAME_ERROR = 'error';
-
-    // リクエストパラメーターがログ出力可能なContent-type(ファイルアップロードなど'form'になっている場合はリクエストパラメーターはログに出力しない)
-    public const LOG_OUTPUTABLE_CONTENT_TYPE = [null, 'json'];
-    public const SECRET_KEYS = [
-        'email' => 'email',
-        'password' => 'password',
-        'password_confirmation' => 'password_confirmation',
-        'email' => 'email',
-        'token' => 'token',
-        'tokenPayload' => 'tokenPayload',
-        'tokenHeader' => 'tokenHeader',
-    ];
-
     /**
      * get banner default image.
      *
@@ -37,7 +22,7 @@ class BannerLibrary
      */
     public static function getDefaultBanner(): string
     {
-        $path = self::DIRECTORY . self::DEFAULT_FILE_IMAGE_NAME_1 . self::EXTENTION;
+        $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
 
         // storage/app直下に無い為file_get_contents()で取得
         $file = file_get_contents(storage_path($path));
@@ -50,5 +35,16 @@ class BannerLibrary
         }
 
         return $file;
+    }
+
+    /**
+     * get banner default image path.
+     *
+     * @return string
+     */
+    public static function getDefaultBannerPath(): string
+    {
+        $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
+        return storage_path($path);
     }
 }

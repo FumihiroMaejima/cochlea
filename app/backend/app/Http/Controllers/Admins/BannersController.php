@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Admins;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Banners\BannerCreateRequest;
 use App\Http\Requests\Admin\Banners\BannerDeleteRequest;
 use App\Http\Requests\Admin\Banners\BannersImportRequest;
 use App\Http\Requests\Admin\Banners\BannerUpdateRequest;
 use App\Services\Admins\BannersService;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Trait\CheckHeaderTrait;
 
 class BannersController extends Controller
@@ -47,6 +51,41 @@ class BannersController extends Controller
 
         // サービスの実行
         return $this->service->getBanners($request);
+    }
+
+    /**
+     * Get Banner Image.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $uuid
+     * @return BinaryFileResponse|JsonResponse
+     */
+    public function getImage(Request $request, string $uuid): BinaryFileResponse|JsonResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // バリデーションチェック
+        $validator = Validator::make(
+            ['uuid' => $uuid],
+            [
+                'uuid' => ['required','uuid'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        // サービスの実行
+        return $this->service->getImage(
+            $request->uuid,
+            $request->ver ?? TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime())
+        );
     }
 
     /**
