@@ -74,11 +74,10 @@ class BannersService
      * 画像ファイルのダウンロード
      *
      * @param string $uuid
-     * @param int $version
      * @return BinaryFileResponse
      * @throws MyApplicationHttpException
      */
-    public function getImage(string $uuid, int $version): BinaryFileResponse
+    public function getImage(string $uuid): BinaryFileResponse
     {
         // 更新用途で使う為lockをかける
         $banners = $this->bannersRepository->getByUuid($uuid, true);

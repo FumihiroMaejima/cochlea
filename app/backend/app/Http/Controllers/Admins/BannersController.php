@@ -82,10 +82,7 @@ class BannersController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getImage(
-            $request->uuid,
-            $request->ver ?? TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime())
-        );
+        return $this->service->getImage($request->uuid);
     }
 
     /**
