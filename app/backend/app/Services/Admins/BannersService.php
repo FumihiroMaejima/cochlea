@@ -88,12 +88,13 @@ class BannersService
 
         // 複数チェックはrepository側で実施済み
         $banner = ArrayLibrary::toArray(ArrayLibrary::getFirst($banners->toArray()));
+        $bannerId = !empty($banner) ? $banner[Banners::ID] : 0;
 
         $extention = 'png';
 
         $directory = Config::get('myappFile.upload.storage.local.images.banner');
 
-        $imagePath = "{$directory}{$uuid}.{$extention}";
+        $imagePath = "{$directory}{$bannerId}.{$extention}";
 
         $file = FileLibrary::getFileStoream($imagePath);
 
