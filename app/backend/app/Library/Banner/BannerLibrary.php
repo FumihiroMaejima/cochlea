@@ -25,7 +25,7 @@ class BannerLibrary
      */
     public static function getDefaultBanner(): string
     {
-        $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
+        $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
 
         // storage/app直下に無い為file_get_contents()で取得
         $file = file_get_contents(storage_path($path));
@@ -50,9 +50,9 @@ class BannerLibrary
     {
         if ($isRand) {
             $value = rand(1, 3);
-            $path = self::DIRECTORY . 'default/' . "200x600px_default$value" . '.' . self::EXTENTION;
+            $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . "200x600px_default$value" . '.' . self::EXTENTION;
         } else {
-            $path = self::DIRECTORY . 'default/' . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
+            $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_1 . '.' . self::EXTENTION;
         }
         return storage_path($path);
     }
