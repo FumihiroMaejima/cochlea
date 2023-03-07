@@ -58,6 +58,9 @@ class BannersResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
+            // 画像URL設定
+            $item->{self::RESOURCE_KEY_IMAGE} = config('app.url') . '/api/v1/admin/banners/' . $item->{Banners::UUID};
+
             $item->{Banners::START_AT} = TimeLibrary::format($item->{Banners::START_AT});
             $item->{Banners::END_AT} = TimeLibrary::format($item->{Banners::END_AT});
 
