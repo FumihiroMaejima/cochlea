@@ -5,6 +5,8 @@ namespace App\Http\Resources\Admins;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
+use App\Library\Array\ArrayLibrary;
+use App\Library\Banner\BannerLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
 
@@ -59,7 +61,7 @@ class BannersResource extends JsonResource
 
         foreach ($collection as $item) {
             // 画像URL設定
-            $item->{self::RESOURCE_KEY_IMAGE} = config('app.url') . '/api/v1/admin/banners/' . $item->{Banners::UUID};
+            $item->{self::RESOURCE_KEY_IMAGE} = BannerLibrary::getAdminBannerPath(ArrayLibrary::toArray($item));
 
             $item->{Banners::START_AT} = TimeLibrary::format($item->{Banners::START_AT});
             $item->{Banners::END_AT} = TimeLibrary::format($item->{Banners::END_AT});
