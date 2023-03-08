@@ -15,12 +15,12 @@ class BannerLibrary
     public const DIRECTORY_DEFAULT = 'default/';
     public const ADMIN_BANNER_PATH = '/api/v1/admin/banners/';
     public const USER_BANNER_PATH = '/api/v1/banners/';
-    public const DEFAULT_FILE_IMAGE_NAME_200x600_1 = '200x600px_default1';
-    public const DEFAULT_FILE_IMAGE_NAME_200x600_2 = '200x600px_default2';
-    public const DEFAULT_FILE_IMAGE_NAME_200x600_3 = '200x600px_default3';
-    public const DEFAULT_FILE_IMAGE_NAME_240x1200_1 = '240x1200px_default1';
-    public const DEFAULT_FILE_IMAGE_NAME_240x1200_2 = '240x1200px_default2';
-    public const DEFAULT_FILE_IMAGE_NAME_240x1200_3 = '240x1200px_default3';
+    public const DEFAULT_FILE_IMAGE_NAME_200X600_1 = '200x600px_default1';
+    public const DEFAULT_FILE_IMAGE_NAME_200X600_2 = '200x600px_default2';
+    public const DEFAULT_FILE_IMAGE_NAME_200X600_3 = '200x600px_default3';
+    public const DEFAULT_FILE_IMAGE_NAME_240X1200_1 = '240x1200px_default1';
+    public const DEFAULT_FILE_IMAGE_NAME_240X1200_2 = '240x1200px_default2';
+    public const DEFAULT_FILE_IMAGE_NAME_240X1200_3 = '240x1200px_default3';
 
     /**
      * get banner default image.
@@ -29,7 +29,7 @@ class BannerLibrary
      */
     public static function getDefaultBanner(): string
     {
-        $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_200x600_1 . '.' . self::EXTENTION;
+        $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_200X600_1 . '.' . self::EXTENTION;
 
         // storage/app直下に無い為file_get_contents()で取得
         $file = file_get_contents(storage_path($path));
@@ -56,7 +56,7 @@ class BannerLibrary
             $value = rand(1, 3);
             $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . "200x600px_default$value" . '.' . self::EXTENTION;
         } else {
-            $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_200x600_1 . '.' . self::EXTENTION;
+            $path = self::DIRECTORY . self::DIRECTORY_DEFAULT . self::DEFAULT_FILE_IMAGE_NAME_200X600_1 . '.' . self::EXTENTION;
         }
         return storage_path($path);
     }

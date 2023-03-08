@@ -59,8 +59,7 @@ class DebugService
         ?int $fakerTimeStamp,
         ?string $clinetIp,
         ?string $userAgent
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $admin = (new Admins())->getRecordById($userId);
         if (is_null($admin)) {
             throw new MyApplicationHttpException(

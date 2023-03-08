@@ -198,7 +198,7 @@ class BannersService
         string $startAt,
         string $endAt,
         string $url
-        ): JsonResponse {
+    ): JsonResponse {
         $resource = BannersResource::toArrayForCreate(
             UuidLibrary::uuidVersion4(),
             $name,
