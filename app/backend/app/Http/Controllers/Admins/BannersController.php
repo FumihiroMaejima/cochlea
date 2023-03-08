@@ -221,6 +221,6 @@ class BannersController extends Controller
     public function destroy(BannerDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_EVENTS});
+        return $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_BANNERS});
     }
 }
