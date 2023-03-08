@@ -150,6 +150,7 @@ class BannersResource extends JsonResource
     /**
      * Transform the resource into an array for update.
      *
+     * @param string $uuid uuid
      * @param string $name name
      * @param string $detail detail
      * @param int $location location vlaue
@@ -163,6 +164,7 @@ class BannersResource extends JsonResource
      * @return array
      */
     public static function toArrayForUpdate(
+        string $uuid,
         string $name,
         string $detail,
         int $location,
@@ -177,6 +179,7 @@ class BannersResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
+            self::RESOURCE_KEY_UUID       => $uuid,
             self::RESOURCE_KEY_NAME       => $name,
             self::RESOURCE_KEY_DETAIL     => $detail,
             self::RESOURCE_KEY_LOCATION   => $location,
