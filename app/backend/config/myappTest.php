@@ -54,6 +54,7 @@ return [
                     'sp_width'     => 1000,
                     'start_at'     => '2022/05/10 00:00:00',
                     'end_at'       => '2030/12/31 23:59:59',
+                    'url'          => 'localhost/banner/1',
                     'banners' => [2,3],
                 ]
             ],
@@ -74,6 +75,7 @@ return [
                         'sp_width'     => 1000,
                         'start_at'     => '2022/05/10 00:00:00',
                         'end_at'       => '2030/12/31 23:59:59',
+                        'url'          => 'localhost/banner/1',
                         'banners' => [2,3],
                     ]
                 ]
