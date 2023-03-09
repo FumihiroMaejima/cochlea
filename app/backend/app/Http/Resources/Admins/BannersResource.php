@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Banner\BannerLibrary;
+use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
 
@@ -225,18 +226,19 @@ class BannersResource extends JsonResource
         foreach ($resouce as $key => $item) {
             // 先頭はファイルのヘッダーに当たる為除外
             if ($key !== 0) {
+                // TODO UUIDも固定で入れさせて良さそう
                 $response[] = [
-                    Banners::UUID       => $item[0],
-                    Banners::NAME       => $item[1],
-                    Banners::DETAIL     => $item[2],
-                    Banners::LOCATION   => $item[3],
-                    Banners::PC_HEIGHT  => $item[4],
-                    Banners::PC_WIDTH   => $item[5],
-                    Banners::SP_HEIGHT  => $item[6],
-                    Banners::SP_WIDTH   => $item[7],
-                    Banners::START_AT   => $item[8],
-                    Banners::END_AT     => $item[9],
-                    Banners::URL        => $item[10],
+                    Banners::UUID       => UuidLibrary::uuidVersion4(),
+                    Banners::NAME       => $item[0],
+                    Banners::DETAIL     => $item[1],
+                    Banners::LOCATION   => $item[2],
+                    Banners::PC_HEIGHT  => $item[3],
+                    Banners::PC_WIDTH   => $item[4],
+                    Banners::SP_HEIGHT  => $item[5],
+                    Banners::SP_WIDTH   => $item[6],
+                    Banners::START_AT   => $item[7],
+                    Banners::END_AT     => $item[8],
+                    Banners::URL        => $item[9],
                     Banners::CREATED_AT => $dateTime,
                     Banners::UPDATED_AT => $dateTime,
                 ];
