@@ -79,9 +79,9 @@ Route::group(['prefix' => 'v1/admin'], function () {
         // banners
         Route::group(['prefix' => 'banners'], function () {
             Route::get('/', [\App\Http\Controllers\Admins\BannersController::class, 'index'])->name('admin.banners.index');
-            Route::get('/{uuid}', [\App\Http\Controllers\Admins\BannersController::class, 'getImage'])->name('admin.banners.image');
             Route::get('/csv', [\App\Http\Controllers\Admins\BannersController::class, 'download'])->name('admin.banners.download.csv');
             Route::post('/banner', [\App\Http\Controllers\Admins\BannersController::class, 'create'])->name('admin.banners.create');
+            Route::get('/banner/{uuid}', [\App\Http\Controllers\Admins\BannersController::class, 'getImage'])->name('admin.banners.image');
             Route::patch('/banner/{uuid}', [\App\Http\Controllers\Admins\BannersController::class, 'update'])->name('admin.banners.update');
             Route::delete('/banner', [\App\Http\Controllers\Admins\BannersController::class, 'destroy'])->name('admin.banners.delete');
             Route::get('/file/template', [\App\Http\Controllers\Admins\BannersController::class, 'template'])->name('admin.banners.download.template');
