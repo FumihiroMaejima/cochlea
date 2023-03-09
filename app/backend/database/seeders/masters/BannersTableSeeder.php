@@ -5,6 +5,7 @@ namespace Database\Seeders\Masters;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\Banner\BannerLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
@@ -57,7 +58,7 @@ class BannersTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            $row[Banners::UUID]   = UuidLibrary::uuidVersion4();
+            $row[Banners::UUID]   = BannerLibrary::getTestBannerUuidByNumber($i);
             $row[Banners::NAME]   = 'banner_' . (string)($i);
             $row[Banners::DETAIL] = 'testBanner' . (string)($i) . '';
             $row[Banners::LOCATION]   = Banners::LOCATION_VALUE_LIST[(($i % 3) + 1)];

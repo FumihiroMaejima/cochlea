@@ -22,6 +22,21 @@ class BannerLibrary
     public const DEFAULT_FILE_IMAGE_NAME_240X1200_2 = '240x1200px_default2';
     public const DEFAULT_FILE_IMAGE_NAME_240X1200_3 = '240x1200px_default3';
 
+    // テスト用UUID
+    public const BASE_TEST_UUID = 'eac5c89b-9688-4d5a-a377-53586c46cffX';
+
+    /**
+     * get banner uuid for testing.
+     *
+     * @param int $value
+     * @return string
+     */
+    public static function getTestBannerUuidByNumber(int $value): string
+    {
+        // 末尾を置き換えて返す
+        return str_replace('X', $value, self::BASE_TEST_UUID);
+    }
+
     /**
      * get banner default image.
      *
