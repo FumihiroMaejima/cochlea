@@ -62,7 +62,7 @@ class BannersResource extends JsonResource
 
         foreach ($collection as $item) {
             // 画像URL設定
-            $item->{self::RESOURCE_KEY_IMAGE} = BannerLibrary::getAdminBannerPath(ArrayLibrary::toArray($item));
+            $item->{self::RESOURCE_KEY_IMAGE} = BannerLibrary::getAdminServiceBannerPath(ArrayLibrary::toArray($item));
 
             $item->{Banners::START_AT} = TimeLibrary::format($item->{Banners::START_AT});
             $item->{Banners::END_AT} = TimeLibrary::format($item->{Banners::END_AT});

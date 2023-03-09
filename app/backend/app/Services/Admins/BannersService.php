@@ -83,7 +83,7 @@ class BannersService
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
-            return response()->file(BannerLibrary::getDefaultBannerPath());
+            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
         }
 
         // 複数チェックはrepository側で実施済み
@@ -99,7 +99,7 @@ class BannersService
         $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
-            return response()->file(BannerLibrary::getDefaultBannerPath());
+            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
         }
 
         return response()->file(Storage::path($imagePath));

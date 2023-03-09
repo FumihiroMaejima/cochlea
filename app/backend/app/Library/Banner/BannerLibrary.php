@@ -60,12 +60,12 @@ class BannerLibrary
     }
 
     /**
-     * get banner default image path.
+     * get banner default image storage path.
      *
      * @param bool $isRand is random default image
      * @return string
      */
-    public static function getDefaultBannerPath(bool $isRand = false): string
+    public static function getDefaultBannerStoragePath(bool $isRand = false): string
     {
         if ($isRand) {
             $value = rand(1, 3);
@@ -82,7 +82,7 @@ class BannerLibrary
      * @param array $banner banner record
      * @return string
      */
-    public static function getAdminBannerPath(array $banner): string
+    public static function getAdminServiceBannerPath(array $banner): string
     {
         return config('app.url') . self::ADMIN_BANNER_PATH . $banner[Banners::UUID];
         ;
