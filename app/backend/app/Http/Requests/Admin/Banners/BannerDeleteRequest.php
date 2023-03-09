@@ -8,8 +8,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Admin\Banners\BannerBaseRequest;
-use App\Http\Requests\Admin\Coins\CoinBaseRequest;
-use App\Models\Masters\Banners;
 
 class BannerDeleteRequest extends BannerBaseRequest
 {
@@ -31,9 +29,9 @@ class BannerDeleteRequest extends BannerBaseRequest
      */
     public function rules()
     {
-        $coinsModel = new Banners();
         return [
-            'banners' => 'required|array|exists:' . $coinsModel->getTable() . ',id'
+            'banners' => 'required|array',
+            'banners.*' => 'uuid',
         ];
     }
 

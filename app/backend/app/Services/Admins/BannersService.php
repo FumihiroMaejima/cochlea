@@ -315,7 +315,7 @@ class BannersService
             // ロックをかける為transaction内で実行
             $banners = $this->getBannersByUuid($bannerUuids);
 
-            $deleteRowCount = $this->bannersRepository->delete($bannerUuids, $resource);
+            $deleteRowCount = $this->bannersRepository->delete(array_column($banners, Banners::ID), $resource);
 
             DB::commit();
 
