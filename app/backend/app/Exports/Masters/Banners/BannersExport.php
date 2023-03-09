@@ -60,7 +60,7 @@ class BannersExport implements FromCollection, WithHeadings, WithTitle, WithMapp
      */
     public function title(): string
     {
-        return 'コイン検索結果';
+        return 'バナー検索結果';
     }
 
     /**

@@ -59,7 +59,7 @@ class BannersBulkInsertTemplateExport implements FromCollection, WithHeadings, W
      */
     public function title(): string
     {
-        return 'コイン情報作成テンプレート';
+        return 'バナー情報作成テンプレート';
     }
 
     /**
