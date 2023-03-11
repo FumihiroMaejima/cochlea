@@ -9,6 +9,7 @@ import {
   ServerRequestType,
   AuthAppHeaderOptions,
 } from '@/types'
+import { makeDataUrl, downloadFile } from '@/util'
 // import { TableColumnSetting } from '@/types/config/data'
 /* import { ToastData, SelectBoxType } from '@/types/applications/index'
 import {
@@ -179,6 +180,39 @@ export function useCoins() {
   }
 
   /**
+   * get coins csv file.
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getCoinsCsvFileRequest = async (
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+    return await useRequest()
+      .getRequest<ServerRequestType<BlobPart>>(config.endpoint.coins.csv, {
+        headers: options.headers,
+      })
+      .then((response) => {
+        const data = response.data as unknown as BlobPart
+        // download
+        downloadFile(
+          makeDataUrl(data, response.headers['content-type']),
+          response.headers['content-disposition'].replace(
+            'attachment; filename=',
+            ''
+          )
+        )
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
    * update coins request.
    * @param {CoinType} coin coin record
    * @param {BaseAddHeaderResponse} header
@@ -282,6 +316,7 @@ export function useCoins() {
     updateCoinTextData,
     updateCoinNumberData,
     getCoinsRequest,
+    getCoinsCsvFileRequest,
     updateCoinRequest,
     deleteCoinRequest,
   } as const
