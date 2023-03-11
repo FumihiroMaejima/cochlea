@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, MouseEventHandler } from 'react'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
@@ -37,6 +37,7 @@ export const Coins: React.VFC = () => {
   const {
     coinsState,
     getCoinsRequest,
+    getCoinsCsvFileRequest,
     updateCoinTextData,
     updateCoinRequest,
     deleteCoinRequest,
@@ -99,6 +100,18 @@ export const Coins: React.VFC = () => {
   }
 
   /**
+   * update request handler
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickDownLoadCsvButtonHandler = async (): Promise<void> => {
+    updateGlobalLoading(true)
+    await getCoinsCsvFileRequest(getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
+  /**
    * delete request handler
    * @param {number} index
    * @return {Promise<void>}
@@ -116,6 +129,13 @@ export const Coins: React.VFC = () => {
       <PartsSimpleHeading text="コイン一覧 ページ" color="dark-grey" />
       <div className="mx-2">
         <PartsLabelHeading text="コイン一覧" color="dark-grey" />
+        <div className="mxy-2 util-color__text--dark-grey">
+          <PartsSimpleButton
+            text="downlaod csv"
+            color="black"
+            onClick={onClickDownLoadCsvButtonHandler}
+          />
+        </div>
         <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
           <PartsSimpleTable
             headers={simpleTableHeaderData}
