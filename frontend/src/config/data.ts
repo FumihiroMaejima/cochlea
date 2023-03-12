@@ -36,13 +36,21 @@ export const appConfig: IAppConfig = {
       create: '/api/v1/admin/admins/admin',
       roles: '/api/v1/admin/roles/list',
     },
+    banners: {
+      banners: '/api/v1/admin/banners',
+      csv: '/api/v1/admin/banners/csv',
+      banner: '/api/v1/admin/banners/banner/:id',
+      create: '/api/v1/admin/banners/banner',
+      delete: '/api/v1/admin/banners/banner',
+      fileTemplate: '/api/v1/admin/banners/file/template',
+    },
     coins: {
       coins: '/api/v1/admin/coins',
       csv: '/api/v1/admin/coins/csv',
       coin: '/api/v1/admin/coins/coin/:id',
       create: '/api/v1/admin/coins/coin',
       delete: '/api/v1/admin/coins/coin',
-      fileTemplate: '/api/v1/admin/file/template',
+      fileTemplate: '/api/v1/admin/coins/file/template',
     },
     members: {
       members: '/api/v1/admin/members',
