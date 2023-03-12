@@ -7,6 +7,7 @@ import { PartsTitleBox } from '@/components/parts/box/PartsTitleBox'
 import { PartsSimpleChip } from '@/components/parts/chip/PartsSimpleChip'
 import { PartsCircleButton } from '@/components/parts/button/PartsCircleButton'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
+import { PartsSimpleFileInput } from '@/components/parts/form/PartsSimpleFileInput'
 import { PartsSimpleFlatButton } from '@/components/parts/button/PartsSimpleFlatButton'
 import { PartsSimpleAutoComplete } from '@/components/parts/form/PartsSimpleAutoComplete'
 import { PartsSimpleSelectBox } from '@/components/parts/form/PartsSimpleSelectBox'
@@ -74,6 +75,8 @@ export const Sample: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const { getAuthId } = useContext(AuthAppContext)
 
+  const [fileValue, setFileValue] = useState<undefined | File>(undefined)
+
   // mount後に実行する処理
   const onDidMount = (): void => {
     const asyncInitPageHandler = async () => {
@@ -120,6 +123,25 @@ export const Sample: React.VFC = () => {
     }
   }
 
+  /**
+   * catch select file event
+   * @param {File} file
+   * @return {void}
+   */
+  const catchSelectFileHandler = async (file: File) => {
+    setFileValue(file)
+    const data = new FormData()
+    data.append('file', file)
+  }
+
+  /**
+   * catch reset file event
+   * @return {void}
+   */
+  const catchResetFileHandler = () => {
+    setFileValue(undefined)
+  }
+
   const removeMultiAuctoCompleteSelect = function <T = string>(x: T): void {
     if (typeof x === 'string') {
       setSelectMultiValue([
@@ -145,6 +167,14 @@ export const Sample: React.VFC = () => {
         isDashed={false}
         isDouble={false}
       />
+
+      <div className="mxy-2">
+        <PartsSimpleFileInput
+          value={fileValue}
+          onUpdateFile={catchSelectFileHandler}
+          onResetFile={catchResetFileHandler}
+        />
+      </div>
 
       <div className="mxy-2">
         <p className="util-color__text--black">test util basic color black</p>

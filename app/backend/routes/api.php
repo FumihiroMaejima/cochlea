@@ -76,6 +76,18 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/list', [\App\Http\Controllers\Admins\PermissionsController::class, 'list'])->name('admin.permissions.list');
         });
 
+        // banners
+        Route::group(['prefix' => 'banners'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\BannersController::class, 'index'])->name('admin.banners.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\BannersController::class, 'download'])->name('admin.banners.download.csv');
+            Route::post('/banner', [\App\Http\Controllers\Admins\BannersController::class, 'create'])->name('admin.banners.create');
+            Route::get('/banner/{uuid}', [\App\Http\Controllers\Admins\BannersController::class, 'getImage'])->name('admin.banners.image');
+            Route::patch('/banner/{uuid}', [\App\Http\Controllers\Admins\BannersController::class, 'update'])->name('admin.banners.update');
+            Route::delete('/banner', [\App\Http\Controllers\Admins\BannersController::class, 'destroy'])->name('admin.banners.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\BannersController::class, 'template'])->name('admin.banners.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\BannersController::class, 'uploadTemplate'])->name('admin.banners.upload.template');
+        });
+
         // coins
         Route::group(['prefix' => 'coins'], function () {
             Route::get('/', [\App\Http\Controllers\Admins\CoinsController::class, 'index'])->name('admin.coins.index');
@@ -114,6 +126,7 @@ Route::group(['prefix' => 'v1/admin'], function () {
     if (Config::get('app.env') !== 'production') {
         Route::group(['prefix' => 'debug'], function () {
             Route::get('test', [\App\Http\Controllers\Admins\AdminDebugController::class, 'test'])->name('admin.debug.test.get');
+            Route::get('status', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getDebugStatus'])->name('admin.debug.status.get');
             Route::get('list', [\App\Http\Controllers\Admins\AdminDebugController::class, 'list'])->name('admin.debug.list.get');
             Route::get('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'getImage'])->name('admin.debug.image.get');
             Route::post('image', [\App\Http\Controllers\Admins\AdminDebugController::class, 'uploadImage'])->name('admin.debug.image.post');

@@ -47,6 +47,32 @@ class AdminDebugController extends Controller
     }
 
     /**
+     * デバッグ関連情報取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getDebugStatus(Request $request): JsonResponse
+    {
+        // 権限チェック
+        if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.debug'))) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $userId = self::getUserId($request);
+        $sessionId = self::getSessionId($request);
+        $fakerTimeStamp = self::getFakerTimeStamp($request);
+        return $this->service->getDebugStatus(
+            $userId,
+            $sessionId,
+            $fakerTimeStamp,
+            $request->getClientIp(),
+            $request->userAgent()
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -125,7 +151,7 @@ class AdminDebugController extends Controller
     /**
      * テスト用PDFファイルの表示
      *
-     * @param DebugFileUploadRequest $request
+     * @param Request $request
      * @return BinaryFileResponse|JsonResponse
      * @throws MyApplicationHttpException
      */

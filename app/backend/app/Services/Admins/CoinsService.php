@@ -13,9 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
 use App\Exports\Masters\Coins\CoinsExport;
@@ -139,7 +136,7 @@ class CoinsService
     }
 
     /**
-     * update coin data service
+     * create coin data service
      *
      * @param string $name name
      * @param string $detail detail
@@ -280,16 +277,16 @@ class CoinsService
     private function getCoinsByIds(array $coinIds): array
     {
         // 更新用途で使う為lockをかける
-        $roles = $this->coinsRepository->getByIds($coinIds, true);
+        $coins = $this->coinsRepository->getByIds($coinIds, true);
 
-        if (empty($roles)) {
+        if (empty($coins)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
-                'not exist roles.'
+                'not exist coins.'
             );
         }
 
         // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray($roles->toArray());
+        return ArrayLibrary::toArray($coins->toArray());
     }
 }

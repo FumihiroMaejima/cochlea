@@ -118,3 +118,9 @@
   justify-content: right;
 } */
 
+
+@each $name, $direction in $over-flow-valus {
+  .over-flow-#{$name} {
+    overflow: $direction;
+  }
+}

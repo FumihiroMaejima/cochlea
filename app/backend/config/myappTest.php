@@ -42,6 +42,45 @@ return [
                 ]
             ]
         ],
+        'banners' => [
+            'create' => [
+                'success' => [
+                    'name'         => 'test name',
+                    'detail'       => 'banners`s detail.',
+                    'location'     => 1,
+                    'pc_height'    => 1000,
+                    'pc_width'     => 1000,
+                    'sp_height'    => 1000,
+                    'sp_width'     => 1000,
+                    'start_at'     => '2022/05/10 00:00:00',
+                    'end_at'       => '2030/12/31 23:59:59',
+                    'url'          => 'localhost/banner/1',
+                    'banners' => [2,3],
+                ]
+            ],
+            'import' => [
+                'success' => [
+                    'fileName'  => 'master_banners_template_20220404000000.xlsx',
+                    'mimeType'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'         => 'test name',
+                        'detail'       => 'banners`s detail.',
+                        'location'     => 1,
+                        'pc_height'    => 1000,
+                        'pc_width'     => 1000,
+                        'sp_height'    => 1000,
+                        'sp_width'     => 1000,
+                        'start_at'     => '2022/05/10 00:00:00',
+                        'end_at'       => '2030/12/31 23:59:59',
+                        'url'          => 'localhost/banner/1',
+                        'banners' => [2,3],
+                    ]
+                ]
+            ],
+        ],
         'coins' => [
             'create' => [
                 'success' => [

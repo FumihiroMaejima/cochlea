@@ -18,7 +18,11 @@ export const useRequest = () => {
     return await axios
       .get<T, AxiosResponse<T, D>, D>(url, options)
       .then((response: AxiosResponse<T, D>) => {
-        return { data: response.data, status: response.status }
+        return {
+          data: response.data,
+          status: response.status,
+          headers: response.headers,
+        }
       })
       .catch((error: AxiosError<ServerErrorResponseType>) => {
         /* eslint-disable-next-line no-console */
@@ -44,7 +48,11 @@ export const useRequest = () => {
     return await axios
       .delete<T, AxiosResponse<T, D>, D>(url, options)
       .then((response: AxiosResponse<T, D>) => {
-        return { data: response.data, status: response.status }
+        return {
+          data: response.data,
+          status: response.status,
+          headers: response.headers,
+        }
       })
       .catch((error: AxiosError<ServerErrorResponseType>) => {
         /* eslint-disable-next-line no-console */
@@ -72,7 +80,11 @@ export const useRequest = () => {
     return await axios
       .post<T, AxiosResponse<T, D>, D>(url, data, options)
       .then((response: AxiosResponse<T, D>) => {
-        return { data: response.data, status: response.status }
+        return {
+          data: response.data,
+          status: response.status,
+          headers: response.headers,
+        }
       })
       .catch((error: AxiosError<ServerErrorResponseType>) => {
         /* eslint-disable-next-line no-console */
@@ -100,7 +112,11 @@ export const useRequest = () => {
     return await axios
       .put<T, AxiosResponse<T, D>, D>(url, data, options)
       .then((response: AxiosResponse<T, D>) => {
-        return { data: response.data, status: response.status }
+        return {
+          data: response.data,
+          status: response.status,
+          headers: response.headers,
+        }
       })
       .catch((error: AxiosError<ServerErrorResponseType>) => {
         /* eslint-disable-next-line no-console */
@@ -128,7 +144,11 @@ export const useRequest = () => {
     return await axios
       .patch<T, AxiosResponse<T, D>, D>(url, data, options)
       .then((response: AxiosResponse<T, D>) => {
-        return { data: response.data, status: response.status }
+        return {
+          data: response.data,
+          status: response.status,
+          headers: response.headers,
+        }
       })
       .catch((error: AxiosError<ServerErrorResponseType>) => {
         /* eslint-disable-next-line no-console */

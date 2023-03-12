@@ -10,6 +10,7 @@ use App\Library\Session\SessionLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Admins;
 use App\Models\Masters\OAuthUsers;
+use App\Models\User;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -86,13 +87,40 @@ class SocialLoginController extends Controller
             if (is_null($oAuthUser)) {
                 $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
                 $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
-                (new OAuthUsers())->insertByUserId([
-                    OAuthUsers::NAME => $timeStamp,
-                    OAuthUsers::GITT_HUB_ID => $userId,
-                    OAuthUsers::GIT_HUB_TOKEN => $token . $timeStamp,
-                    'code' => $request->code,
-                    'state' => $request->state,
+
+                $userRecordId = (new User())->insertUserAndGetId([
+                    User::NAME => $timeStamp,
                 ]);
+
+                (new OAuthUsers())->insertUser([
+                    OAuthUsers::USER_ID => $userRecordId,
+                    OAuthUsers::TYPE => OAuthUsers::PROVIDER_TYPE_GIT_HUB,
+                    OAuthUsers::GIT_HUB_ID => $userId,
+                    OAuthUsers::GIT_HUB_TOKEN => $token . $timeStamp,
+                    OAuthUsers::CODE => $request->code,
+                    OAuthUsers::STATE => $request->state,
+                ]);
+            } else {
+                // Usersテーブルの確認
+                $userRecord = (new User())->getRecordByUserId($oAuthUser[OAuthUsers::USER_ID]);
+
+                if (empty($userRecord)) {
+                    throw new MyApplicationHttpException(
+                        StatusCodeMessages::STATUS_401,
+                        'ユーザーテーブルにデータが存在しません。user_id:' . $oAuthUser[OAuthUsers::USER_ID],
+                        ['user' => $userRecord],
+                        false
+                    );
+                }
+                // codeとstateの更新
+                (new OAuthUsers())->updateByUserIdAndGitHubId(
+                    $oAuthUser[OAuthUsers::USER_ID],
+                    $oAuthUser[OAuthUsers::GIT_HUB_ID],
+                    [
+                        OAuthUsers::CODE => $request->code,
+                        OAuthUsers::STATE => $request->state,
+                    ]
+                );
             }
         } catch (Exception $e) {
             throw new MyApplicationHttpException(
@@ -109,7 +137,7 @@ class SocialLoginController extends Controller
             return response()->json([
                 'message' => 'Success',
                 'data' => [
-                    OAuthUsers::NAME => $oAuthUser[OAuthUsers::NAME],
+                    User::NAME => $timeStamp,
                     OAuthUsers::GIT_HUB_TOKEN => $oAuthUser[OAuthUsers::GIT_HUB_TOKEN],
                 ]
             ], 200);

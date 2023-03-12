@@ -1,10 +1,10 @@
 import {
-  checkPerformance,
   sortArrayNumbers,
   sortArrayNumbersDesc,
   getMultiSelectLabel,
   InvalidStateErrorUtil,
 } from '@/util/index'
+import { checkPerformance } from '@/util/performance'
 
 const testData = [{ param: [5, 3, 9, 1, 10], expect: [1, 3, 5, 9, 10] }]
 

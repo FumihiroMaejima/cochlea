@@ -2,34 +2,40 @@
 
 namespace App\Models\Masters;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
 use App\Library\Array\ArrayLibrary;
-use App\Library\Database\ShardingLibrary;
-
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OAuthUsers extends Authenticatable implements JWTSubject
+class OAuthUsers extends Model
 {
     use HasFactory;
-    use Notifiable;
     use SoftDeletes;
+
+    public const PROVIDER_TYPE_GIT_HUB = 1;
+    public const PROVIDER_TYPE_TWITTER = 2;
+    public const PROVIDER_TYPE_FACEBOOK = 3;
+
+    public const PROVIDER_TYPE_LIST = [
+        self::PROVIDER_TYPE_GIT_HUB => self::PROVIDER_TYPE_GIT_HUB,
+        self::PROVIDER_TYPE_TWITTER => self::PROVIDER_TYPE_TWITTER,
+        self::PROVIDER_TYPE_FACEBOOK => self::PROVIDER_TYPE_FACEBOOK,
+    ];
 
     // カラム一覧
     public const ID = 'id';
-    public const NAME = 'name';
-    public const EMAIL = 'email';
-    public const EMAIL_VERIFIED_AT = 'email_verified_at';
-    public const PASSWORD = 'password';
-    public const REMEMBER_TOKEN = 'remember_token';
-    public const GITT_HUB_ID = 'github_id';
+    public const USER_ID = 'user_id';
+    public const TYPE = 'type';
+    public const GIT_HUB_ID = 'github_id';
     public const GIT_HUB_TOKEN = 'github_token';
+    public const TWITTER_ID = 'twitter_id';
+    public const TWITTER_TOKEN = 'twitter_token';
+    public const FACEBOOK_ID = 'facebook_id';
+    public const FACEBOOK_TOKEN = 'facebook_token';
+    public const CODE = 'code';
+    public const STATE = 'state';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
@@ -49,7 +55,7 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      *
      * @var string
      */
-    protected $primaryKey = self::ID;
+    protected $primaryKey = self::USER_ID;
 
     /**
      * The attributes that are mass assignable.
@@ -57,10 +63,16 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      * @var string[]
      */
     protected $fillable = [
-        self::NAME,
-        self::EMAIL,
-        self::PASSWORD,
+        self::USER_ID,
+        self::TYPE,
+        self::GIT_HUB_ID,
         self::GIT_HUB_TOKEN,
+        self::TWITTER_ID,
+        self::TWITTER_TOKEN,
+        self::FACEBOOK_ID,
+        self::FACEBOOK_TOKEN,
+        self::FACEBOOK_ID,
+        self::FACEBOOK_TOKEN,
     ];
 
     /**
@@ -68,19 +80,7 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $hidden = [
-        self::PASSWORD,
-        self::REMEMBER_TOKEN
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        self::EMAIL_VERIFIED_AT => 'datetime',
-    ];
+    protected $hidden = [];
 
     /**
      * The accessors to append to the model's array form.
@@ -168,7 +168,7 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      */
     public function getRecordByGitHubUserId(int $userId, bool $isLock = false): array|null
     {
-        $query = DB::table($this->getTable())->where(self::GITT_HUB_ID, '=', $userId);
+        $query = DB::table($this->getTable())->where(self::GIT_HUB_ID, '=', $userId);
 
         if ($isLock) {
             $query->lockForUpdate();
@@ -189,8 +189,24 @@ class OAuthUsers extends Authenticatable implements JWTSubject
      * @param array $resource resource
      * @return bool
      */
-    public function insertByUserId(array $resource): bool
+    public function insertUser(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
+    }
+
+    /**
+     * update record by userId & githubId(code & state).
+     *
+     * @param int $userId user id
+     * @param int $gitHubId github id
+     * @param array $resource resource
+     * @return bool
+     */
+    public function updateByUserIdAndGitHubId(int $userId, int $gitHubId, array $resource): bool
+    {
+        return DB::table($this->getTable())
+            ->where(self::USER_ID, '=', $userId)
+            ->where(self::GIT_HUB_ID, '=', $gitHubId)
+            ->update($resource);
     }
 }

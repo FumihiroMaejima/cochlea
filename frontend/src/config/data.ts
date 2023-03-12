@@ -29,6 +29,21 @@ export const appConfig: IAppConfig = {
     authSelf: '/api/v1/admin/auth/self',
   },
   endpoint: {
+    admins: {
+      admins: '/api/v1/admin/admins',
+      csv: '/api/v1/admin/admins/csv',
+      admin: '/api/v1/admin/admins/admin/:id',
+      create: '/api/v1/admin/admins/admin',
+      roles: '/api/v1/admin/roles/list',
+    },
+    coins: {
+      coins: '/api/v1/admin/coins',
+      csv: '/api/v1/admin/coins/csv',
+      coin: '/api/v1/admin/coins/coin/:id',
+      create: '/api/v1/admin/coins/coin',
+      delete: '/api/v1/admin/coins/coin',
+      fileTemplate: '/api/v1/admin/file/template',
+    },
     members: {
       members: '/api/v1/admin/members',
       csv: '/api/v1/admin/members/csv',
@@ -43,6 +58,9 @@ export const appConfig: IAppConfig = {
       create: '/api/v1/admin/roles/role',
       delete: '/api/v1/admin/roles/role',
       permissions: '/api/v1/admin/permissions/list',
+    },
+    debugs: {
+      status: '/api/v1/admin/debug/status',
     },
   },
 }
