@@ -38,6 +38,7 @@ export const Coins: React.VFC = () => {
     coinsState,
     getCoinsRequest,
     getCoinsCsvFileRequest,
+    getCoinTemplateRequest,
     updateCoinTextData,
     updateCoinRequest,
     deleteCoinRequest,
@@ -100,13 +101,25 @@ export const Coins: React.VFC = () => {
   }
 
   /**
-   * update request handler
+   * download csv file request handler
    * @return {Promise<void>}
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
   const onClickDownLoadCsvButtonHandler = async (): Promise<void> => {
     updateGlobalLoading(true)
     await getCoinsCsvFileRequest(getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
+  /**
+   * download templte file request handler
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickDownLoadTemplateButtonHandler = async (): Promise<void> => {
+    updateGlobalLoading(true)
+    await getCoinTemplateRequest(getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -134,6 +147,12 @@ export const Coins: React.VFC = () => {
             text="downlaod csv"
             color="black"
             onClick={onClickDownLoadCsvButtonHandler}
+          />
+
+          <PartsSimpleButton
+            text="downlaod template"
+            color="green"
+            onClick={onClickDownLoadTemplateButtonHandler}
           />
         </div>
         <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
