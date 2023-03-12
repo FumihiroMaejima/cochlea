@@ -122,7 +122,8 @@ export function useAuthApp(): UseAuthAppType {
     if (token === '') {
       resetAction()
     }
-    restoreToken()
+    // TODO add SameSite or server set to server side  token.
+    // restoreToken()
 
     return {
       headers: addHeaders({

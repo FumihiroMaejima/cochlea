@@ -15,6 +15,8 @@
 @import './components/parts/button/PartsSimpleFlatButton.scss';
 @import './components/parts/carousel/PartsSimpleCarousel.scss';
 @import './components/parts/chip/PartsSimpleChip.scss';
+@import './components/parts/form/PartsSimpleAutoComplete.scss';
+@import './components/parts/form/PartsSimpleFileInput.scss';
 @import './components/parts/form/PartsSimpleSelectBox.scss';
 @import './components/parts/form/PartsSimpleTextField.scss';
 @import './components/parts/form/PartsTextChipBox.scss';
@@ -40,6 +42,7 @@
 /* util */
 @import './util/border.scss';
 @import './util/colors.scss';
+@import './util/grid.scss';
 @import './util/layout.scss';
 @import './util/index.scss';
 @import './util/text.scss';

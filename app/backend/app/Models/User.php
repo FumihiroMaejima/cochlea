@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Library\Array\ArrayLibrary;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -128,5 +130,40 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * get single Record record by user id.
+     *
+     * @param int $userId user id
+     * @param bool $isLock exec lock For Update
+     * @return array|null
+     */
+    public function getRecordByUserId(int $userId, bool $isLock = false): array|null
+    {
+        $query = DB::table($this->getTable())->where(self::ID, '=', $userId)->where(self::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            $query->lockForUpdate();
+        }
+
+        $record = $query->first();
+
+        if (empty($record)) {
+            return null;
+        }
+
+        return ArrayLibrary::toArray($record);
+    }
+
+    /**
+     * insert record & get record id.
+     *
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertUserAndGetId(array $resource): bool
+    {
+        return DB::table($this->getTable())->insertGetId($resource);
     }
 }

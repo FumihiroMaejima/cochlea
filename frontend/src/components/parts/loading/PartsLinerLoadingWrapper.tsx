@@ -1,13 +1,19 @@
 import React from 'react'
 import { PartsLinerLoading } from '@/components/parts/loading/PartsLinerLoading'
 
-/* type Props = {
-  open: boolean
-} */
+type Props = {
+  isDarkMode?: boolean
+}
 
-export const PartsLinerLoadingWrapper: React.VFC = () => {
+export const PartsLinerLoadingWrapper: React.VFC<Props> = ({
+  isDarkMode = true,
+}) => {
   return (
-    <div className="parts-liner-loading-wrapper">
+    <div
+      className={`parts-liner-loading-wrapper${
+        isDarkMode ? ' app-dark-mode' : ''
+      }`}
+    >
       <div className="parts-liner-loading-wrapper__content">
         <PartsLinerLoading />
       </div>

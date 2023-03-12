@@ -69,6 +69,12 @@ $layout-align-directions: (
   bottom: bottom
 );
 
+$over-flow-valus: (
+  auto: auto,
+  hidden: hidden,
+  scroll: scroll,
+);
+
 /* $basic-color-code: (
   black: black,
   dark-grey: dark-grey,
