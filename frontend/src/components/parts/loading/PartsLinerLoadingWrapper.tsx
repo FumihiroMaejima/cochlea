@@ -2,7 +2,7 @@ import React from 'react'
 import { PartsLinerLoading } from '@/components/parts/loading/PartsLinerLoading'
 
 type Props = {
-  isDarkMode: boolean
+  isDarkMode?: boolean
 }
 
 export const PartsLinerLoadingWrapper: React.VFC<Props> = ({
