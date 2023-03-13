@@ -75,7 +75,7 @@ export const Coins: React.VFC = () => {
    * @param {string} value
    * @return {void}
    */
-  const editToDoHandler = (
+  const editRecordHandler = (
     index: number,
     key: Extract<keyof CoinType, 'name' | 'detail'>,
     value: string
@@ -92,7 +92,7 @@ export const Coins: React.VFC = () => {
    * @param {number} index
    * @return {Promise<void>}
    */
-  const updateToDoRequestHandler = async (index: number): Promise<void> => {
+  const updateRecordRequestHandler = async (index: number): Promise<void> => {
     const coin = coinsState.coins[index]
     updateGlobalLoading(true)
     await updateCoinRequest(coin, getHeaderOptions()).then((res) => {
@@ -129,7 +129,7 @@ export const Coins: React.VFC = () => {
    * @param {number} index
    * @return {Promise<void>}
    */
-  const deleteToDoRequestHandler = async (index: number): Promise<void> => {
+  const deleteRecordRequestHandler = async (index: number): Promise<void> => {
     const coin = coinsState.coins[index]
     updateGlobalLoading(true)
     await deleteCoinRequest([coin.id], getHeaderOptions()).then((res) => {
@@ -175,14 +175,14 @@ export const Coins: React.VFC = () => {
               /* console.log('form edit1 index:', index)
               console.log('form edit2 key:', key)
               console.log('form edit3 value:', value) */
-              editToDoHandler(
+              editRecordHandler(
                 index,
                 key as Extract<keyof CoinType, 'name' | 'detail'>,
                 value as unknown as string
               )
             }}
-            onClickUpdate={updateToDoRequestHandler}
-            onClickDelete={deleteToDoRequestHandler}
+            onClickUpdate={updateRecordRequestHandler}
+            onClickDelete={deleteRecordRequestHandler}
           />
         </div>
       </div>

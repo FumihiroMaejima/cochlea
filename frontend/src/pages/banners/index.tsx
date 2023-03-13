@@ -15,6 +15,7 @@ import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
 const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'id' },
+  { label: 'uuid' },
   { label: 'name' },
   { label: 'detail' },
   { label: 'location' },
@@ -28,7 +29,7 @@ const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'image' },
   { label: 'created_at' },
   { label: 'updated_at' },
-  { label: 'deleted_at' },
+  // { label: 'deleted_at' },
 ]
 
 export const Coins: React.VFC = () => {
@@ -72,7 +73,7 @@ export const Coins: React.VFC = () => {
    * @param {string} value
    * @return {void}
    */
-  const editToDoHandler = (
+  const editRecordHandler = (
     index: number,
     key: Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
     value: string
@@ -89,7 +90,7 @@ export const Coins: React.VFC = () => {
    * @param {number} index
    * @return {Promise<void>}
    */
-  const updateToDoRequestHandler = async (index: number): Promise<void> => {
+  const updateRecordRequestHandler = async (index: number): Promise<void> => {
     const banner = bannersState.banners[index]
     updateGlobalLoading(true)
     await updateBannerRequest(banner, getHeaderOptions()).then((res) => {
@@ -126,7 +127,7 @@ export const Coins: React.VFC = () => {
    * @param {number} index
    * @return {Promise<void>}
    */
-  const deleteToDoRequestHandler = async (index: number): Promise<void> => {
+  const deleteRecordRequestHandler = async (index: number): Promise<void> => {
     const banner = bannersState.banners[index]
     updateGlobalLoading(true)
     await deleteBannerRequest([banner.id], getHeaderOptions()).then((res) => {
@@ -172,14 +173,14 @@ export const Coins: React.VFC = () => {
               /* console.log('form edit1 index:', index)
               console.log('form edit2 key:', key)
               console.log('form edit3 value:', value) */
-              editToDoHandler(
+              editRecordHandler(
                 index,
                 key as Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
                 value as unknown as string
               )
             }}
-            onClickUpdate={updateToDoRequestHandler}
-            onClickDelete={deleteToDoRequestHandler}
+            onClickUpdate={updateRecordRequestHandler}
+            onClickDelete={deleteRecordRequestHandler}
           />
         </div>
       </div>
