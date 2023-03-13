@@ -29,7 +29,6 @@ const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'image' },
   { label: 'created_at' },
   { label: 'updated_at' },
-  // { label: 'deleted_at' },
 ]
 
 export const Coins: React.VFC = () => {

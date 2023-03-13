@@ -26,6 +26,7 @@ export const editableRole = ['master', 'administrator']
 
 export const bannerData = {
   id: 0,
+  uuid: '',
   name: '',
   detail: '',
   location: 1,
@@ -39,7 +40,6 @@ export const bannerData = {
   image: '',
   created_at: '',
   updated_at: '',
-  deleted_at: '',
 }
 
 export type BannerType = typeof bannerData
