@@ -81,12 +81,19 @@ export const Debug: React.VFC = () => {
             </label>
             <PartsSimpleTextField
               id="time"
-              className="width-8"
+              className="width-8 mx-2"
               type="datetime-local"
               value={debugsState.fakerTime}
               onInput={(e) => updateLocalFakerTime(e.currentTarget.value)}
               placeholder="time"
             />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+              />
+            </span>
           </div>
         </div>
       </div>
