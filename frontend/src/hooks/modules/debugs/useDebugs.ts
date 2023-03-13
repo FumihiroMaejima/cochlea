@@ -32,10 +32,12 @@ export type DebugSelectKeys = Extract<DebugTypeKeys, 'fakerTimeStamp'>
 
 export type StateType = {
   status: DebugType
+  fakerTime: string
 }
 
 export const initialData: StateType = {
   status: { ...debugData },
+  fakerTime: '',
 }
 
 export function useDebugs() {
@@ -77,9 +79,22 @@ export function useDebugs() {
       })
   }
 
+  /**
+   * update local faker time value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateLocalFakerTime = (value: string): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: value,
+    })
+  }
+
   return {
     debugsState,
     getDebugStatusRequest,
+    updateLocalFakerTime,
   } as const
 }
 

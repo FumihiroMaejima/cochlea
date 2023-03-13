@@ -1,5 +1,6 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
+import { PartsSimpleTextField } from '@/components/parts/form/PartsSimpleTextField'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
 import {
@@ -15,7 +16,8 @@ import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
 export const Debug: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { debugsState, getDebugStatusRequest } = useDebugs()
+  const { debugsState, getDebugStatusRequest, updateLocalFakerTime } =
+    useDebugs()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -72,6 +74,19 @@ export const Debug: React.VFC = () => {
             <p>
               <b>userAgent</b> : {debugsState.status.userAgent}
             </p>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              時間偽装時刻
+            </label>
+            <PartsSimpleTextField
+              id="time"
+              className="width-8"
+              type="datetime-local"
+              value={debugsState.fakerTime}
+              onInput={(e) => updateLocalFakerTime(e.currentTarget.value)}
+              placeholder="time"
+            />
           </div>
         </div>
       </div>
