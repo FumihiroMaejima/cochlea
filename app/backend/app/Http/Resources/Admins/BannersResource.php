@@ -61,13 +61,23 @@ class BannersResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
-            // 画像URL設定
-            $item->{self::RESOURCE_KEY_IMAGE} = BannerLibrary::getAdminServiceBannerPath(ArrayLibrary::toArray($item));
-
-            $item->{Banners::START_AT} = TimeLibrary::format($item->{Banners::START_AT});
-            $item->{Banners::END_AT} = TimeLibrary::format($item->{Banners::END_AT});
-
-            $response[self::RESOURCE_KEY_DATA][] = $item;
+            $response[self::RESOURCE_KEY_DATA][] = [
+                Banners::ID              => $item->{Banners::ID},
+                Banners::UUID            => $item->{Banners::UUID},
+                Banners::NAME            => $item->{Banners::NAME},
+                Banners::DETAIL          => $item->{Banners::DETAIL},
+                Banners::LOCATION        => $item->{Banners::LOCATION},
+                Banners::PC_HEIGHT       => $item->{Banners::PC_HEIGHT},
+                Banners::PC_WIDTH        => $item->{Banners::PC_WIDTH},
+                Banners::SP_HEIGHT       => $item->{Banners::SP_HEIGHT},
+                Banners::SP_WIDTH        => $item->{Banners::SP_WIDTH},
+                Banners::START_AT        => TimeLibrary::format($item->{Banners::START_AT}),
+                Banners::END_AT          => TimeLibrary::format($item->{Banners::END_AT}),
+                Banners::URL             => $item->{Banners::URL},
+                self::RESOURCE_KEY_IMAGE => BannerLibrary::getAdminServiceBannerPath(ArrayLibrary::toArray($item)),   // 画像URL設定
+                Banners::CREATED_AT      => $item->{Banners::CREATED_AT},
+                Banners::UPDATED_AT      => $item->{Banners::UPDATED_AT},
+            ];
         }
 
         return $response;
