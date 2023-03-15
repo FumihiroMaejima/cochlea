@@ -14,9 +14,7 @@ export const GlobalContextWrapper: React.VFC = () => {
   const { isOpenLoading } = useContext(GlobalLoadingContext)
   const { toastState, updateToastState } = useContext(ToastContext)
   // const { login } = useContext(AuthAppContext)
-  console.log(
-    'global wrapper component.: ' + JSON.stringify(updateToastState, null, 2)
-  )
+  console.log('global context wrapper component toastState.: ' + toastState)
 
   return (
     <div className="global-context-wrapper">
