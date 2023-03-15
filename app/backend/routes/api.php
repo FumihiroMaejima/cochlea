@@ -151,6 +151,11 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'coins'], function () {
         Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
     });
+    // banners
+    Route::group(['prefix' => 'banners'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\BannersController::class, 'index'])->name('noAuth.banners.index');
+        Route::get('/banner/{uuid}', [\App\Http\Controllers\Users\BannersController::class, 'getImage'])->name('noAuth.banners.image');
+    });
     // events
     Route::group(['prefix' => 'events'], function () {
         Route::get('/', [\App\Http\Controllers\Users\EventsController::class, 'index'])->name('noAuth.events.index');
