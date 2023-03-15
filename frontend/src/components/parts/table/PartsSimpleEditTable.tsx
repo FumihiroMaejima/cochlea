@@ -70,6 +70,8 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                     disabled={disabled}
                     readOnly={readOnly}
                   />
+                ) : key === 'image' ? (
+                  <img src={item[key] as string} alt={`sample image${j}`}></img>
                 ) : (
                   item[key]
                 )}
