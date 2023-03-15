@@ -74,7 +74,7 @@ class BannersResource extends JsonResource
                 Banners::START_AT        => TimeLibrary::format($item->{Banners::START_AT}),
                 Banners::END_AT          => TimeLibrary::format($item->{Banners::END_AT}),
                 Banners::URL             => $item->{Banners::URL},
-                self::RESOURCE_KEY_IMAGE => BannerLibrary::getAdminServiceBannerPath(ArrayLibrary::toArray($item)),   // 画像URL設定
+                self::RESOURCE_KEY_IMAGE => BannerLibrary::getUserServiceBannerPath(ArrayLibrary::toArray($item)),   // 画像URL設定
                 Banners::CREATED_AT      => $item->{Banners::CREATED_AT},
                 Banners::UPDATED_AT      => $item->{Banners::UPDATED_AT},
             ];
