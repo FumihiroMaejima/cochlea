@@ -2,6 +2,7 @@
 import { useState, useReducer, useCallback } from 'react'
 import { useRequest } from '@/hooks/useRequest'
 import { appConfig } from '@/config/data'
+import { getTimeStamp } from '@/util/time'
 import {
   // IAppConfig,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,12 +33,12 @@ export type DebugSelectKeys = Extract<DebugTypeKeys, 'fakerTimeStamp'>
 
 export type StateType = {
   status: DebugType
-  fakerTime: string
+  fakerTime?: string
 }
 
 export const initialData: StateType = {
   status: { ...debugData },
-  fakerTime: '',
+  fakerTime: undefined,
 }
 
 export function useDebugs() {
