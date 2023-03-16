@@ -24,6 +24,9 @@ type Props = {
   readOnly?: boolean
 }
 
+// 画像を表示するkey
+const imageKeys = ['image', 'pc_image', 'sp_image']
+
 export const PartsSimpleEditTable: React.VFC<Props> = ({
   headers = [],
   items = [],
@@ -70,7 +73,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                     disabled={disabled}
                     readOnly={readOnly}
                   />
-                ) : key === 'image' ? (
+                ) : imageKeys.find((k) => k === key) ? (
                   <img src={item[key] as string} alt={`sample image${j}`}></img>
                 ) : (
                   item[key]

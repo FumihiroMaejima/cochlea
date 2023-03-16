@@ -11,6 +11,9 @@ type Props = {
   items: SimpleTableDataType[]
 }
 
+// 画像を表示するkey
+const imageKeys = ['image', 'pc_image', 'sp_image']
+
 export const PartsSimpleTable: React.VFC<Props> = (props) => {
   return (
     <table className="parts-simple-table parts-simple-table__table-element">
@@ -26,7 +29,7 @@ export const PartsSimpleTable: React.VFC<Props> = (props) => {
           <tr key={j}>
             {Object.keys(item).map((key) => (
               <td key={key}>
-                {key === 'image' ? (
+                {imageKeys.find((k) => k === key) ? (
                   <img src={item[key] as string} alt={`sample image${j}`}></img>
                 ) : (
                   item[key]
