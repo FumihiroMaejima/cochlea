@@ -25,7 +25,13 @@ export const PartsSimpleTable: React.VFC<Props> = (props) => {
         {props.items.map((item, j) => (
           <tr key={j}>
             {Object.keys(item).map((key) => (
-              <td key={key}>{item[key]}</td>
+              <td key={key}>
+                {key === 'image' ? (
+                  <img src={item[key] as string} alt={`sample image${j}`}></img>
+                ) : (
+                  item[key]
+                )}
+              </td>
             ))}
           </tr>
         ))}
