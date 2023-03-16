@@ -39,6 +39,18 @@ export const Debug: React.VFC = () => {
   }
   useEffect(onDidMount, [])
 
+  /**
+   * set faker time & and re request debug status.
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickFakerTimeSetButtonHandler = async (): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugStatusRequest(getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
   return (
     <div className="admins page-container page-container__mx-auto">
       <PartsSimpleHeading text="デバッグ情報一覧 ページ" color="dark-grey" />
@@ -92,6 +104,7 @@ export const Debug: React.VFC = () => {
                 className="app-container"
                 text="適用"
                 color="green"
+                onClick={onClickFakerTimeSetButtonHandler}
               />
             </span>
           </div>

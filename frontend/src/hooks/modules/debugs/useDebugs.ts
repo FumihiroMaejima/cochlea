@@ -15,6 +15,10 @@ const config = { ...appConfig }
 
 export const editableRole = ['master', 'administrator']
 
+export type DebagHeaderType = {
+  'X-Faker-Time': number
+}
+
 export const debugData = {
   userId: 0,
   sessionId: '',
@@ -63,9 +67,15 @@ export function useDebugs() {
     options: AuthAppHeaderOptions
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
     return await useRequest()
       .getRequest<ServerRequestType<DebugType>>(config.endpoint.debugs.status, {
-        headers: options.headers,
+        headers: { ...options.headers, ...debugHeader },
       })
       .then((response) => {
         const data = response.data as ServerRequestType<DebugType>
@@ -90,6 +100,15 @@ export function useDebugs() {
       status: debugsState.status,
       fakerTime: value,
     })
+  }
+
+  /**
+   * update local faker time value.
+   * @param {string} datetime
+   * @return {DebagHeaderType}
+   */
+  const creteFakerTimeHeader = (datetime: string): DebagHeaderType => {
+    return { 'X-Faker-Time': getTimeStamp(datetime) }
   }
 
   return {
