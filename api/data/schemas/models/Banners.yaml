@@ -1,0 +1,93 @@
+# Banners:
+  type: array
+  items:
+    type: object
+    required:
+      - id
+      - name
+      - detail
+      - location
+      - pc_height
+      - pc_width
+      - sp_height
+      - sp_width
+      - image
+      - url
+      - start_at
+      - end_at
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      detail:
+        type: string
+      location:
+        type: string
+        description: Banner Location
+      pc_height:
+        type: integer
+        format: int64
+        description: pc image height
+      pc_width:
+        type: integer
+        format: int64
+        description: pc image width
+      sp_height:
+        type: integer
+        format: int64
+        description: sp image height
+      sp_width:
+        type: integer
+        format: int64
+        description: sp image width
+      image:
+        type: string
+        description: banner image url
+      url:
+        type: string
+        description: banner image href
+      start_at:
+        type: string
+      end_at:
+        type: string
+  example:
+  - id: 1
+    name: 'test banner1'
+    detail: 'test detail1'
+    location: 'home1'
+    pc_height: 100
+    pc_width: 100
+    sp_height: 50
+    sp_width: 50
+    image: 'http://localhost/banner/1?ver=12334450000'
+    url: 'http://localhost/location/href/example1'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  - id: 2
+    name: 'test banner2'
+    detail: 'test detail2'
+    location: 'home1'
+    pc_height: 100
+    pc_width: 100
+    sp_height: 50
+    sp_width: 50
+    image: 'http://localhost/banner/2?ver=12334450000'
+    url: 'http://localhost/location/href/example2'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  - id: 3
+    name: 'test banner3'
+    location: 'home1'
+    pc_height: 100
+    pc_width: 100
+    sp_height: 50
+    sp_width: 50
+    image: 'http://localhost/banner/3?ver=12334450000'
+    url: 'http://localhost/location/href/example3'
+    detail: 'test detail3'
+    start_at: '2022/05/10 00:00:00'
+    end_at: '2035/12/31 23:59:59'
+  xml:
+    name: Banners
