@@ -83,16 +83,15 @@ paths:
     $ref: "./data/paths/admin/banners/template.yaml"
   /admin/banners/banner:
     $ref: "./data/paths/admin/banners/banner/index.yaml"
-  "/admin/banners/banner/{id}":
+  "/admin/banners/banner/{uuid}":
     parameters:
-      - name: id
+      - name: uuid
         in: path
-        description: ID of banner
+        description: UUID of banner
         required: true
         schema:
-          type: integer
-          format: int64
-    $ref: "./data/paths/admin/banners/banner/id.yaml"
+          type: string
+    $ref: "./data/paths/admin/banners/banner/uuid.yaml"
   /admin/coins:
     $ref: "./data/paths/admin/coins/index.yaml"
   /admin/coins/csv:
