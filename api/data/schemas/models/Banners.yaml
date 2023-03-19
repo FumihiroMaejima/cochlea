@@ -4,6 +4,7 @@
     type: object
     required:
       - id
+      - uuid
       - name
       - detail
       - location
@@ -19,6 +20,9 @@
       id:
         type: integer
         format: int64
+      uuid:
+        type: string
+        description: Banner UUID
       name:
         type: string
       detail:
@@ -50,10 +54,13 @@
         description: banner image href
       start_at:
         type: string
+        description: start datetime
       end_at:
         type: string
+        description: end datetime
   example:
   - id: 1
+    uuid: 'eab6a89d-9677-4d5b-b345-53624c46daa1'
     name: 'test banner1'
     detail: 'test detail1'
     location: 'home1'
@@ -66,6 +73,7 @@
     start_at: '2022/05/10 00:00:00'
     end_at: '2035/12/31 23:59:59'
   - id: 2
+    uuid: 'eab6a89d-9677-4d5b-b345-53624c46daa2'
     name: 'test banner2'
     detail: 'test detail2'
     location: 'home1'
@@ -78,6 +86,7 @@
     start_at: '2022/05/10 00:00:00'
     end_at: '2035/12/31 23:59:59'
   - id: 3
+    uuid: 'eab6a89d-9677-4d5b-b345-53624c46daa3'
     name: 'test banner3'
     location: 'home1'
     pc_height: 100
