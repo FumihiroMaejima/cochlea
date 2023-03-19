@@ -1,10 +1,10 @@
-# /admin/events/event:
+# /admin/banners/banner:
   post:
     tags:
-      - events
-    summary: Create Event
+      - banners
+    summary: Create Banner
     description: ""
-    operationId: createEventWithForm
+    operationId: createBannerWithForm
     parameters:
       - name: Authorization
         in: header
@@ -25,7 +25,7 @@
         schema:
           type: string
     requestBody:
-      $ref: "../../../../components/requestBodies/createEventWithForm.yaml"
+      $ref: "../../../../components/requestBodies/createBannerWithForm.yaml"
     responses:
       "201":
         description: successful Create
@@ -51,10 +51,10 @@
       - auth_id: []
   delete:
     tags:
-      - events
-    summary: Deletes some events
+      - banners
+    summary: Deletes some banners
     description: ""
-    operationId: deleteEvent
+    operationId: deleteBanner
     parameters:
       - name: Authorization
         in: header
@@ -68,9 +68,9 @@
         required: true
         schema:
           type: string
-      - name: events
+      - name: banners
         in: query
-        description: ID of event
+        description: ID of banner
         required: true
         schema:
           type: array
