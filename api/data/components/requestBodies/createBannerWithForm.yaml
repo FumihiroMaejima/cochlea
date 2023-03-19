@@ -1,0 +1,56 @@
+# createBannerWithForm:
+  description: test createBannerWithForm description.
+  content:
+    # application/x-www-form-urlencoded:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: name of Banner
+            type: string
+          type:
+            description: type of Banner
+            type: integer
+          detail:
+            description: detail of Banner
+            type: string
+          location:
+            type: string
+            description: Banner Location
+          pc_height:
+            type: integer
+            format: int64
+            description: pc image height
+          pc_width:
+            type: integer
+            format: int64
+            description: pc image width
+          sp_height:
+            type: integer
+            format: int64
+            description: sp image height
+          sp_width:
+            type: integer
+            format: int64
+            description: sp image width
+          url:
+            type: string
+            description: banner image href
+          start_at:
+            description: start datetime of Banner
+            type: string
+          end_at:
+            description: end datetime of Banner
+            type: string
+        required:
+          - name
+          - detail
+          - location
+          - pc_height
+          - pc_width
+          - sp_height
+          - sp_width
+          - url
+          - start_at
+          - end_at
