@@ -53,7 +53,7 @@ export type BannerSelectKeys = Extract<BannerTypeKeys, 'location'>
 
 export type StateType = {
   banners: BannerType[]
-  images: Record<number, File> | undefined
+  images: Record<number, File | undefined> | undefined
 }
 
 export const initialData: StateType = {
@@ -146,22 +146,26 @@ export function useBanners() {
    * update banner's fileobject value.
    * @param {number} index
    * @param {File | undefined} file
-   * @return {Promise<void>}
+   * @return {void}
    */
-  const updateBannerFileObject = async (
+  const updateBannerFileObject = (
     index: number,
     file: File | undefined
-  ): Promise<void> => {
+  ): void => {
     const banner = bannersState.banners[index]
     if (!banner || !bannersState.images) {
       return
     }
 
     if (!file) {
-      if (bannersState.images[banner.id]) {
+      bannersState.images[banner.id] = undefined
+      // TODO 一旦削除ボタンを押した段階で既存のものは削除される様にする
+      /* if (bannersState.images[banner.id]) {
         const fileObject = await getFileObjectByUrl(banner.image)
         bannersState.images[banner.id] = fileObject
-      }
+      } else {
+        bannersState.images[banner.id] = undefined
+      } */
     } else {
       bannersState.images[banner.id] = file
     }

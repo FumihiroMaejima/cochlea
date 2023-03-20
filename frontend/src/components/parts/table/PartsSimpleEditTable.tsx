@@ -10,7 +10,7 @@ export type SimpleTableDataType = {
 type Props = {
   headers: TableHeaderType[]
   items: SimpleTableDataType[]
-  fileObjects?: Record<number, File> | undefined
+  fileObjects?: Record<number, File | undefined> | undefined
   editable?: boolean
   editableKeys?: string[]
   // onInput?: FormEventHandler<HTMLInputElement>
