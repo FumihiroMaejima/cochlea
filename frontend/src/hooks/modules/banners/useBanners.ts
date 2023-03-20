@@ -10,6 +10,7 @@ import {
   AuthAppHeaderOptions,
 } from '@/types'
 import { makeDataUrl, downloadFile } from '@/util'
+import { getFileObjectByUrl } from '@/util/file'
 /* import { ToastData, SelectBoxType } from '@/types/applications/index'
 import {
   validateName,
@@ -52,10 +53,12 @@ export type BannerSelectKeys = Extract<BannerTypeKeys, 'location'>
 
 export type StateType = {
   banners: BannerType[]
+  images: Record<number, File> | undefined
 }
 
 export const initialData: StateType = {
   banners: [...[]],
+  images: undefined,
 }
 
 export function useBanners() {
@@ -83,6 +86,7 @@ export function useBanners() {
         }
         return banner
       }),
+      images: bannersState.images,
     })
   }
 
@@ -105,6 +109,7 @@ export function useBanners() {
         }
         return banner
       }),
+      images: bannersState.images,
     })
   }
 
@@ -115,6 +120,25 @@ export function useBanners() {
    */
   const setBanners = (banners: BannerType[]) => {
     bannersState.banners = banners
+    dispatch(bannersState)
+  }
+
+  /**
+   * set banner imgae file object.
+   * @param {BannerType[]} banners
+   * @return {void}
+   */
+  const setBannerFileObjectList = async (
+    banners: BannerType[]
+  ): Promise<void> => {
+    const fileObjectList: Record<number, File> = {}
+    // 直列でファイルオブジェクトを取得
+    for (const banner of banners) {
+      const fileObject = await getFileObjectByUrl(banner.image)
+      fileObjectList[banner.id] = fileObject
+    }
+    bannersState.banners = banners
+    bannersState.images = fileObjectList
     dispatch(bannersState)
   }
 
@@ -136,7 +160,9 @@ export function useBanners() {
       )
       .then((response) => {
         const data = response.data as ServerRequestType<BannerType[]>
-        setBanners(data.data as BannerType[])
+        const banners = data.data as BannerType[]
+        setBanners(banners)
+        setBannerFileObjectList(banners)
         return { data: response.data, status: 200 }
       })
       .catch((error) => {
