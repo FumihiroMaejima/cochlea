@@ -31,7 +31,7 @@ const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'updated_at' },
 ]
 
-export const Coins: React.VFC = () => {
+export const Banners: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const {
     bannersState,
@@ -187,4 +187,4 @@ export const Coins: React.VFC = () => {
   )
 }
 
-export default Coins
+export default Banners
