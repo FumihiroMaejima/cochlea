@@ -191,6 +191,7 @@ export function useBanners() {
       })
 
     // ファイルオブジェクトの設定
+    // TODO 全て更新をかけてから追えるのに時間がかかる為、個別に取得したものを画面に更新出来る様にさせる
     await setBannerFileObjectList(bannersState.banners)
     return response
   }
