@@ -86,6 +86,15 @@ export const Banners: React.VFC = () => {
   }
 
   /**
+   * 更新前のファイルを再取得
+   * @param {number} index
+   * @return {void}
+   */
+  const resetFileHandler = (index: number): void => {
+    updateBannerFileObject(index, undefined)
+  }
+
+  /**
    * update request handler
    * @param {number} index
    * @return {Promise<void>}
@@ -196,6 +205,7 @@ export const Banners: React.VFC = () => {
             }}
             onClickUpdate={updateRecordRequestHandler}
             onClickDelete={deleteRecordRequestHandler}
+            onResetFile={resetFileHandler}
             updateImageHandler={updateImageHandler}
           />
         </div>

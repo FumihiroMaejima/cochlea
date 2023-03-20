@@ -20,7 +20,7 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onClickUpdate?: (i: number) => void
   onClickDelete?: (i: number) => void
-  resetFileHandler?: () => void
+  onResetFile?: (i: number) => void
   updateImageHandler?: (i: number, v: File) => void
   maxLength?: number
   required?: boolean
@@ -41,7 +41,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
   onChange = undefined,
   onClickUpdate = undefined,
   onClickDelete = undefined,
-  resetFileHandler = undefined,
+  onResetFile = undefined,
   updateImageHandler = undefined,
   maxLength = undefined,
   required = undefined,
@@ -102,8 +102,8 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                     }
                     onUpdateFile={(e) => updateImage(i, e)}
                     onResetFile={() => {
-                      if (resetFileHandler !== undefined) {
-                        resetFileHandler()
+                      if (onResetFile !== undefined) {
+                        onResetFile(j)
                       }
                     }}
                     isOpenPreview={true}

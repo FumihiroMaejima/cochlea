@@ -145,15 +145,26 @@ export function useBanners() {
   /**
    * update banner's fileobject value.
    * @param {number} index
-   * @param {File} file
-   * @return {void}
+   * @param {File | undefined} file
+   * @return {Promise<void>}
    */
-  const updateBannerFileObject = (index: number, file: File) => {
+  const updateBannerFileObject = async (
+    index: number,
+    file: File | undefined
+  ): Promise<void> => {
     const banner = bannersState.banners[index]
     if (!banner || !bannersState.images) {
       return
     }
-    bannersState.images[banner.id] = file
+
+    if (!file) {
+      if (bannersState.images[banner.id]) {
+        const fileObject = await getFileObjectByUrl(banner.image)
+        bannersState.images[banner.id] = fileObject
+      }
+    } else {
+      bannersState.images[banner.id] = file
+    }
 
     dispatch({
       banners: bannersState.banners,
