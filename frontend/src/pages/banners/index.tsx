@@ -148,12 +148,9 @@ export const Banners: React.VFC = () => {
    * update file each object for preview
    * @param {number} index
    * @param {File} file
-   * @return {Promise<void>}
+   * @return {void}
    */
-  const updateImageHandler = async (
-    index: number,
-    file: File
-  ): Promise<void> => {
+  const updateImageHandler = (index: number, file: File): void => {
     updateBannerFileObject(index, file)
   }
 

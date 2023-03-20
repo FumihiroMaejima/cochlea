@@ -100,7 +100,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                         ? undefined
                         : fileObjects[item['id'] as unknown as number]
                     }
-                    onUpdateFile={(e) => updateImage(i, e)}
+                    onUpdateFile={(e) => updateImage(j, e)}
                     onResetFile={() => {
                       if (onResetFile !== undefined) {
                         onResetFile(j)
