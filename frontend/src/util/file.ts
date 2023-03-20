@@ -16,3 +16,18 @@ export const getFileObjectByUrl = async (
       return file
     })
 }
+
+/**
+ * get file object by file url (include server)
+ * @param {File} file file object
+ * @param {string} key form key name
+ * @return FormData
+ */
+export const createFileRequestFormData = (
+  file: File,
+  key = 'file'
+): FormData => {
+  const data = new FormData()
+  data.append(key, file)
+  return data
+}
