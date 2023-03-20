@@ -39,6 +39,7 @@ export const Banners: React.VFC = () => {
     getBannersCsvFileRequest,
     getBannerTemplateRequest,
     updateBannerTextData,
+    updateBannerFileObject,
     updateBannerRequest,
     deleteBannerRequest,
   } = useBanners()
@@ -134,6 +135,19 @@ export const Banners: React.VFC = () => {
     })
   }
 
+  /**
+   * update file each object for preview
+   * @param {number} index
+   * @param {File} file
+   * @return {Promise<void>}
+   */
+  const updateImageHandler = async (
+    index: number,
+    file: File
+  ): Promise<void> => {
+    updateBannerFileObject(index, file)
+  }
+
   return (
     <div className="admins page-container page-container__mx-auto">
       <PartsSimpleHeading text="バナー一覧 ページ" color="dark-grey" />
@@ -166,6 +180,7 @@ export const Banners: React.VFC = () => {
           <PartsSimpleEditTable
             headers={simpleTableHeaderData}
             items={bannersState.banners}
+            fileObjects={bannersState.images}
             editable={true}
             editableKeys={['name', 'detail', 'url']}
             onInput={(index, key, value) => {
@@ -180,6 +195,7 @@ export const Banners: React.VFC = () => {
             }}
             onClickUpdate={updateRecordRequestHandler}
             onClickDelete={deleteRecordRequestHandler}
+            updateImageHandler={updateImageHandler}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler } from 'react'
+import { PartsSimpleFileInput } from '@/components/parts/form/PartsSimpleFileInput'
 
 export type TableHeaderType = Record<'label', string>
 
@@ -9,6 +10,7 @@ export type SimpleTableDataType = {
 type Props = {
   headers: TableHeaderType[]
   items: SimpleTableDataType[]
+  fileObjects?: Record<number, File> | undefined
   editable?: boolean
   editableKeys?: string[]
   // onInput?: FormEventHandler<HTMLInputElement>
@@ -18,6 +20,8 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onClickUpdate?: (i: number) => void
   onClickDelete?: (i: number) => void
+  resetFileHandler?: () => void
+  updateImageHandler?: (i: number, v: File) => void
   maxLength?: number
   required?: boolean
   disabled?: boolean
@@ -30,17 +34,32 @@ const imageKeys = ['image', 'pc_image', 'sp_image']
 export const PartsSimpleEditTable: React.VFC<Props> = ({
   headers = [],
   items = [],
+  fileObjects = undefined,
   editable = false,
   editableKeys = [],
   onInput = undefined,
   onChange = undefined,
   onClickUpdate = undefined,
   onClickDelete = undefined,
+  resetFileHandler = undefined,
+  updatePreviewImageHandler = undefined,
   maxLength = undefined,
   required = undefined,
   disabled = false,
   readOnly = false,
 }) => {
+  /**
+   * create preview image
+   * @param {number} index
+   * @param {File} file
+   * @return {void}
+   */
+  const updateImage = (index: number, file: File): void => {
+    if (updatePreviewImageHandler) {
+      updateImageHandler(index, file)
+    }
+  }
+
   return (
     <table className="parts-simple-edit-table parts-simple-edit-table__table-element">
       <thead>
@@ -54,7 +73,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
       <tbody>
         {items.map((item, j) => (
           <tr key={j}>
-            {Object.keys(item).map((key) => (
+            {Object.keys(item).map((key, i) => (
               <td key={key}>
                 {editable && editableKeys.includes(key) ? (
                   <input
@@ -74,7 +93,21 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                     readOnly={readOnly}
                   />
                 ) : imageKeys.find((k) => k === key) ? (
-                  <img src={item[key] as string} alt={`sample image${j}`}></img>
+                  // <img src={item[key] as string} alt={`sample image${j}`}></img>
+                  <PartsSimpleFileInput
+                    value={
+                      !fileObjects
+                        ? undefined
+                        : fileObjects[item['id'] as unknown as number]
+                    }
+                    onUpdateFile={(e) => updateImage(i, e)}
+                    onResetFile={() => {
+                      if (resetFileHandler !== undefined) {
+                        resetFileHandler()
+                      }
+                    }}
+                    isOpenPreview={true}
+                  />
                 ) : (
                   item[key]
                 )}

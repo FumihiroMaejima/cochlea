@@ -143,6 +143,25 @@ export function useBanners() {
   }
 
   /**
+   * update banner's fileobject value.
+   * @param {number} index
+   * @param {File} file
+   * @return {void}
+   */
+  const updateBannerFileObject = (index: number, file: File) => {
+    const banner = bannersState.banners[index]
+    if (!banner || !bannersState.images) {
+      return
+    }
+    bannersState.images[banner.id] = file
+
+    dispatch({
+      banners: bannersState.banners,
+      images: bannersState.images,
+    })
+  }
+
+  /**
    * get banners data.
    * @param {BaseAddHeaderResponse} header
    * @return {void}
@@ -151,7 +170,7 @@ export function useBanners() {
     options: AuthAppHeaderOptions
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
-    return await useRequest()
+    const response = await useRequest()
       .getRequest<ServerRequestType<BannerType[]>>(
         config.endpoint.banners.banners,
         {
@@ -162,7 +181,6 @@ export function useBanners() {
         const data = response.data as ServerRequestType<BannerType[]>
         const banners = data.data as BannerType[]
         setBanners(banners)
-        setBannerFileObjectList(banners)
         return { data: response.data, status: 200 }
       })
       .catch((error) => {
@@ -171,6 +189,10 @@ export function useBanners() {
       .finally(() => {
         options.callback()
       })
+
+    // ファイルオブジェクトの設定
+    await setBannerFileObjectList(bannersState.banners)
+    return response
   }
 
   /**
@@ -350,6 +372,8 @@ export function useBanners() {
     bannersState,
     updateBannerTextData,
     updateBannerNumberData,
+    updateBannerFileObject,
+    setBannerFileObjectList,
     getBannersRequest,
     getBannersCsvFileRequest,
     getBannerTemplateRequest,
