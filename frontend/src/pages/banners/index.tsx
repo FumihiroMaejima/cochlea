@@ -167,10 +167,11 @@ export const Banners: React.VFC = () => {
           />
         </div>
         <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
-          <PartsSimpleTable
+          {/* // TODO 一時非表示 */}
+          {/* <PartsSimpleTable
             headers={simpleTableHeaderData}
             items={bannersState.banners}
-          />
+          /> */}
         </div>
       </div>
 
