@@ -44,7 +44,7 @@ class BannerUpdateRequest extends BannerBaseRequest
             'sp_width'    => 'required|integer|min:1|max:1500',
             'start_at'    => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
             'end_at'      => 'required|date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH.'|after:start_at',
-            'image'       => 'file|image|max:512', // 最大512KB
+            'image'       => 'file|image|max:512|mimes:png|mimetypes:application/png', // 最大512KB
         ];
     }
 
@@ -70,8 +70,10 @@ class BannerUpdateRequest extends BannerBaseRequest
             'file'        => ':attributeはファイル形式で入力してください。',
             'image'       => ':attributeは画像ファイルで入力してください。',
             'image.max'   => ':attributeは最大:max KBで入力してください。',
+            'mimes'       => ':attributeの拡張子が正しくありません。',
+            'mimetypes'   => ':attributeは:valuesのファイル形式でアップロードしてください。',
             'exists'      => '指定した:attributeは存在しません。',
-            'uuid'        => '指定した:attributeの形式が不正です。'
+            'uuid'        => '指定した:attributeの形式が不正です。',
         ];
     }
 }
