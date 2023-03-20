@@ -19,6 +19,13 @@ use App\Library\Time\TimeLibrary;
 
 class ImageLibrary
 {
+    // リソースキー
+    public const RESOURCE_KEY_UUID = Images::UUID;
+    public const RESOURCE_KEY_NAME = Images::NAME;
+    public const RESOURCE_KEY_EXTENTION = Images::EXTENTION;
+    public const RESOURCE_KEY_MIME_TYPE = Images::MIME_TYPE;
+    public const RESOURCE_KEY_S3_KEY = Images::S3_KEY;
+
     /**
      * 画像ファイルのアップロード
      *
