@@ -24,6 +24,7 @@ use App\Library\Banner\BannerLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\File\FileLibrary;
+use App\Library\File\ImageLibrary;
 use App\Models\Masters\Banners;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
@@ -287,6 +288,25 @@ class BannersService
             // ロックをかける為transaction内で実行
             $banner = $this->getBannerByUuid($uuid);
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+            // 画像がアップロードされている場合
+            if ($image) {
+                // アップロードするディレクトリ名を指定
+                $directory = Config::get('myappFile.upload.storage.local.images.banner');
+                $bannerId = $banner[Banners::ID];
+
+                $fileResource = ImageLibrary::getFileResource($image);
+                // ファイル名
+                $storageFileName = $fileResource[ImageLibrary::RESOURCE_KEY_NAME] . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+
+                $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
+                if (!$result) {
+                    throw new MyApplicationHttpException(
+                        StatusCodeMessages::MESSAGE_500,
+                        'store file failed.'
+                    );
+                }
+            }
 
             DB::commit();
 
