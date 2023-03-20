@@ -186,6 +186,7 @@ class BannersService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string $url url
+     * @param UploadedFile|null $image image file
      * @return \Illuminate\Http\JsonResponse
      */
     public function createBanner(
@@ -198,7 +199,8 @@ class BannersService
         int $spWidth,
         string $startAt,
         string $endAt,
-        string $url
+        string $url,
+        ?UploadedFile $image
     ): JsonResponse {
         $resource = BannersResource::toArrayForCreate(
             UuidLibrary::uuidVersion4(),
@@ -249,6 +251,7 @@ class BannersService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string $url url
+     * @param UploadedFile|null $image image file
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateBanner(
@@ -262,7 +265,8 @@ class BannersService
         int $spWidth,
         string $startAt,
         string $endAt,
-        string $url
+        string $url,
+        ?UploadedFile $image
     ): JsonResponse {
         $resource = BannersResource::toArrayForUpdate(
             $uuid,

@@ -151,6 +151,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_START_AT},
             $request->{BannerCreateRequest::KEY_END_AT},
             $request->{BannerCreateRequest::KEY_URL},
+            $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
     }
 
@@ -209,6 +210,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_START_AT},
             $request->{BannerCreateRequest::KEY_END_AT},
             $request->{BannerCreateRequest::KEY_URL},
+            $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
     }
 
