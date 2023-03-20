@@ -86,6 +86,16 @@ export const Banners: React.VFC = () => {
   }
 
   /**
+   * update file each object for preview
+   * @param {number} index
+   * @param {File} file
+   * @return {void}
+   */
+  const updateImageHandler = (index: number, file: File): void => {
+    updateBannerFileObject(index, file)
+  }
+
+  /**
    * 更新前のファイルを再取得
    * @param {number} index
    * @return {void}
@@ -142,16 +152,6 @@ export const Banners: React.VFC = () => {
     await deleteBannerRequest([banner.id], getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
-  }
-
-  /**
-   * update file each object for preview
-   * @param {number} index
-   * @param {File} file
-   * @return {void}
-   */
-  const updateImageHandler = (index: number, file: File): void => {
-    updateBannerFileObject(index, file)
   }
 
   return (
