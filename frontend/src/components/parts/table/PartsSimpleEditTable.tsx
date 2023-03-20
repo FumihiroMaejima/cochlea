@@ -42,7 +42,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
   onClickUpdate = undefined,
   onClickDelete = undefined,
   resetFileHandler = undefined,
-  updatePreviewImageHandler = undefined,
+  updateImageHandler = undefined,
   maxLength = undefined,
   required = undefined,
   disabled = false,
@@ -55,7 +55,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
    * @return {void}
    */
   const updateImage = (index: number, file: File): void => {
-    if (updatePreviewImageHandler) {
+    if (updateImageHandler) {
       updateImageHandler(index, file)
     }
   }
