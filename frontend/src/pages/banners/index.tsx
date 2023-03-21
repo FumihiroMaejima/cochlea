@@ -41,6 +41,7 @@ export const Banners: React.VFC = () => {
     updateBannerTextData,
     updateBannerFileObject,
     updateBannerRequest,
+    updateImageRequest,
     deleteBannerRequest,
   } = useBanners()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
@@ -113,6 +114,21 @@ export const Banners: React.VFC = () => {
     const banner = bannersState.banners[index]
     updateGlobalLoading(true)
     await updateBannerRequest(banner, getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
+  /**
+   * update image request handler
+   * @param {number} index
+   * @return {Promise<void>}
+   */
+  const updateRecordImageRequestHandler = async (
+    index: number
+  ): Promise<void> => {
+    const banner = bannersState.banners[index]
+    updateGlobalLoading(true)
+    await updateImageRequest(banner, getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -201,6 +217,7 @@ export const Banners: React.VFC = () => {
               )
             }}
             onClickUpdate={updateRecordRequestHandler}
+            onClickUpdateImgae={updateRecordImageRequestHandler}
             onClickDelete={deleteRecordRequestHandler}
             onResetFile={resetFileHandler}
             updateImageHandler={updateImageHandler}
