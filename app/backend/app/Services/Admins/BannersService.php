@@ -179,7 +179,7 @@ class BannersService
      *
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -193,7 +193,7 @@ class BannersService
     public function createBanner(
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
@@ -244,7 +244,7 @@ class BannersService
      * @param string $uuid uuid
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -259,7 +259,7 @@ class BannersService
         string $uuid,
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,

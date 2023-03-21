@@ -32,7 +32,8 @@ class BannerCreateRequest extends BannerBaseRequest
         return [
             'name'        => 'required|string|between:1,50',
             'detail'      => 'required|string|between:1,100',
-            'location'    => 'required|integer|min:1|max:3',
+            // 'location'    => 'required|integer|min:1|max:3',
+            'location'    => 'required|string',
             'pc_height'   => 'required|integer|min:1|max:1500',
             'pc_width'    => 'required|integer|min:1|max:1500',
             'sp_height'   => 'required|integer|min:1|max:1500',
