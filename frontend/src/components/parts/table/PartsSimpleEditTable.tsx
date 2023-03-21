@@ -19,6 +19,7 @@ type Props = {
   onChange?: ChangeEventHandler<HTMLInputElement>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onClickUpdate?: (i: number) => void
+  onClickUpdateImgae?: (i: number) => void
   onClickDelete?: (i: number) => void
   onResetFile?: (i: number) => void
   updateImageHandler?: (i: number, v: File) => void
@@ -40,6 +41,7 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
   onInput = undefined,
   onChange = undefined,
   onClickUpdate = undefined,
+  onClickUpdateImgae = undefined,
   onClickDelete = undefined,
   onResetFile = undefined,
   updateImageHandler = undefined,
@@ -125,6 +127,16 @@ export const PartsSimpleEditTable: React.VFC<Props> = ({
                 >
                   update
                 </button>
+                {onClickUpdateImgae !== undefined && (
+                  <button
+                    className="parts-simple-button parts-simple-button__color--black util-color__text--white my-1"
+                    onClick={() => {
+                      onClickUpdateImgae(j)
+                    }}
+                  >
+                    update image
+                  </button>
+                )}
                 <button
                   className="parts-simple-button parts-simple-button__color--red util-color__text--white"
                   onClick={() => {
