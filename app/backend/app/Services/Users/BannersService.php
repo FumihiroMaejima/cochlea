@@ -70,7 +70,6 @@ class BannersService
      */
     public function getImage(string $uuid): BinaryFileResponse
     {
-        // 更新用途で使う為lockをかける
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
@@ -81,11 +80,7 @@ class BannersService
         $banner = ArrayLibrary::toArray(ArrayLibrary::getFirst($banners->toArray()));
         $bannerId = !empty($banner) ? $banner[Banners::ID] : 0;
 
-        $extention = 'png';
-
-        $directory = Config::get('myappFile.upload.storage.local.images.banner');
-
-        $imagePath = "$directory$bannerId/$uuid.$extention";
+        $imagePath = BannerLibrary::getBannerStoragePathByBannerIdAndUuid($bannerId, $uuid, 'png');
 
         $file = FileLibrary::getFileStoream($imagePath);
 
