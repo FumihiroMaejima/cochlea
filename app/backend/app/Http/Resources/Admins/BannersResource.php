@@ -211,6 +211,18 @@ class BannersResource extends JsonResource
      *
      * @return array
      */
+    public static function toArrayForUpdateImage(): array
+    {
+        return [
+            self::RESOURCE_KEY_UPDATED_AT => TimeLibrary::getCurrentDateTime(),
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for delete.
+     *
+     * @return array
+     */
     public static function toArrayForDelete(): array
     {
         $dateTime = TimeLibrary::getCurrentDateTime();
