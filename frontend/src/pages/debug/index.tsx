@@ -95,7 +95,7 @@ export const Debug: React.VFC = () => {
               id="time"
               className="width-8 mx-2"
               type="datetime-local"
-              value={debugsState.fakerTime}
+              value={debugsState.fakerTime ?? ''}
               onInput={(e) => updateLocalFakerTime(e.currentTarget.value)}
               placeholder="time"
             />
