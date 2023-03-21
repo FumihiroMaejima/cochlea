@@ -342,11 +342,11 @@ export function useBanners() {
     if (!file) {
       throw new Error('No File')
     }
-    const form = createFileRequestFormData(file)
+    const form = createFileRequestFormData(file, 'image')
 
     return await useRequest()
-      .patchRequest<ServerRequestType<BannerType[]>>(
-        config.endpoint.banners.banner.replace(':id', String(banner.id)),
+      .postRequest<ServerRequestType<BannerType[]>>(
+        config.endpoint.banners.image.replace(':uuid', String(banner.uuid)),
         form,
         {
           headers: options.headers,
