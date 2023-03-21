@@ -10,7 +10,7 @@ import {
   AuthAppHeaderOptions,
 } from '@/types'
 import { makeDataUrl, downloadFile } from '@/util'
-import { getFileObjectByUrl } from '@/util/file'
+import { getFileObjectByUrl, createFileRequestFormData } from '@/util/file'
 /* import { ToastData, SelectBoxType } from '@/types/applications/index'
 import {
   validateName,
@@ -324,6 +324,46 @@ export function useBanners() {
   }
 
   /**
+   * update banner image request.
+   * @param {BannerType} banner banner record
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const updateImageRequest = async (
+    banner: BannerType,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+    if (!bannersState.images) {
+      throw new Error('No Image Setting')
+    }
+
+    const file = bannersState.images[banner.id]
+    if (!file) {
+      throw new Error('No File')
+    }
+    const form = createFileRequestFormData(file)
+
+    return await useRequest()
+      .patchRequest<ServerRequestType<BannerType[]>>(
+        config.endpoint.banners.banner.replace(':id', String(banner.id)),
+        form,
+        {
+          headers: options.headers,
+        }
+      )
+      .then((response) => {
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
    * delete banners request.
    * @param {number[]} bannerIds banner id list
    * @param {BaseAddHeaderResponse} header
@@ -394,6 +434,7 @@ export function useBanners() {
     getBannersCsvFileRequest,
     getBannerTemplateRequest,
     updateBannerRequest,
+    updateImageRequest,
     deleteBannerRequest,
   } as const
 }
