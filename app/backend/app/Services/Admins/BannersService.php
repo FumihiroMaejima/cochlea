@@ -364,39 +364,47 @@ class BannersService
      */
     public function uploadImage(string $uuid, UploadedFile $image): JsonResponse
     {
-        $banner = $this->getBannerByUuid($uuid);
-        // TODO 更新日時の更新
-        // $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+        DB::beginTransaction();
+        try {
+            // ロックをかける為transaction内で実行
+            $banner = $this->getBannerByUuid($uuid);
 
-        // アップロードするディレクトリ名を指定
-        $directory = Config::get('myappFile.upload.storage.local.images.banner');
-        $bannerId = $banner[Banners::ID];
+            // 画像の格納
+            // アップロードするディレクトリ名を指定
+            $directory = Config::get('myappFile.upload.storage.local.images.banner');
+            $bannerId = $banner[Banners::ID];
 
-        $fileResource = ImageLibrary::getFileResource($image);
-        // ファイル名(UUID)
-        $storageFileName = $uuid . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+            $fileResource = ImageLibrary::getFileResource($image);
+            // ファイル名(UUID)
+            $storageFileName = $uuid . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
 
-        $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
-        if (!$result) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::MESSAGE_500,
-                'store file failed.'
-            );
+            $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::MESSAGE_500,
+                    'store file failed.'
+                );
+            }
+
+            // 更新日時の更新
+            $resource = BannersResource::toArrayForUpdateImage();
+            $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+            DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status, 'data' => []], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            abort(500);
         }
-
-        // キャッシュの削除
-        CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-        return response()->json(
-            [
-                'message' => 'Success',
-                'status'  => 200,
-                'data'    => [
-                    'image'   => '?&ver=' . TimeLibrary::strToTimeStamp($banner[Banners::UPDATED_AT]),
-                ],
-            ],
-            200
-        );
     }
 
     /**
