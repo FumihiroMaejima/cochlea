@@ -25,6 +25,7 @@ use App\Library\Cache\CacheLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\File\FileLibrary;
 use App\Library\File\ImageLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
@@ -357,6 +358,47 @@ class BannersService
             DB::rollback();
             abort(500);
         }
+    }
+
+    /**
+     * 画像ファイルのアップロード
+     *
+     * @param string $uuid
+     * @param UploadedFile $image image file
+     * @return JsonResponse
+     */
+    public function uploadImage(string $uuid, UploadedFile $image): JsonResponse
+    {
+        $banner = $this->getBannerByUuid($uuid);
+        // TODO 更新日時の更新
+        // $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+        // アップロードするディレクトリ名を指定
+        $directory = Config::get('myappFile.upload.storage.local.images.banner');
+        $bannerId = $banner[Banners::ID];
+
+        $fileResource = ImageLibrary::getFileResource($image);
+        // ファイル名
+        $storageFileName = $fileResource[ImageLibrary::RESOURCE_KEY_NAME] . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+
+        $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
+        if (!$result) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::MESSAGE_500,
+                'store file failed.'
+            );
+        }
+
+        return response()->json(
+            [
+                'message' => 'Success',
+                'status'  => 200,
+                'data'    => [
+                    'image'   => '?&ver=' . TimeLibrary::strToTimeStamp($banner[Banners::UPDATED_AT]),
+                ],
+            ],
+            200
+        );
     }
 
     /**

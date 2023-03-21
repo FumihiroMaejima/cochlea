@@ -12,6 +12,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Banners\BannerCreateRequest;
 use App\Http\Requests\Admin\Banners\BannerDeleteRequest;
+use App\Http\Requests\Admin\Banners\BannerImagesImportRequest;
 use App\Http\Requests\Admin\Banners\BannersImportRequest;
 use App\Http\Requests\Admin\Banners\BannerUpdateRequest;
 use App\Services\Admins\BannersService;
@@ -83,6 +84,19 @@ class BannersController extends Controller
 
         // サービスの実行
         return $this->service->getImage($request->uuid);
+    }
+
+    /**
+     * 画像ファイルイメージのアップロード
+     *
+     * @param BannerImagesImportRequest $request
+     * @param string $uuid
+     * @return JsonResponse
+     */
+    public function uploadImage(BannerImagesImportRequest $request, string $uuid): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->uploadImage($uuid, $request->image);
     }
 
     /**
