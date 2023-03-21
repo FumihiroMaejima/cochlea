@@ -378,8 +378,8 @@ class BannersService
         $bannerId = $banner[Banners::ID];
 
         $fileResource = ImageLibrary::getFileResource($image);
-        // ファイル名
-        $storageFileName = $fileResource[ImageLibrary::RESOURCE_KEY_NAME] . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+        // ファイル名(UUID)
+        $storageFileName = $uuid . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
 
         $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
         if (!$result) {
