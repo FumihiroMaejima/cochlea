@@ -49,6 +49,7 @@ export type BannersServiceEndipont = {
   banners: string
   csv: string
   banner: string
+  image: string
   create: string
   delete: string
   fileTemplate: string

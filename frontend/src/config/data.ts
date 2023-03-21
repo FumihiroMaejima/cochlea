@@ -40,6 +40,7 @@ export const appConfig: IAppConfig = {
       banners: '/api/v1/admin/banners',
       csv: '/api/v1/admin/banners/csv',
       banner: '/api/v1/admin/banners/banner/:id',
+      image: '/api/v1/admin/banners/banner/image/:uuid',
       create: '/api/v1/admin/banners/banner',
       delete: '/api/v1/admin/banners/banner',
       fileTemplate: '/api/v1/admin/banners/file/template',

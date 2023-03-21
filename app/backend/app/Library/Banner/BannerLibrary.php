@@ -13,8 +13,8 @@ class BannerLibrary
     public const EXTENTION = 'png';
     public const DIRECTORY = 'images/';
     public const DIRECTORY_DEFAULT = 'default/';
-    public const ADMIN_BANNER_PATH = '/api/v1/admin/banners/banner/';
-    public const USER_BANNER_PATH = '/api/v1/banners/banner/';
+    public const ADMIN_BANNER_PATH = '/api/v1/admin/banners/banner/image/';
+    public const USER_BANNER_PATH = '/api/v1/banners/banner/image/';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_1 = '200x600px_default1';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_2 = '200x600px_default2';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_3 = '200x600px_default3';
