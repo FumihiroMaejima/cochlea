@@ -96,7 +96,7 @@ class BannersService
 
         $directory = Config::get('myappFile.upload.storage.local.images.banner');
 
-        $imagePath = "{$directory}{$bannerId}.{$extention}";
+        $imagePath = "$directory$bannerId/$uuid.$extention";
 
         $file = FileLibrary::getFileStoream($imagePath);
 
