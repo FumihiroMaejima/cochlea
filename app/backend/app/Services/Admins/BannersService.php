@@ -288,7 +288,7 @@ class BannersService
             // 画像がアップロードされている場合
             if ($image) {
                 // アップロードするディレクトリ名を指定
-                $directory = Config::get('myappFile.upload.storage.local.images.banner');
+                $directory = BannerLibrary::getBannerStorageDirctory();
                 $bannerId = $banner[Banners::ID];
 
                 $fileResource = ImageLibrary::getFileResource($image);
@@ -371,7 +371,7 @@ class BannersService
 
             // 画像の格納
             // アップロードするディレクトリ名を指定
-            $directory = Config::get('myappFile.upload.storage.local.images.banner');
+            $directory = BannerLibrary::getBannerStorageDirctory();
             $bannerId = $banner[Banners::ID];
 
             $fileResource = ImageLibrary::getFileResource($image);
