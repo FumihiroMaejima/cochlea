@@ -219,6 +219,9 @@ Route::group(['prefix' => 'v1'], function () {
                 phpinfo();
             })->name('user.debug.phpinfo');
 
+            // デバッグステータス
+            Route::get('status', [\App\Http\Controllers\Users\DebugController::class, 'getDebugStatus'])->name('user.debug.status.get');
+
             // stripe決済
             Route::group(['prefix' => 'checkout'], function () {
                 Route::get('/', [\App\Http\Controllers\Users\DebugController::class, 'checkout'])->name('user.debug.checkout.index');
