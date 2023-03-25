@@ -213,6 +213,43 @@ export function useCoins() {
   }
 
   /**
+   * downlaoad template file request.
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getCoinTemplateRequest = async (
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+    return await useRequest()
+      .getRequest<ServerRequestType<BlobPart>>(
+        config.endpoint.coins.fileTemplate,
+        {
+          headers: options.headers,
+          responseType: 'blob',
+        }
+      )
+      .then((response) => {
+        const data = response.data as unknown as BlobPart
+        // download
+        downloadFile(
+          makeDataUrl(data, response.headers['content-type']),
+          response.headers['content-disposition'].replace(
+            'attachment; filename=',
+            ''
+          )
+        )
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
    * update coins request.
    * @param {CoinType} coin coin record
    * @param {BaseAddHeaderResponse} header
@@ -317,6 +354,7 @@ export function useCoins() {
     updateCoinNumberData,
     getCoinsRequest,
     getCoinsCsvFileRequest,
+    getCoinTemplateRequest,
     updateCoinRequest,
     deleteCoinRequest,
   } as const

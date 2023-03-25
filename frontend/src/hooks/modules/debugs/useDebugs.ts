@@ -2,6 +2,7 @@
 import { useState, useReducer, useCallback } from 'react'
 import { useRequest } from '@/hooks/useRequest'
 import { appConfig } from '@/config/data'
+import { getTimeStamp } from '@/util/time'
 import {
   // IAppConfig,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,6 +14,10 @@ import {
 const config = { ...appConfig }
 
 export const editableRole = ['master', 'administrator']
+
+export type DebagHeaderType = {
+  'X-Faker-Time': number
+}
 
 export const debugData = {
   userId: 0,
@@ -32,10 +37,12 @@ export type DebugSelectKeys = Extract<DebugTypeKeys, 'fakerTimeStamp'>
 
 export type StateType = {
   status: DebugType
+  fakerTime?: string
 }
 
 export const initialData: StateType = {
   status: { ...debugData },
+  fakerTime: undefined,
 }
 
 export function useDebugs() {
@@ -60,9 +67,15 @@ export function useDebugs() {
     options: AuthAppHeaderOptions
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
     return await useRequest()
       .getRequest<ServerRequestType<DebugType>>(config.endpoint.debugs.status, {
-        headers: options.headers,
+        headers: { ...options.headers, ...debugHeader },
       })
       .then((response) => {
         const data = response.data as ServerRequestType<DebugType>
@@ -77,9 +90,31 @@ export function useDebugs() {
       })
   }
 
+  /**
+   * update local faker time value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateLocalFakerTime = (value: string): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: value,
+    })
+  }
+
+  /**
+   * update local faker time value.
+   * @param {string} datetime
+   * @return {DebagHeaderType}
+   */
+  const creteFakerTimeHeader = (datetime: string): DebagHeaderType => {
+    return { 'X-Faker-Time': getTimeStamp(datetime) }
+  }
+
   return {
     debugsState,
     getDebugStatusRequest,
+    updateLocalFakerTime,
   } as const
 }
 

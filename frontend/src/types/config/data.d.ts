@@ -29,6 +29,7 @@ export type AuthEndpoint = {
 export type EndpointType = {
   // authinfo: AuthInfoServiceEndipont
   admins: AdminsServiceEndipont
+  banners: BannersServiceEndipont
   coins: CoinsServiceEndipont
   members: MembersServiceEndipont
   roles: RolesServiceEndipont
@@ -42,6 +43,16 @@ export type AdminsServiceEndipont = {
   admin: string
   create: string
   roles: string
+}
+
+export type BannersServiceEndipont = {
+  banners: string
+  csv: string
+  banner: string
+  image: string
+  create: string
+  delete: string
+  fileTemplate: string
 }
 
 export type CoinsServiceEndipont = {

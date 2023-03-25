@@ -40,8 +40,11 @@ class OAuthUsers extends Model
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
-    //テーブル名指定
+    // テーブル名指定
     protected $table = 'oauth_users';
+
+    // カラムの自動更新をEloquentに許可
+    public $timestamps = true;
 
     /**
      * used in initializeSoftDeletes()
@@ -144,19 +147,20 @@ class OAuthUsers extends Model
      */
     public function getRecordByUserId(int $userId, bool $isLock = false): array|null
     {
-        $query = DB::table($this->getTable())->where(self::ID, '=', $userId);
+        $query = DB::table($this->getTable())->where(self::USER_ID, '=', $userId);
 
         if ($isLock) {
             $query->lockForUpdate();
         }
 
-        $record = $query->first();
+        $record = $query->get()->toArray();
 
         if (empty($record)) {
             return null;
         }
 
-        return ArrayLibrary::toArray($record);
+        return ArrayLibrary::getFirst(ArrayLibrary::toArray($record));
+        // return ArrayLibrary::toArray($record);
     }
 
     /**

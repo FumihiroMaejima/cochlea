@@ -24,6 +24,8 @@ use App\Library\Banner\BannerLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\File\FileLibrary;
+use App\Library\File\ImageLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
@@ -79,7 +81,6 @@ class BannersService
      */
     public function getImage(string $uuid): BinaryFileResponse
     {
-        // 更新用途で使う為lockをかける
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
@@ -90,11 +91,7 @@ class BannersService
         $banner = ArrayLibrary::toArray(ArrayLibrary::getFirst($banners->toArray()));
         $bannerId = !empty($banner) ? $banner[Banners::ID] : 0;
 
-        $extention = 'png';
-
-        $directory = Config::get('myappFile.upload.storage.local.images.banner');
-
-        $imagePath = "{$directory}{$bannerId}.{$extention}";
+        $imagePath = BannerLibrary::getBannerStoragePathByBannerIdAndUuid($bannerId, $uuid, 'png');
 
         $file = FileLibrary::getFileStoream($imagePath);
 
@@ -178,7 +175,7 @@ class BannersService
      *
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -186,19 +183,21 @@ class BannersService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string $url url
+     * @param UploadedFile|null $image image file
      * @return \Illuminate\Http\JsonResponse
      */
     public function createBanner(
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
         int $spWidth,
         string $startAt,
         string $endAt,
-        string $url
+        string $url,
+        ?UploadedFile $image
     ): JsonResponse {
         $resource = BannersResource::toArrayForCreate(
             UuidLibrary::uuidVersion4(),
@@ -241,7 +240,7 @@ class BannersService
      * @param string $uuid uuid
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -249,20 +248,22 @@ class BannersService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string $url url
+     * @param UploadedFile|null $image image file
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateBanner(
         string $uuid,
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
         int $spWidth,
         string $startAt,
         string $endAt,
-        string $url
+        string $url,
+        ?UploadedFile $image
     ): JsonResponse {
         $resource = BannersResource::toArrayForUpdate(
             $uuid,
@@ -283,6 +284,25 @@ class BannersService
             // ロックをかける為transaction内で実行
             $banner = $this->getBannerByUuid($uuid);
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+            // 画像がアップロードされている場合
+            if ($image) {
+                // アップロードするディレクトリ名を指定
+                $directory = BannerLibrary::getBannerStorageDirctory();
+                $bannerId = $banner[Banners::ID];
+
+                $fileResource = ImageLibrary::getFileResource($image);
+                // ファイル名
+                $storageFileName = $fileResource[ImageLibrary::RESOURCE_KEY_NAME] . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+
+                $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
+                if (!$result) {
+                    throw new MyApplicationHttpException(
+                        StatusCodeMessages::MESSAGE_500,
+                        'store file failed.'
+                    );
+                }
+            }
 
             DB::commit();
 
@@ -328,6 +348,58 @@ class BannersService
             $status = ($deleteRowCount > 0) ? 200 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
+        } catch (Exception $e) {
+            Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
+            DB::rollback();
+            abort(500);
+        }
+    }
+
+    /**
+     * 画像ファイルのアップロード
+     *
+     * @param string $uuid
+     * @param UploadedFile $image image file
+     * @return JsonResponse
+     */
+    public function uploadImage(string $uuid, UploadedFile $image): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            // ロックをかける為transaction内で実行
+            $banner = $this->getBannerByUuid($uuid);
+
+            // 画像の格納
+            // アップロードするディレクトリ名を指定
+            $directory = BannerLibrary::getBannerStorageDirctory();
+            $bannerId = $banner[Banners::ID];
+
+            $fileResource = ImageLibrary::getFileResource($image);
+            // ファイル名(UUID)
+            $storageFileName = $uuid . '.' . $fileResource[ImageLibrary::RESOURCE_KEY_EXTENTION];
+
+            $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::MESSAGE_500,
+                    'store file failed.'
+                );
+            }
+
+            // 更新日時の更新
+            $resource = BannersResource::toArrayForUpdateImage();
+            $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+            DB::commit();
+
+            // キャッシュの削除
+            CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
+
+            // 更新されていない場合は304
+            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
+            $status = ($updatedRowCount > 0) ? 200 : 304;
+
+            return response()->json(['message' => $message, 'status' => $status, 'data' => []], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

@@ -1,0 +1,40 @@
+# /admin/banners/banner/{id}:
+  patch:
+    tags:
+      - banners
+    summary: Update Banner
+    description: ""
+    operationId: UpdateBannerWithForm
+    parameters:
+      - name: id
+        in: path
+        description: ID of Banner
+        required: true
+        schema:
+          type: integer
+          format: int64
+    requestBody:
+      $ref: "../../../../components/requestBodies/createBannerWithForm.yaml"
+    responses:
+      "200":
+        description: successful Update
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiSuccessResponse.yaml"
+      "405":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+      "422":
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              $ref: "../../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []

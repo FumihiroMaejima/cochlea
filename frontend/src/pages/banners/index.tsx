@@ -8,41 +8,42 @@ import {
 } from '@/components/parts/table/PartsSimpleTable'
 import { PartsSimpleEditTable } from '@/components/parts/table/PartsSimpleEditTable'
 
-import { useCoins, CoinType } from '@/hooks/modules/coins/useCoins'
+import { useBanners, BannerType } from '@/hooks/modules/banners/useBanners'
 import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProviderContainer'
 import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
 import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
-/* const simpleTableHeaderData: TableHeaderType[] = [
-  { label: 'label1' },
-  { label: 'label2' },
-  { label: 'label3' },
-] */
 const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'id' },
+  { label: 'uuid' },
   { label: 'name' },
   { label: 'detail' },
-  { label: 'price' },
-  { label: 'cost' },
+  { label: 'location' },
+  { label: 'pc_height' },
+  { label: 'pc_width' },
+  { label: 'sp_height' },
+  { label: 'sp_width' },
   { label: 'start_at' },
   { label: 'end_at' },
+  { label: 'url' },
   { label: 'image' },
   { label: 'created_at' },
   { label: 'updated_at' },
-  { label: 'deleted_at' },
 ]
 
-export const Coins: React.VFC = () => {
+export const Banners: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const {
-    coinsState,
-    getCoinsRequest,
-    getCoinsCsvFileRequest,
-    getCoinTemplateRequest,
-    updateCoinTextData,
-    updateCoinRequest,
-    deleteCoinRequest,
-  } = useCoins()
+    bannersState,
+    getBannersRequest,
+    getBannersCsvFileRequest,
+    getBannerTemplateRequest,
+    updateBannerTextData,
+    updateBannerFileObject,
+    updateBannerRequest,
+    updateImageRequest,
+    deleteBannerRequest,
+  } = useBanners()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -55,11 +56,9 @@ export const Coins: React.VFC = () => {
       if (getAuthId() !== null) {
         updateGlobalLoading(true)
         /* await getAdminsRequest(getHeaderOptions()).then((res) => {
-          // console.log('response: ' + JSON.stringify(res, null, 2))
           updateGlobalLoading(false)
         }) */
-        await getCoinsRequest(getHeaderOptions()).then((res) => {
-          // console.log('response: ' + JSON.stringify(res, null, 2))
+        await getBannersRequest(getHeaderOptions()).then((res) => {
           updateGlobalLoading(false)
         })
       }
@@ -71,20 +70,39 @@ export const Coins: React.VFC = () => {
   /**
    * edit data handler
    * @param {number} index
-   * @param {Extract<keyof CoinType, 'name' | 'detail'>} key
+   * @param {Extract<keyof BannerType, 'name' | 'detail' | 'url'>} key
    * @param {string} value
    * @return {void}
    */
   const editRecordHandler = (
     index: number,
-    key: Extract<keyof CoinType, 'name' | 'detail'>,
+    key: Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
     value: string
   ): void => {
     // TODO remove
     // 追加になる。
     // setTodo([...todos, { ...todos[index], ...{ [key]: value } }])
     // setTodo([...todos, { ...todos[index], [key]: value }])
-    updateCoinTextData(index, key, value)
+    updateBannerTextData(index, key, value)
+  }
+
+  /**
+   * update file each object for preview
+   * @param {number} index
+   * @param {File} file
+   * @return {void}
+   */
+  const updateImageHandler = (index: number, file: File): void => {
+    updateBannerFileObject(index, file)
+  }
+
+  /**
+   * 更新前のファイルを再取得
+   * @param {number} index
+   * @return {void}
+   */
+  const resetFileHandler = (index: number): void => {
+    updateBannerFileObject(index, undefined)
   }
 
   /**
@@ -93,9 +111,24 @@ export const Coins: React.VFC = () => {
    * @return {Promise<void>}
    */
   const updateRecordRequestHandler = async (index: number): Promise<void> => {
-    const coin = coinsState.coins[index]
+    const banner = bannersState.banners[index]
     updateGlobalLoading(true)
-    await updateCoinRequest(coin, getHeaderOptions()).then((res) => {
+    await updateBannerRequest(banner, getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
+  /**
+   * update image request handler
+   * @param {number} index
+   * @return {Promise<void>}
+   */
+  const updateRecordImageRequestHandler = async (
+    index: number
+  ): Promise<void> => {
+    const banner = bannersState.banners[index]
+    updateGlobalLoading(true)
+    await updateImageRequest(banner, getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -107,7 +140,7 @@ export const Coins: React.VFC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
   const onClickDownLoadCsvButtonHandler = async (): Promise<void> => {
     updateGlobalLoading(true)
-    await getCoinsCsvFileRequest(getHeaderOptions()).then((res) => {
+    await getBannersCsvFileRequest(getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -119,7 +152,7 @@ export const Coins: React.VFC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
   const onClickDownLoadTemplateButtonHandler = async (): Promise<void> => {
     updateGlobalLoading(true)
-    await getCoinTemplateRequest(getHeaderOptions()).then((res) => {
+    await getBannerTemplateRequest(getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -130,18 +163,18 @@ export const Coins: React.VFC = () => {
    * @return {Promise<void>}
    */
   const deleteRecordRequestHandler = async (index: number): Promise<void> => {
-    const coin = coinsState.coins[index]
+    const banner = bannersState.banners[index]
     updateGlobalLoading(true)
-    await deleteCoinRequest([coin.id], getHeaderOptions()).then((res) => {
+    await deleteBannerRequest([banner.id], getHeaderOptions()).then((res) => {
       updateGlobalLoading(false)
     })
   }
 
   return (
     <div className="admins page-container page-container__mx-auto">
-      <PartsSimpleHeading text="コイン一覧 ページ" color="dark-grey" />
+      <PartsSimpleHeading text="バナー一覧 ページ" color="dark-grey" />
       <div className="mx-2">
-        <PartsLabelHeading text="コイン一覧" color="dark-grey" />
+        <PartsLabelHeading text="バナー一覧" color="dark-grey" />
         <div className="mxy-2 util-color__text--dark-grey">
           <PartsSimpleButton
             text="downlaod csv"
@@ -156,33 +189,38 @@ export const Coins: React.VFC = () => {
           />
         </div>
         <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
-          <PartsSimpleTable
+          {/* // TODO 一時非表示 */}
+          {/* <PartsSimpleTable
             headers={simpleTableHeaderData}
-            items={coinsState.coins}
-          />
+            items={bannersState.banners}
+          /> */}
         </div>
       </div>
 
       <div className="mx-2">
-        <PartsLabelHeading text="コイン一覧 編集可能" color="dark-grey" />
+        <PartsLabelHeading text="バナー一覧 編集可能" color="dark-grey" />
         <div className="mxy-2 util-color__text--dark-grey over-flow-auto">
           <PartsSimpleEditTable
             headers={simpleTableHeaderData}
-            items={coinsState.coins}
+            items={bannersState.banners}
+            fileObjects={bannersState.images}
             editable={true}
-            editableKeys={['name', 'detail']}
+            editableKeys={['name', 'detail', 'url']}
             onInput={(index, key, value) => {
               /* console.log('form edit1 index:', index)
               console.log('form edit2 key:', key)
               console.log('form edit3 value:', value) */
               editRecordHandler(
                 index,
-                key as Extract<keyof CoinType, 'name' | 'detail'>,
+                key as Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
                 value as unknown as string
               )
             }}
             onClickUpdate={updateRecordRequestHandler}
+            onClickUpdateImgae={updateRecordImageRequestHandler}
             onClickDelete={deleteRecordRequestHandler}
+            onResetFile={resetFileHandler}
+            updateImageHandler={updateImageHandler}
           />
         </div>
       </div>
@@ -190,4 +228,4 @@ export const Coins: React.VFC = () => {
   )
 }
 
-export default Coins
+export default Banners
