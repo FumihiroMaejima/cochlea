@@ -2,6 +2,7 @@
 import React, {
   FormEventHandler,
   FocusEventHandler,
+  useEffect,
   useRef,
   useState,
   DragEvent,
@@ -53,6 +54,15 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
     useState<boolean>(false)
   const [isDraged, setIsDraged] = useState<boolean>(false)
   const refElement = useRef<HTMLInputElement>(null) // reference to container
+
+  // mount後に実行する処理
+  const onDidMount = (): void => {
+    // プレビュー設定ありかつファイルデータがある場合
+    if (isOpenPreview && value) {
+      createPreviewImage(value)
+    }
+  }
+  useEffect(onDidMount, [])
 
   // methods
   /**

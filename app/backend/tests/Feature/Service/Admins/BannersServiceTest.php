@@ -70,7 +70,7 @@ class BannersServiceTest extends AdminServiceBaseTestCase
     public function testCreateBannerSuccess(
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
@@ -123,7 +123,7 @@ class BannersServiceTest extends AdminServiceBaseTestCase
         // データの整形
         $testCase['no_name'][BannerBaseRequest::KEY_NAME]           = '';
         $testCase['no_detail'][BannerBaseRequest::KEY_DETAIL]       = '';
-        $testCase['no_location'][BannerBaseRequest::KEY_LOCATION]   = 0;
+        $testCase['no_location'][BannerBaseRequest::KEY_LOCATION]   = null;
         $testCase['no_pc_height'][BannerBaseRequest::KEY_PC_HEIGHT] = 0;
         $testCase['no_pc_width'][BannerBaseRequest::KEY_PC_WIDTH]   = 0;
         $testCase['no_sp_height'][BannerBaseRequest::KEY_SP_HEIGHT] = 0;
@@ -144,7 +144,7 @@ class BannersServiceTest extends AdminServiceBaseTestCase
     public function testCreateBanner422Failed(
         string $name,
         string $detail,
-        int $location,
+        ?string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
@@ -233,7 +233,7 @@ class BannersServiceTest extends AdminServiceBaseTestCase
         $response = $this->json('PATCH', route('admin.banners.update', [BannerBaseRequest::KEY_UUID => $uuid]), [
             BannerBaseRequest::KEY_NAME     => 'test banner name4',
             BannerBaseRequest::KEY_DETAIL   => 'test banner detail',
-            BannerBaseRequest::KEY_LOCATION => 3,
+            BannerBaseRequest::KEY_LOCATION => 'home',
             BannerBaseRequest::KEY_PC_HEIGHT => 100,
             BannerBaseRequest::KEY_PC_WIDTH => 100,
             BannerBaseRequest::KEY_SP_HEIGHT => 100,

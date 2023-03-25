@@ -1,0 +1,29 @@
+# /admin/banners/csv:
+  get:
+    tags:
+      - banners
+    summary: Find banners CSV data
+    description: Returns banners CSV data
+    responses:
+      "200":
+        description: successful operation
+        content:
+          application/csv:
+            schema:
+              $ref: "../../../schemas/files/FileData.yaml"
+      "404":
+        description: banners not found
+        content:
+          application/csv:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+      default:
+        description: unsuccessful operation
+        content:
+          application/csv:
+            schema:
+              $ref: "../../../schemas/request/ApiErrorResponse.yaml"
+    security:
+      - authenticaion_key: []
+      - authority_key: []
+      - auth_id: []

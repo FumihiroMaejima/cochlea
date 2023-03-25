@@ -1,5 +1,6 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { PartsSimpleButton } from '@/components/parts/button/PartsSimpleButton'
+import { PartsSimpleTextField } from '@/components/parts/form/PartsSimpleTextField'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
 import {
@@ -15,7 +16,8 @@ import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
 export const Debug: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { debugsState, getDebugStatusRequest } = useDebugs()
+  const { debugsState, getDebugStatusRequest, updateLocalFakerTime } =
+    useDebugs()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -36,6 +38,18 @@ export const Debug: React.VFC = () => {
     asyncInitPageHandler()
   }
   useEffect(onDidMount, [])
+
+  /**
+   * set faker time & and re request debug status.
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickFakerTimeSetButtonHandler = async (): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugStatusRequest(getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
 
   return (
     <div className="admins page-container page-container__mx-auto">
@@ -72,6 +86,27 @@ export const Debug: React.VFC = () => {
             <p>
               <b>userAgent</b> : {debugsState.status.userAgent}
             </p>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              時間偽装時刻
+            </label>
+            <PartsSimpleTextField
+              id="time"
+              className="width-8 mx-2"
+              type="datetime-local"
+              value={debugsState.fakerTime ?? ''}
+              onInput={(e) => updateLocalFakerTime(e.currentTarget.value)}
+              placeholder="time"
+            />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+                onClick={onClickFakerTimeSetButtonHandler}
+              />
+            </span>
           </div>
         </div>
       </div>

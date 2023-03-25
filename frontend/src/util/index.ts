@@ -147,6 +147,28 @@ export const readFileDataAsDataURL = async (
 }
 
 /**
+ * ファイルの読み込みとデータをバイナリストリングとして取得
+ * @param {File} file
+ * @return {Promise<string | ArrayBuffer | null>}
+ */
+export const readFileDataAsBinaryString = async (
+  file: File
+): Promise<string | ArrayBuffer | null> => {
+  return new Promise(
+    (resolve: (param: string | ArrayBuffer | null) => void) => {
+      const reader = new FileReader()
+      // reader.onload = (e: ProgressEvent) => {
+      reader.onload = () => {
+        // 読み込んだ結果をresolve(解決)する
+        resolve(reader.result)
+      }
+      // 読み込み
+      reader.readAsBinaryString(file)
+    }
+  )
+}
+
+/**
  * 日付の形式(yyyy/mm/dd)のチェック
  * @param {string} value
  * @return {boolean}

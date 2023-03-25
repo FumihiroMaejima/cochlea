@@ -18,6 +18,8 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+  - name: banners
+    description: Banners information
   - name: coins
     description: Coins information
   - name: events
@@ -73,6 +75,23 @@ paths:
           type: integer
           format: int64
     $ref: "./data/paths/admin/roles/role/id.yaml"
+  /admin/banners:
+    $ref: "./data/paths/admin/banners/index.yaml"
+  /admin/banners/csv:
+    $ref: "./data/paths/admin/banners/csv.yaml"
+  /admin/banners/template:
+    $ref: "./data/paths/admin/banners/template.yaml"
+  /admin/banners/banner:
+    $ref: "./data/paths/admin/banners/banner/index.yaml"
+  "/admin/banners/banner/{uuid}":
+    parameters:
+      - name: uuid
+        in: path
+        description: UUID of banner
+        required: true
+        schema:
+          type: string
+    $ref: "./data/paths/admin/banners/banner/uuid.yaml"
   /admin/coins:
     $ref: "./data/paths/admin/coins/index.yaml"
   /admin/coins/csv:
@@ -153,6 +172,8 @@ paths:
     $ref: "./data/paths/admin/auth/refresh.yaml"
   /admin/auth/self:
     $ref: "./data/paths/admin/auth/self.yaml"
+  /user/banners:
+    $ref: "./data/paths/user/banners/index.yaml"
   /user/coins:
     $ref: "./data/paths/user/coins/index.yaml"
   /user/events:

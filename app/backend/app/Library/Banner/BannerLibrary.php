@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Banners;
 
 class BannerLibrary
@@ -13,8 +14,8 @@ class BannerLibrary
     public const EXTENTION = 'png';
     public const DIRECTORY = 'images/';
     public const DIRECTORY_DEFAULT = 'default/';
-    public const ADMIN_BANNER_PATH = '/api/v1/admin/banners/banner/';
-    public const USER_BANNER_PATH = '/api/v1/banners/banner/';
+    public const ADMIN_BANNER_PATH = '/api/v1/admin/banners/banner/image/';
+    public const USER_BANNER_PATH = '/api/v1/banners/banner/image/';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_1 = '200x600px_default1';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_2 = '200x600px_default2';
     public const DEFAULT_FILE_IMAGE_NAME_200X600_3 = '200x600px_default3';
@@ -77,6 +78,29 @@ class BannerLibrary
     }
 
     /**
+     * get banner storage directory.
+     *
+     * @return string
+     */
+    public static function getBannerStorageDirctory(): string
+    {
+        return Config::get('myappFile.upload.storage.local.images.banner');
+    }
+
+    /**
+     * get banner storage path by banner id & uuid.
+     *
+     * @param int $bannerId
+     * @param string $uuid
+     * @param string $extention
+     * @return string
+     */
+    public static function getBannerStoragePathByBannerIdAndUuid(int $bannerId, string $uuid, string $extention = 'png'): string
+    {
+        return self::getBannerStorageDirctory() . "$bannerId/$uuid.$extention";
+    }
+
+    /**
      * get banner path at admin service.
      *
      * @param array $banner banner record
@@ -84,8 +108,7 @@ class BannerLibrary
      */
     public static function getAdminServiceBannerPath(array $banner): string
     {
-        return config('app.url') . self::ADMIN_BANNER_PATH . $banner[Banners::UUID];
-        ;
+        return config('app.url') . self::ADMIN_BANNER_PATH . $banner[Banners::UUID] . '?ver=' . TimeLibrary::strToTimeStamp($banner[Banners::UPDATED_AT]);
     }
 
     /**
@@ -96,7 +119,6 @@ class BannerLibrary
      */
     public static function getUserServiceBannerPath(array $banner): string
     {
-        return config('app.url') . self::USER_BANNER_PATH . $banner[Banners::UUID];
-        ;
+        return config('app.url') . self::USER_BANNER_PATH . $banner[Banners::UUID] . '?ver=' . TimeLibrary::strToTimeStamp($banner[Banners::UPDATED_AT]);
     }
 }

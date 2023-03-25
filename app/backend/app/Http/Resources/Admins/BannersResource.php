@@ -61,13 +61,23 @@ class BannersResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
-            // 画像URL設定
-            $item->{self::RESOURCE_KEY_IMAGE} = BannerLibrary::getAdminServiceBannerPath(ArrayLibrary::toArray($item));
-
-            $item->{Banners::START_AT} = TimeLibrary::format($item->{Banners::START_AT});
-            $item->{Banners::END_AT} = TimeLibrary::format($item->{Banners::END_AT});
-
-            $response[self::RESOURCE_KEY_DATA][] = $item;
+            $response[self::RESOURCE_KEY_DATA][] = [
+                Banners::ID              => $item->{Banners::ID},
+                Banners::UUID            => $item->{Banners::UUID},
+                Banners::NAME            => $item->{Banners::NAME},
+                Banners::DETAIL          => $item->{Banners::DETAIL},
+                Banners::LOCATION        => $item->{Banners::LOCATION},
+                Banners::PC_HEIGHT       => $item->{Banners::PC_HEIGHT},
+                Banners::PC_WIDTH        => $item->{Banners::PC_WIDTH},
+                Banners::SP_HEIGHT       => $item->{Banners::SP_HEIGHT},
+                Banners::SP_WIDTH        => $item->{Banners::SP_WIDTH},
+                Banners::START_AT        => TimeLibrary::format($item->{Banners::START_AT}),
+                Banners::END_AT          => TimeLibrary::format($item->{Banners::END_AT}),
+                Banners::URL             => $item->{Banners::URL},
+                self::RESOURCE_KEY_IMAGE => BannerLibrary::getUserServiceBannerPath(ArrayLibrary::toArray($item)),   // 画像URL設定
+                Banners::CREATED_AT      => $item->{Banners::CREATED_AT},
+                Banners::UPDATED_AT      => $item->{Banners::UPDATED_AT},
+            ];
         }
 
         return $response;
@@ -106,7 +116,7 @@ class BannersResource extends JsonResource
      * @param string $uuid uuid
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -120,7 +130,7 @@ class BannersResource extends JsonResource
         string $uuid,
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
@@ -154,7 +164,7 @@ class BannersResource extends JsonResource
      * @param string $uuid uuid
      * @param string $name name
      * @param string $detail detail
-     * @param int $location location vlaue
+     * @param string $location location vlaue
      * @param int $pcHeight pc height
      * @param int $pcWidth pc width
      * @param int $spHeight sp height
@@ -168,7 +178,7 @@ class BannersResource extends JsonResource
         string $uuid,
         string $name,
         string $detail,
-        int $location,
+        string $location,
         int $pcHeight,
         int $pcWidth,
         int $spHeight,
@@ -193,6 +203,18 @@ class BannersResource extends JsonResource
             self::RESOURCE_KEY_URL        => $url,
             self::RESOURCE_KEY_CREATED_AT => $dateTime,
             self::RESOURCE_KEY_UPDATED_AT => $dateTime
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for delete.
+     *
+     * @return array
+     */
+    public static function toArrayForUpdateImage(): array
+    {
+        return [
+            self::RESOURCE_KEY_UPDATED_AT => TimeLibrary::getCurrentDateTime(),
         ];
     }
 

@@ -47,7 +47,7 @@ return [
                 'success' => [
                     'name'         => 'test name',
                     'detail'       => 'banners`s detail.',
-                    'location'     => 1,
+                    'location'     => 'home',
                     'pc_height'    => 1000,
                     'pc_width'     => 1000,
                     'sp_height'    => 1000,
@@ -68,7 +68,7 @@ return [
                     (object)[
                         'name'         => 'test name',
                         'detail'       => 'banners`s detail.',
-                        'location'     => 1,
+                        'location'     => 'home',
                         'pc_height'    => 1000,
                         'pc_width'     => 1000,
                         'sp_height'    => 1000,

@@ -2,6 +2,7 @@ import React, { MouseEventHandler } from 'react'
 
 type ColorType = 'black' | 'dark-grey' | 'blue' | 'green' | 'red' | 'white'
 type Props = {
+  className?: string
   text?: string
   color?: ColorType
   textColor?: ColorType
@@ -10,6 +11,7 @@ type Props = {
 }
 
 export const PartsSimpleButton: React.VFC<Props> = ({
+  className = undefined,
   text = 'text',
   color = 'dark-grey',
   textColor = 'white',
@@ -25,7 +27,7 @@ export const PartsSimpleButton: React.VFC<Props> = ({
       // className={`parts-simple-button util-color__bg--${color} util-color__text--${textColor}`}
       className={`parts-simple-button parts-simple-button__color--${color} util-color__text--${textColor}${
         disabled ? ' parts-simple-button__disabled' : ''
-      }`}
+      }${className ? ' ' + className : ''}`}
       onClick={onClick}
       disabled={disabled}
     >

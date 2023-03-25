@@ -124,3 +124,23 @@
     overflow: $direction;
   }
 }
+
+.app-container {
+  width: 100%;
+
+  @include min-screen($page-container-mobile-breakpont) {
+    max-width: $page-container-mobile-breakpont;
+  }
+
+  @include min-screen($page-container-tablet-breakpont) {
+    max-width: $page-container-tablet-breakpont;
+  }
+
+  @include min-screen($page-container-pc-breakpont) {
+    max-width: $page-container-pc-breakpont;
+  }
+
+  &__mx-auto {
+    margin: 0 auto 0 auto;
+  }
+}

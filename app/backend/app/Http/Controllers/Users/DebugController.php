@@ -64,6 +64,27 @@ class DebugController extends Controller
     }
 
     /**
+     * デバッグ関連情報取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getDebugStatus(Request $request): JsonResponse
+    {
+        $userId = self::getUserId($request, true);
+        $sessionId = self::getSessionId($request);
+        $fakerTimeStamp = self::getFakerTimeStamp($request);
+        return $this->service->getDebugStatus(
+            $userId,
+            $sessionId,
+            $fakerTimeStamp,
+            $request->getClientIp(),
+            $request->userAgent()
+        );
+    }
+
+    /**
      * Create Stipe Checkout Session.
      *
      * @param \Illuminate\Http\Request $request

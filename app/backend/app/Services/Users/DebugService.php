@@ -24,6 +24,8 @@ use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterfa
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
+use App\Models\Masters\OAuthUsers;
+use App\Models\User;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -64,6 +66,44 @@ class DebugService
         $this->userCoinPaymentStatusRepository = $userCoinPaymentStatusRepository;
         $this->userCoinsRepository = $userCoinsRepository;
         $this->userCoinPaymentLogRepository = $userCoinPaymentLogRepository;
+    }
+
+    /**
+     * デバッグ関連情報取得と整形
+     *
+     * @param int $userId
+     * @param ?string $sessionId
+     * @param ?int $fakerTimeStamp
+     * @param ?string $clinetIp
+     * @param ?string $userAgent
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getDebugStatus(
+        int $userId,
+        ?string $sessionId,
+        ?int $fakerTimeStamp,
+        ?string $clinetIp,
+        ?string $userAgent
+    ): JsonResponse {
+        $user = $userId > 0 ? (new User())->getRecordByUserId($userId) : null;
+        $oAuthUser = (new OAuthUsers())->getRecordByUserId($userId);
+
+        $response = [
+            'userId' => $userId,
+            'sessionId' => $sessionId,
+            'email' => $user[User::EMAIL] ?? null,
+            'name' => $user[User::NAME] ?? null,
+            'fakerTimeStamp' => $fakerTimeStamp,
+            'host' => config('app.url'),
+            'clinetIp' => $clinetIp,
+            'userAgent' => $userAgent,
+            OAuthUsers::GIT_HUB_ID => $oAuthUser[OAuthUsers::GIT_HUB_ID] ?? null,
+            OAuthUsers::TWITTER_ID => $oAuthUser[OAuthUsers::TWITTER_ID] ?? null,
+            OAuthUsers::FACEBOOK_ID => $oAuthUser[OAuthUsers::FACEBOOK_ID] ?? null,
+        ];
+
+        return response()->json(['data' => $response, 'status' => 200]);
     }
 
     /**
