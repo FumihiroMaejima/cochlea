@@ -38,14 +38,17 @@ class TableMemoryLibrary
         string $sort = 'DESC'
     ): array {
         $baseValue = self::BASE_UNIT_VALUE;
+        $allMegaByte = self::LABEL_ALL_MB;
+        $dataMegaByte = self::LABEL_DATA_MB;
+        $indexMegaByte = self::LABEL_INDEX_MB;
 
         $collection = DB::connection($connection)
             ->table('INFORMATION_SCHEMA.TABLES')
             ->select(DB::raw("
                 TABLE_SCHEMA,
-                FLOOR(SUM(DATA_LENGTH + INDEX_LENGTH) / $baseValue / $baseValue) AS ALL_MB,
-                FLOOR(SUM((DATA_LENGTH) / $baseValue / $baseValue)) AS DATA_MB,
-                FLOOR(SUM((INDEX_LENGTH) / $baseValue / $baseValue)) AS INDEX_MB
+                FLOOR(SUM(DATA_LENGTH + INDEX_LENGTH) / $baseValue / $baseValue) AS $allMegaByte,
+                FLOOR(SUM((DATA_LENGTH) / $baseValue / $baseValue)) AS $dataMegaByte,
+                FLOOR(SUM((INDEX_LENGTH) / $baseValue / $baseValue)) AS $indexMegaByte
             "))
             ->groupBy('TABLE_SCHEMA')
             ->orderByRaw("SUM(DATA_LENGTH + INDEX_LENGTH) $sort")
@@ -75,6 +78,9 @@ class TableMemoryLibrary
         $engine = self::LABEL_DB_ENGINE;
         $rows = self::LABEL_ROWS;
         $avgRecordLength = self::LABEL_AVG_RECORD_LENGTH;
+        $allMegaByte = self::LABEL_ALL_MB;
+        $dataMegaByte = self::LABEL_DATA_MB;
+        $indexMegaByte = self::LABEL_INDEX_MB;
 
         $collection = DB::connection($connection)
             ->table('INFORMATION_SCHEMA.TABLES')
@@ -83,12 +89,11 @@ class TableMemoryLibrary
                 ENGINE AS $engine,
                 TABLE_ROWS AS $rows,
                 AVG_ROW_LENGTH AS $avgRecordLength,
-                FLOOR((DATA_LENGTH + INDEX_LENGTH) / $baseValue / $baseValue) AS ALL_MB,
-                FLOOR(DATA_LENGTH / $baseValue / $baseValue) AS DATA_MB,
-                FLOOR(INDEX_LENGTH / $baseValue / $baseValue) AS INDEX_MB
+                FLOOR((DATA_LENGTH + INDEX_LENGTH) / $baseValue / $baseValue) AS $allMegaByte,
+                FLOOR(DATA_LENGTH / $baseValue / $baseValue) AS $dataMegaByte,
+                FLOOR(INDEX_LENGTH / $baseValue / $baseValue) AS $indexMegaByte
             "))
             ->whereRaw("TABLE_SCHEMA = database()")
-            // ->groupBy('TABLE_SCHEMA')
             ->orderByRaw("(DATA_LENGTH + INDEX_LENGTH) $sort")
             ->get()
             ->toArray();
