@@ -272,6 +272,7 @@ Route::group(['prefix' => 'v1'], function () {
             // DB関係
             Route::group(['prefix' => 'databases'], function () {
                 Route::get('schema', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaList'])->name('user.debug.databases.schema');
+                Route::get('schema/size', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaSizeList'])->name('user.debug.databases.schema.size');
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
             });
         });

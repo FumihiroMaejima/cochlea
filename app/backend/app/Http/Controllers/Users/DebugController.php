@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Database\DatabaseLibrary;
+use App\Library\Database\TableMemoryLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\File\QRCodeLibrary;
 use App\Library\Encrypt\EncryptLibrary;
@@ -346,6 +347,19 @@ class DebugController extends Controller
     {
         return response()->json(
             ['data' => DatabaseLibrary::getSchemaListByConnection($request->connection ?? null)]
+        );
+    }
+
+    /**
+     * DBごとのサイズの取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getSchemaSizeList(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => TableMemoryLibrary::getDatabaseMemories($request->connection ?? 'mysql')]
         );
     }
 
