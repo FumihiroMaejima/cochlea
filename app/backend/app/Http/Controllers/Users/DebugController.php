@@ -364,6 +364,19 @@ class DebugController extends Controller
     }
 
     /**
+     * テーブルごとのサイズの取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTableSizeList(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => TableMemoryLibrary::getTableMemories($request->connection ?? 'mysql')]
+        );
+    }
+
+    /**
      * テーブル情報の取得
      *
      * @param Request $request
