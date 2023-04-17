@@ -58,12 +58,7 @@ class BannersTableSeeder extends BaseSeeder
         foreach (range(1, $this->count) as $i) {
             $row = $template;
 
-            // TODO テスト時の調整
-            $uuid = (config('app.env') === 'tesintg')
-                ? BannerLibrary::getTestBannerUuidByNumber($i)
-                : UuidLibrary::uuidVersion4();
-
-            $row[Banners::UUID]   = $uuid;
+            $row[Banners::UUID]   = BannerLibrary::getTestBannerUuidByNumber($i);
             $row[Banners::NAME]   = 'banner_' . (string)($i);
             $row[Banners::DETAIL] = 'testBanner' . (string)($i) . '';
             $row[Banners::LOCATION]   = Banners::LOCATION_VALUE_LIST[(($i % 3) + 1)];

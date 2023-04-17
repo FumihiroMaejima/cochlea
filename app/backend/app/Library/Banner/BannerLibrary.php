@@ -34,6 +34,10 @@ class BannerLibrary
      */
     public static function getTestBannerUuidByNumber(int $value): string
     {
+        // 10以上は16進数に変換
+        if ($value > 9) {
+            $value = dechex($value);
+        }
         // 末尾を置き換えて返す
         return str_replace('X', $value, self::BASE_TEST_UUID);
     }
