@@ -8,6 +8,10 @@ use App\Repositories\Admins\AdminsRepository;
 use App\Repositories\Admins\AdminsRepositoryInterface;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepository;
 use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Admins\Banners\BannersBlockContentsRepository;
+use App\Repositories\Admins\Banners\BannersBlockContentsRepositoryInterface;
+use App\Repositories\Admins\Banners\BannersBlocksRepository;
+use App\Repositories\Admins\Banners\BannersBlocksRepositoryInterface;
 use App\Repositories\Admins\Banners\BannersRepository;
 use App\Repositories\Admins\Banners\BannersRepositoryInterface;
 use App\Repositories\Admins\Coins\CoinsRepository;
@@ -50,6 +54,8 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(AdminsRepositoryInterface::class, AdminsRepository::class);
         $this->app->bind(AdminsRolesRepositoryInterface::class, AdminsRolesRepository::class);
+        $this->app->bind(BannersBlockContentsRepositoryInterface::class, BannersBlockContentsRepository::class);
+        $this->app->bind(BannersBlocksRepositoryInterface::class, BannersBlocksRepository::class);
         $this->app->bind(BannersRepositoryInterface::class, BannersRepository::class);
         $this->app->bind(CoinsRepositoryInterface::class, CoinsRepository::class);
         $this->app->bind(EventsRepositoryInterface::class, EventsRepository::class);
