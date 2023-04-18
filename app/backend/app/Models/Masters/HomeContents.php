@@ -11,6 +11,11 @@ class HomeContents extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const HOME_CONTENTS_KEY_VISUAL = 1;
+    public const HOME_CONTENTS_INFORMATION = 2;
+    public const HOME_CONTENTS_BANNER = 3;
+    public const HOME_CONTENTS_OTHER = 99;
+
     // カラム一覧
     public const ID          = 'id';
     public const TYPE        = 'type';
@@ -22,7 +27,7 @@ class HomeContents extends Model
     public const DELETED_AT  = 'deleted_at';
 
     //テーブル名指定
-    protected $table = 'home_contents_groups';
+    protected $table = 'home_contents';
 
     /**
      * Indicates if the model should be timestamped.
