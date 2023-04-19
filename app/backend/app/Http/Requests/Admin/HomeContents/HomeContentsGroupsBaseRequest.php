@@ -39,7 +39,7 @@ class HomeContentsGroupsBaseRequest extends BaseRequest
     public function attributes()
     {
         return [
-            self::KEY_ID          => 'バナーID',
+            self::KEY_ID          => 'グループID',
             self::KEY_NAME        => 'グループ名',
             self::KEY_ORDER       => '順番',
             self::KEY_START_AT    => '公開開始日時',

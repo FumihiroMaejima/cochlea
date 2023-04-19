@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Requests\Admin\HomeContents;
+namespace App\Http\Requests\Admin\BannerBlocks;
 
 use Illuminate\Support\Facades\Config;
 use App\Http\Requests\BaseRequest;
 
-class HomeContentsBaseRequest extends BaseRequest
+class BannerBlocksBaseRequest extends BaseRequest
 {
     // attribute keys
     public const KEY_ID            = 'id';
-    public const KEY_TYPE          = 'type';
-    public const KEY_CONTENTS_ID   = 'contents_id';
+    public const KEY_NAME          = 'name';
+    public const KEY_ORDER         = 'order';
     public const KEY_START_AT      = 'start_at';
     public const KEY_END_AT        = 'end_at';
     public const KEY_IMAGE         = 'image';
@@ -38,9 +38,9 @@ class HomeContentsBaseRequest extends BaseRequest
     public function attributes()
     {
         return [
-            self::KEY_ID          => 'ID',
-            self::KEY_TYPE        => 'コンテンツタイプ',
-            self::KEY_CONTENTS_ID => 'コンテンツID',
+            self::KEY_ID          => 'バナーブロックID',
+            self::KEY_NAME        => 'ブロック名',
+            self::KEY_ORDER       => '順番',
             self::KEY_START_AT    => '公開開始日時',
             self::KEY_END_AT      => '公開終了日時',
             self::KEY_IMAGE       => 'イメージ',

@@ -35,7 +35,7 @@ class HomeContentsImportRequest extends HomeContentsBaseRequest
     public function rules()
     {
         return [
-            'file' => 'file|max:1000|mimes:xlsx|mimetypes:text/csv,application/csv'
+            'file' => 'file|max:1000|mimes:csv|mimetypes:text/csv,application/csv'
         ];
     }
 
