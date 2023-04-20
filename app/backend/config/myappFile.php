@@ -43,6 +43,28 @@ return [
                     ]
                 ],
             ],
+            'bannerBlockContents' => [
+                'template' => [
+                    (object)[
+                        'banner_block_id' => 1,
+                        'banner_id'       => 1,
+                        'type'            => 1,
+                        'order'           => 10,
+                        'start_at'        => '2022/05/10 00:00:00',
+                        'end_at'          => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
+            'bannerBlocks' => [
+                'template' => [
+                    (object)[
+                        'name'     => 'test name',
+                        'order'    => 10,
+                        'start_at' => '2022/05/10 00:00:00',
+                        'end_at'   => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
             'coins' => [
                 'template' => [
                     (object)[
@@ -73,6 +95,26 @@ return [
                         'name'     => 'test name',
                         'type'     => 1,
                         'detail'   => 'test detail',
+                        'start_at' => '2022/05/10 00:00:00',
+                        'end_at'   => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
+            'homeContents' => [
+                'template' => [
+                    (object)[
+                        'type'        => 1,
+                        'contents_id' => 1,
+                        'start_at'    => '2022/05/10 00:00:00',
+                        'end_at'      => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
+            'homeContentsGroups' => [
+                'template' => [
+                    (object)[
+                        'name'     => 'test name',
+                        'order'    => 10,
                         'start_at' => '2022/05/10 00:00:00',
                         'end_at'   => '2030/12/31 23:59:59',
                     ]
