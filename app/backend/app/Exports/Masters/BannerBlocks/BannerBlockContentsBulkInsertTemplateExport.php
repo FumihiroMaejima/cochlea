@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\Masters\HomeContents;
+namespace App\Exports\Masters\BannerBlocks;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
