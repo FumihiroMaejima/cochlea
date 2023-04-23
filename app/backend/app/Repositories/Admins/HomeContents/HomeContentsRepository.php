@@ -159,18 +159,18 @@ class HomeContentsRepository implements HomeContentsRepositoryInterface
     }
 
     /**
-     * get by record id.
+     * get by group id.
      *
-     * @param int $contentsId contents id
+     * @param int $groupId contents id
      * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getContentsById(int $contentsId, bool $isLock = false): Collection|null
+    public function getByGroupId(int $groupId, bool $isLock = false): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
-            ->where(HomeContents::CONTENTS_ID, '=', $contentsId)
+            ->where(HomeContents::GROUP_ID, '=', $groupId)
             ->where(HomeContents::DELETED_AT, '=', null)
             ->get();
 
@@ -192,7 +192,7 @@ class HomeContentsRepository implements HomeContentsRepositoryInterface
             $collection = DB::table($this->getTable())
             ->lockForUpdate()
             ->select(['*'])
-            ->where(HomeContents::CONTENTS_ID, '=', $contentsId)
+            ->where(HomeContents::GROUP_ID, '=', $groupId)
             ->where(HomeContents::DELETED_AT, '=', null)
             ->get();
         }

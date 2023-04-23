@@ -118,6 +118,7 @@ class CreateProductMasterModelTable extends Migration
         Schema::create('home_contents', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('type')->unsigned()->comment('コンテンツタイプ');
+            $table->integer('group_id')->unsigned()->comment('グループのID');
             $table->integer('contents_id')->unsigned()->comment('コンテンツのID');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');

@@ -10,6 +10,7 @@ class HomeContentsBaseRequest extends BaseRequest
     // attribute keys
     public const KEY_ID            = 'id';
     public const KEY_TYPE          = 'type';
+    public const KEY_GROUP_ID      = 'group_id';
     public const KEY_CONTENTS_ID   = 'contents_id';
     public const KEY_START_AT      = 'start_at';
     public const KEY_END_AT        = 'end_at';
@@ -40,6 +41,7 @@ class HomeContentsBaseRequest extends BaseRequest
         return [
             self::KEY_ID          => 'ID',
             self::KEY_TYPE        => 'コンテンツタイプ',
+            self::KEY_GROUP_ID    => 'グループID',
             self::KEY_CONTENTS_ID => 'コンテンツID',
             self::KEY_START_AT    => '公開開始日時',
             self::KEY_END_AT      => '公開終了日時',

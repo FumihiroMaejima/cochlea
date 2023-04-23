@@ -41,6 +41,7 @@ class HomeContentsExport implements FromCollection, WithHeadings, WithTitle, Wit
     {
         return [
             '種類',
+            'グループID',
             'コンテンツID',
             '公開開始日時',
             '公開終了日時',
@@ -65,6 +66,7 @@ class HomeContentsExport implements FromCollection, WithHeadings, WithTitle, Wit
         // return $data;
         return [
             'type'        => $item->{HomeContents::TYPE},
+            'groups_id'   => $item->{HomeContents::GROUP_ID},
             'contents_id' => $item->{HomeContents::CONTENTS_ID},
             'start_at'    => $item->{HomeContents::START_AT},
             'end_at'      => $item->{HomeContents::END_AT},

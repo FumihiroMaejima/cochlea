@@ -121,9 +121,10 @@ class HomeContentsResource extends JsonResource
             if ($key !== 0) {
                 $response[] = [
                     HomeContents::TYPE        => $item[0],
-                    HomeContents::CONTENTS_ID => $item[1],
-                    HomeContents::START_AT    => $item[2],
-                    HomeContents::END_AT      => $item[3],
+                    HomeContents::GROUP_ID => $item[1],
+                    HomeContents::CONTENTS_ID => $item[2],
+                    HomeContents::START_AT    => $item[3],
+                    HomeContents::END_AT      => $item[4],
                     HomeContents::CREATED_AT  => $dateTime,
                     HomeContents::UPDATED_AT  => $dateTime,
                 ];

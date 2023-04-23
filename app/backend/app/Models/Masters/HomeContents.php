@@ -19,6 +19,7 @@ class HomeContents extends Model
     // カラム一覧
     public const ID          = 'id';
     public const TYPE        = 'type';
+    public const GROUP_ID    = 'group_id';
     public const CONTENTS_ID = 'contents_id';
     public const START_AT    = 'start_at';
     public const END_AT      = 'end_at';
@@ -57,6 +58,7 @@ class HomeContents extends Model
      */
     protected $fillable = [
         self::TYPE,
+        self::GROUP_ID,
         self::CONTENTS_ID,
         self::START_AT,
         self::END_AT,
