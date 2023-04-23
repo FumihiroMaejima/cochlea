@@ -101,25 +101,30 @@ class HomeContentsResource extends JsonResource
      *
      * @param array $bannerBlocks
      * @param array $bannerBlockContentsList
+     * @param array $bannerResponses
      * @return array
      */
-    public static function toArrayForGetBannerBlockResponse(array $bannerBlocks, array $bannerBlockContentsList)
+    public static function toArrayForGetBannerBlockResponse(array $bannerBlocks, array $bannerBlockContentsList, array $bannerResponses)
     {
         // レスポンス
         $response = [];
 
         $contentsGroupByBlockId = [];
         foreach ($bannerBlockContentsList as $bannerBlockContents) {
-            $contentsGroupByBlockId[$bannerBlockContents[BannerBlockContents::BANNER_BLOCK_ID]][] = $bannerBlockContents;
+            $bannerResponse = [];
+            if (isset($bannerResponses[$bannerBlockContents[BannerBlockContents::BANNER_ID]])) {
+                $bannerResponse = $bannerResponses[$bannerBlockContents[BannerBlockContents::BANNER_ID]];
+            }
+            $contentsGroupByBlockId[$bannerBlockContents[BannerBlockContents::BANNER_BLOCK_ID]][] = array_merge($bannerBlockContents, $bannerResponse);
         }
 
         // $this->resourceはCollection
         // 各itemは1レコードずつのデータを持つRolesResourceクラス
         foreach ($bannerBlocks as $bannerBlock) {
-            if (isset($bannerBlockContentsList[$bannerBlock[BannerBlocks::ID]])) {
+            if (isset($contentsGroupByBlockId[$bannerBlock[BannerBlocks::ID]])) {
                 $response[$bannerBlock[BannerBlocks::ID]] = [
                     'name' => $bannerBlock[BannerBlocks::NAME],
-                    'list' => $bannerBlockContentsList[$bannerBlock[BannerBlocks::ID]],
+                    'list' => $contentsGroupByBlockId[$bannerBlock[BannerBlocks::ID]],
                 ];
             }
         }
@@ -139,7 +144,7 @@ class HomeContentsResource extends JsonResource
         $response = [];
 
         foreach ($records as $item) {
-            $response[self::RESOURCE_KEY_DATA][] = [
+            $response[$item[Banners::ID]] = [
                 Banners::ID              => $item[Banners::ID],
                 Banners::UUID            => $item[Banners::UUID],
                 Banners::NAME            => $item[Banners::NAME],

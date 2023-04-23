@@ -14,13 +14,17 @@ use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\HomeContentsResource;
-use App\Repositories\Admins\HomeContents\HomeContentsGroupsRepositoryInterface;
-use App\Repositories\Admins\HomeContents\HomeContentsRepositoryInterface;
 use App\Repositories\Admins\Banners\BannersBlockContentsRepositoryInterface;
 use App\Repositories\Admins\Banners\BannersBlocksRepositoryInterface;
+use App\Repositories\Admins\Banners\BannersRepository;
+use App\Repositories\Admins\Banners\BannersRepositoryInterface;
+use App\Repositories\Admins\HomeContents\HomeContentsGroupsRepositoryInterface;
+use App\Repositories\Admins\HomeContents\HomeContentsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Models\Masters\BannerBlockContents;
 use App\Models\Masters\BannerBlocks;
+use App\Models\Masters\Banners;
 use App\Models\Masters\HomeContentsGroups;
 use App\Models\Masters\HomeContents;
 use Exception;
@@ -32,11 +36,13 @@ class HomeContentsService
     private const CACHE_KEY_USER_HOME_CONTENTS_LIST = 'cache_user_home_contents_list';
     private const CACHE_KEY_USER_BANNER_BLOCKS_LIST = 'cache_user_banner_blocks_list';
     private const CACHE_KEY_USER_BANNER_BLOCKS_CONTENTS_LIST = 'cache_user_banner_blocks_contents_list';
+    private const CACHE_KEY_USER_BANNER_LIST_BY_ID = 'cache_user_banner_blocks_contents_list_BY_ID:';
 
     protected HomeContentsGroupsRepositoryInterface $homeContentsGroupsRepository;
     protected HomeContentsRepositoryInterface $homeContentsRepository;
     protected BannersBlocksRepositoryInterface $bannerBlocksRepository;
     protected BannersBlockContentsRepositoryInterface $bannerBlockContentsRepository;
+    protected BannersRepositoryInterface $bannersRepository;
 
     /**
      * create service instance
@@ -45,6 +51,7 @@ class HomeContentsService
      * @param HomeContentsRepositoryInterface $homeContentsRepository
      * @param BannersBlocksRepositoryInterface $bannerBlocksRepository
      * @param BannersBlockContentsRepositoryInterface $bannerBlockContentsRepository
+     * @param BannersRepositoryInterface $bannersRepository
      * @return void
      */
     public function __construct(
@@ -52,12 +59,14 @@ class HomeContentsService
         HomeContentsRepositoryInterface $homeContentsRepository,
         BannersBlocksRepositoryInterface $bannerBlocksRepository,
         BannersBlockContentsRepositoryInterface $bannerBlockContentsRepository,
+        BannersRepositoryInterface $bannersRepository,
         )
     {
         $this->homeContentsGroupsRepository = $homeContentsGroupsRepository;
         $this->homeContentsRepository = $homeContentsRepository;
         $this->bannerBlocksRepository = $bannerBlocksRepository;
         $this->bannerBlockContentsRepository = $bannerBlockContentsRepository;
+        $this->bannersRepository = $bannersRepository;
     }
 
     /**
@@ -77,10 +86,14 @@ class HomeContentsService
         // banner
         $bennerBlocks = $this->getBannerBlocksRecords($blockIds);
         $bennerBlockIds = array_unique(array_column($bennerBlocks, BannerBlocks::ID));
-        $bannerBlockContents = $this->getBannerBlocksContentsRecords($bennerBlockIds);
 
-        $bannerResponse = HomeContentsResource::toArrayForGetBannerBlockResponse($bennerBlocks, $bannerBlockContents);
-        $response[] = $bannerResponse;
+        $bannerBlockContents = $this->getBannerBlocksContentsRecords($bennerBlockIds);
+        $bennerIds = array_unique(array_column($bannerBlockContents, BannerBlockContents::BANNER_ID));
+
+        $banners = $this->getBannersRecords($bennerIds);
+        $bannerResponses = HomeContentsResource::toArrayForGetCollectionListForBanners($banners);
+        $bannerBlockResponse = HomeContentsResource::toArrayForGetBannerBlockResponse($bennerBlocks, $bannerBlockContents, $bannerResponses);
+        $response[] = $bannerBlockResponse;
 
         return response()->json(['data' => $response], 200);
     }
@@ -185,6 +198,30 @@ class HomeContentsService
     }
 
     /**
+     * get banners data
+     *
+     * @param array $bannerIds banner ids
+     * @return array
+     */
+    public function getBannersRecords(array $bannerIds): array
+    {
+        $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_BANNER_LIST_BY_ID);
+
+        // キャッシュチェック
+        if (is_null($cache)) {
+            $records = $this->getBannersByIds($bannerIds);
+
+            if (!empty($records)) {
+                CacheLibrary::setCache(self::CACHE_KEY_USER_BANNER_LIST_BY_ID, $records);
+            }
+        } else {
+            $records = $cache;
+        }
+
+        return $records;
+    }
+
+    /**
      * get home contents by group id.
      *
      * @param int $groupId group id
@@ -229,6 +266,24 @@ class HomeContentsService
     private function getBannerBlockContentsByBlockIds(array $ids): array
     {
         $records = $this->bannerBlockContentsRepository->getByBlockIds($ids, true);
+
+        if (empty($records)) {
+            return [];
+        }
+
+        // 複数チェックはrepository側で実施済み
+        return ArrayLibrary::toArray($records->toArray());
+    }
+
+    /**
+     * get banners by banner ids.
+     *
+     * @param array $ids benner ids
+     * @return array
+     */
+    private function getBannersByIds(array $ids): array
+    {
+        $records = $this->bannersRepository->getByIds($ids, true);
 
         if (empty($records)) {
             return [];
