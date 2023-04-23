@@ -18,6 +18,8 @@ interface HomeContentsRepositoryInterface
 
     public function getByIds(array $ids, bool $isLock = false): Collection|null;
 
+    public function getByContentsId(int $contentsId, bool $isLock = false): Collection|null;
+
     public function create(array $resource): int;
 
     public function update(int $id, array $resource): int;
