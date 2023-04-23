@@ -56,7 +56,7 @@ class BannerContentsService
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadCSVForHomeContentsGroups()
+    public function downloadCSVForBannerBlocks()
     {
         $data = $this->bannerBlocksRepository->getRecords();
 
@@ -68,7 +68,7 @@ class BannerContentsService
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadTemplateForHomeContentsGroups()
+    public function downloadTemplateForBannerBlocks()
     {
         return Excel::download(
             new BannerBlocksBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.bannerBlocks.template'))),
@@ -83,7 +83,7 @@ class BannerContentsService
      * @param UploadedFile $file
      * @return JsonResponse
      */
-    public function importTemplateForHomeContentsGroups(UploadedFile $file)
+    public function importTemplateForBannerBlocks(UploadedFile $file)
     {
         // ファイル名チェック
         if (!preg_match('/^master_banner_blocks_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
@@ -123,7 +123,7 @@ class BannerContentsService
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadCSVForHomeContents()
+    public function downloadCSVForBannerBlockContents()
     {
         $data = $this->bannerBlockContentsRepository->getRecords();
 
@@ -135,7 +135,7 @@ class BannerContentsService
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadTemplateForHomeContents()
+    public function downloadTemplateForBannerBlockContents()
     {
         return Excel::download(
             new BannerBlockContentsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.bannerBlockContents.template'))),
@@ -150,7 +150,7 @@ class BannerContentsService
      * @param UploadedFile $file
      * @return JsonResponse
      */
-    public function importTemplateForHomeContents(UploadedFile $file)
+    public function importTemplateForBannerBlockContents(UploadedFile $file)
     {
         // ファイル名チェック
         if (!preg_match('/^master_banner_block_contents_template_\d{14}\.csv/u', $file->getClientOriginalName())) {

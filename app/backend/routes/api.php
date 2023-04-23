@@ -100,17 +100,6 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/file/template', [\App\Http\Controllers\Admins\CoinsController::class, 'uploadTemplate'])->name('admin.coins.upload.template');
         });
 
-        // informations
-        Route::group(['prefix' => 'informations'], function () {
-            Route::get('/', [\App\Http\Controllers\Admins\InformationsController::class, 'index'])->name('admin.informations.index');
-            Route::get('/csv', [\App\Http\Controllers\Admins\InformationsController::class, 'download'])->name('admin.informations.download.csv');
-            Route::post('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'create'])->name('admin.informations.create');
-            Route::patch('/information/{id}', [\App\Http\Controllers\Admins\InformationsController::class, 'update'])->name('admin.informations.update');
-            Route::delete('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'destroy'])->name('admin.informations.delete');
-            Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
-            Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
-        });
-
         // events
         Route::group(['prefix' => 'events'], function () {
             Route::get('/', [\App\Http\Controllers\Admins\EventsController::class, 'index'])->name('admin.events.index');
@@ -120,6 +109,32 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::delete('/event', [\App\Http\Controllers\Admins\EventsController::class, 'destroy'])->name('admin.events.delete');
             Route::get('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'template'])->name('admin.events.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'uploadTemplate'])->name('admin.events.upload.template');
+        });
+
+        // home contents
+        Route::group(['prefix' => 'home'], function () {
+            Route::group(['prefix' => 'contents'], function () {
+                Route::get('/csv', [\App\Http\Controllers\Admins\HomeContentsController::class, 'downloadHomeContents'])->name('admin.home.contents.download.csv');
+                Route::get('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'templateHomeContents'])->name('admin.home.contents.download.template');
+                Route::post('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'uploadTemplateHomeContents'])->name('admin.home.contents.upload.template');
+
+                Route::group(['prefix' => 'groups'], function () {
+                    Route::get('/csv', [\App\Http\Controllers\Admins\HomeContentsController::class, 'downloadHomeContentsGroups'])->name('admin.home.contents.groups.download.csv');
+                    Route::get('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'templateHomeContentsGroups'])->name('admin.home.contents.groups.download.template');
+                    Route::post('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'uploadTemplateHomeContentsGroups'])->name('admin.home.contents.groups.upload.template');
+                });
+            });
+        });
+
+        // informations
+        Route::group(['prefix' => 'informations'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\InformationsController::class, 'index'])->name('admin.informations.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\InformationsController::class, 'download'])->name('admin.informations.download.csv');
+            Route::post('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'create'])->name('admin.informations.create');
+            Route::patch('/information/{id}', [\App\Http\Controllers\Admins\InformationsController::class, 'update'])->name('admin.informations.update');
+            Route::delete('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'destroy'])->name('admin.informations.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
     });
 
