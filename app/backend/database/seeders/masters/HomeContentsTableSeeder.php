@@ -32,6 +32,7 @@ class HomeContentsTableSeeder extends BaseSeeder
 
         $template = [
             HomeContents::TYPE        => HomeContents::HOME_CONTENTS_OTHER,
+            HomeContents::GROUP_ID => 1,
             HomeContents::CONTENTS_ID => 1,
             HomeContents::START_AT    => $now,
             HomeContents::END_AT      => $endDate,
@@ -50,6 +51,7 @@ class HomeContentsTableSeeder extends BaseSeeder
             $row = $template;
 
             // $row[HomeContents::TYPE]   = (($i - 1) % 3) + 1;
+            // $row[HomeContents::GROUP_ID]   = (($i - 1) % 5) + 1;
             $row[HomeContents::CONTENTS_ID]   = (($i - 1) % 5) + 1;
 
             $data[] = $row;
