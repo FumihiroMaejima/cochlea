@@ -116,7 +116,11 @@ class HomeContentsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            abort(500);
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                $e->getMessage(),
+                previous: $e
+            );
         }
     }
 
@@ -183,7 +187,11 @@ class HomeContentsService
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
-            abort(500);
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                $e->getMessage(),
+                previous: $e
+            );
         }
     }
 }
