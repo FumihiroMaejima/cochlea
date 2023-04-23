@@ -6,10 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
-use App\Models\Masters\HomeContents;
-use App\Models\Masters\HomeContentsGroups;
+use App\Library\Array\ArrayLibrary;
+use App\Library\Banner\BannerLibrary;
 use App\Models\Masters\BannerBlockContents;
 use App\Models\Masters\BannerBlocks;
+use App\Models\Masters\Banners;
+use App\Models\Masters\HomeContents;
+use App\Models\Masters\HomeContentsGroups;
+
 
 class HomeContentsResource extends JsonResource
 {
@@ -118,6 +122,40 @@ class HomeContentsResource extends JsonResource
                     'list' => $bannerBlockContentsList[$bannerBlock[BannerBlocks::ID]],
                 ];
             }
+        }
+
+        return $response;
+    }
+
+    /**
+     * Transform the resource into an array for get roles collection.
+     *
+     * @param array $records
+     * @return array
+     */
+    public static function toArrayForGetCollectionListForBanners(array $records)
+    {
+        // レスポンス
+        $response = [];
+
+        foreach ($records as $item) {
+            $response[self::RESOURCE_KEY_DATA][] = [
+                Banners::ID              => $item[Banners::ID],
+                Banners::UUID            => $item[Banners::UUID],
+                Banners::NAME            => $item[Banners::NAME],
+                Banners::DETAIL          => $item[Banners::DETAIL],
+                Banners::LOCATION        => $item[Banners::LOCATION],
+                Banners::PC_HEIGHT       => $item[Banners::PC_HEIGHT],
+                Banners::PC_WIDTH        => $item[Banners::PC_WIDTH],
+                Banners::SP_HEIGHT       => $item[Banners::SP_HEIGHT],
+                Banners::SP_WIDTH        => $item[Banners::SP_WIDTH],
+                Banners::START_AT        => TimeLibrary::format($item[Banners::START_AT]),
+                Banners::END_AT          => TimeLibrary::format($item[Banners::END_AT]),
+                Banners::URL             => $item[Banners::URL],
+                self::RESOURCE_KEY_IMAGE => BannerLibrary::getUserServiceBannerPath(ArrayLibrary::toArray($item)), // 画像URL設定
+                Banners::CREATED_AT      => $item[Banners::CREATED_AT],
+                Banners::UPDATED_AT      => $item[Banners::UPDATED_AT],
+            ];
         }
 
         return $response;
