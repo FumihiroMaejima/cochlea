@@ -333,7 +333,7 @@ class DebugController extends Controller
     public function getDateLog(Request $request): JsonResponse
     {
         return response()->json(
-            ['data' => LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null)]
+            ['data' => LogLibrary::getLogFileContentAsAssociative($request->date ?? null, $request->name ?? null, $request->sort ?? SORT_ASC)]
         );
     }
 
