@@ -79,6 +79,9 @@ class HomeContentsService
         $bennerBlockIds = array_unique(array_column($bennerBlocks, BannerBlocks::ID));
         $bannerBlockContents = $this->getBannerBlocksContentsRecords($bennerBlockIds);
 
+        $bannerResponse = HomeContentsResource::toArrayForGetBannerBlockResponse($bennerBlocks, $bannerBlockContents);
+        $response[] = $bannerResponse;
+
         return response()->json(['data' => $response], 200);
     }
 
