@@ -201,6 +201,41 @@ class BannersBlockContentsRepository implements BannersBlockContentsRepositoryIn
         return $collection;
     }
 
+
+    /**
+     * get by ids.
+     *
+     * @param array $blockId block id
+     * @param bool $isLock exec lock For Update
+     * @return Collection|null
+     * @throws MyApplicationHttpException
+     */
+    public function getByBlockIds(array $blockIds, bool $isLock = false): Collection|null
+    {
+        $collection = DB::table($this->getTable())
+            ->select(['*'])
+            ->whereIn(BannerBlockContents::BANNER_BLOCK_ID, $blockIds)
+            ->where(BannerBlockContents::DELETED_AT, '=', null)
+            ->get();
+
+        // 存在しない場合
+        if ($collection->count() === self::NO_DATA_COUNT) {
+            return null;
+        }
+
+        if ($isLock) {
+            // ロックをかけた状態で再検索
+            $collection = DB::table($this->getTable())
+                ->select(['*'])
+                ->whereIn(BannerBlockContents::BANNER_BLOCK_ID, $blockIds)
+                ->where(BannerBlockContents::DELETED_AT, '=', null)
+                ->lockForUpdate()
+                ->get();
+        }
+
+        return $collection;
+    }
+
     /**
      * create recode.
      *

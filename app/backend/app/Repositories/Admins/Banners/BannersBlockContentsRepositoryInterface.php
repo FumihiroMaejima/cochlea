@@ -20,6 +20,8 @@ interface BannersBlockContentsRepositoryInterface
 
     public function getByBlockId(int $blockId, bool $isLock = false, bool $isSkipDeplicate = true): Collection|null;
 
+    public function getByBlockIds(array $blockIds, bool $isLock = false): Collection|null;
+
     public function create(array $resource): int;
 
     public function update(int $id, array $resource): int;
