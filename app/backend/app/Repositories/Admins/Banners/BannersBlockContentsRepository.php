@@ -163,10 +163,11 @@ class BannersBlockContentsRepository implements BannersBlockContentsRepositoryIn
      *
      * @param int $blockId block id
      * @param bool $isLock exec lock For Update
+     * @param bool $isLisSkipDeplicateock whicherver skip deplicate rocords
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByBlockId(int $blockId, bool $isLock = false): Collection|null
+    public function getByBlockId(int $blockId, bool $isLock = false, bool $isSkipDeplicate = true): Collection|null
     {
         $collection = DB::table($this->getTable())
             ->select(['*'])
@@ -180,7 +181,7 @@ class BannersBlockContentsRepository implements BannersBlockContentsRepositoryIn
         }
 
         // 複数ある場合
-        if ($collection->count() > self::FIRST_DATA_COUNT) {
+        if (($collection->count() > self::FIRST_DATA_COUNT) && !$isSkipDeplicate) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
                 'has deplicate collections,'

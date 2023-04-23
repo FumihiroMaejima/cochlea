@@ -18,7 +18,7 @@ interface HomeContentsRepositoryInterface
 
     public function getByIds(array $ids, bool $isLock = false): Collection|null;
 
-    public function getByGroupId(int $groupId, bool $isLock = false): Collection|null;
+    public function getByGroupId(int $groupId, bool $isLock = false, bool $isSkipDeplicate = true): Collection|null;
 
     public function create(array $resource): int;
 
