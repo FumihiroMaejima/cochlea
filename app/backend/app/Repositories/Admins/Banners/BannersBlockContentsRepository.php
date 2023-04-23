@@ -8,7 +8,7 @@ use App\Models\Masters\BannerBlockContents;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
-class BannersBlockContentsRepository implements BannersBlocksRepositoryInterface
+class BannersBlockContentsRepository implements BannersBlockContentsRepositoryInterface
 {
     protected BannerBlockContents $model;
 

@@ -113,6 +113,21 @@ Route::group(['prefix' => 'v1/admin'], function () {
 
         // home contents
         Route::group(['prefix' => 'home'], function () {
+            // banner contents
+            Route::group(['prefix' => 'banner'], function () {
+                Route::group(['prefix' => 'blocks'], function () {
+                    Route::get('/csv', [\App\Http\Controllers\Admins\BannerContentsController::class, 'downloadBannerBlocks'])->name('admin.home.banner.blocks.download.csv');
+                    Route::get('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'templateBannerBlocks'])->name('admin.home.banner.blocks.download.template');
+                    Route::post('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'uploadTemplateBannerBlocks'])->name('admin.home.banner.blocks.upload.template');
+
+                    Route::group(['prefix' => 'contents'], function () {
+                        Route::get('/csv', [\App\Http\Controllers\Admins\BannerContentsController::class, 'downloadBannerBlockContents'])->name('admin.home.banner.blocks.contents.download.csv');
+                        Route::get('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'templateBannerBlockContents'])->name('admin.home.banner.blocks.contents.download.template');
+                        Route::post('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'uploadTemplateBannerBlockContents'])->name('admin.home.banner.blocks.contents.upload.template');
+                    });
+                });
+            });
+
             Route::group(['prefix' => 'contents'], function () {
                 Route::get('/csv', [\App\Http\Controllers\Admins\HomeContentsController::class, 'downloadHomeContents'])->name('admin.home.contents.download.csv');
                 Route::get('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'templateHomeContents'])->name('admin.home.contents.download.template');
