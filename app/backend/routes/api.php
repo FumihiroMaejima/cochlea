@@ -191,6 +191,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'events'], function () {
         Route::get('/', [\App\Http\Controllers\Users\EventsController::class, 'index'])->name('noAuth.events.index');
     });
+    // events
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('/contents/list', [\App\Http\Controllers\Users\HomeContentsController::class, 'index'])->name('noAuth.home.contents.index');
+    });
     // informations
     Route::group(['prefix' => 'informations'], function () {
         Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');

@@ -73,7 +73,7 @@ class HomeContentsService
         $bennerBlocks = $this->getBannerBlocksRecords([]);
         $bannerBlockContents = $this->getBannerBlocksContentsRecords(1);
 
-        return response()->json($response, 200);
+        return response()->json(['data' => $response], 200);
     }
 
     /**
