@@ -20,6 +20,7 @@ use App\Repositories\Admins\Banners\BannersBlockContentsRepositoryInterface;
 use App\Repositories\Admins\Banners\BannersBlocksRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Models\Masters\BannerBlocks;
 use App\Models\Masters\HomeContentsGroups;
 use App\Models\Masters\HomeContents;
 use Exception;
@@ -69,9 +70,14 @@ class HomeContentsService
         $response = [];
 
         $homeGroups = $this->getHomeContentsGroupsRecords();
-        $homeGroupsContents = $this->getHomeContentsRecords(1);
-        $bennerBlocks = $this->getBannerBlocksRecords([]);
-        $bannerBlockContents = $this->getBannerBlocksContentsRecords(1);
+        $homeGroups = current($homeGroups);
+        $homeGroupsContents = $this->getHomeContentsRecords($homeGroups[HomeContentsGroups::ID]);
+        $blockIds = array_unique(array_column($homeGroupsContents, HomeContents::CONTENTS_ID));
+
+        // banner
+        $bennerBlocks = $this->getBannerBlocksRecords($blockIds);
+        $bennerBlockIds = array_unique(array_column($bennerBlocks, BannerBlocks::ID));
+        $bannerBlockContents = $this->getBannerBlocksContentsRecords($bennerBlockIds);
 
         return response()->json(['data' => $response], 200);
     }
@@ -154,16 +160,16 @@ class HomeContentsService
     /**
      * get banner blocks contents records
      *
-     * @param int $bannerBlockId
+     * @param array $bannerBlockIds
      * @return array
      */
-    private function getBannerBlocksContentsRecords(int $bannerBlockId): array
+    private function getBannerBlocksContentsRecords(array $bannerBlockIds): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_BANNER_BLOCKS_CONTENTS_LIST);
 
         // キャッシュチェック
         if (is_null($cache)) {
-            $records = $this->getBannerBlockContentsByBlockId($bannerBlockId);
+            $records = $this->getBannerBlockContentsByBlockIds($bannerBlockIds);
 
             if (!empty($records)) {
                 CacheLibrary::setCache(self::CACHE_KEY_USER_BANNER_BLOCKS_CONTENTS_LIST, $records);
@@ -214,12 +220,12 @@ class HomeContentsService
     /**
      * get banner block contents by banner block id.
      *
-     * @param array $ids block records id
+     * @param array $ids block records ids
      * @return array
      */
-    private function getBannerBlockContentsByBlockId(int $id): array
+    private function getBannerBlockContentsByBlockIds(array $ids): array
     {
-        $records = $this->bannerBlockContentsRepository->getByBlockId($id, true);
+        $records = $this->bannerBlockContentsRepository->getByBlockIds($ids, true);
 
         if (empty($records)) {
             return [];
