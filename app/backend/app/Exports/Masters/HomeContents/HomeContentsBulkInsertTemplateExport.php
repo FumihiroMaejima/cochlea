@@ -66,7 +66,7 @@ class HomeContentsBulkInsertTemplateExport implements FromCollection, WithHeadin
         // return $data;
         return [
             'type'        => $item->{HomeContents::TYPE},
-            'groups_id'   => $item->{HomeContents::GROUP_ID},
+            'group_id'    => $item->{HomeContents::GROUP_ID},
             'contents_id' => $item->{HomeContents::CONTENTS_ID},
             'start_at'    => $item->{HomeContents::START_AT},
             'end_at'      => $item->{HomeContents::END_AT},
