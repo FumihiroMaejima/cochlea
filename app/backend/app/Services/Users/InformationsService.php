@@ -12,7 +12,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\InformationsResource;
 use App\Http\Resources\Users\UserReadInformationsResource;
-use App\Repositories\Admins\Informations\InformationsRepositoryInterface;
+use App\Repositories\Masters\Informations\InformationsRepositoryInterface;
 use App\Repositories\Users\UserReadInformations\UserReadInformationsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;

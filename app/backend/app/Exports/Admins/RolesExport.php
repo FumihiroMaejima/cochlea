@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Support\Collection;
-use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
+use App\Repositories\Masters\Permissions\PermissionsRepositoryInterface;
 use App\Trait\ProcessingRoleDataTrait;
 
 class RolesExport implements FromCollection, WithHeadings, WithTitle, WithMapping

@@ -19,7 +19,7 @@ use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
-use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;

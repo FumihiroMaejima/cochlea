@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\Roles\RolesRepositoryInterface;
 
 class AdminCreateRequest extends AdminBaseRequest
 {

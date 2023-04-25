@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Repositories\Admins\Permissions\PermissionsRepositoryInterface;
+use App\Repositories\Masters\Permissions\PermissionsRepositoryInterface;
 use App\Http\Resources\Admins\PermissionsResource;
 use App\Library\Array\ArrayLibrary;
 

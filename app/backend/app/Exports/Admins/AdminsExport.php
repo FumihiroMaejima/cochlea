@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Support\Collection;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\Roles\RolesRepositoryInterface;
 
 class AdminsExport implements FromCollection, WithHeadings, WithTitle, WithMapping
 {

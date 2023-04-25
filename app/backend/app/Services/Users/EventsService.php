@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\EventsResource;
-use App\Repositories\Admins\Events\EventsRepositoryInterface;
+use App\Repositories\Masters\Events\EventsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use Exception;

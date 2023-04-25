@@ -14,7 +14,7 @@ use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Admins\EventsResource;
-use App\Repositories\Admins\Events\EventsRepositoryInterface;
+use App\Repositories\Masters\Events\EventsRepositoryInterface;
 use App\Exports\Masters\Events\EventsExport;
 use App\Exports\Masters\Events\EventsBulkInsertTemplateExport;
 use App\Imports\Masters\Events\EventsImport;
