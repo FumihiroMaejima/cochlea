@@ -38,11 +38,15 @@ export type DebugSelectKeys = Extract<DebugTypeKeys, 'fakerTimeStamp'>
 export type StateType = {
   status: DebugType
   fakerTime?: string
+  datetime?: string
+  timestamp?: number
 }
 
 export const initialData: StateType = {
   status: { ...debugData },
   fakerTime: undefined,
+  datetime: undefined,
+  timestamp: undefined,
 }
 
 export function useDebugs() {
@@ -99,7 +103,39 @@ export function useDebugs() {
     dispatch({
       status: debugsState.status,
       fakerTime: value,
+      datetime: debugsState.datetime,
+      timestamp: debugsState.timestamp,
     })
+  }
+
+  /**
+   * update date time value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateDateTime = (value: string): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: debugsState.fakerTime,
+      datetime: value,
+      timestamp: debugsState.timestamp,
+    })
+    // dispatch({ ...debugsState, ...{ datetime: value } })
+  }
+
+  /**
+   * update time stamp value.
+   * @param {number} value
+   * @return {void}
+   */
+  const updateTimestamp = (value: number): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: debugsState.fakerTime,
+      datetime: debugsState.datetime,
+      timestamp: value,
+    })
+    // dispatch({ ...debugsState, ...{ timestamp: value } })
   }
 
   /**
@@ -115,6 +151,8 @@ export function useDebugs() {
     debugsState,
     getDebugStatusRequest,
     updateLocalFakerTime,
+    updateDateTime,
+    updateTimestamp,
   } as const
 }
 
