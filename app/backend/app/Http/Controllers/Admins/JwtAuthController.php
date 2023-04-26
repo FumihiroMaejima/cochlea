@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Masters\Admins;
-use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Masters\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;

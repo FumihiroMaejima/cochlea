@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\BannersResource;
-use App\Repositories\Admins\Banners\BannersRepositoryInterface;
+use App\Repositories\Masters\Banners\BannersRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Banner\BannerLibrary;
 use App\Library\Cache\CacheLibrary;

@@ -100,17 +100,6 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/file/template', [\App\Http\Controllers\Admins\CoinsController::class, 'uploadTemplate'])->name('admin.coins.upload.template');
         });
 
-        // informations
-        Route::group(['prefix' => 'informations'], function () {
-            Route::get('/', [\App\Http\Controllers\Admins\InformationsController::class, 'index'])->name('admin.informations.index');
-            Route::get('/csv', [\App\Http\Controllers\Admins\InformationsController::class, 'download'])->name('admin.informations.download.csv');
-            Route::post('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'create'])->name('admin.informations.create');
-            Route::patch('/information/{id}', [\App\Http\Controllers\Admins\InformationsController::class, 'update'])->name('admin.informations.update');
-            Route::delete('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'destroy'])->name('admin.informations.delete');
-            Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
-            Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
-        });
-
         // events
         Route::group(['prefix' => 'events'], function () {
             Route::get('/', [\App\Http\Controllers\Admins\EventsController::class, 'index'])->name('admin.events.index');
@@ -120,6 +109,47 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::delete('/event', [\App\Http\Controllers\Admins\EventsController::class, 'destroy'])->name('admin.events.delete');
             Route::get('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'template'])->name('admin.events.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\EventsController::class, 'uploadTemplate'])->name('admin.events.upload.template');
+        });
+
+        // home contents
+        Route::group(['prefix' => 'home'], function () {
+            // banner contents
+            Route::group(['prefix' => 'banner'], function () {
+                Route::group(['prefix' => 'blocks'], function () {
+                    Route::get('/csv', [\App\Http\Controllers\Admins\BannerContentsController::class, 'downloadBannerBlocks'])->name('admin.home.banner.blocks.download.csv');
+                    Route::get('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'templateBannerBlocks'])->name('admin.home.banner.blocks.download.template');
+                    Route::post('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'uploadTemplateBannerBlocks'])->name('admin.home.banner.blocks.upload.template');
+
+                    Route::group(['prefix' => 'contents'], function () {
+                        Route::get('/csv', [\App\Http\Controllers\Admins\BannerContentsController::class, 'downloadBannerBlockContents'])->name('admin.home.banner.blocks.contents.download.csv');
+                        Route::get('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'templateBannerBlockContents'])->name('admin.home.banner.blocks.contents.download.template');
+                        Route::post('/file/template', [\App\Http\Controllers\Admins\BannerContentsController::class, 'uploadTemplateBannerBlockContents'])->name('admin.home.banner.blocks.contents.upload.template');
+                    });
+                });
+            });
+
+            Route::group(['prefix' => 'contents'], function () {
+                Route::get('/csv', [\App\Http\Controllers\Admins\HomeContentsController::class, 'downloadHomeContents'])->name('admin.home.contents.download.csv');
+                Route::get('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'templateHomeContents'])->name('admin.home.contents.download.template');
+                Route::post('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'uploadTemplateHomeContents'])->name('admin.home.contents.upload.template');
+
+                Route::group(['prefix' => 'groups'], function () {
+                    Route::get('/csv', [\App\Http\Controllers\Admins\HomeContentsController::class, 'downloadHomeContentsGroups'])->name('admin.home.contents.groups.download.csv');
+                    Route::get('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'templateHomeContentsGroups'])->name('admin.home.contents.groups.download.template');
+                    Route::post('/file/template', [\App\Http\Controllers\Admins\HomeContentsController::class, 'uploadTemplateHomeContentsGroups'])->name('admin.home.contents.groups.upload.template');
+                });
+            });
+        });
+
+        // informations
+        Route::group(['prefix' => 'informations'], function () {
+            Route::get('/', [\App\Http\Controllers\Admins\InformationsController::class, 'index'])->name('admin.informations.index');
+            Route::get('/csv', [\App\Http\Controllers\Admins\InformationsController::class, 'download'])->name('admin.informations.download.csv');
+            Route::post('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'create'])->name('admin.informations.create');
+            Route::patch('/information/{id}', [\App\Http\Controllers\Admins\InformationsController::class, 'update'])->name('admin.informations.update');
+            Route::delete('/information', [\App\Http\Controllers\Admins\InformationsController::class, 'destroy'])->name('admin.informations.delete');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
     });
 
@@ -160,6 +190,10 @@ Route::group(['prefix' => 'v1'], function () {
     // events
     Route::group(['prefix' => 'events'], function () {
         Route::get('/', [\App\Http\Controllers\Users\EventsController::class, 'index'])->name('noAuth.events.index');
+    });
+    // events
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('/contents/list', [\App\Http\Controllers\Users\HomeContentsController::class, 'index'])->name('noAuth.home.contents.index');
     });
     // informations
     Route::group(['prefix' => 'informations'], function () {
@@ -272,7 +306,9 @@ Route::group(['prefix' => 'v1'], function () {
             // DB関係
             Route::group(['prefix' => 'databases'], function () {
                 Route::get('schema', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaList'])->name('user.debug.databases.schema');
+                Route::get('schema/size', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaSizeList'])->name('user.debug.databases.schema.size');
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
+                Route::get('table/size', [\App\Http\Controllers\Users\DebugController::class, 'getTableSizeList'])->name('user.debug.databases.table.size');
             });
         });
     }

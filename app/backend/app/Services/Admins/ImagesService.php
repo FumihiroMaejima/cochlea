@@ -19,7 +19,7 @@ use App\Library\File\ImageLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
 use App\Models\Masters\Images;
-use App\Repositories\Admins\Images\ImagesRepositoryInterface;
+use App\Repositories\Masters\Images\ImagesRepositoryInterface;
 use App\Http\Resources\Admins\ImagesResource;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
 

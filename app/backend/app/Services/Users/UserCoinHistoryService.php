@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
-use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepositoryInterface;
 use App\Repositories\Users\UserCoins\UserCoinsRepository;

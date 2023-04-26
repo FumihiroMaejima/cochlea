@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\CoinsResource;
-use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use Exception;
@@ -23,7 +23,7 @@ class CoinsService
     /**
      * create CoinsService instance
      *
-     * @param  \App\Repositories\Admins\Coins\CoinsRepositoryInterface $coinsRepository
+     * @param  \App\Repositories\Masters\Coins\CoinsRepositoryInterface $coinsRepository
      * @return void
      */
     public function __construct(CoinsRepositoryInterface $coinsRepository)

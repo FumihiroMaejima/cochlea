@@ -18,7 +18,7 @@ use App\Http\Resources\Logs\UserCoinPaymentLogResource;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinPaymentStatusResource;
 use App\Http\Resources\Users\UserCoinsResource;
-use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\UserCoinPaymentStatus\UserCoinPaymentStatusRepositoryInterface;

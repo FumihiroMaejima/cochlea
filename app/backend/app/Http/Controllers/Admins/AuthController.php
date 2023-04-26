@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Masters\Admins;
 use App\Library\Session\SessionLibrary;
 use App\Library\Message\StatusCodeMessages;
-use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Masters\AdminsRoles\AdminsRolesRepositoryInterface;
 use App\Trait\CheckHeaderTrait;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;

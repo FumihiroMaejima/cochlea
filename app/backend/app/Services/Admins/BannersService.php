@@ -15,7 +15,7 @@ use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Admins\BannersResource;
-use App\Repositories\Admins\Banners\BannersRepositoryInterface;
+use App\Repositories\Masters\Banners\BannersRepositoryInterface;
 use App\Exports\Masters\Banners\BannersExport;
 use App\Exports\Masters\Banners\BannersBulkInsertTemplateExport;
 use App\Imports\Masters\Banners\BannersImport;
@@ -40,7 +40,7 @@ class BannersService
     /**
      * create CoinsService instance
      *
-     * @param  \App\Repositories\Admins\Banners\BannersRepositoryInterface $bannersRepository
+     * @param  \App\Repositories\Masters\Banners\BannersRepositoryInterface $bannersRepository
      * @return void
      */
     public function __construct(BannersRepositoryInterface $bannersRepository)

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\Roles\RolesRepositoryInterface;
 use App\Http\Requests\Admin\Admins\AdminBaseRequest;
 use App\Http\Requests\BaseRequest;
 use App\Models\Masters\Roles;

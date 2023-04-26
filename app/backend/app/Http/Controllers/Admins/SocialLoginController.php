@@ -11,7 +11,7 @@ use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Admins;
 use App\Models\Masters\OAuthUsers;
 use App\Models\User;
-use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Masters\AdminsRoles\AdminsRolesRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

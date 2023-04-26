@@ -14,7 +14,7 @@ use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Admins\CoinsResource;
-use App\Repositories\Admins\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Exports\Masters\Coins\CoinsExport;
 use App\Exports\Masters\Coins\CoinsBulkInsertTemplateExport;
 use App\Imports\Masters\Coins\CoinsImport;
@@ -33,7 +33,7 @@ class CoinsService
     /**
      * create CoinsService instance
      *
-     * @param  \App\Repositories\Admins\Coins\CoinsRepositoryInterface $coinsRepository
+     * @param  \App\Repositories\Masters\Coins\CoinsRepositoryInterface $coinsRepository
      * @return void
      */
     public function __construct(CoinsRepositoryInterface $coinsRepository)

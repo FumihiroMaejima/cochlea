@@ -38,11 +38,15 @@ export type DebugSelectKeys = Extract<DebugTypeKeys, 'fakerTimeStamp'>
 export type StateType = {
   status: DebugType
   fakerTime?: string
+  datetime?: string
+  timestamp?: number
 }
 
 export const initialData: StateType = {
   status: { ...debugData },
   fakerTime: undefined,
+  datetime: undefined,
+  timestamp: undefined,
 }
 
 export function useDebugs() {
@@ -91,6 +95,80 @@ export function useDebugs() {
   }
 
   /**
+   * get converted dateime to timestamp request.
+   * @param {string} datetime
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getDebugDateTimeToTimeStampRequest = async (
+    datetime: string,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
+    return await useRequest()
+      .getRequest<ServerRequestType<number>>(config.endpoint.debugs.timestamp, {
+        headers: { ...options.headers, ...debugHeader },
+        params: { datetime },
+      })
+      .then((response) => {
+        // const data = response.data as ServerRequestType<number>
+        // updateTimestamp(data.data as number)
+        updateTimestamp(response.data as unknown as number)
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
+   * get converted timestamp to dateime request.
+   * @param {number} timestamp
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getDebugTimeStampToDateTimeRequest = async (
+    timestamp: number,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
+    return await useRequest()
+      .getRequest<ServerRequestType<string>>(
+        config.endpoint.debugs.datetime + `?timestamp=${timestamp}`,
+        {
+          headers: { ...options.headers, ...debugHeader },
+        }
+      )
+      .then((response) => {
+        // const data = response.data as ServerRequestType<string>
+        // updateDateTime(data.data as string)
+        updateDateTime(response.data as unknown as string)
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
    * update local faker time value.
    * @param {string} value
    * @return {void}
@@ -99,7 +177,39 @@ export function useDebugs() {
     dispatch({
       status: debugsState.status,
       fakerTime: value,
+      datetime: debugsState.datetime,
+      timestamp: debugsState.timestamp,
     })
+  }
+
+  /**
+   * update date time value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateDateTime = (value: string): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: debugsState.fakerTime,
+      datetime: value,
+      timestamp: debugsState.timestamp,
+    })
+    // dispatch({ ...debugsState, ...{ datetime: value } })
+  }
+
+  /**
+   * update time stamp value.
+   * @param {number} value
+   * @return {void}
+   */
+  const updateTimestamp = (value: number): void => {
+    dispatch({
+      status: debugsState.status,
+      fakerTime: debugsState.fakerTime,
+      datetime: debugsState.datetime,
+      timestamp: value,
+    })
+    // dispatch({ ...debugsState, ...{ timestamp: value } })
   }
 
   /**
@@ -114,7 +224,11 @@ export function useDebugs() {
   return {
     debugsState,
     getDebugStatusRequest,
+    getDebugDateTimeToTimeStampRequest,
+    getDebugTimeStampToDateTimeRequest,
     updateLocalFakerTime,
+    updateDateTime,
+    updateTimestamp,
   } as const
 }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\Roles\RolesRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 use App\Models\Masters\Roles;

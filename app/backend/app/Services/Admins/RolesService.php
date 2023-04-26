@@ -22,8 +22,8 @@ use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Models\Masters\Roles;
-use App\Repositories\Admins\RolePermissions\RolePermissionsRepositoryInterface;
-use App\Repositories\Admins\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\RolePermissions\RolePermissionsRepositoryInterface;
+use App\Repositories\Masters\Roles\RolesRepositoryInterface;
 use App\Services\Admins\Notifications\RoleSlackNotificationService;
 use Exception;
 
