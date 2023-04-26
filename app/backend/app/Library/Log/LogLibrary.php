@@ -69,12 +69,21 @@ class LogLibrary
      *
      * @param string|null $date
      * @param string $name
+     * @param int $sort
      * @return array
      */
-    public static function getLogFileContentAsAssociative(?string $date = null, string $name = self::FILE_NAME_ACCESS): array
-    {
+    public static function getLogFileContentAsAssociative(
+        ?string $date = null,
+        string $name = self::FILE_NAME_ACCESS,
+        int $sort = SORT_ASC,
+    ): array {
         $response = [];
         $logFileContetsList = self::getLogFileContentsList($date ?? null, $name ?? null);
+
+        // 降順にソートする場合
+        if ($sort === SORT_DESC) {
+            $logFileContetsList = array_reverse($logFileContetsList);
+        }
 
         foreach ($logFileContetsList as $logRow) {
             $tmp = explode(' ', $logRow);

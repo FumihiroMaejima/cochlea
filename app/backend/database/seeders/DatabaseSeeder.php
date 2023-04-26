@@ -18,8 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call(Masters\AdminsTableSeeder::class);
         // $this->call(Logs\AdminsLogTableSeeder::class);
         $this->call(Masters\BannersTableSeeder::class);
+        $this->call(Masters\BannerBlockContentsTableSeeder::class);
+        $this->call(Masters\BannerBlocksTableSeeder::class);
         $this->call(Masters\CoinsTableSeeder::class);
         $this->call(Masters\EventsTableSeeder::class);
+        $this->call(Masters\HomeContentsGroupsTableSeeder::class);
+        $this->call(Masters\HomeContentsTableSeeder::class);
         $this->call(Masters\InformationsTableSeeder::class);
         $this->call(Masters\ManufacturersTableSeeder::class);
         $this->call(Masters\ProductsTableSeeder::class);

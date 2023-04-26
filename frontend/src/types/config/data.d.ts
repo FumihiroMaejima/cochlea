@@ -83,4 +83,9 @@ export type RolesServiceEndipont = {
 
 export type DebugsServiceEndipont = {
   status: string
+  encrypt: string
+  decrypt: string
+  timestamp: string
+  datetime: string
+  log: string
 }

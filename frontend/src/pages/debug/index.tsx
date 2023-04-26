@@ -16,8 +16,15 @@ import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
 export const Debug: React.VFC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
-  const { debugsState, getDebugStatusRequest, updateLocalFakerTime } =
-    useDebugs()
+  const {
+    debugsState,
+    getDebugStatusRequest,
+    getDebugDateTimeToTimeStampRequest,
+    getDebugTimeStampToDateTimeRequest,
+    updateLocalFakerTime,
+    updateDateTime,
+    updateTimestamp,
+  } = useDebugs()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
 
@@ -47,6 +54,37 @@ export const Debug: React.VFC = () => {
   const onClickFakerTimeSetButtonHandler = async (): Promise<void> => {
     updateGlobalLoading(true)
     await getDebugStatusRequest(getHeaderOptions()).then((res) => {
+      updateGlobalLoading(false)
+    })
+  }
+
+  /**
+   * set date time & and request convert timestamp.
+   * @param {string} datetime
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickConvertDateTimeButtonHandler = async (datetime: string): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugDateTimeToTimeStampRequest(datetime, getHeaderOptions()).then(
+      (res) => {
+        updateGlobalLoading(false)
+      }
+    )
+  }
+
+  /**
+   * set timestamp & and request convert datetime.
+   * @param {number} timestamp
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickConvertTimestampButtonHandler = async (timestamp: number): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugTimeStampToDateTimeRequest(
+      parseInt(timestamp),
+      getHeaderOptions()
+    ).then((res) => {
       updateGlobalLoading(false)
     })
   }
@@ -92,7 +130,7 @@ export const Debug: React.VFC = () => {
               時間偽装時刻
             </label>
             <PartsSimpleTextField
-              id="time"
+              id="fakertime"
               className="width-8 mx-2"
               type="datetime-local"
               value={debugsState.fakerTime ?? ''}
@@ -105,6 +143,60 @@ export const Debug: React.VFC = () => {
                 text="適用"
                 color="green"
                 onClick={onClickFakerTimeSetButtonHandler}
+              />
+            </span>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              timestampへ変換
+            </label>
+            <PartsSimpleTextField
+              id="dateime"
+              className="width-8 mx-2"
+              type="datetime-local"
+              value={debugsState.datetime ?? ''}
+              onInput={(e) => updateDateTime(e.currentTarget.value)}
+              placeholder="dateime"
+            />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+                onClick={() => {
+                  if (debugsState.datetime) {
+                    onClickConvertDateTimeButtonHandler(debugsState.datetime)
+                  }
+                }}
+                disabled={debugsState.datetime === undefined}
+              />
+            </span>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              datetimeへ変換
+            </label>
+            <PartsSimpleTextField
+              id="timestamp"
+              className="width-8 mx-2"
+              type="number"
+              value={(debugsState.timestamp as unknown as string) ?? undefined}
+              onInput={(e) =>
+                updateTimestamp(e.currentTarget.value as unknown as number)
+              }
+              placeholder="timestamp"
+            />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+                onClick={() => {
+                  if (debugsState.timestamp) {
+                    onClickConvertTimestampButtonHandler(debugsState.timestamp)
+                  }
+                }}
+                disabled={debugsState.timestamp === undefined}
               />
             </span>
           </div>

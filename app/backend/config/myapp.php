@@ -16,6 +16,7 @@ return [
             'banners'      => ['master', 'administrator', 'develop'],
             'coins'        => ['master', 'administrator', 'develop'],
             'events'       => ['master', 'administrator', 'develop'],
+            'home'         => ['master', 'administrator', 'develop'],
             'informations' => ['master', 'administrator', 'develop'],
             'debug'        => ['master', 'administrator', 'develop'],
         ]

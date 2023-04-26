@@ -59,6 +59,43 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
+         * banner blocks table
+         */
+        Schema::create('banner_blocks', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('ブロック名');
+            $table->integer('order')->unsigned()->comment('順番');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('banner blocks table');
+        });
+
+        /**
+         * banner block contents table
+         */
+        Schema::create('banner_block_contents', function (Blueprint $table) {
+            $table->id();
+            $table->integer('banner_block_id')->unsigned()->comment('バナーブロックのID');
+            $table->integer('banner_id')->unsigned()->comment('バナーのID');
+            $table->tinyInteger('type')->unsigned()->comment('コンテンツタイプ');
+            $table->integer('order')->unsigned()->comment('順番');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            // uniqueキー設定
+            $table->unique(['banner_block_id', 'banner_id']);
+
+            $table->comment('banner block contents table');
+        });
+
+        /**
          * events table
          */
         Schema::create('events', function (Blueprint $table) {
@@ -73,6 +110,39 @@ class CreateProductMasterModelTable extends Migration
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('events table');
+        });
+
+        /**
+         * home contents table
+         */
+        Schema::create('home_contents', function (Blueprint $table) {
+            $table->id();
+            $table->tinyInteger('type')->unsigned()->comment('コンテンツタイプ');
+            $table->integer('group_id')->unsigned()->comment('グループのID');
+            $table->integer('contents_id')->unsigned()->comment('コンテンツのID');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('home contents table');
+        });
+
+        /**
+         * home contents groups table
+         */
+        Schema::create('home_contents_groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('コンテンツグループ名');
+            $table->integer('order')->unsigned()->comment('順番');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('home contents groups table');
         });
 
         /**
@@ -177,7 +247,11 @@ class CreateProductMasterModelTable extends Migration
     {
         Schema::dropIfExists('coins');
         Schema::dropIfExists('banners');
+        Schema::dropIfExists('banner_blocks');
+        Schema::dropIfExists('banner_block_contents');
         Schema::dropIfExists('events');
+        Schema::dropIfExists('home_contents');
+        Schema::dropIfExists('home_contents_groups');
         Schema::dropIfExists('images');
         Schema::dropIfExists('informations');
         Schema::dropIfExists('products');

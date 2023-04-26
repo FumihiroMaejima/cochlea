@@ -14,8 +14,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Exports\Admins\AdminsExport;
-use App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface;
-use App\Repositories\Admins\AdminsRepositoryInterface;
+use App\Repositories\Masters\AdminsRoles\AdminsRolesRepositoryInterface;
+use App\Repositories\Masters\AdminsRepositoryInterface;
 use App\Http\Requests\Admin\Admins\AdminCreateRequest;
 use App\Http\Requests\Admin\Admins\AdminDeleteRequest;
 use App\Http\Requests\Admin\Admins\AdminUpdateRequest;
@@ -46,8 +46,8 @@ class AdminsService
 
     /**
      * create AdminsService instance
-     * @param \App\Repositories\Admins\AdminsRepositoryInterface $adminsRepository
-     * @param \App\Repositories\Admins\AdminsRoles\AdminsRolesRepositoryInterface $adminsRepository
+     * @param \App\Repositories\Masters\AdminsRepositoryInterface $adminsRepository
+     * @param \App\Repositories\Masters\AdminsRoles\AdminsRolesRepositoryInterface $adminsRepository
      * @return void
      */
     public function __construct(AdminsRepositoryInterface $adminsRepository, AdminsRolesRepositoryInterface $adminsRolesRepository)

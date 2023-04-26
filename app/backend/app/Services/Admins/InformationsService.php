@@ -14,7 +14,7 @@ use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Admins\InformationsResource;
-use App\Repositories\Admins\Informations\InformationsRepositoryInterface;
+use App\Repositories\Masters\Informations\InformationsRepositoryInterface;
 use App\Exports\Masters\Informations\InformationsExport;
 use App\Exports\Masters\Informations\InformationsBulkInsertTemplateExport;
 use App\Imports\Masters\Informations\InformationsImport;
