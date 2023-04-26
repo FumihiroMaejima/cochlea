@@ -70,11 +70,11 @@ export const appConfig: IAppConfig = {
     },
     debugs: {
       status: '/api/v1/admin/debug/status',
-      encrypt: '/api/v1/admin/debug/email/encrypt',
-      decrypt: '/api/v1/admin/debug/email/decrypt',
-      timestamp: '/api/v1/admin/debug/datetimes/timestamp',
-      datetime: '/api/v1/admin/debug/datetimes/datetime',
-      log: '/api/v1/admin/debug/logs/dateLog',
+      encrypt: '/api/v1/debug/email/encrypt',
+      decrypt: '/api/v1/debug/email/decrypt',
+      timestamp: '/api/v1/debug/datetimes/timestamp',
+      datetime: '/api/v1/debug/datetimes/datetime',
+      log: '/api/v1/debug/logs/dateLog',
     },
   },
 }
