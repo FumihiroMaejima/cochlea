@@ -47,8 +47,7 @@ class HomeContentsService
     public function __construct(
         HomeContentsGroupsRepositoryInterface $homeContentsGroupsRepository,
         HomeContentsRepositoryInterface $homeContentsRepository,
-        )
-    {
+    ) {
         $this->homeContentsGroupsRepository = $homeContentsGroupsRepository;
         $this->homeContentsRepository = $homeContentsRepository;
     }

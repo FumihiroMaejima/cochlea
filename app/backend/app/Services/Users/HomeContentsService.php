@@ -60,8 +60,7 @@ class HomeContentsService
         BannersBlocksRepositoryInterface $bannerBlocksRepository,
         BannersBlockContentsRepositoryInterface $bannerBlockContentsRepository,
         BannersRepositoryInterface $bannersRepository,
-        )
-    {
+    ) {
         $this->homeContentsGroupsRepository = $homeContentsGroupsRepository;
         $this->homeContentsRepository = $homeContentsRepository;
         $this->bannerBlocksRepository = $bannerBlocksRepository;

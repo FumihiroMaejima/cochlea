@@ -14,7 +14,6 @@ use App\Models\Masters\Banners;
 use App\Models\Masters\HomeContents;
 use App\Models\Masters\HomeContentsGroups;
 
-
 class HomeContentsResource extends JsonResource
 {
     public const RESOURCE_KEY_DATA = 'data';

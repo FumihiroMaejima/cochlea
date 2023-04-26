@@ -45,8 +45,7 @@ class BannerContentsService
     public function __construct(
         BannersBlocksRepositoryInterface $bannerBlocksRepository,
         BannersBlockContentsRepositoryInterface $bannerBlockContentsRepository,
-        )
-    {
+    ) {
         $this->bannerBlocksRepository = $bannerBlocksRepository;
         $this->bannerBlockContentsRepository = $bannerBlockContentsRepository;
     }
