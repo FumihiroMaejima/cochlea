@@ -171,6 +171,21 @@ mysql-dump:
 mysql-restore:
 	sh ./scripts/restore-dump.sh
 
+##############################
+# prometheus docker container
+##############################
+prometheus-up:
+	docker-compose -f ./docker-compose.prometheus.yml up -d
+
+prometheus-down:
+	docker-compose -f ./docker-compose.prometheus.yml down
+
+prometheus-ps:
+	docker-compose -f ./docker-compose.prometheus.yml ps
+
+prometheus-dev:
+	sh ./scripts/prometheus-container.sh
+
 
 ##############################
 # circle ci

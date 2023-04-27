@@ -29,7 +29,7 @@ services:
     image: grafana/grafana
     container_name: ${PROJECT_NAME}_grafana
     ports:
-      - "${PROMETHEUS_GRAFANA_PORT:-3200}:3000"
+      - "${PROMETHEUS_GRAFANA_PORT:-3300}:3000"
     volumes:
       - ./sprometheusrc/grafana/grafana:/var/lib/grafana # 設定ファイル置き場(WORKDIRは別)
     environment:
