@@ -228,12 +228,10 @@ export function useDebugs() {
     }
 
     return await useRequest()
-      .getRequest<ServerRequestType<string>>(
-        config.endpoint.debugs.decrypt + `?email=${email}`,
-        {
-          headers: { ...options.headers, ...debugHeader },
-        }
-      )
+      .getRequest<ServerRequestType<string>>(config.endpoint.debugs.decrypt, {
+        headers: { ...options.headers, ...debugHeader },
+        params: { email },
+      })
       .then((response) => {
         // const data = response.data as ServerRequestType<number>
         // updateTimestamp(data.data as number)

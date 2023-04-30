@@ -21,9 +21,13 @@ export const Debug: React.VFC = () => {
     getDebugStatusRequest,
     getDebugDateTimeToTimeStampRequest,
     getDebugTimeStampToDateTimeRequest,
+    getDebugEmailToEncryptRequest,
+    getDebugEmailToDecryptRequest,
     updateLocalFakerTime,
     updateDateTime,
     updateTimestamp,
+    updateDecryptEamail,
+    updateEncryptEamail,
   } = useDebugs()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)
   const { getAuthId, getHeaderOptions } = useContext(AuthAppContext)
@@ -87,6 +91,36 @@ export const Debug: React.VFC = () => {
     ).then((res) => {
       updateGlobalLoading(false)
     })
+  }
+
+  /**
+   * set email & and request encrypt email.
+   * @param {string} email
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickConvertEncryptEmailButtonHandler = async (email: string): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugEmailToEncryptRequest(email, getHeaderOptions()).then(
+      (res) => {
+        updateGlobalLoading(false)
+      }
+    )
+  }
+
+  /**
+   * set email & and request decrypt email.
+   * @param {string} email
+   * @return {Promise<void>}
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const onClickConvertDecryptEmailButtonHandler = async (email: string): Promise<void> => {
+    updateGlobalLoading(true)
+    await getDebugEmailToDecryptRequest(email, getHeaderOptions()).then(
+      (res) => {
+        updateGlobalLoading(false)
+      }
+    )
   }
 
   return (
@@ -197,6 +231,70 @@ export const Debug: React.VFC = () => {
                   }
                 }}
                 disabled={debugsState.timestamp === undefined}
+              />
+            </span>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              暗号化
+            </label>
+            <PartsSimpleTextField
+              id="decryptEmail"
+              className="width-8 mx-2"
+              type="text"
+              value={
+                (debugsState.decryptEmail as unknown as string) ?? undefined
+              }
+              onInput={(e) =>
+                updateDecryptEamail(e.currentTarget.value as unknown as string)
+              }
+              placeholder="email"
+            />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+                onClick={() => {
+                  if (debugsState.decryptEmail) {
+                    onClickConvertEncryptEmailButtonHandler(
+                      debugsState.decryptEmail
+                    )
+                  }
+                }}
+                disabled={debugsState.decryptEmail === undefined}
+              />
+            </span>
+          </div>
+          <div className="my-4 d-flex flex-align-center">
+            <label className="width-2 text-left" htmlFor="time">
+              複合化
+            </label>
+            <PartsSimpleTextField
+              id="encryptEmail"
+              className="width-8 mx-2"
+              type="text"
+              value={
+                (debugsState.encryptEmail as unknown as string) ?? undefined
+              }
+              onInput={(e) =>
+                updateEncryptEamail(e.currentTarget.value as unknown as string)
+              }
+              placeholder="email"
+            />
+            <span className="width-2 app-container">
+              <PartsSimpleButton
+                className="app-container"
+                text="適用"
+                color="green"
+                onClick={() => {
+                  if (debugsState.encryptEmail) {
+                    onClickConvertDecryptEmailButtonHandler(
+                      debugsState.encryptEmail
+                    )
+                  }
+                }}
+                disabled={debugsState.encryptEmail === undefined}
               />
             </span>
           </div>
