@@ -188,13 +188,13 @@ export function useDebugs() {
    * @return {void}
    */
   const updateDateTime = (value: string): void => {
-    dispatch({
+    /* dispatch({
       status: debugsState.status,
       fakerTime: debugsState.fakerTime,
       datetime: value,
       timestamp: debugsState.timestamp,
-    })
-    // dispatch({ ...debugsState, ...{ datetime: value } })
+    }) */
+    dispatch({ ...debugsState, ...{ datetime: value } })
   }
 
   /**
@@ -203,13 +203,13 @@ export function useDebugs() {
    * @return {void}
    */
   const updateTimestamp = (value: number): void => {
-    dispatch({
+    /* dispatch({
       status: debugsState.status,
       fakerTime: debugsState.fakerTime,
       datetime: debugsState.datetime,
       timestamp: value,
-    })
-    // dispatch({ ...debugsState, ...{ timestamp: value } })
+    }) */
+    dispatch({ ...debugsState, ...{ timestamp: value } })
   }
 
   /**
