@@ -82,7 +82,7 @@ export const Debug: React.VFC = () => {
   const onClickConvertTimestampButtonHandler = async (timestamp: number): Promise<void> => {
     updateGlobalLoading(true)
     await getDebugTimeStampToDateTimeRequest(
-      parseInt(timestamp),
+      timestamp,
       getHeaderOptions()
     ).then((res) => {
       updateGlobalLoading(false)
