@@ -43,8 +43,8 @@ services:
     container_name: ${PROJECT_NAME}_grafana_loki
     ports:
       - "${PROMETHEUS_GRAFANA_LOKI_PORT:-3400}:3100"
-    # volumes:
-    #   - ./prometheus/grafana/loki/local-config.yaml:/etc/loki/local-config.yaml
+    volumes:
+      - ./prometheus/grafana/loki/local-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
     environment:
       TZ: "Asia/Tokyo"
