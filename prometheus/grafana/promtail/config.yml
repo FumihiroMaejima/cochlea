@@ -7,9 +7,17 @@ positions:
 
 clients:
   - url: http://loki:3400/loki/api/v1/push
+  # - url: http://localhost:3400/loki/api/v1/push
 
 scrape_configs:
-- job_name: system
+# - job_name: system
+#   static_configs:
+#   - targets:
+#       - localhost
+#     labels:
+#       job: varlogs
+#       __path__: /var/log/*log
+- job_name: Laravel
   static_configs:
   - targets:
       - localhost
