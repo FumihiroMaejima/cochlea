@@ -31,3 +31,10 @@ scrape_configs:
     labels:
       job: applogs
       __path__: /var/log/app/*log
+- job_name: laravel-app-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-access-logs
+      __path__: /var/log/app/access-*.log
