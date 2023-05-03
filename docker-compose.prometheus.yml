@@ -57,7 +57,7 @@ services:
     volumes:
       - ./prometheus/grafana/promtail/config.yml:/etc/promtail/config.yml
       # - /var/log:/var/log
-      - ./app/backend/storage/logs:/var/log
+      - ./app/backend/storage/logs:/var/log/app
     command: -config.file=/etc/promtail/config.yml
     networks:
       default:
