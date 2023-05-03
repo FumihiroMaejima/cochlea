@@ -22,7 +22,11 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
   docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
 
   showMessage '下記の環境へアクセス出来ます。'
-  showMessage 'prometheus : http://localhost:9090, node-exporter : http://localhost:9100/metrics, grafana : http://localhost:3200, alertmanager : http://localhost:9093/#/status'
+  showMessage 'prometheus : http://localhost:9090'
+  showMessage 'node-exporter : http://localhost:9100/metrics'
+  showMessage 'grafana : http://localhost:3200'
+  showMessage 'alertmanager : http://localhost:9093/#/status'
+  showMessage 'promtail : http://localhost:9080/targets'
 else
   # コンテナが立ち上がっている状態の時
   showMessage 'Down Docker Container!'
