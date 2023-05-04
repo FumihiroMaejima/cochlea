@@ -91,6 +91,7 @@ Grafana Lokiについて
 
 # 設定したラベルを利用してログのフォーマットを編集
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "line is here {{.line}}"
+{job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}"
 
 ```
 
