@@ -93,6 +93,12 @@ Grafana Lokiについて
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "line is here {{.line}}"
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}"
 
+### 不要部分を削除したログをjson形式として扱う。keyをラベルとして扱う様にする。
+{job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
+
+# メソッドがPOSTのログを取得
+{job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json | method="POST"
+
 ```
 
 ---
