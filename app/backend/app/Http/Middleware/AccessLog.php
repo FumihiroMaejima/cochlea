@@ -20,6 +20,22 @@ class AccessLog
     private const AUTHORIZATION_HEADER_VALUE_START_POSITION = 0;
     private const AUTHORIZATION_HEADER_VALUE_END_POSITION = 10;
 
+      // ログキー
+    private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
+    private const LOG_KEY_REQUEST_URI = 'uri';
+    private const LOG_KEY_REQUEST_METHOD = 'method';
+    private const LOG_KEY_REQUEST_STATUS_CODE = 'status_code';
+    private const LOG_KEY_REQUEST_RESPONSE_TIME = 'response_time';
+    private const LOG_KEY_REQUEST_HOST = 'host';
+    private const LOG_KEY_REQUEST_IP = 'ip';
+    private const LOG_KEY_REQUEST_CONTENT_TYPE = 'content_type';
+    private const LOG_KEY_REQUEST_HEADERS = 'headers';
+    private const LOG_KEY_REQUEST_REQUEST_CONTENT = 'request_content';
+    private const LOG_KEY_REQUEST_PLATHOME = 'plathome';
+    private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
+    private const LOG_KEY_REQUEST_MEMORY = 'memory';
+    private const LOG_KEY_REQUEST_PEAK_MEMORY = 'peak_memory';
+
     // log出力項目
     private string $requestDateTime;
     private string $uri;
@@ -159,20 +175,20 @@ class AccessLog
     private function outputLog(): void
     {
         $context = [
-            'request_datetime' => $this->requestDateTime,
-            'uri'              => $this->uri,
-            'method'           => $this->method,
-            'status_code'      => $this->statusCode,
-            'response_time'    => $this->responseTime,
-            'host'             => $this->host,
-            'ip'               => $this->ip,
-            'content_type'     => $this->contentType,
-            'headers'          => $this->headers,
-            'request_content'  => $this->requestContent,
-            'plathome'         => $this->plathome,
-            'process_id'       => $this->pid,
-            'memory'           => $this->memory . ' Byte',
-            'peak_memory'      => $this->peakMemory . ' Byte',
+            self::LOG_KEY_REQUEST_DATETIME         => $this->requestDateTime,
+            self::LOG_KEY_REQUEST_URI              => $this->uri,
+            self::LOG_KEY_REQUEST_METHOD           => $this->method,
+            self::LOG_KEY_REQUEST_STATUS_CODE      => $this->statusCode,
+            self::LOG_KEY_REQUEST_RESPONSE_TIME    => $this->responseTime,
+            self::LOG_KEY_REQUEST_HOST             => $this->host,
+            self::LOG_KEY_REQUEST_IP               => $this->ip,
+            self::LOG_KEY_REQUEST_CONTENT_TYPE     => $this->contentType,
+            self::LOG_KEY_REQUEST_HEADERS          => $this->headers,
+            self::LOG_KEY_REQUEST_REQUEST_CONTENT  => $this->requestContent,
+            self::LOG_KEY_REQUEST_PLATHOME         => $this->plathome,
+            self::LOG_KEY_REQUEST_PROCESS_ID       => $this->pid,
+            self::LOG_KEY_REQUEST_MEMORY           => $this->memory . ' Byte',
+            self::LOG_KEY_REQUEST_PEAK_MEMORY      => $this->peakMemory . ' Byte',
         ];
 
         // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);
