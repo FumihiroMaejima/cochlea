@@ -96,6 +96,9 @@ Grafana Lokiについて
 ### 不要部分を削除したログをjson形式として扱う。keyをラベルとして扱う様にする。
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
 
+### JSON parseでエラーになるがリクエスト日時を出力できる。
+{job="app-access-logs"} | pattern "<log_date> <log_time> <_> <_> <line>" | line_format "{{.log_date}} {{.log_time}} {{.line}}" | json
+
 # メソッドがPOSTのログを取得
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json | method="POST"
 
