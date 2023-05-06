@@ -83,7 +83,7 @@ Grafana Lokiについて
 # jobに該当する全てのログを取得
 {job="app-access-logs"} |= ``
 
-# ファイルを指定するには絶対パスが確実
+# ファイルを指定するには絶対パスを指定する必要がある
 {filename="/var/log/app/access-2023-05-04.log"} |= ``
 
 # パターンが決まっているログに対して特定部分をラベルに設定。スペースで区切った5つ目移行を「line」と言うラベルを設定
@@ -102,6 +102,18 @@ Grafana Lokiについて
 # メソッドがPOSTのログを取得
 {job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json | method="POST"
 
+```
+
+#### ログからメトリクスの生成
+
+```logql
+# rate:指定した時間で発生した1秒間の平均値
+# sum:全体合計
+sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m]))
+
+# ラベルごとの合計
+sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url)
+sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (method)
 ```
 
 ---
