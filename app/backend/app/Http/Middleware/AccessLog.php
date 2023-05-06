@@ -22,13 +22,13 @@ class AccessLog
 
     // log出力項目
     private string $requestDateTime;
-    private string $method;
-    private string $host;
-    private string $ip;
     private string $uri;
-    private string|null $contentType;
+    private string $method;
     private int $statusCode;
     private string $responseTime;
+    private string $host;
+    private string $ip;
+    private string|null $contentType;
     private string|array|null $headers;
     private mixed $requestContent;
     private string $plathome;
@@ -98,10 +98,10 @@ class AccessLog
     private function getLogParameterByRequest(Request $request): void
     {
         $contentType = $request->getContentType();
+        $this->uri             = $request->getRequestUri();
+        $this->method          = $request->getMethod();
         $this->host            = $request->getHost();
         $this->ip              = $request->getClientIp();
-        $this->method          = $request->getMethod();
-        $this->uri             = $request->getRequestUri();
         $this->contentType     = $contentType;
         $this->plathome        = $request->userAgent() ?? '';
         $this->headers         = self::getRequestHeader($request->header());
@@ -159,14 +159,14 @@ class AccessLog
     private function outputLog(): void
     {
         $context = [
-            'method'           => $this->method,
             'request_datetime' => $this->requestDateTime,
-            'host'             => $this->host,
             'uri'              => $this->uri,
-            'ip'               => $this->ip,
-            'content_type'     => $this->contentType,
+            'method'           => $this->method,
             'status_code'      => $this->statusCode,
             'response_time'    => $this->responseTime,
+            'host'             => $this->host,
+            'ip'               => $this->ip,
+            'content_type'     => $this->contentType,
             'headers'          => $this->headers,
             'request_content'  => $this->requestContent,
             'plathome'         => $this->plathome,
