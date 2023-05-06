@@ -12,6 +12,9 @@ class ErrorLog
 {
     private const LOG_CAHNNEL_NAME = 'errorlog';
 
+    // $_SERVERのキー
+    private const GLOBAL_VALUE_KEY_REQUEST_URI = 'REQUEST_URI';
+
     // ログキー
     private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
     private const LOG_KEY_REQUEST_MESSAGE = 'message';
@@ -44,6 +47,10 @@ class ErrorLog
         array $parameter = []
     ) {
         $this->requestDateTime = TimeLibrary::getCurrentDateTime();
+        // リクエストがある場合
+        $this->uri = isset($_SERVER[self::GLOBAL_VALUE_KEY_REQUEST_URI])
+            ? $_SERVER[self::GLOBAL_VALUE_KEY_REQUEST_URI]
+            : null;
         $this->message         = $error->getMessage();
         $this->pid             = getmypid();
         $this->memory = (string)memory_get_usage();
