@@ -114,6 +114,11 @@ sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_forma
 # ラベルごとの合計
 sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url)
 sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (method)
+sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (host)
+
+# 値が大きいor小さい順、*個まで表示
+topk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url))
+bottomk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url))
 ```
 
 ---
