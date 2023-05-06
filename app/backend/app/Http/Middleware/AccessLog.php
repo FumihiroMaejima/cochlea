@@ -20,7 +20,7 @@ class AccessLog
     private const AUTHORIZATION_HEADER_VALUE_START_POSITION = 0;
     private const AUTHORIZATION_HEADER_VALUE_END_POSITION = 10;
 
-      // ログキー
+    // ログキー
     private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
     private const LOG_KEY_REQUEST_URI = 'uri';
     private const LOG_KEY_REQUEST_METHOD = 'method';

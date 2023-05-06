@@ -12,8 +12,19 @@ class ErrorLog
 {
     private const LOG_CAHNNEL_NAME = 'errorlog';
 
+    // ログキー
+    private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
+    private const LOG_KEY_REQUEST_MESSAGE = 'message';
+    private const LOG_KEY_REQUEST_URI = 'uri';
+    private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
+    private const LOG_KEY_REQUEST_MEMORY = 'memory';
+    private const LOG_KEY_REQUEST_PEAK_MEMORY = 'peak_memory';
+    private const LOG_KEY_REQUEST_STACK_TRACE = 'stackTrace';
+    private const LOG_KEY_REQUEST_REQUEST_PARAMETER = 'request_parameter';
+
     // log出力項目
     private string $requestDateTime;
+    private ?string $uri = null;
     private string $message;
     private int|false $pid;
     private string $memory;
@@ -50,13 +61,14 @@ class ErrorLog
     private function outputLog(): void
     {
         $context = [
-            'request_datetime'  => $this->requestDateTime,
-            'message'           => $this->message,
-            'process_id'        => $this->pid,
-            'memory'           => $this->memory . ' Byte',
-            'peak_memory'      => $this->peakMemory . ' Byte',
-            'stackTrace'        => $this->stackTrace,
-            'request_parameter' => $this->parameter,
+            self::LOG_KEY_REQUEST_DATETIME          => $this->requestDateTime,
+            self::LOG_KEY_REQUEST_URI               => $this->uri ?? null,
+            self::LOG_KEY_REQUEST_MESSAGE           => $this->message,
+            self::LOG_KEY_REQUEST_PROCESS_ID        => $this->pid,
+            self::LOG_KEY_REQUEST_MEMORY            => $this->memory . ' Byte',
+            self::LOG_KEY_REQUEST_PEAK_MEMORY       => $this->peakMemory . ' Byte',
+            self::LOG_KEY_REQUEST_STACK_TRACE       => $this->stackTrace,
+            self::LOG_KEY_REQUEST_REQUEST_PARAMETER => $this->parameter,
         ];
 
         Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $context);
