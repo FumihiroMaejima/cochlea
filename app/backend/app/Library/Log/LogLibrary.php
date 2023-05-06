@@ -13,6 +13,7 @@ use App\Library\Random\RandomStringLibrary;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
+use Exception;
 
 class LogLibrary
 {
@@ -49,13 +50,22 @@ class LogLibrary
 
         $path = self::DIRECTORY . "$name-$date." . self::EXTENTION;
 
-        // storage/app直下に無い為file_get_contents()で取得
-        $file = file_get_contents(storage_path($path));
-
-        if (is_null($file)) {
+        try {
+            // storage/app直下に無い為file_get_contents()で取得
+            $file = file_get_contents(storage_path($path));
+            if (is_null($file)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_404,
+                    'File Not Exist.'
+                );
+            }
+        } catch(Exception $e) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
-                'File Not Exist.'
+                'File Not Exist.',
+                ['message' => $e->getMessage()],
+                true,
+                previous: $e
             );
         }
 
