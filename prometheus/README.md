@@ -117,6 +117,10 @@ sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_forma
 sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (host)
 # 平均
 avg((rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])))
+avg((rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m]))) by (method)
+
+# ステータスコードごとのカウント
+count(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (status_code)
 
 # 値が大きいor小さい順、*個まで表示
 topk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url))
