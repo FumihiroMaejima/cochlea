@@ -31,7 +31,7 @@ class ErrorLogLibrary
      * @param array $parameter error data exmple: request parameter
      * @return void
      */
-    public function exec(
+    public static function exec(
         Throwable|HttpExceptionInterface $error,
         array $parameter = []
     ) {
@@ -39,7 +39,7 @@ class ErrorLogLibrary
         ? $_SERVER[self::GLOBAL_VALUE_KEY_REQUEST_URI]
         : null;
 
-        $this->outputLog(
+        self::outputLog(
             TimeLibrary::getCurrentDateTime(),
             $uri,
             $error->getMessage(),
@@ -59,6 +59,7 @@ class ErrorLogLibrary
      * @param string $message
      * @param int|bool $pid
      * @param string $memory
+     * @param string $peakMemory
      * @param string $stackTrace
      * @param string $parameter
      * @return void
