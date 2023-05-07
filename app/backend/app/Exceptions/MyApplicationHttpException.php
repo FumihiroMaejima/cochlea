@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\ErrorLog;
+use App\Library\Log\ErrorLogLibrary;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -92,7 +92,7 @@ class MyApplicationHttpException extends HttpException
     {
         if (config('app.env') !== 'testing') {
             // エラーログの出力
-            new ErrorLog($this, $parameter);
+            ErrorLogLibrary::exec($this, $parameter);
         }
     }
 }
