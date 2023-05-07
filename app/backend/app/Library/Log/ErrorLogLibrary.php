@@ -2,6 +2,7 @@
 
 namespace App\Library\Log;
 
+use App\Library\Log\LogLibrary;
 use App\Library\Time\TimeLibrary;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -47,7 +48,7 @@ class ErrorLogLibrary
             (string)memory_get_usage(),
             (string)memory_get_peak_usage(),
             str_replace("\n", '', $error->getTraceAsString()), // １行で表示させる
-            $parameter
+            LogLibrary::maskingSecretKeys($parameter) // マスキング処理を挟む
         );
     }
 
