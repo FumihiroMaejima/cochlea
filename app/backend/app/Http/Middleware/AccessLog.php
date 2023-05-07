@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Library\Log\LogLibrary;
+use App\Library\Log\AccessLogLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -89,7 +90,23 @@ class AccessLog
 
 
         // log出力
-        $this->outputLog();
+        // $this->outputLog();
+        AccessLogLibrary::outputLog(
+            $this->requestDateTime,
+            $this->uri,
+            $this->method,
+            $this->statusCode,
+            $this->responseTime,
+            $this->host,
+            $this->ip,
+            $this->contentType,
+            $this->headers,
+            $this->requestContent,
+            $this->plathome,
+            $this->pid,
+            $this->memory,
+            $this->peakMemory
+        );
 
         return $response;
     }

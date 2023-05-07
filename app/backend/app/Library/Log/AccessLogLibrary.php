@@ -202,7 +202,7 @@ class AccessLogLibrary
      * @param string $peakMemory
      * @return void
      */
-    private static function outputLog(
+    public static function outputLog(
         string $requestDateTime,
         string $uri,
         string $method,
