@@ -125,6 +125,18 @@ count(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_for
 # 値が大きいor小さい順、*個まで表示
 topk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url))
 bottomk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (url))
+
+# エラーログ
+{job="app-error-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
+sum(rate({job="app-error-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (uri)
+
+# エラーログ
+{job="app-sql-logs"} |= ``
+{job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
+sum(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
+count(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
+avg(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
+sum(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m]))
 ```
 
 ---
