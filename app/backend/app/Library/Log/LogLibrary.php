@@ -59,7 +59,7 @@ class LogLibrary
                     'File Not Exist.'
                 );
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
                 'File Not Exist.',

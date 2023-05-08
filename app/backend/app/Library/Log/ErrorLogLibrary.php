@@ -74,7 +74,7 @@ class ErrorLogLibrary
         string $peakMemory,
         string $stackTrace,
         array $parameter
-    ): void{
+    ): void {
         $context = [
             self::LOG_KEY_REQUEST_DATETIME          => $requestDateTime,
             self::LOG_KEY_REQUEST_URI               => $uri ?? null,
