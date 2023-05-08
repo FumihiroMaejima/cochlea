@@ -61,3 +61,17 @@ scrape_configs:
           process_id:
           memory:
           peak_memory:
+- job_name: laravel-error-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-error-logs
+      __path__: /var/log/app/error-*.log
+- job_name: laravel-sql-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-sql-logs
+      __path__: /var/log/app/sql-*.log
