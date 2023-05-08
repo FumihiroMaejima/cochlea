@@ -130,7 +130,7 @@ bottomk(10, sum(rate({job="app-access-logs"} | pattern "<_> <_> <_> <_> <line>" 
 {job="app-error-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
 sum(rate({job="app-error-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (uri)
 
-# エラーログ
+# SQLログ
 {job="app-sql-logs"} |= ``
 {job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json
 sum(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
