@@ -140,6 +140,9 @@ sum(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "
 count(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
 avg(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m])) by (sql)
 sum(rate({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json[1m]))
+
+# クエリごとの平均time
+avg_over_time(({job="app-sql-logs"} | pattern "<_> <_> <_> <_> <line>" | line_format "{{.line}}" | json | unwrap time [1m])) by (sql)
 ```
 
 ---
