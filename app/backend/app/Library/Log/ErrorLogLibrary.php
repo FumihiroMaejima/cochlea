@@ -19,6 +19,7 @@ class ErrorLogLibrary
     private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
     private const LOG_KEY_REQUEST_MESSAGE = 'message';
     private const LOG_KEY_REQUEST_URI = 'uri';
+    private const LOG_KEY_REQUEST_STATUS_CODE = 'status_code';
     private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
     private const LOG_KEY_REQUEST_MEMORY_BYTE = 'memory_byte';
     private const LOG_KEY_REQUEST_PEAK_MEMORY_BYTE = 'peak_memory_byte';
@@ -29,11 +30,13 @@ class ErrorLogLibrary
      * constructer.
      *
      * @param Throwable|HttpExceptionInterface $error error
+     * @param int $statusCode status code
      * @param array $parameter error data exmple: request parameter
      * @return void
      */
     public static function exec(
         Throwable|HttpExceptionInterface $error,
+        int $statusCode = 0,
         array $parameter = []
     ) {
         $uri = isset($_SERVER[self::GLOBAL_VALUE_KEY_REQUEST_URI])
@@ -44,6 +47,7 @@ class ErrorLogLibrary
             TimeLibrary::getCurrentDateTime(),
             $uri,
             $error->getMessage(),
+            $statusCode,
             getmypid(),
             memory_get_usage(),
             memory_get_peak_usage(),
@@ -58,6 +62,7 @@ class ErrorLogLibrary
      * @param string $requestDateTime
      * @param ?string $uri
      * @param string $message
+     * @param int $statusCode
      * @param int|bool $pid
      * @param int $memory
      * @param int $peakMemory
@@ -69,6 +74,7 @@ class ErrorLogLibrary
         string $requestDateTime,
         ?string $uri,
         string $message,
+        int $statusCode,
         int|bool $pid,
         int $memory,
         int $peakMemory,
@@ -79,6 +85,7 @@ class ErrorLogLibrary
             self::LOG_KEY_REQUEST_DATETIME          => $requestDateTime,
             self::LOG_KEY_REQUEST_URI               => $uri ?? null,
             self::LOG_KEY_REQUEST_MESSAGE           => $message,
+            self::LOG_KEY_REQUEST_STATUS_CODE       => $statusCode,
             self::LOG_KEY_REQUEST_PROCESS_ID        => $pid,
             self::LOG_KEY_REQUEST_MEMORY_BYTE       => $memory,
             self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE  => $peakMemory,

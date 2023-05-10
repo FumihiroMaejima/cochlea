@@ -10,8 +10,6 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    private const LOG_CAHNNEL_NAME = 'errorlog';
-
     /**
      * A list of Http Error Message.
      *
@@ -108,8 +106,7 @@ class Handler extends ExceptionHandler
 
         if (config('app.env') !== 'testing' && $message !== '') {
             // エラーログの出力
-            // Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $request->toArray());
-            ErrorLogLibrary::exec($e);
+            ErrorLogLibrary::exec($e, $e->getCode() ?? 0);
         }
 
         // HttpExceptionクラスの場合
