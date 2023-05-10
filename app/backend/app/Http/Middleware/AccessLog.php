@@ -14,29 +14,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AccessLog
 {
-    private const LOG_CAHNNEL_NAME = 'accesslog';
-
-    private const AUTHORIZATION_HEADER_KEY = 'authorization';
-    private const AUTHORIZATION_HEADER_VALUE_SUFFIX = '*****';
-    private const AUTHORIZATION_HEADER_VALUE_START_POSITION = 0;
-    private const AUTHORIZATION_HEADER_VALUE_END_POSITION = 10;
-
-    // ログキー
-    private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
-    private const LOG_KEY_REQUEST_URI = 'uri';
-    private const LOG_KEY_REQUEST_METHOD = 'method';
-    private const LOG_KEY_REQUEST_STATUS_CODE = 'status_code';
-    private const LOG_KEY_REQUEST_RESPONSE_TIME = 'response_time';
-    private const LOG_KEY_REQUEST_HOST = 'host';
-    private const LOG_KEY_REQUEST_IP = 'ip';
-    private const LOG_KEY_REQUEST_CONTENT_TYPE = 'content_type';
-    private const LOG_KEY_REQUEST_HEADERS = 'headers';
-    private const LOG_KEY_REQUEST_REQUEST_CONTENT = 'request_content';
-    private const LOG_KEY_REQUEST_PLATHOME = 'plathome';
-    private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
-    private const LOG_KEY_REQUEST_MEMORY = 'memory';
-    private const LOG_KEY_REQUEST_PEAK_MEMORY = 'peak_memory';
-
     // log出力項目
     private string $requestDateTime;
     private string $uri;
@@ -90,7 +67,6 @@ class AccessLog
 
 
         // log出力
-        // $this->outputLog();
         AccessLogLibrary::outputLog(
             $this->requestDateTime,
             $this->uri,
@@ -137,7 +113,7 @@ class AccessLog
         $this->ip              = $request->getClientIp();
         $this->contentType     = $contentType;
         $this->plathome        = $request->userAgent() ?? '';
-        $this->headers         = self::getRequestHeader($request->header());
+        $this->headers         = AccessLogLibrary::getRequestHeader($request->header());
         $this->requestContent  = LogLibrary::maskingSecretKeys($request->all());
     }
 
@@ -151,64 +127,5 @@ class AccessLog
         RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
     ): void {
         $this->statusCode = $response->getStatusCode();
-    }
-
-    /**
-     * get request header.
-     *
-     * @param string|array|null $headers header contents.
-     * @return string|array|null
-     */
-    private static function getRequestHeader(string|array|null $headers): string|array|null
-    {
-        if (is_array($headers)) {
-            $response = [];
-            foreach ($headers as $key => $value) {
-                if ($key === self::AUTHORIZATION_HEADER_KEY) {
-                    // $valueは配列になる想定
-                    $response[$key] = mb_substr(
-                        $value[0],
-                        self::AUTHORIZATION_HEADER_VALUE_START_POSITION,
-                        self::AUTHORIZATION_HEADER_VALUE_END_POSITION
-                    ) . self::AUTHORIZATION_HEADER_VALUE_SUFFIX;
-                } else {
-                    $response[$key] = $value;
-                }
-            }
-
-            return $response;
-        } else {
-            return $headers;
-        }
-    }
-
-
-
-    /**
-     * output access log in log file.
-     *
-     * @return void
-     */
-    private function outputLog(): void
-    {
-        $context = [
-            self::LOG_KEY_REQUEST_DATETIME         => $this->requestDateTime,
-            self::LOG_KEY_REQUEST_URI              => $this->uri,
-            self::LOG_KEY_REQUEST_METHOD           => $this->method,
-            self::LOG_KEY_REQUEST_STATUS_CODE      => $this->statusCode,
-            self::LOG_KEY_REQUEST_RESPONSE_TIME    => $this->responseTime,
-            self::LOG_KEY_REQUEST_HOST             => $this->host,
-            self::LOG_KEY_REQUEST_IP               => $this->ip,
-            self::LOG_KEY_REQUEST_CONTENT_TYPE     => $this->contentType,
-            self::LOG_KEY_REQUEST_HEADERS          => $this->headers,
-            self::LOG_KEY_REQUEST_REQUEST_CONTENT  => $this->requestContent,
-            self::LOG_KEY_REQUEST_PLATHOME         => $this->plathome,
-            self::LOG_KEY_REQUEST_PROCESS_ID       => $this->pid,
-            self::LOG_KEY_REQUEST_MEMORY           => $this->memory . ' Byte',
-            self::LOG_KEY_REQUEST_PEAK_MEMORY      => $this->peakMemory . ' Byte',
-        ];
-
-        // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);
-        Log::channel(self::LOG_CAHNNEL_NAME)->info('Access:', $context);
     }
 }

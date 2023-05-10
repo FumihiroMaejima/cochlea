@@ -155,10 +155,10 @@ class AccessLogLibrary
     /**
      * get request header.
      *
-     * @param string|array|null $headers header contents.
+     * @param string|array|null $headers header contents. (\Illuminate\Http\Request->header())
      * @return string|array|null
      */
-    private static function getRequestHeader(string|array|null $headers): string|array|null
+    public static function getRequestHeader(string|array|null $headers): string|array|null
     {
         if (is_array($headers)) {
             $response = [];
@@ -180,8 +180,6 @@ class AccessLogLibrary
             return $headers;
         }
     }
-
-
 
     /**
      * output access log in log file.
@@ -235,7 +233,6 @@ class AccessLogLibrary
             self::LOG_KEY_REQUEST_PEAK_MEMORY      => $peakMemory . ' Byte',
         ];
 
-        // Log::debug($request->method(), ['url' => $request->fullUrl(), 'request' => $request->all()]);
         Log::channel(self::LOG_CAHNNEL_NAME)->info('Access:', $context);
     }
 }
