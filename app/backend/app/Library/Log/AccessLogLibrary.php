@@ -34,8 +34,8 @@ class AccessLogLibrary
     private const LOG_KEY_REQUEST_REQUEST_CONTENT = 'request_content';
     private const LOG_KEY_REQUEST_PLATHOME = 'plathome';
     private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
-    private const LOG_KEY_REQUEST_MEMORY = 'memory';
-    private const LOG_KEY_REQUEST_PEAK_MEMORY = 'peak_memory';
+    private const LOG_KEY_REQUEST_MEMORY_BYTE = 'memory_byte';
+    private const LOG_KEY_REQUEST_PEAK_MEMORY_BYTE = 'peak_memory_byte';
 
     // log出力項目
     private string $requestDateTime;
@@ -50,8 +50,8 @@ class AccessLogLibrary
     private mixed $requestContent;
     private string $plathome;
     private int|false $pid;
-    private string $memory;
-    private string $peakMemory;
+    private int $memory;
+    private int $peakMemory;
 
     private const ECLUDE_PATH_LIST = [
         '_debugbar',
@@ -83,8 +83,8 @@ class AccessLogLibrary
         $response = $next($request);
 
         $this->responseTime = microtime(true) - $startTime;
-        $this->memory = (string)memory_get_usage();
-        $this->peakMemory = (string)memory_get_peak_usage();
+        $this->memory = memory_get_usage();
+        $this->peakMemory = memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
 
@@ -196,8 +196,8 @@ class AccessLogLibrary
      * @param mixed $requestContent
      * @param string $plathome
      * @param int|bool $pid
-     * @param string $memory
-     * @param string $peakMemory
+     * @param int $memory
+     * @param int $peakMemory
      * @return void
      */
     public static function outputLog(
@@ -213,8 +213,8 @@ class AccessLogLibrary
         mixed $requestContent,
         string $plathome,
         int|bool $pid,
-        string $memory,
-        string $peakMemory
+        int $memory,
+        int $peakMemory
     ): void {
         $context = [
             self::LOG_KEY_REQUEST_DATETIME         => $requestDateTime,
@@ -229,8 +229,8 @@ class AccessLogLibrary
             self::LOG_KEY_REQUEST_REQUEST_CONTENT  => $requestContent,
             self::LOG_KEY_REQUEST_PLATHOME         => $plathome,
             self::LOG_KEY_REQUEST_PROCESS_ID       => $pid,
-            self::LOG_KEY_REQUEST_MEMORY           => $memory . ' Byte',
-            self::LOG_KEY_REQUEST_PEAK_MEMORY      => $peakMemory . ' Byte',
+            self::LOG_KEY_REQUEST_MEMORY_BYTE      => $memory,
+            self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE => $peakMemory,
         ];
 
         Log::channel(self::LOG_CAHNNEL_NAME)->info('Access:', $context);

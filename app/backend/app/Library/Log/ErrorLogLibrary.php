@@ -20,8 +20,8 @@ class ErrorLogLibrary
     private const LOG_KEY_REQUEST_MESSAGE = 'message';
     private const LOG_KEY_REQUEST_URI = 'uri';
     private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
-    private const LOG_KEY_REQUEST_MEMORY = 'memory';
-    private const LOG_KEY_REQUEST_PEAK_MEMORY = 'peak_memory';
+    private const LOG_KEY_REQUEST_MEMORY_BYTE = 'memory_byte';
+    private const LOG_KEY_REQUEST_PEAK_MEMORY_BYTE = 'peak_memory_byte';
     private const LOG_KEY_REQUEST_STACK_TRACE = 'stackTrace';
     private const LOG_KEY_REQUEST_REQUEST_PARAMETER = 'request_parameter';
 
@@ -80,8 +80,8 @@ class ErrorLogLibrary
             self::LOG_KEY_REQUEST_URI               => $uri ?? null,
             self::LOG_KEY_REQUEST_MESSAGE           => $message,
             self::LOG_KEY_REQUEST_PROCESS_ID        => $pid,
-            self::LOG_KEY_REQUEST_MEMORY            => $memory . ' Byte',
-            self::LOG_KEY_REQUEST_PEAK_MEMORY       => $peakMemory . ' Byte',
+            self::LOG_KEY_REQUEST_MEMORY_BYTE            => $memory . ' Byte',
+            self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE       => $peakMemory . ' Byte',
             self::LOG_KEY_REQUEST_STACK_TRACE       => $stackTrace,
             self::LOG_KEY_REQUEST_REQUEST_PARAMETER => $parameter,
         ];

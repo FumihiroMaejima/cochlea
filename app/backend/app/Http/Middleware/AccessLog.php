@@ -27,8 +27,8 @@ class AccessLog
     private mixed $requestContent;
     private string $plathome;
     private int|false $pid;
-    private string $memory;
-    private string $peakMemory;
+    private int $memory;
+    private int $peakMemory;
 
     private array $excludes = [
         '_debugbar',
@@ -60,8 +60,8 @@ class AccessLog
         $response = $next($request);
 
         $this->responseTime = microtime(true) - $startTime;
-        $this->memory = (string)memory_get_usage();
-        $this->peakMemory = (string)memory_get_peak_usage();
+        $this->memory = memory_get_usage();
+        $this->peakMemory = memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
 
