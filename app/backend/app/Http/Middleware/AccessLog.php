@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Library\Log\LogLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Library\Log\AccessLogLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -30,10 +31,6 @@ class AccessLog
     private int $memory;
     private int $peakMemory;
 
-    private array $excludes = [
-        '_debugbar',
-    ];
-
     /**
      * Handle an incoming request.
      *
@@ -43,12 +40,12 @@ class AccessLog
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($this->isExcludePath($request)) {
+        if (AccessLogLibrary::isExcludePath($request->path())) {
             return $next($request);
         }
 
         // $this->host = getmypid();
-        $this->requestDateTime = now()->format('Y-m-d H:i:s');
+        $this->requestDateTime = TimeLibrary::getCurrentDateTime();
         $this->pid             = getmypid();
 
         $this->getLogParameterByRequest($request);
@@ -64,7 +61,6 @@ class AccessLog
         $this->peakMemory = memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
-
 
         // log出力
         AccessLogLibrary::outputLog(
@@ -85,17 +81,6 @@ class AccessLog
         );
 
         return $response;
-    }
-
-    /**
-     * check current path is log exclude path.
-     *
-     * @param Request $request
-     * @return bool
-     */
-    private function isExcludePath(Request $request): bool
-    {
-        return in_array($request->path(), $this->excludes, true);
     }
 
     /**

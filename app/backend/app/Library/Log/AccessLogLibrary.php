@@ -66,7 +66,7 @@ class AccessLogLibrary
      */
     public function handle(Request $request, Closure $next)
     {
-        if (self::isExcludePath($request)) {
+        if (self::isExcludePath($request->path())) {
             return $next($request);
         }
 
@@ -87,7 +87,6 @@ class AccessLogLibrary
         $this->peakMemory = memory_get_peak_usage();
 
         $this->getLogParameterByResponse($response);
-
 
         // log出力
         self::outputLog(
@@ -113,12 +112,12 @@ class AccessLogLibrary
     /**
      * check current path is log exclude path.
      *
-     * @param Request $request
+     * @param string $path
      * @return bool
      */
-    private static function isExcludePath(Request $request): bool
+    public static function isExcludePath(string $path): bool
     {
-        return in_array($request->path(), self::ECLUDE_PATH_LIST, true);
+        return in_array($path, self::ECLUDE_PATH_LIST, true);
     }
 
     /**

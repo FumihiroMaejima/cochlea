@@ -45,8 +45,8 @@ class ErrorLogLibrary
             $uri,
             $error->getMessage(),
             getmypid(),
-            (string)memory_get_usage(),
-            (string)memory_get_peak_usage(),
+            memory_get_usage(),
+            memory_get_peak_usage(),
             str_replace("\n", '', $error->getTraceAsString()), // １行で表示させる
             LogLibrary::maskingSecretKeys($parameter) // マスキング処理を挟む
         );
@@ -59,8 +59,8 @@ class ErrorLogLibrary
      * @param ?string $uri
      * @param string $message
      * @param int|bool $pid
-     * @param string $memory
-     * @param string $peakMemory
+     * @param int $memory
+     * @param int $peakMemory
      * @param string $stackTrace
      * @param string $parameter
      * @return void
@@ -70,8 +70,8 @@ class ErrorLogLibrary
         ?string $uri,
         string $message,
         int|bool $pid,
-        string $memory,
-        string $peakMemory,
+        int $memory,
+        int $peakMemory,
         string $stackTrace,
         array $parameter
     ): void {
@@ -80,8 +80,8 @@ class ErrorLogLibrary
             self::LOG_KEY_REQUEST_URI               => $uri ?? null,
             self::LOG_KEY_REQUEST_MESSAGE           => $message,
             self::LOG_KEY_REQUEST_PROCESS_ID        => $pid,
-            self::LOG_KEY_REQUEST_MEMORY_BYTE            => $memory . ' Byte',
-            self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE       => $peakMemory . ' Byte',
+            self::LOG_KEY_REQUEST_MEMORY_BYTE       => $memory,
+            self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE  => $peakMemory,
             self::LOG_KEY_REQUEST_STACK_TRACE       => $stackTrace,
             self::LOG_KEY_REQUEST_REQUEST_PARAMETER => $parameter,
         ];
