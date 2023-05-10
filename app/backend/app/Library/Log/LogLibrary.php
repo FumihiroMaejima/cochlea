@@ -78,15 +78,18 @@ class LogLibrary
      * get logfile contents as Associative array(連想配列).
      *
      * @param string|null $date
-     * @param string $name
+     * @param string|null $name
      * @param int $sort
      * @return array
      */
     public static function getLogFileContentAsAssociative(
         ?string $date = null,
-        string $name = self::FILE_NAME_ACCESS,
+        ?string $name = self::FILE_NAME_ACCESS,
         int $sort = SORT_ASC,
     ): array {
+        if (is_null($name)) {
+            $name = self::FILE_NAME_ACCESS;
+        }
         $response = [];
         $logFileContetsList = self::getLogFileContentsList($date ?? null, $name ?? null);
 
