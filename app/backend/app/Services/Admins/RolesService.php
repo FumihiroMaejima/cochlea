@@ -21,6 +21,7 @@ use App\Http\Resources\Admins\RolesResource;
 use App\Http\Resources\Admins\RoleUpdateNotificationResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Roles;
 use App\Repositories\Masters\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Masters\Roles\RolesRepositoryInterface;
@@ -108,7 +109,7 @@ class RolesService
     {
         $data = $this->rolesRepository->getRoles();
 
-        return Excel::download(new RolesExport($data), 'roles_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new RolesExport($data), 'roles_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**

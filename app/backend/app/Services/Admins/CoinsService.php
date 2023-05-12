@@ -20,6 +20,7 @@ use App\Exports\Masters\Coins\CoinsBulkInsertTemplateExport;
 use App\Imports\Masters\Coins\CoinsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Coins;
 use Exception;
 
@@ -74,7 +75,7 @@ class CoinsService
     {
         $data = $this->coinsRepository->getRecords();
 
-        return Excel::download(new CoinsExport($data), 'coins_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new CoinsExport($data), 'coins_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -86,7 +87,7 @@ class CoinsService
     {
         return Excel::download(
             new CoinsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.coins.template'))),
-            'master_coins_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
+            'master_coins_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.xlsx'
         );
     }
 

@@ -111,7 +111,7 @@ class BannersService
     {
         $data = $this->bannersRepository->getRecords();
 
-        return Excel::download(new BannersExport($data), 'banners_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new BannersExport($data), 'banners_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -123,7 +123,7 @@ class BannersService
     {
         return Excel::download(
             new BannersBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.banners.template'))),
-            'master_banners_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
+            'master_banners_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.xlsx'
         );
     }
 
