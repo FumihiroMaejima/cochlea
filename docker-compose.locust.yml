@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  master:
+    image: locustio/locust
+    ports:
+     - "${LOCUST_PORT}:8089"
+    volumes:
+      - ./loadTest/locust:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H ${TEST_TARGET_HOST}
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./loadTest/locust:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master

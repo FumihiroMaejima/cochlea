@@ -1,5 +1,11 @@
 .PHONY: help
 .DEFAULT_GOAL := help
+
+# load test
+WOKER=1
+LOCUST_FILE=./loadTest/locust/locustfile.py
+LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
+
 ##############################
 # make docker environmental
 ##############################
@@ -190,6 +196,32 @@ prometheus-ps:
 
 prometheus-dev:
 	sh ./scripts/prometheus-container.sh
+
+##############################
+# locust docker environmental
+##############################
+locust-up:
+	docker-compose -f ./docker-compose.locust.yml up -d
+
+locust-down:
+	docker-compose -f ./docker-compose.locust.yml down
+
+locust-down-rmi:
+	docker-compose -f ./docker-compose.locust.yml down --rmi all
+
+locust-ps:
+	docker-compose -f ./docker-compose.locust.yml ps
+
+create: # create locustfile.py
+ifeq ("$(wildcard $(LOCUST_FILE))", "") # ファイルが無い場合
+	cp $(LOCUST_SAMPLE_FILE) $(LOCUST_FILE)
+else
+	@echo file already exist.
+endif
+
+locust-dev:
+#	 sh ./scripts/locust-dev.sh
+	sh ./scripts/locust-dev.sh $(WOKER)
 
 ##############################
 # circle ci
