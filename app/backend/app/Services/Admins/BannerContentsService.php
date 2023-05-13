@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -25,6 +24,7 @@ use App\Imports\Masters\BannerBlocks\BannerBlockContentsImport;
 use App\Imports\Masters\BannerBlocks\BannerBlocksImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use Exception;
 
 class BannerContentsService
@@ -59,7 +59,7 @@ class BannerContentsService
     {
         $data = $this->bannerBlocksRepository->getRecords();
 
-        return Excel::download(new BannerBlocksExport($data), 'banner_banner_blocks_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new BannerBlocksExport($data), 'banner_banner_blocks_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -71,7 +71,7 @@ class BannerContentsService
     {
         return Excel::download(
             new BannerBlocksBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.bannerBlocks.template'))),
-            'master_banner_blocks_template_' . Carbon::now()->format('YmdHis') . '.csv'
+            'master_banner_blocks_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
         );
     }
 
@@ -130,7 +130,7 @@ class BannerContentsService
     {
         $data = $this->bannerBlockContentsRepository->getRecords();
 
-        return Excel::download(new BannerBlockContentsExport($data), 'banner_block_contents_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new BannerBlockContentsExport($data), 'banner_block_contents_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -142,7 +142,7 @@ class BannerContentsService
     {
         return Excel::download(
             new BannerBlockContentsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.bannerBlockContents.template'))),
-            'master_banner_block_contents_template_' . Carbon::now()->format('YmdHis') . '.csv'
+            'master_banner_block_contents_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
         );
     }
 

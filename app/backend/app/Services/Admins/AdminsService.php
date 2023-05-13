@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exceptions\MyApplicationHttpException;
@@ -24,6 +23,7 @@ use App\Http\Resources\Admins\AdminsResource;
 use App\Http\Resources\Admins\AdminsRolesResource;
 use App\Http\Resources\Admins\AdminUpdateNotificationResource;
 use App\Library\Array\ArrayLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Admins;
 use App\Services\Admins\Notifications\AdminsSlackNotificationService;
 use App\Services\Admins\Notifications\PasswordForgotNotificationService;
@@ -86,7 +86,7 @@ class AdminsService
     {
         $data = $this->adminsRepository->getAdminsList();
 
-        return Excel::download(new AdminsExport($data), 'admins_list_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new AdminsExport($data), 'admins_list_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**

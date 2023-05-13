@@ -1,0 +1,83 @@
+version: '3.7'
+
+services:
+  prometheus:
+    platform: 'linux/amd64'
+    image: prom/prometheus
+    container_name: ${PROJECT_NAME}_prometheus
+    volumes:
+      - ./prometheus/prometheus:/etc/prometheus
+    command: "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+  exporter:
+    image: prom/node-exporter:latest
+    container_name: ${PROJECT_NAME}_node-exporter
+    ports:
+      - "${PROMETHEUS_EXPORTER_PORT:-9100}:9100"
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+  grafana:
+    image: grafana/grafana
+    container_name: ${PROJECT_NAME}_grafana
+    ports:
+      - "${PROMETHEUS_GRAFANA_PORT:-3300}:3000"
+    volumes:
+      - ./prometheus/grafana/grafana:/var/lib/grafana # 設定ファイル置き場(WORKDIRは別)
+    environment:
+      TZ: "Asia/Tokyo"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource" # 初期プラグインインストール設定
+    networks:
+      default:
+
+  loki:
+    image: grafana/loki
+    container_name: ${PROJECT_NAME}_grafana_loki
+    ports:
+      - "${PROMETHEUS_GRAFANA_LOKI_PORT:-3400}:3100"
+    volumes:
+      - ./prometheus/grafana/loki/local-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+  promtail:
+    image: grafana/promtail
+    container_name: ${PROJECT_NAME}_grafana_promtail
+    ports:
+      - "${PROMETHEUS_GRAFANA_PROMTAIL_PORT:-9080}:9080"
+    volumes:
+      - ./prometheus/grafana/promtail/config.yml:/etc/promtail/config.yml
+      # - /var/log:/var/log
+      - ./app/backend/storage/logs:/var/log/app
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      default:
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: ${PROJECT_NAME}_alertmanager
+    volumes:
+      - ./prometheus/alertmanager:/etc/alertmanager
+    command: "--config.file=/etc/alertmanager/config.yaml"
+    ports:
+      - "${PROMETHEUS_ALERT_MANAGER_PORT:-9093}:9093"
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+networks:
+  default:
+    external: true # 他のコンテナで利用しているネットワークを利用
+    name: ${NETWORK_NAME}
