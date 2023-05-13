@@ -1,0 +1,77 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  # - url: http://loki:3100/loki/api/v1/push
+  - url: http://loki:3400/loki/api/v1/push
+
+scrape_configs:
+# - job_name: system
+#   static_configs:
+#   - targets:
+#       - localhost
+#     labels:
+#       job: varlogs
+#       __path__: /var/log/*log
+- job_name: system
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: varlogs
+      __path__: /var/log/*log
+- job_name: laravel
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: applogs
+      __path__: /var/log/app/*log
+- job_name: laravel-app-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-access-logs
+      __path__: /var/log/app/access-*.log
+  # pipeline_stages:
+  # - match:
+  #     selector: '{job="app-access-logs"}'
+  #     stages:
+  #     - regex:
+  #         expression: '^method:(?P<method>.*)\trequest_datetime:(?P<request_datetime>.*)\thost:(?P<host>.*)\turi:(?P<uri>.*)\tip:(?P<ip>.*)\tcontent_type:(?P<content_type>.*)\trequest_uri:(?P<request_uri>.*)\tstatus_code:(?P<status_code>.*)\tresponse_time:(?P<response_time>.*)\theaders:(?P<headers>.*)\trequest_content:(?P<request_content>.*)\tplathome:(?P<plathome>.*)\tprocess_id:(?P<process_id>.*)\tmemory:(?P<memory>.*)\tpeak_memory:(?P<peak_memory>.*)$'
+  #         # expression: '^method:(?P<method>.*),request_datetime:(?P<request_datetime>.*),host:(?P<host>.*),uri:(?P<uri>.*),ip:(?P<ip>.*),content_type:(?P<content_type>.*),request_uri:(?P<request_uri>.*),status_code:(?P<status_code>.*),response_time:(?P<response_time>.*),headers:(?P<headers>.*),request_content:(?P<request_content>.*),plathome:(?P<plathome>.*),process_id:(?P<process_id>.*),memory:(?P<memory>.*),peak_memory:(?P<peak_memory>.*)$'
+  #     - labels:
+  #         method:
+  #         request_datetime:
+  #         host:
+  #         uri:
+  #         ip:
+  #         content_type:
+  #         request_uri:
+  #         status_code:
+  #         response_time:
+  #         headers:
+  #         request_content:
+  #         plathome:
+  #         process_id:
+  #         memory:
+  #         peak_memory:
+- job_name: laravel-error-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-error-logs
+      __path__: /var/log/app/error-*.log
+- job_name: laravel-sql-log
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: app-sql-logs
+      __path__: /var/log/app/sql-*.log

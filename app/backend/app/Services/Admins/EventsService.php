@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -20,6 +19,7 @@ use App\Exports\Masters\Events\EventsBulkInsertTemplateExport;
 use App\Imports\Masters\Events\EventsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Events;
 use Exception;
 
@@ -75,7 +75,7 @@ class EventsService
     {
         $data = $this->eventsRepository->getRecords();
 
-        return Excel::download(new EventsExport($data), 'events_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new EventsExport($data), 'events_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -87,7 +87,7 @@ class EventsService
     {
         return Excel::download(
             new EventsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.events.template'))),
-            'master_events_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
+            'master_events_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.xlsx'
         );
     }
 

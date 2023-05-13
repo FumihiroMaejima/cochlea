@@ -55,7 +55,8 @@ class DataBaseQueryServiceProvider extends ServiceProvider
             }
 
             //  Log::debug('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
-            Log::channel(self::LOG_CAHNNEL_NAME)->info('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
+            // Log::channel(self::LOG_CAHNNEL_NAME)->info('SQL', ['sql' => $sql, 'time' => "{$query->time} ms"]);
+            Log::channel(self::LOG_CAHNNEL_NAME)->info('SQL', ['sql' => $sql, 'time' => "{$query->time}", 'time_string' => "{$query->time} ms"]);
 
             Event::listen(TransactionBeginning::class, function (TransactionBeginning $event): void {
                 Log::debug(self::LOG_TRANSACTION_START_MESSAGE);

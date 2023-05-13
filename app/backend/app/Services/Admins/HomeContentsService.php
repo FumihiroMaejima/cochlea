@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -25,6 +24,7 @@ use App\Imports\Masters\HomeContents\HomeContentsGroupsImport;
 use App\Imports\Masters\HomeContents\HomeContentsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\HomeContentsGroups;
 use App\Models\Masters\HomeContents;
 use Exception;
@@ -61,7 +61,7 @@ class HomeContentsService
     {
         $data = $this->homeContentsGroupsRepository->getRecords();
 
-        return Excel::download(new HomeContentsGroupsExport($data), 'home_contents_groups_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new HomeContentsGroupsExport($data), 'home_contents_groups_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -73,7 +73,7 @@ class HomeContentsService
     {
         return Excel::download(
             new HomeContentsGroupsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.homeContentsGroups.template'))),
-            'master_home_contents_groups_template_' . Carbon::now()->format('YmdHis') . '.csv'
+            'master_home_contents_groups_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
         );
     }
 
@@ -132,7 +132,7 @@ class HomeContentsService
     {
         $data = $this->homeContentsRepository->getRecords();
 
-        return Excel::download(new HomeContentsExport($data), 'home_contents_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new HomeContentsExport($data), 'home_contents_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -144,7 +144,7 @@ class HomeContentsService
     {
         return Excel::download(
             new HomeContentsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.homeContents.template'))),
-            'master_home_contents_template_' . Carbon::now()->format('YmdHis') . '.csv'
+            'master_home_contents_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
         );
     }
 

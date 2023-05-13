@@ -40,6 +40,8 @@ export type StateType = {
   fakerTime?: string
   datetime?: string
   timestamp?: number
+  decryptEmail?: string
+  encryptEmail?: string
 }
 
 export const initialData: StateType = {
@@ -47,6 +49,8 @@ export const initialData: StateType = {
   fakerTime: undefined,
   datetime: undefined,
   timestamp: undefined,
+  decryptEmail: undefined,
+  encryptEmail: undefined,
 }
 
 export function useDebugs() {
@@ -169,17 +173,92 @@ export function useDebugs() {
   }
 
   /**
+   * get converted email to encrypt email.
+   * @param {string} email
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getDebugEmailToEncryptRequest = async (
+    email: string,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
+    return await useRequest()
+      .getRequest<ServerRequestType<string>>(
+        config.endpoint.debugs.encrypt + `?email=${email}`,
+        {
+          headers: { ...options.headers, ...debugHeader },
+        }
+      )
+      .then((response) => {
+        // const data = response.data as ServerRequestType<number>
+        // updateTimestamp(data.data as number)
+        updateEncryptEamail(response.data as unknown as string)
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
+   * get converted encrypt email to decrypt email.
+   * @param {string} email
+   * @param {BaseAddHeaderResponse} header
+   * @return {void}
+   */
+  const getDebugEmailToDecryptRequest = async (
+    email: string,
+    options: AuthAppHeaderOptions
+  ): Promise<ServerRequestType> => {
+    // axios.defaults.withCredentials = true
+
+    let debugHeader: DebagHeaderType | undefined = undefined
+    if (debugsState.fakerTime) {
+      debugHeader = creteFakerTimeHeader(debugsState.fakerTime)
+    }
+
+    return await useRequest()
+      .getRequest<ServerRequestType<string>>(config.endpoint.debugs.decrypt, {
+        headers: { ...options.headers, ...debugHeader },
+        params: { email },
+      })
+      .then((response) => {
+        // const data = response.data as ServerRequestType<number>
+        // updateTimestamp(data.data as number)
+        updateDecryptEamail(response.data as unknown as string)
+        return { data: response.data, status: 200 }
+      })
+      .catch((error) => {
+        return { data: error, status: 404 | 500 }
+      })
+      .finally(() => {
+        options.callback()
+      })
+  }
+
+  /**
    * update local faker time value.
    * @param {string} value
    * @return {void}
    */
   const updateLocalFakerTime = (value: string): void => {
-    dispatch({
+    /* dispatch({
       status: debugsState.status,
       fakerTime: value,
       datetime: debugsState.datetime,
       timestamp: debugsState.timestamp,
-    })
+    }) */
+    dispatch({ ...debugsState, ...{ fakerTime: value } })
   }
 
   /**
@@ -188,13 +267,13 @@ export function useDebugs() {
    * @return {void}
    */
   const updateDateTime = (value: string): void => {
-    dispatch({
+    /* dispatch({
       status: debugsState.status,
       fakerTime: debugsState.fakerTime,
       datetime: value,
       timestamp: debugsState.timestamp,
-    })
-    // dispatch({ ...debugsState, ...{ datetime: value } })
+    }) */
+    dispatch({ ...debugsState, ...{ datetime: value } })
   }
 
   /**
@@ -203,13 +282,31 @@ export function useDebugs() {
    * @return {void}
    */
   const updateTimestamp = (value: number): void => {
-    dispatch({
+    /* dispatch({
       status: debugsState.status,
       fakerTime: debugsState.fakerTime,
       datetime: debugsState.datetime,
       timestamp: value,
-    })
-    // dispatch({ ...debugsState, ...{ timestamp: value } })
+    }) */
+    dispatch({ ...debugsState, ...{ timestamp: value } })
+  }
+
+  /**
+   * update decrypt email value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateDecryptEamail = (value: string): void => {
+    dispatch({ ...debugsState, ...{ decryptEmail: value } })
+  }
+
+  /**
+   * update encrypt email value.
+   * @param {string} value
+   * @return {void}
+   */
+  const updateEncryptEamail = (value: string): void => {
+    dispatch({ ...debugsState, ...{ encryptEmail: value } })
   }
 
   /**
@@ -226,9 +323,13 @@ export function useDebugs() {
     getDebugStatusRequest,
     getDebugDateTimeToTimeStampRequest,
     getDebugTimeStampToDateTimeRequest,
+    getDebugEmailToEncryptRequest,
+    getDebugEmailToDecryptRequest,
     updateLocalFakerTime,
     updateDateTime,
     updateTimestamp,
+    updateDecryptEamail,
+    updateEncryptEamail,
   } as const
 }
 

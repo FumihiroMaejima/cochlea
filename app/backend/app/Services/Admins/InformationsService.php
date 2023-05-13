@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -20,6 +19,7 @@ use App\Exports\Masters\Informations\InformationsBulkInsertTemplateExport;
 use App\Imports\Masters\Informations\InformationsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Informations;
 use Exception;
 
@@ -75,7 +75,7 @@ class InformationsService
     {
         $data = $this->informationsRepository->getRecords();
 
-        return Excel::download(new InformationsExport($data), 'informations_info_' . Carbon::now()->format('YmdHis') . '.csv');
+        return Excel::download(new InformationsExport($data), 'informations_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
@@ -87,7 +87,7 @@ class InformationsService
     {
         return Excel::download(
             new InformationsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.informations.template'))),
-            'master_informations_template_' . Carbon::now()->format('YmdHis') . '.xlsx'
+            'master_informations_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.xlsx'
         );
     }
 

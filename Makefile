@@ -171,6 +171,25 @@ mysql-dump:
 mysql-restore:
 	sh ./scripts/restore-dump.sh
 
+##############################
+# prometheus docker container
+##############################
+prometheus-up:
+	docker-compose -f ./docker-compose.prometheus.yml up -d && \
+	echo 'prometheus : http://localhost:9090' && \
+	echo 'node-exporter : http://localhost:9100/metrics' && \
+	echo 'grafana : http://localhost:3200' && \
+	echo 'alertmanager : http://localhost:9093/#/status' && \
+	echo 'promtail : http://localhost:9080/targets'
+
+prometheus-down:
+	docker-compose -f ./docker-compose.prometheus.yml down
+
+prometheus-ps:
+	docker-compose -f ./docker-compose.prometheus.yml ps
+
+prometheus-dev:
+	sh ./scripts/prometheus-container.sh
 
 ##############################
 # circle ci

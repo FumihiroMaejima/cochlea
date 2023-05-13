@@ -13,6 +13,7 @@ use App\Library\Random\RandomStringLibrary;
 use App\Library\Stripe\StripeLibrary;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
+use Exception;
 
 class LogLibrary
 {
@@ -49,13 +50,22 @@ class LogLibrary
 
         $path = self::DIRECTORY . "$name-$date." . self::EXTENTION;
 
-        // storage/app直下に無い為file_get_contents()で取得
-        $file = file_get_contents(storage_path($path));
-
-        if (is_null($file)) {
+        try {
+            // storage/app直下に無い為file_get_contents()で取得
+            $file = file_get_contents(storage_path($path));
+            if (is_null($file)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_404,
+                    'File Not Exist.'
+                );
+            }
+        } catch (Exception $e) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
-                'File Not Exist.'
+                'File Not Exist.',
+                ['message' => $e->getMessage()],
+                true,
+                previous: $e
             );
         }
 
@@ -68,15 +78,18 @@ class LogLibrary
      * get logfile contents as Associative array(連想配列).
      *
      * @param string|null $date
-     * @param string $name
+     * @param string|null $name
      * @param int $sort
      * @return array
      */
     public static function getLogFileContentAsAssociative(
         ?string $date = null,
-        string $name = self::FILE_NAME_ACCESS,
+        ?string $name = self::FILE_NAME_ACCESS,
         int $sort = SORT_ASC,
     ): array {
+        if (is_null($name)) {
+            $name = self::FILE_NAME_ACCESS;
+        }
         $response = [];
         $logFileContetsList = self::getLogFileContentsList($date ?? null, $name ?? null);
 

@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\ErrorLog;
+use App\Library\Log\ErrorLogLibrary;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -10,8 +10,6 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    private const LOG_CAHNNEL_NAME = 'errorlog';
-
     /**
      * A list of Http Error Message.
      *
@@ -104,17 +102,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable|HttpExceptionInterface $e)
     {
+        $isHttpException = $this->isHttpException($e);
         $message = $e->getMessage();
+        $status = $isHttpException ? $e->getStatusCode() : $e->getCode();
 
         if (config('app.env') !== 'testing' && $message !== '') {
             // エラーログの出力
-            // Log::channel(self::LOG_CAHNNEL_NAME)->error('Error:', $request->toArray());
-            new ErrorLog($e);
+            ErrorLogLibrary::exec($e, $status);
         }
 
         // HttpExceptionクラスの場合
-        if ($this->isHttpException($e)) {
-            $status = $e->getStatusCode();
+        if ($isHttpException) {
             if ($message === '') {
                 $message = $this->httpErrorsMessage[$status];
             }

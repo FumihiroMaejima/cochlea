@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\ErrorLog;
+use App\Library\Log\ErrorLogLibrary;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -45,7 +45,7 @@ class MyApplicationHttpException extends HttpException
         // メッセージをレスポンスとして返さない場合
         if (!$isResponseMessage) {
             // ログに出力
-            $this->setErrorLog($parameter);
+            $this->setErrorLog($statusCode, $parameter);
             // ログ出力後にメッセージを初期化(Handlerクラスでエラーメッセージを設定する)
             $this->message = '';
         }
@@ -85,14 +85,17 @@ class MyApplicationHttpException extends HttpException
     /**
      * set message to error log.
      *
+     * @param int $statusCode status code
      * @param array $parameter error data exmple: request parameter
      * @return void
      */
-    private function setErrorLog(array $parameter): void
-    {
+    private function setErrorLog(
+        int $statusCode,
+        array $parameter
+    ): void {
         if (config('app.env') !== 'testing') {
             // エラーログの出力
-            new ErrorLog($this, $parameter);
+            ErrorLogLibrary::exec($this, $statusCode, $parameter);
         }
     }
 }
