@@ -5,6 +5,20 @@
 
 ---
 
+# Web
+
+```shell
+# ワーカーの数を指定して実行
+docker-compose -f ./docker-compose.locust.yml up -d --scale worker=5
+# 下記のコマンドでmasterのコンテナが実行される
+-f /mnt/locust/locustfile.py --master -H http://localhosst:portNumber
+# wokerコンテナの実行コマンド(コンテナのサービス名を指定している)
+-f /mnt/locust/locustfile.py --worker --master-host master
+
+# ブラウザで下記にアクセスして負荷試験を実行する
+http://localhost:8089
+```
+
 # CLI
 
 ```shell

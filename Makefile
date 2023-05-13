@@ -201,7 +201,8 @@ prometheus-dev:
 # locust docker environmental
 ##############################
 locust-up:
-	docker-compose -f ./docker-compose.locust.yml up -d
+	docker-compose -f ./docker-compose.locust.yml up -d --scale worker=$(WOKER) && \
+	echo 'locust : http://localhost:8089'
 
 locust-down:
 	docker-compose -f ./docker-compose.locust.yml down
@@ -212,7 +213,7 @@ locust-down-rmi:
 locust-ps:
 	docker-compose -f ./docker-compose.locust.yml ps
 
-create: # create locustfile.py
+locust-create: # create locustfile.py
 ifeq ("$(wildcard $(LOCUST_FILE))", "") # ファイルが無い場合
 	cp $(LOCUST_SAMPLE_FILE) $(LOCUST_FILE)
 else
