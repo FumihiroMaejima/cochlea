@@ -11,7 +11,7 @@
 # ワーカーの数を指定して実行
 docker-compose -f ./docker-compose.locust.yml up -d --scale worker=5
 # 下記のコマンドでmasterのコンテナが実行される
--f /mnt/locust/locustfile.py --master -H http://localhosst:portNumber
+-f /mnt/locust/locustfile.py --master -H http://localhost:portNumber
 # wokerコンテナの実行コマンド(コンテナのサービス名を指定している)
 -f /mnt/locust/locustfile.py --worker --master-host master
 

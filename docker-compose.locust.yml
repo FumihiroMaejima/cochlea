@@ -16,7 +16,7 @@ services:
 
   worker:
     image: locustio/locust
-    container_name: ${PROJECT_NAME}_locust_woker
+    # container_name: ${PROJECT_NAME}_locust_woker # wokerごとに採番する必要がある為固定で名前をつけない
     volumes:
       - ./loadTest/locust:/mnt/locust
     command: -f /mnt/locust/locustfile.py --worker --master-host master
