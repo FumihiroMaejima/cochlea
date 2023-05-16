@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  jenkins-master:
+    container_name: ${PROJECT_NAME}-jenkins-master
+    image: jenkins/jenkins:latest
+    volumes:
+      - ./jenkins/home:/var/jenkins_home
+    ports:
+      - "${JENKINS_CLIENT_PORT:-8888}:8080"
+      - "${JENKINS_SERVER_PORT:-50000}:50000"
+    environment:
+      TZ: "Asia/Tokyo"

@@ -225,6 +225,29 @@ locust-dev:
 	sh ./scripts/locust-dev.sh $(WOKER)
 
 ##############################
+# jenkins
+##############################
+jenkins-up:
+	docker-compose -f ./docker-compose.jenkins.yml up && \
+	echo 'locust : http://localhost:8080'
+
+jenkins-down:
+	docker-compose -f ./docker-compose.jenkins.yml down
+
+jenkins-clear-src:
+	rm -rf jenkins/home/* && \
+	rm -r jenkins/home/.cache && \
+	rm -r jenkins/home/.java
+
+jenkins-rebuild: # down container & remove cacahe & rebuild container.
+	docker-compose -f ./docker-compose.jenkins.yml down --rmi all && \
+	rm -r jenkins/home/.cache && \
+	docker-compose -f ./docker-compose.jenkins.yml up -d
+
+jenkins-quiet: # down jenkins.
+	curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d '{}' localhost:8080/quietDown
+
+##############################
 # circle ci
 ##############################
 circleci:
