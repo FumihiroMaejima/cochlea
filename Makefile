@@ -228,11 +228,12 @@ locust-dev:
 # jenkins
 ##############################
 jenkins-up:
-	docker-compose -f ./docker-compose.jenkins.yml up && \
-	echo 'locust : http://localhost:8080'
+	docker-compose -f ./docker-compose.jenkins.yml up -d && \
+	echo 'locust : http://localhost:8280'
 
 jenkins-down:
-	docker-compose -f ./docker-compose.jenkins.yml down
+	docker-compose -f ./docker-compose.jenkins.yml down -v && \
+	rm -r jenkins/home/.cache
 
 jenkins-clear-src:
 	rm -rf jenkins/home/* && \
