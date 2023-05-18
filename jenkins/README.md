@@ -73,6 +73,8 @@ jobの具体的な内容はシェルスクリプトなどに書いてjob内の�
 ```shell
 # jobで実行するスクリプトを実行
 sh /usr/local/scripts/test-job-script.sh
+# パラメーターを渡す場合(設定したパラメーター名を指定する)
+sh /usr/local/scripts/test-job-script.sh $testParameter1
 ```
 
 ---
