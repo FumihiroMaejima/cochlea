@@ -102,3 +102,21 @@ Error report
 
 
 ---
+
+# ログ出力
+
+Docker-Composeの場合。
+
+`/home/locust`内にログが出力される為マウント設定を入れる。
+
+起動時のコマンドで`--csv=log/test --csv-full-history`のオプションを指定する。
+
+```yml
+    volumes:
+      - ./log:/home/locust/log # ログ出力
+
+    # 起動時のコマンド
+    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history
+```
+
+---
