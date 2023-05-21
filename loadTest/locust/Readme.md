@@ -119,4 +119,13 @@ Docker-Composeの場合。
     command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history
 ```
 
+コンテナやスクリプト自体のログ出力は`--logfile`オプションを指定する。
+
+`--logfile=log/test.log`と指定する。
+
+```yml
+    # 起動時のコマンド
+    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history --logfile=log/test.log
+```
+
 ---

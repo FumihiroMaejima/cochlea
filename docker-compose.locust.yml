@@ -10,7 +10,7 @@ services:
       - ./loadTest/locust:/mnt/locust
       - ./loadTest/log:/home/locust/log # ログ出力
     # command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST}
-    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history
+    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history --logfile=log/test.log
     environment:
       TZ: "Asia/Tokyo"
     networks:
