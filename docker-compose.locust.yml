@@ -8,7 +8,9 @@ services:
      - "${LOCUST_PORT}:8089"
     volumes:
       - ./loadTest/locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST}
+      - ./loadTest/log:/home/locust/log # ログ出力
+    # command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST}
+    command: -f /mnt/locust/locustfile.py --master -H ${LOCUST_TEST_TARGET_HOST} --csv=log/test --csv-full-history
     environment:
       TZ: "Asia/Tokyo"
     networks:
