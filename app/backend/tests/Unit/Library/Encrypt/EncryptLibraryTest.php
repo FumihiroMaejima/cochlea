@@ -56,6 +56,33 @@ class EncryptLibraryTest extends TestCase
     }
 
     /**
+     * create iv length data
+     * @return array
+     */
+    public function createIvDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            /* 'length 0' => [
+                'length' => 0,
+            ], */
+            'length 1' => [
+                'length' => 1,
+            ],
+            'length 5' => [
+                'length' => 5,
+            ],
+            'length 10' => [
+                'length' => 10,
+            ],
+            'length 16' => [
+                'length' => 16,
+            ],
+        ];
+    }
+
+    /**
      * test encrypt string by ECB mode.
      *
      * @dataProvider encryptStringDataProvider
@@ -93,5 +120,32 @@ class EncryptLibraryTest extends TestCase
     public function testDecryptByEbcMode(string $value, string $expect): void
     {
         $this->assertSame($expect, EncryptLibrary::decrypt($value, false));
+    }
+
+    /**
+     * test decrypt string by CBC mode.
+     *
+     * @dataProvider decryptStringDataProvider
+     * @param string $value
+     * @param string $expect
+     * @return void
+     */
+    public function testDecryptByCbcMode(string $value, string $expect): void
+    {
+        $this->assertNotSame($expect, EncryptLibrary::decrypt($value, true));
+    }
+
+    /**
+     * test create iv method output is random.
+     *
+     * @dataProvider createIvDataProvider
+     * @param int $length
+     * @return void
+     */
+    public function testCreateIvRandomValue(int $length): void
+    {
+        $value = EncryptLibrary::createIv($length);
+        $expect = EncryptLibrary::createIv($length);
+        $this->assertNotSame($expect, $value);
     }
 }
