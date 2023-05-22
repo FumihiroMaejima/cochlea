@@ -6,6 +6,7 @@ namespace Tests\Unit\Library\Encrypt;
 
 use App\Library\Encrypt\EncryptLibrary;
 use Tests\TestCase;
+use Exception;
 
 /**
  * Test Class of EncryptLibrary
@@ -140,10 +141,14 @@ class EncryptLibraryTest extends TestCase
      *
      * @dataProvider createIvDataProvider
      * @param int $length
+     * @param Exception|null $exception
      * @return void
      */
-    public function testCreateIvRandomValue(int $length): void
+    public function testCreateIvRandomValue(int $length, Exception $exception = null): void
     {
+        /* if (!is_null($exception)) {
+            $this->assertThrows(, $exception);
+        } */
         $value = EncryptLibrary::createIv($length);
         $expect = EncryptLibrary::createIv($length);
         $this->assertNotSame($expect, $value);
