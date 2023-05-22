@@ -32,9 +32,25 @@ class EncryptLibraryTest extends TestCase
         $this->createApplication();
 
         return [
-            'encrypt email is ecb mode' => [
+            'encrypt email for ecb mode data' => [
                 'value' => self::TEST_EMAIL_VALUE,
                 'expect' => self::TEST_ENCRYPT_EMAIL_VALUE,
+            ],
+        ];
+    }
+
+    /**
+     * decrypt string data
+     * @return array
+     */
+    public function decryptStringDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            'decrypt email for ecb mode data' => [
+                'value' => self::TEST_ENCRYPT_EMAIL_VALUE,
+                'expect' => self::TEST_EMAIL_VALUE,
             ],
         ];
     }
@@ -47,7 +63,7 @@ class EncryptLibraryTest extends TestCase
      * @param string $expect
      * @return void
      */
-    public function testEncryptByEbcMode($value, $expect): void
+    public function testEncryptByEbcMode(string $value, string $expect): void
     {
         $this->assertSame($expect, EncryptLibrary::encrypt($value, false));
     }
@@ -60,9 +76,22 @@ class EncryptLibraryTest extends TestCase
      * @param string $expect
      * @return void
      */
-    public function testEncryptByCbcMode($value, $expect): void
+    public function testEncryptByCbcMode(string $value, string $expect): void
     {
         // EBCモードとは値が異なる
         $this->assertNotSame($expect, EncryptLibrary::encrypt($value, true));
+    }
+
+    /**
+     * test decrypt string by ECB mode.
+     *
+     * @dataProvider decryptStringDataProvider
+     * @param string $value
+     * @param string $expect
+     * @return void
+     */
+    public function testDecryptByEbcMode(string $value, string $expect): void
+    {
+        $this->assertSame($expect, EncryptLibrary::decrypt($value, false));
     }
 }
