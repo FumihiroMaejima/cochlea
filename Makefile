@@ -1,5 +1,11 @@
 .PHONY: help
 .DEFAULT_GOAL := help
+
+# load test
+WOKER=1
+LOCUST_FILE=./loadTest/locust/locustfile.py
+LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
+
 ##############################
 # make docker environmental
 ##############################
@@ -190,6 +196,57 @@ prometheus-ps:
 
 prometheus-dev:
 	sh ./scripts/prometheus-container.sh
+
+##############################
+# locust docker environmental
+##############################
+locust-up:
+	docker-compose -f ./docker-compose.locust.yml up -d --scale worker=$(WOKER) && \
+	echo 'locust : http://localhost:8089'
+
+locust-down:
+	docker-compose -f ./docker-compose.locust.yml down
+
+locust-down-rmi:
+	docker-compose -f ./docker-compose.locust.yml down --rmi all
+
+locust-ps:
+	docker-compose -f ./docker-compose.locust.yml ps
+
+locust-create: # create locustfile.py
+ifeq ("$(wildcard $(LOCUST_FILE))", "") # ファイルが無い場合
+	cp $(LOCUST_SAMPLE_FILE) $(LOCUST_FILE)
+else
+	@echo file already exist.
+endif
+
+locust-dev:
+#	 sh ./scripts/locust-dev.sh
+	sh ./scripts/locust-dev.sh $(WOKER)
+
+##############################
+# jenkins
+##############################
+jenkins-up:
+	docker-compose -f ./docker-compose.jenkins.yml up -d && \
+	echo 'locust : http://localhost:8280'
+
+jenkins-down:
+	docker-compose -f ./docker-compose.jenkins.yml down -v && \
+	rm -r jenkins/home/.cache
+
+jenkins-clear-src:
+	rm -rf jenkins/home/* && \
+	rm -r jenkins/home/.cache && \
+	rm -r jenkins/home/.java
+
+jenkins-rebuild: # down container & remove cacahe & rebuild container.
+	docker-compose -f ./docker-compose.jenkins.yml down --rmi all && \
+	rm -r jenkins/home/.cache && \
+	docker-compose -f ./docker-compose.jenkins.yml up -d
+
+jenkins-quiet: # down jenkins.
+	curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d '{}' localhost:8080/quietDown
 
 ##############################
 # circle ci
