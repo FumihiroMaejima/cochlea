@@ -1,0 +1,5 @@
+locust/__pycache__
+locust/locustfile.py
+
+log/*
+!log/.gitkeep

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -42,7 +44,11 @@ class AuthController extends Controller
         // $credentials = request(['name', 'password']);
 
         if (!$token = auth('api-users')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                'Unauthorized',
+                isResponseMessage: true,
+            );
         }
 
         return $this->respondWithToken($token);
