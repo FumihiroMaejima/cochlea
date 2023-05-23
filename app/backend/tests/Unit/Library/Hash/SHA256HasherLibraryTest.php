@@ -42,6 +42,28 @@ class SHA256HasherLibraryTest extends TestCase
     }
 
     /**
+     * hash check data
+     * @return array
+     */
+    public function makeHashCheckDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            'same hash value' => [
+                'value1' => self::TEST_HASH_TARGET_VALUE,
+                'value2' => self::TEST_HASH_TARGET_VALUE,
+                'expect' => true,
+            ],
+            'different hash value' => [
+                'value1' => self::TEST_HASH_TARGET_VALUE,
+                'value2' => 'test12345',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
      * encrypt string data
      * @return array
      */
@@ -58,7 +80,7 @@ class SHA256HasherLibraryTest extends TestCase
     }
 
     /**
-     * test make hash.
+     * test hash make hash.
      *
      * @dataProvider makeHashDataProvider
      * @param string $value
@@ -70,5 +92,20 @@ class SHA256HasherLibraryTest extends TestCase
         $value1 = SHA256HasherLibrary::make($value);
         $value2 = SHA256HasherLibrary::make($value);
         $this->assertEquals($value1, $value2);
+    }
+
+    /**
+     * test hash check hash.
+     *
+     * @dataProvider makeHashCheckDataProvider
+     * @param string $value1
+     * @param string $value2
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheck(string $value1, string $value2, bool $expect): void
+    {
+        $hashedValue = SHA256HasherLibrary::make($value2);
+        $this->assertEquals($expect, SHA256HasherLibrary::check($value1, $hashedValue));
     }
 }
