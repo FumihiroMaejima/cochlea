@@ -153,4 +153,22 @@ class EncryptLibraryTest extends TestCase
         $expect = EncryptLibrary::createIv($length);
         $this->assertNotSame($expect, $value);
     }
+
+    /**
+     * test generate cbc key & iv.
+     *
+     * @return void
+     */
+    public function testGenerateCbcKeyAndIv(): void
+    {
+        [$cbcKey, $cbcIv] = EncryptLibrary::generateCbcKeyAndIv();
+        // 文字列であること
+        $this->assertIsString($cbcKey);
+        $this->assertIsString($cbcIv);
+
+        // 値が変わらない事を確認
+        [$cbcKey2, $cbcIv2] = EncryptLibrary::generateCbcKeyAndIv();
+        $this->assertEquals($cbcKey, $cbcKey2);
+        $this->assertEquals($cbcIv, $cbcIv2);
+    }
 }
