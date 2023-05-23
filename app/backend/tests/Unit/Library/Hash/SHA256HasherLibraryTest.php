@@ -108,4 +108,17 @@ class SHA256HasherLibraryTest extends TestCase
         $hashedValue = SHA256HasherLibrary::make($value2);
         $this->assertEquals($expect, SHA256HasherLibrary::check($value1, $hashedValue));
     }
+
+    /**
+     * test password get info.
+     *
+     * @dataProvider makeHashDataProvider
+     * @param string $value
+     * @return void
+     */
+    public function testPasswordGetInfo(string $value): void
+    {
+        $hashedValue = SHA256HasherLibrary::make($value);
+        $this->assertIsArray(SHA256HasherLibrary::info($hashedValue));
+    }
 }
