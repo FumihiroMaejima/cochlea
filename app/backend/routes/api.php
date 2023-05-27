@@ -266,7 +266,8 @@ Route::group(['prefix' => 'v1'], function () {
             // コイン付与
             Route::post('coins/assign', [\App\Http\Controllers\Users\DebugController::class, 'assignCoins'])->name('user.debug.coins.assign');
 
-            Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.random.get');
+            Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.string.random');
+            Route::get('emoji', [\App\Http\Controllers\Users\DebugController::class, 'checkIsEmoji'])->name('user.debug.string.emoji');
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');

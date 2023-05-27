@@ -17,6 +17,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
+use App\Library\String\SurrogatePair;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
@@ -261,6 +262,27 @@ class DebugService
                 'code' => 200,
                 'message' => 'Success.',
                 'data' => $entries[$targetKey] ?? 0,
+            ]
+        );
+    }
+
+    /**
+     * check value is emoji.
+     *
+     * @param string $value
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function checkIsEmoji(string $value): JsonResponse
+    {
+        // 対象の要素のkeyを取得
+        $result = SurrogatePair::isNotSurrogatePair($value);
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success.',
+                'data' => $result,
             ]
         );
     }
