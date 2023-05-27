@@ -298,10 +298,12 @@ class DebugService
                         'hex' => [
                             'value' => $hex,
                             'length' => $hexLen,
+                            'format' => SurrogatePair::formatUnicode($hex, true),
                         ],
                         'decimal' => [
                             'value' => $dec,
                             'length' => $decLen,
+                            'format' => SurrogatePair::formatUnicode($dec),
                         ],
                     ],
                 ],

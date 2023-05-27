@@ -57,13 +57,13 @@ class SurrogatePair
     }
 
     /**
-     * get unicode length
+     * get unicode length.
      *
      * @param string $unicode
      * @param bool $isHex is hex. default decimal
-     * @return string
+     * @return int
      */
-    public static function getUnicodeLength(string $unicode, bool $isHex = false): string
+    public static function getUnicodeLength(string $unicode, bool $isHex = false): int
     {
         if ($isHex) {
             // 16進数
@@ -71,6 +71,26 @@ class SurrogatePair
         } else {
             // 10進数
             return strlen($unicode) / 6;
+        }
+    }
+
+    /**
+     * format unicode.
+     *
+     * @param string $unicode
+     * @param bool $isHex is hex. default decimal
+     * @return string
+     */
+    public static function formatUnicode(string $unicode, bool $isHex = false): string
+    {
+        if ($isHex) {
+            // 4桁ずつ
+            $values = str_split($unicode, 4);
+            $prev = hexdec($values[0]);
+            $next = $values[1];
+            return "&#x$prev$next;";
+        } else {
+            return "&#$unicode;";
         }
     }
 }
