@@ -275,14 +275,36 @@ class DebugService
      */
     public function checkIsEmoji(string $value): JsonResponse
     {
-        // 対象の要素のkeyを取得
         $result = SurrogatePair::isNotSurrogatePair($value);
+
+        $dec = SurrogatePair::getUnicodeFromEmoji($value);
+        $hex = SurrogatePair::getUnicodeFromEmoji($value, true);
+
+        // 16進数
+        $hex = SurrogatePair::getUnicodeFromEmoji($value, true);
+        $hexLen = strlen($hex) / 8;
+
+        // 10進数
+        $dec = SurrogatePair::getUnicodeFromEmoji($value);
+        $decLen = strlen($dec) / 6;
 
         return response()->json(
             [
                 'code' => 200,
                 'message' => 'Success.',
-                'data' => $result,
+                'data' => [
+                    'check' => $result,
+                    'values' => [
+                        'hex' => [
+                            'value' => $hex,
+                            'length' => $hexLen,
+                        ],
+                        'decimal' => [
+                            'value' => $dec,
+                            'length' => $decLen,
+                        ],
+                    ],
+                ],
             ]
         );
     }

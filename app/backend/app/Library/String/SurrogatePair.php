@@ -13,7 +13,9 @@ class SurrogatePair
     // echo mb_convert_encoding('絵文字', 'UTF-16'); // b"Ø=Þ\x07"など
     // echo strlen(mb_convert_encoding('絵文字', 'UTF-16')); // 4
 
+    public const UTF_8 = 'UTF-8';
     public const UTF_16 = 'UTF-16';
+    public const UTF_32 = 'UTF-32';
 
     /**
      * check is not
@@ -32,4 +34,25 @@ class SurrogatePair
     // echo mb_strlen('\U+270A'); // 7
     // echo mb_convert_encoding('\U+270A', 'UTF-16'); // "\0\\0U\0+\02\07\00\0A"
     // echo strlen(mb_convert_encoding('\U+270A', 'UTF-16')); // 14
+
+    /**
+     * get unicode of emoji
+     *
+     * @param string $value
+     * @param bool $isHex is hex. default decimal
+     * @return string
+     */
+    public static function getUnicodeFromEmoji(string $value, bool $isHex = false): string
+    {
+        // UTF-8からUTF-32へ変換
+        $emojiBinary = mb_convert_encoding($value, self::UTF_32, self::UTF_8);
+        // 16進数
+        $hex = bin2hex($emojiBinary);
+
+        if ($isHex) {
+            return $hex;
+        } else {
+            return (string)hexdec($hex);
+        }
+    }
 }
