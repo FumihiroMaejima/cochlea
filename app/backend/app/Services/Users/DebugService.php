@@ -282,11 +282,11 @@ class DebugService
 
         // 16進数
         $hex = SurrogatePair::getUnicodeFromEmoji($value, true);
-        $hexLen = strlen($hex) / 8;
+        $hexLen = SurrogatePair::getUnicodeLength($hex, true);
 
         // 10進数
         $dec = SurrogatePair::getUnicodeFromEmoji($value);
-        $decLen = strlen($dec) / 6;
+        $decLen = SurrogatePair::getUnicodeLength($dec);
 
         return response()->json(
             [

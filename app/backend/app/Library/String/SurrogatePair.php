@@ -38,14 +38,14 @@ class SurrogatePair
     /**
      * get unicode of emoji
      *
-     * @param string $value
+     * @param string $emoji
      * @param bool $isHex is hex. default decimal
      * @return string
      */
-    public static function getUnicodeFromEmoji(string $value, bool $isHex = false): string
+    public static function getUnicodeFromEmoji(string $emoji, bool $isHex = false): string
     {
         // UTF-8からUTF-32へ変換
-        $emojiBinary = mb_convert_encoding($value, self::UTF_32, self::UTF_8);
+        $emojiBinary = mb_convert_encoding($emoji, self::UTF_32, self::UTF_8);
         // 16進数
         $hex = bin2hex($emojiBinary);
 
@@ -53,6 +53,24 @@ class SurrogatePair
             return $hex;
         } else {
             return (string)hexdec($hex);
+        }
+    }
+
+    /**
+     * get unicode length
+     *
+     * @param string $unicode
+     * @param bool $isHex is hex. default decimal
+     * @return string
+     */
+    public static function getUnicodeLength(string $unicode, bool $isHex = false): string
+    {
+        if ($isHex) {
+            // 16進数
+            return strlen($unicode) / 8;
+        } else {
+            // 10進数
+            return strlen($unicode) / 6;
         }
     }
 }
