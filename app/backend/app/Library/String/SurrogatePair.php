@@ -25,8 +25,8 @@ class SurrogatePair
      */
     public static function isNotSurrogatePair(string $value): bool
     {
-        // 文字数とbyte数を比較
-        return mb_strlen($value) === mb_strlen(mb_convert_encoding($value, self::UTF_16)) / 2;
+        //  文字数とbyte数を比較(文字列の長さをバイト数で取得する必要がある為mb_strlen()ではなくstrlen()を使う)
+        return mb_strlen($value) === strlen(mb_convert_encoding($value, self::UTF_16)) / 2;
     }
 
     // 絵文字を入力してもサロゲートペアにならないケース

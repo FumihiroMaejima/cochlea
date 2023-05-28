@@ -293,7 +293,7 @@ class DebugService
                 'code' => 200,
                 'message' => 'Success.',
                 'data' => [
-                    'check' => $result,
+                    'isSurrogatePair' => !$result,
                     'values' => [
                         'hex' => [
                             'value' => $hex,

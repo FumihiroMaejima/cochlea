@@ -30,8 +30,8 @@ class SurrogatePairTest extends TestCase
                 'value' => 'stringValue',
                 'expect' => true,
             ],
-            'is surrogate value' => [
-                'value' => 'Ø=Þ\x07',
+            'is surrogate value(emoji)' => [
+                'value' => '😀',
                 'expect' => false,
             ],
         ];
