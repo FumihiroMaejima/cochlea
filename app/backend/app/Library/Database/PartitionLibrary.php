@@ -145,4 +145,18 @@ class PartitionLibrary
         // return json_decode(json_encode($collection), true);
         return ArrayLibrary::toArray($collection);
     }
+
+    /**
+     * get latest partition of table.
+     *
+     * @param string $connection connection name
+     * @param string $tableName table name
+     * @return array
+     */
+    public static function checkLatestPartition(
+        string $connection,
+        string $tableName
+    ): array {
+        return current(self::getPartitionsByTableName($connection, $tableName, 'DESC'));
+    }
 }
