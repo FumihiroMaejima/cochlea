@@ -3,6 +3,7 @@
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\DB;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Database\DatabaseLibrary;
 
 class PartitionLibrary
@@ -141,6 +142,7 @@ class PartitionLibrary
             return [];
         }
 
-        return json_decode(json_encode($collection), true);
+        // return json_decode(json_encode($collection), true);
+        return ArrayLibrary::toArray($collection);
     }
 }
