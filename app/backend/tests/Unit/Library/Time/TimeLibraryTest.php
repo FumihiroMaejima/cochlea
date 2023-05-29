@@ -8,7 +8,6 @@ use App\Library\Time\TimeLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
-use DateTime;
 
 class TimeLibraryTest extends TestCase
 {
@@ -291,34 +290,4 @@ class TimeLibraryTest extends TestCase
         // 偽装時刻として設定した日時と合致する
         $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
     }
-
-    /**
-     * member crerate data
-     * @return array
-     */
-    /* public function memberCreateDataProvider(): array
-    {
-        $this->createApplication();
-
-        return [
-            'create member data' => Config::get('myappTest.test.member.create.success')
-        ];
-    } */
-
-    /**
-     * members create request test.
-     * @dataProvider memberCreateDataProvider
-     * @return void
-     */
-   /*  public function testCreateMemberSuccess(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
-    {
-        $response = $this->json('POST', route('admin.admins.create'), [
-            'name'                  => $name,
-            'email'                 => $email,
-            'roleId'                => $roleId,
-            'password'              => $password,
-            'password_confirmation' => $password_confirmation
-        ]);
-        $response->assertStatus(201);
-    } */
 }
