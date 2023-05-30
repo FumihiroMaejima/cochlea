@@ -6,8 +6,9 @@ use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
-use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Trait\CheckHeaderTrait;
 
 class CacheLibrary
@@ -74,7 +75,8 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)->expireAt($key, time() + $expire);
+            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)
+                ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
                 throw new MyApplicationHttpException(
