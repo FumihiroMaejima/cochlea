@@ -32,7 +32,7 @@ class CacheLibrary
      */
     public static function getByKey(string $key): mixed
     {
-        if (Config::get('app.env') === 'testing') {
+        if (self::isTesting()) {
             return null;
         }
 
@@ -56,7 +56,7 @@ class CacheLibrary
     public static function setCache(string $key, mixed $value, int $expire = self::DEFAULT_CACHE_EXPIRE): void
     {
         // test時は実行しない
-        if (Config::get('app.env') !== 'testing') {
+        if (!self::isTesting()) {
             if (is_array($value)) {
                 $value = json_encode($value);
             }
@@ -97,7 +97,7 @@ class CacheLibrary
         $cache = self::getByKey($key);
 
         if (empty($cache)) {
-            if ($isIgnore || (Config::get('app.env') === 'testing')) {
+            if ($isIgnore || self::isTesting()) {
                 return;
             }
 
@@ -129,5 +129,15 @@ class CacheLibrary
         $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
 
         return $cache ? true : false;
+    }
+
+    /**
+     * is testing env.
+     *
+     * @return bool
+     */
+    protected static function isTesting(): bool
+    {
+        return Config::get('app.env') === 'testing';
     }
 }
