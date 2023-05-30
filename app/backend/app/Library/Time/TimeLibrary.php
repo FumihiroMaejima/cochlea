@@ -52,8 +52,13 @@ class TimeLibrary
      */
     public static function getCurrentDateTimeTimeStamp(): int|float|string
     {
+        // 偽装時刻が設定されている場合
+        if (!is_null(static::$fakerTimeStamp)) {
+            return static::$fakerTimeStamp;
+        }
         // return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
-        return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
+        // return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
+        time();
     }
 
     /**
