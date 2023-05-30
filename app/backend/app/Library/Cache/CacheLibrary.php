@@ -126,7 +126,7 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::get($key);
+        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
 
         return $cache ? true : false;
     }
