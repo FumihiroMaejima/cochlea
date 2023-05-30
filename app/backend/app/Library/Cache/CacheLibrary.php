@@ -14,16 +14,15 @@ class CacheLibrary
 {
     use CheckHeaderTrait;
 
-    private const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
+    // database.phpのキー名
+    protected const REDIS_CONNECTION = 'cache';
+    protected const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
 
     private const SET_CACHE_RESULT_VALUE = 'OK';
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
 
     private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
-
-    // database.phpのキー名
-    private const REDIS_CONNECTION = 'cache';
 
     /**
      * get cache value by Key.
