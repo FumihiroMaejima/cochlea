@@ -65,17 +65,15 @@ class HashCacheLibrary extends CacheLibrary
         // test時は実行しない
         if (!self::isTesting()) {
             if (is_array($value)) {
-                $value = json_encode($value);
+                $jsonValue = json_encode($value);
             }
 
-            /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key => $value]);
-            $payload = $result->getPayload();
-
-            if ($payload !== self::SET_CACHE_RESULT_VALUE) {
+            $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key, "record", $jsonValue]);
+            // 登録済みはresult = 0。これもエラーとする。
+            if ($result !== 1) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
-                    'set cache action is failure.'
+                    'set hash cache action is failure.'
                 );
             }
 
