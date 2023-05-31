@@ -37,9 +37,15 @@ class HashCacheLibrary extends CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key]);
+        // 現状,HGETでは取得出来ない
+        // $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key]);
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGETALL', [$key]);
 
-        if (is_null($cache)) {
+        if (empty($cache)) {
+            return null;
+        }
+
+        if (is_array($cache)) {
             return $cache;
         }
 
@@ -128,8 +134,8 @@ class HashCacheLibrary extends CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key]);
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGETALL', [$key]);
 
-        return $cache ? true : false;
+        return !empty($cache) ? true : false;
     }
 }
