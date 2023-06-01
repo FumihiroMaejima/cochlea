@@ -11,6 +11,7 @@ use App\Http\Resources\Users\CoinsResource;
 use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+// use App\Library\Cache\HashCacheLibrary;
 use Exception;
 
 class CoinsService
@@ -40,6 +41,8 @@ class CoinsService
     public function getCoins(): JsonResponse
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_COINS_LIST);
+        // hash型の検証
+        // $testCache = HashCacheLibrary::getByKey(self::CACHE_KEY_USER_COINS_LIST.'_test');
 
         // キャッシュチェック
         if (is_null($cache)) {
@@ -48,12 +51,13 @@ class CoinsService
 
             if (!empty($resourceCollection)) {
                 CacheLibrary::setCache(self::CACHE_KEY_USER_COINS_LIST, $resourceCollection);
+                // HashCacheLibrary::setCache(self::CACHE_KEY_USER_COINS_LIST.'_test', $resourceCollection);
             }
         } else {
             $resourceCollection = $cache;
         }
 
-        return response()->json($resourceCollection, StatusCodeMessages::STATUS_200);
+        return response()->json(['data' => $resourceCollection], StatusCodeMessages::STATUS_200);
     }
 
     /**
