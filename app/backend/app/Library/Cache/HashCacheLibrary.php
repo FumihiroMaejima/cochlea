@@ -38,19 +38,18 @@ class HashCacheLibrary extends CacheLibrary
             return null;
         }
 
-        // 現状,HGETでは取得出来ない
-        // $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key]);
-        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGETALL', [$key]);
+        // hashキーとhash内のキーの両方を配列で指定
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
 
         if (empty($cache)) {
             return null;
         }
 
-        if (is_array($cache[self::HASH_RECORD_KEY])) {
+        if (is_array($cache)) {
             return $cache;
         }
 
-        return json_decode($cache[self::HASH_RECORD_KEY], true);
+        return json_decode($cache, true);
     }
 
     /**
@@ -119,7 +118,7 @@ class HashCacheLibrary extends CacheLibrary
             );
         }
 
-        /** @var int $result 削除結果 */
+        /** @var int $result 削除結果 *hashキーとhash内のキーの両方を配列で指定 */
         $result = Redis::connection(self::REDIS_CONNECTION)->command('HDEL', [$key, self::HASH_RECORD_KEY]);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
@@ -138,7 +137,8 @@ class HashCacheLibrary extends CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGETALL', [$key]);
+        // hashキーとhash内のキーの両方を配列で指定
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
 
         return !empty($cache) ? true : false;
     }
