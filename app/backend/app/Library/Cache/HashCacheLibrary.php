@@ -18,6 +18,7 @@ class HashCacheLibrary extends CacheLibrary
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
     protected const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
+    protected const HASH_RECORD_KEY = 'record'; // hash内のキー名
 
     private const SET_CACHE_RESULT_VALUE = 'OK';
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
@@ -45,11 +46,11 @@ class HashCacheLibrary extends CacheLibrary
             return null;
         }
 
-        if (is_array($cache)) {
+        if (is_array($cache[self::HASH_RECORD_KEY])) {
             return $cache;
         }
 
-        return json_decode($cache, true);
+        return json_decode($cache[self::HASH_RECORD_KEY], true);
     }
 
     /**
@@ -68,7 +69,12 @@ class HashCacheLibrary extends CacheLibrary
                 $jsonValue = json_encode($value);
             }
 
-            $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key, "record", $jsonValue]);
+            // 設定済みの場合は削除が必要
+            if (self::hasCache($key)) {
+                self::deleteCache($key);
+            }
+
+            $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key, self::HASH_RECORD_KEY, $jsonValue]);
             // 登録済みはresult = 0。これもエラーとする。
             if ($result !== 1) {
                 throw new MyApplicationHttpException(
@@ -114,7 +120,7 @@ class HashCacheLibrary extends CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::connection(self::REDIS_CONNECTION)->command('HDEL', [$key]);
+        $result = Redis::connection(self::REDIS_CONNECTION)->command('HDEL', [$key, self::HASH_RECORD_KEY]);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
