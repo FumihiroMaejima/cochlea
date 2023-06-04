@@ -208,6 +208,17 @@ class DebugController extends Controller
     }
 
     /**
+     * Complete Stipe Checkout Session.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function checkIsEmoji(Request $request): JsonResponse
+    {
+        return $this->service->checkIsEmoji($request->emoji);
+    }
+
+    /**
      * テスト用PDFファイルの表示
      *
      * @param DebugFileUploadRequest $request

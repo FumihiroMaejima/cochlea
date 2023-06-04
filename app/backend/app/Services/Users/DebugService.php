@@ -17,6 +17,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
+use App\Library\String\SurrogatePair;
 use App\Library\String\UuidLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
@@ -261,6 +262,51 @@ class DebugService
                 'code' => 200,
                 'message' => 'Success.',
                 'data' => $entries[$targetKey] ?? 0,
+            ]
+        );
+    }
+
+    /**
+     * check value is emoji.
+     *
+     * @param string $value
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function checkIsEmoji(string $value): JsonResponse
+    {
+        $result = SurrogatePair::isNotSurrogatePair($value);
+
+        $dec = SurrogatePair::getUnicodeFromEmoji($value);
+        $hex = SurrogatePair::getUnicodeFromEmoji($value, true);
+
+        // 16進数
+        $hex = SurrogatePair::getUnicodeFromEmoji($value, true);
+        $hexLen = SurrogatePair::getUnicodeLength($hex, true);
+
+        // 10進数
+        $dec = SurrogatePair::getUnicodeFromEmoji($value);
+        $decLen = SurrogatePair::getUnicodeLength($dec);
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success.',
+                'data' => [
+                    'isSurrogatePair' => !$result,
+                    'values' => [
+                        'hex' => [
+                            'value' => $hex,
+                            'length' => $hexLen,
+                            'format' => SurrogatePair::formatUnicode($hex, true),
+                        ],
+                        'decimal' => [
+                            'value' => $dec,
+                            'length' => $decLen,
+                            'format' => SurrogatePair::formatUnicode($dec),
+                        ],
+                    ],
+                ],
             ]
         );
     }

@@ -3,6 +3,7 @@
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\DB;
+use App\Library\Array\ArrayLibrary;
 
 class TableMemoryLibrary
 {
@@ -59,7 +60,7 @@ class TableMemoryLibrary
             return [];
         }
 
-        return json_decode(json_encode($collection), true);
+        return ArrayLibrary::toArray($collection);
     }
 
     /**
@@ -102,6 +103,6 @@ class TableMemoryLibrary
             return [];
         }
 
-        return json_decode(json_encode($collection), true);
+        return ArrayLibrary::toArray($collection);
     }
 }

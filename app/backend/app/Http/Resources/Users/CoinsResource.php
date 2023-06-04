@@ -85,8 +85,7 @@ class CoinsResource extends JsonResource
                 self::RESOURCE_KEY_TEXT => $item->{Coins::NAME},
                 self::RESOURCE_KEY_VALUE => $item->{Coins::PRICE},
             ];
-            // 多次元配列の中の連想配列を格納
-            $response[self::RESOURCE_KEY_DATA][] = $role;
+            $response[] = $role;
         }
 
         return $response;

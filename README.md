@@ -80,6 +80,24 @@ MAIL_PORT=1025
 
 # Redis
 
+### メモリ情報等の確認
+
+```shell
+redis-cli info
+
+# Memory
+used_memory:1179368 # redisによって割り当てられたバイト数
+used_memory_human:1.12M
+used_memory_rss:7544832
+used_memory_rss_human:7.20M
+used_memory_peak:1179368
+used_memory_peak_human:1.12M
+used_memory_peak_perc:100.11%
+used_memory_overhead:916012
+used_memory_startup:894848
+used_memory_dataset:263356
+```
+
 ## redisでLua scriptを実行させる場合
 
 `--eval`オプションを指定してファイルを実行させる
@@ -89,7 +107,17 @@ MAIL_PORT=1025
 
 
 ```shell
-$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2 , value1 value2 value3
+$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2, value1 value2 value3
+
+# 引数で渡されたKEYのGETを行うスクリプト
+$ redis-cli --eval /usr/local/share/lua/test2.lua key1 key2
+1) OK
+2) OK
+
+# 引数で渡されたKEYとARGのSETを行うスクリプト
+$ redis-cli --eval /usr/local/share/lua/test3.lua key1 key2, value1 value2
+1) OK
+2) OK
 ```
 
 ### Luaデバッガー

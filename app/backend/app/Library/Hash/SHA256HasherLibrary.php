@@ -16,7 +16,6 @@ class SHA256HasherLibrary
         return hash('sha256', $value);
     }
 
-
     /**
      * check value is equal hashed value.
      * equal password_verify()
@@ -36,7 +35,7 @@ class SHA256HasherLibrary
      *
      * @param string $hash hashed value
      * @param array $options options
-     * @return bool is same value
+     * @return bool is need rehash
      */
     public static function isNeedsRehash(string $hash, array $options = []): bool
     {
@@ -48,7 +47,6 @@ class SHA256HasherLibrary
      * equal password_get_info()
      *
      * @param string $hashedValue hashed value
-     * @param array $options options
      * @return ?array
      */
     public static function info(string $hash): ?array

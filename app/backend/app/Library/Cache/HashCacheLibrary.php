@@ -3,21 +3,22 @@
 namespace App\Library\Cache;
 
 use Illuminate\Redis\RedisManager;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Cache\CacheLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Trait\CheckHeaderTrait;
 
-class CacheLibrary
+class HashCacheLibrary extends CacheLibrary
 {
     use CheckHeaderTrait;
 
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
     protected const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
+    protected const HASH_RECORD_KEY = 'record'; // hash内のキー名
 
     private const SET_CACHE_RESULT_VALUE = 'OK';
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
@@ -37,9 +38,14 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        // hashキーとhash内のキーの両方を配列で指定
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
 
-        if (is_null($cache)) {
+        if (empty($cache)) {
+            return null;
+        }
+
+        if (is_array($cache)) {
             return $cache;
         }
 
@@ -59,17 +65,20 @@ class CacheLibrary
         // test時は実行しない
         if (!self::isTesting()) {
             if (is_array($value)) {
-                $value = json_encode($value);
+                $jsonValue = json_encode($value);
             }
 
-            /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(self::REDIS_CONNECTION)->set($key, $value);
-            $payload = $result->getPayload();
+            // 設定済みの場合は削除が必要
+            if (self::hasCache($key)) {
+                self::deleteCache($key);
+            }
 
-            if ($payload !== self::SET_CACHE_RESULT_VALUE) {
+            $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key, self::HASH_RECORD_KEY, $jsonValue]);
+            // 登録済みはresult = 0。これもエラーとする。
+            if ($result !== 1) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
-                    'set cache action is failure.'
+                    'set hash cache action is failure.'
                 );
             }
 
@@ -109,8 +118,8 @@ class CacheLibrary
             );
         }
 
-        /** @var int $result 削除結果 */
-        $result = Redis::connection(self::REDIS_CONNECTION)->del($key);
+        /** @var int $result 削除結果 *hashキーとhash内のキーの両方を配列で指定 */
+        $result = Redis::connection(self::REDIS_CONNECTION)->command('HDEL', [$key, self::HASH_RECORD_KEY]);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -128,18 +137,9 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        // hashキーとhash内のキーの両方を配列で指定
+        $cache = Redis::connection(self::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
 
-        return $cache ? true : false;
-    }
-
-    /**
-     * is testing env.
-     *
-     * @return bool
-     */
-    protected static function isTesting(): bool
-    {
-        return Config::get('app.env') === 'testing';
+        return !empty($cache) ? true : false;
     }
 }
