@@ -107,7 +107,17 @@ used_memory_dataset:263356
 
 
 ```shell
-$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2 , value1 value2 value3
+$ redis-cli --eval /usr/local/share/lua/test1.lua key1 key2, value1 value2 value3
+
+# 引数で渡されたKEYのGETを行うスクリプト
+$ redis-cli --eval /usr/local/share/lua/test2.lua key1 key2
+1) OK
+2) OK
+
+# 引数で渡されたKEYとARGのSETを行うスクリプト
+$ redis-cli --eval /usr/local/share/lua/test3.lua key1 key2, value1 value2
+1) OK
+2) OK
 ```
 
 ### Luaデバッガー
