@@ -95,5 +95,4 @@ class JwtLibraryTest extends TestCase
         $expect = JwtLibrary::encodeTokenHeader($value);
         $this->assertSame($expect, $decodeValue);
     }
-
 }

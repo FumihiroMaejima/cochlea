@@ -67,10 +67,10 @@ class SurrogatePair
     {
         if ($isHex) {
             // 16進数
-            return strlen($unicode) / 8;
+            return mb_strlen($unicode) / 8;
         } else {
             // 10進数
-            return strlen($unicode) / 6;
+            return mb_strlen($unicode) / 6;
         }
     }
 
@@ -85,7 +85,7 @@ class SurrogatePair
     {
         if ($isHex) {
             // 4桁ずつ
-            $values = str_split($unicode, 4);
+            $values = mb_str_split($unicode, 4);
             $prev = hexdec($values[0]);
             $next = $values[1];
             return "&#x$prev$next;";
