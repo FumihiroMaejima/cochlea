@@ -10,6 +10,7 @@ use Exception;
 
 /**
  * Test Class of MemoryLibrary
+ * *テスト実行時のメモリ使用量が急増する為注意すること
  */
 class MemoryLibraryTest extends TestCase
 {
