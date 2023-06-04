@@ -13,8 +13,19 @@ use Exception;
  */
 class EncryptLibraryTest extends TestCase
 {
-    private const TEST_EMAIL_VALUE = 'test@example.com';
-    private const TEST_ENCRYPT_EMAIL_VALUE = 'XyLyJ0jGX4VWniEcl6igwatZIl4dd+5qksaqiEdlsrA=';
+    private const TEST_EMAIL_VALUE = 'test1@example.com';
+    private const TEST_ENCRYPT_EMAIL_VALUE = '9B7dbo96dqC5HKYx3+e19QhONeAQpKPumR3Zk4snXIw=';
+
+    /**
+     * 環境変数の置き換えなどに利用
+     * Laravel関係のメソッドは利用不可
+     */
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        // $_SERVER['EMAIL_EBC_ENCRYPT_KEY'] = 'testEncryptKey';
+    }
+
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
