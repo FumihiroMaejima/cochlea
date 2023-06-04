@@ -9,6 +9,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\File\FileLibrary;
 use App\Library\Random\RandomStringLibrary;
+use App\Library\Time\TimeLibrary;
 use App\Trait\CheckHeaderTrait;
 
 class SessionLibrary
@@ -89,7 +90,8 @@ class SessionLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)->expireAt($key, time() + $expire);
+            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)
+                ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
                 throw new MyApplicationHttpException(

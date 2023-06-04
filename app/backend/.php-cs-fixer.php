@@ -45,7 +45,7 @@ return $config
         'declare_parentheses'                    => true,
         'native_function_invocation'             => false,
         // 'final_public_method_for_abstract_class' => true,
-        'mb_str_functions'                       => true,
+        // 'mb_str_functions'                       => true, // strlen()が必要なケースもある為除外
         'simplified_if_return'                   => true,
         'simplified_null_return'                 => true,
     ])
