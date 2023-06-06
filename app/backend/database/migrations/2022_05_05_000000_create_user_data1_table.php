@@ -25,9 +25,10 @@ class CreateUserData1Table extends Migration
                  */
                 Schema::connection($connectionName)->create('user_auth_codes'.$shardId, function (Blueprint $table) {
                     $table->integer('user_id')->unsigned()->comment('ユーザーID');
+                    $table->tinyInteger('type')->unsigned()->comment('認証種類');
+                    $table->tinyInteger('count')->unsigned()->default(0)->comment('試行回数');
                     $table->integer('code')->unsigned()->comment('認証コード');
                     $table->tinyInteger('is_used')->unsigned()->default(0)->comment('使用済みか');
-                    $table->dateTime('start_at')->comment('開始日時');
                     $table->dateTime('expired_at')->comment('有効期限日時');
                     $table->dateTime('created_at')->comment('登録日時');
                     $table->dateTime('updated_at')->comment('更新日時');

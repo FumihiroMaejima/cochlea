@@ -12,11 +12,18 @@ class UserAuthCodes extends BaseUserDataModel
     use HasFactory;
     use SoftDeletes;
 
+    public const TYPE_REGISTER = 1; // 新規登録
+    public const TYPE_PASSWORD_UPDATE = 2; // パスワード変更
+    public const TYPE_PASSWORD_FORGET = 3; // パスワードリセット
+    public const TYPE_LINKAGE_REGISTER = 4; // 外部連携
+    public const TYPE_LINKAGE_CHANGE = 5; // 外部連携変更
+
     // カラム一覧
     public const USER_ID = 'user_id';
+    public const TYPE = 'type';
     public const CODE = 'code';
+    public const COUNT = 'count';
     public const IS_USED = 'is_used';
-    public const START_AT = 'start_at';
     public const EXPIRED_AT = 'expired_at';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
@@ -51,9 +58,10 @@ class UserAuthCodes extends BaseUserDataModel
     // 更新可能なカラムリスト
     protected $fillable = [
         self::USER_ID,
+        self::TYPE,
         self::CODE,
+        self::COUNT,
         self::IS_USED,
-        self::START_AT,
         self::EXPIRED_AT,
         self::UPDATED_AT,
         self::DELETED_AT,
