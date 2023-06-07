@@ -18,6 +18,7 @@ use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use App\Models\Users\UserAuthCodes;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepositoryInterface;
+use App\Services\Admins\Notifications\AuthCodeNotificationService;
 use Exception;
 
 class UserAuthService
@@ -63,7 +64,7 @@ class UserAuthService
 
             // 6文字のランダム文字列
             $code = RandomStringLibrary::getByMtRandString(6);
-            $expireAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
+            $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
 
             $authCodeResource = UsersAuthCodeResource::toArrayForCreate(
                 $userId,
@@ -71,10 +72,13 @@ class UserAuthService
                 $code,
                 0,
                 1,
-                $expireAt
+                $expiredAt
             );
 
             $this->userAuthCodeRepository->create($userId, $authCodeResource);
+
+            // メール送信
+            (new AuthCodeNotificationService($email))->send($token, $expiredAt);
         } catch (Exception $e) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
@@ -89,7 +93,8 @@ class UserAuthService
                 'code' => 200,
                 'message' => 'Success',
                 'data' => [
-
+                    'userId' => $userId,
+                    'expiredAt' => $expiredAt,
                 ],
             ]
         );
