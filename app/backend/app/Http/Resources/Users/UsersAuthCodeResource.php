@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
-use App\Models\User;
+use App\Models\Users\UserAuthCodes;
 
-class UsersResource extends JsonResource
+class UsersAuthCodeResource extends JsonResource
 {
     public const RESOURCE_KEY_DATA = 'data';
     public const RESOURCE_KEY_TEXT = 'text';
@@ -43,25 +43,33 @@ class UsersResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param string $name ユーザー名
-     * @param string $email メールアドレス
-     * @param string $password パスワード
+     * @param int $userId ユーザーID
+     * @param int $type 認証種類
+     * @param int $code コード
+     * @param int $count 回数
+     * @param int $isUsed 使用済みか
+     * @param string $expiredAt
      * @return array
      */
     public static function toArrayForCreate(
-        string $name,
-        string $email,
-        string $password
+        int $userId,
+        int $type,
+        int $code,
+        int $count,
+        int $isUsed,
+        string $expiredAt
     ): array {
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
-            User::NAME => $name,
-            User::EMAIL => $email,
-            User::PASSWORD => bcrypt($password),
-            User::CREATED_AT => $dateTime,
-            User::UPDATED_AT => $dateTime,
-            User::DELETED_AT => null,
+            UserAuthCodes::USER_ID => $userId,
+            UserAuthCodes::TYPE => $type,
+            UserAuthCodes::CODE => $code,
+            UserAuthCodes::COUNT => $count,
+            UserAuthCodes::IS_USED => $isUsed,
+            UserAuthCodes::EXPIRED_AT => $expiredAt,
+            UserAuthCodes::CREATED_AT => $dateTime,
+            UserAuthCodes::UPDATED_AT => $dateTime
         ];
     }
 
@@ -69,20 +77,26 @@ class UsersResource extends JsonResource
      * Transform the resource into an array for update.
      *
      * @param int $userId ユーザーID
-     * @param string $name ユーザー名
-     * @param string $email メールアドレス
+     * @param int $type 認証種類
+     * @param int $code コード
+     * @param int $count 回数
+     * @param int $isUsed 使用済みか
      * @return array
      */
     public static function toArrayForUpdate(
         int $userId,
-        string $name,
-        string $email
+        int $type,
+        int $code,
+        int $count,
+        int $isUsed
     ): array {
         return [
-            User::ID => $userId,
-            User::NAME => $name,
-            User::EMAIL => $email,
-            User::UPDATED_AT => TimeLibrary::getCurrentDateTime(),
+            UserAuthCodes::USER_ID => $userId,
+            UserAuthCodes::TYPE => $type,
+            UserAuthCodes::CODE => $code,
+            UserAuthCodes::COUNT => $count,
+            UserAuthCodes::IS_USED => $isUsed,
+            UserAuthCodes::UPDATED_AT => TimeLibrary::getCurrentDateTime()
         ];
     }
 
@@ -93,11 +107,9 @@ class UsersResource extends JsonResource
      */
     public static function toArrayForDelete(): array
     {
-        $dateTime = TimeLibrary::getCurrentDateTime();
-
         return [
-            User::UPDATED_AT => $dateTime,
-            User::DELETED_AT => $dateTime,
+            UserAuthCodes::IS_USED => 1,
+            UserAuthCodes::UPDATED_AT => TimeLibrary::getCurrentDateTime(),
         ];
     }
 }
