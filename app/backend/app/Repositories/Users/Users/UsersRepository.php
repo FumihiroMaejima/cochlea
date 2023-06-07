@@ -89,13 +89,14 @@ class UsersRepository extends BaseUserRepository implements UsersRepositoryInter
     /**
      * create record.
      *
-     * @param int $userId user id
      * @param array $resource create data
      * @return int
      */
-    public function create(int $userId, array $resource): int
+    public function create(array $resource): int
     {
-        return DB::table($this->getTable())->insert($resource);
+        // return DB::table($this->getTable())->insert($resource);
+        return DB::table($this->getTable())->create($resource);
+        // return DB::table($this->getTable())->insertGetId($resource);
     }
 
     /**

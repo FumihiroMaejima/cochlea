@@ -13,7 +13,7 @@ interface UsersRepositoryInterface
 
     public function getListByUserId(int $userId): Collection;
 
-    public function create(int $userId, array $resource): int;
+    public function create(array $resource): int;
 
     public function update(int $userId, string $createdAt, array $resource): int;
 
