@@ -97,8 +97,8 @@ class AuthCodeNotification extends Notification
             ->subject('Auth Code Notification')
             ->line('You are receiving this email because we received a authentication request for your account.')
             // ->action(Lang::get('Reset Password'), $url)
-            ->line('Auth Code is :code.', ['code' => $code])
-            ->line('This Auth Code will expire in :count minutes.', ['count' => $expiredAt])
+            ->line("Auth Code is $code .")
+            ->line("This Auth Code will expire ad $expiredAt")
             ->line('If you did not request, no further action is required.');
     }
 
