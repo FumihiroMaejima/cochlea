@@ -3,6 +3,7 @@
 namespace App\Services\Users;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
@@ -69,14 +70,13 @@ class UserAuthService
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
         $resource = UsersResource::toArrayForCreate($timeStamp,  $email, $token);
 
+        DB::beginTransaction();
         try {
             // ユーザーの登録
-            $this->usersRepository->create($resource);
-
             $userId = (new User())->insertUserAndGetId($resource);
 
             // 6文字のランダム文字列
-            $code = RandomStringLibrary::getByMtRandString(6);
+            $code = RandomStringLibrary::getRandomShuffleInteger(6);
             $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
 
             $authCodeResource = UsersAuthCodeResource::toArrayForCreate(
@@ -92,7 +92,9 @@ class UserAuthService
 
             // メール送信
             (new AuthCodeNotificationService($email))->send($token, $expiredAt);
+            DB::commit();
         } catch (Exception $e) {
+            DB::rollBack();
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
                 '認証コード生成処理に失敗しました。' . $e->getMessage(),
