@@ -11,6 +11,8 @@ interface UsersRepositoryInterface
 
     public function getByUserId(int $userId, bool $isLock = false): Collection|null;
 
+    public function getByEmail(string $email, bool $isLock = false): array|null;
+
     public function getListByUserId(int $userId): Collection;
 
     public function create(array $resource): int;

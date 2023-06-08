@@ -52,6 +52,19 @@ class UserAuthService
      * @return JsonResponse
      */
     public function registUserByEmailAndSendAuthCode(string $email): JsonResponse {
+
+        $existUser = $this->usersRepository->getByEmail($email);
+        if (!is_null($existUser)) {
+            return response()->json(
+                [
+                    'code' => 200,
+                    'message' => 'Success',
+                    'data' => [
+                        'userId' => $existUser[User::ID],
+                    ],
+                ]
+            );
+        }
         $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
         $resource = UsersResource::toArrayForCreate($timeStamp,  $email, $token);
@@ -94,7 +107,6 @@ class UserAuthService
                 'message' => 'Success',
                 'data' => [
                     'userId' => $userId,
-                    'expiredAt' => $expiredAt,
                 ],
             ]
         );
