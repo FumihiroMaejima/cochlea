@@ -84,14 +84,14 @@ class UserAuthService
                 UserAuthCodes::TYPE_REGISTER,
                 $code,
                 0,
-                1,
+                0,
                 $expiredAt
             );
 
             $this->userAuthCodeRepository->create($userId, $authCodeResource);
 
             // メール送信
-            (new AuthCodeNotificationService($email))->send($token, $expiredAt);
+            (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
