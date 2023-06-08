@@ -176,6 +176,9 @@ Route::group(['prefix' => 'v1'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [\App\Http\Controllers\Users\AuthController::class, 'login'])->name('auth.user.login');
+        Route::group(['prefix' => 'signup'], function () {
+            Route::post('email', [\App\Http\Controllers\Users\UserAuthController::class, 'registerByEmail'])->name('auth.user.signup.email');
+        });
     });
 
     // coins
