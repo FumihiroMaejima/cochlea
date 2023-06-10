@@ -15,7 +15,7 @@ interface UserAuthCodesRepositoryInterface
 
     public function create(int $userId, array $resource): int;
 
-    public function update(int $userId, string $createdAt, array $resource): int;
+    public function update(int $userId, int $authCode, array $resource): int;
 
     public function delete(int $userId, string $createdAt, array $resource): int;
 }

@@ -131,17 +131,17 @@ class UserAuthCodesRepository extends BaseUserRepository implements UserAuthCode
      * update record.
      *
      * @param int $userId user id
-     * @param string $createdAt recode created date time
+     * @param int $authCode auth code
      * @param array $resource update data
      * @return int
      */
-    public function update(int $userId, string $createdAt, array $resource): int
+    public function update(int $userId, int $authCode, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
             // ->whereIn('id', [$id])
             ->where(UserAuthCodes::USER_ID, '=', $userId)
-            ->where(UserAuthCodes::CREATED_AT, '=', $createdAt)
+            ->where(UserAuthCodes::CODE, '=', $authCode)
             ->update($resource);
     }
 

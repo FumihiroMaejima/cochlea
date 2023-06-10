@@ -113,4 +113,66 @@ class UserAuthService
             ]
         );
     }
+
+    /**
+     * validate auth code
+     *
+     * @param int $userId  user id
+     * @param int $authCode auth code
+     * @return JsonResponse
+     */
+    public function validateUserAuthCode(int $userId , int $authCode): JsonResponse {
+
+        $existUser = $this->usersRepository->getByUserId($userId);
+        if (is_null($existUser)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                'ユーザー情報が存在しません。',
+                ['userId' => $userId],
+                false
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            // TODO 全て取得して最新のコードを比較
+            $userAuthCode = $this->userAuthCodeRepository->getByUserIdAndCode($userId, $authCode);
+            if (is_null($existUser)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    '認証コード情報が存在しません。',
+                    ['userId' => $userId],
+                    false
+                );
+            }
+
+            $authCodeResource = UsersAuthCodeResource::toArrayForUpdate(
+                $userId,
+                UserAuthCodes::TYPE_REGISTER,
+                $userAuthCode[UserAuthCodes::CODE],
+                $userAuthCode[UserAuthCodes::COUNT] + 1,
+                $userAuthCode[UserAuthCodes::EXPIRED_AT]
+            );
+
+            $this->userAuthCodeRepository->update($userId, $authCode, $authCodeResource);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                '認証コードの検証処理に失敗しました。' . $e->getMessage(),
+                [],
+                false
+            );
+        }
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success',
+                'data' => [],
+            ]
+        );
+    }
 }
