@@ -5,6 +5,7 @@ namespace App\Models\Users;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Library\Time\TimeLibrary;
 use App\Models\Users\BaseUserDataModel;
 
 class UserAuthCodes extends BaseUserDataModel
@@ -73,4 +74,21 @@ class UserAuthCodes extends BaseUserDataModel
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * sort by created at.
+     *
+     * @param array $records record list
+     * @return array
+     */
+    public static function sortByCreatedAt(array $records): array
+    {
+        $createdAtList = [];
+        foreach ($records as $record) {
+            $createdAtList = TimeLibrary::strToTimeStamp($record[self::CREATED_AT]);
+        }
+
+        array_multisort($createdAtList, SORT_ASC, $userAuthCodeList);
+        return $records;
+    }
 }
