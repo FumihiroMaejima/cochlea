@@ -7,9 +7,9 @@ use Illuminate\Database\Query\Builder;
 
 interface UserAuthCodesRepositoryInterface
 {
-    public function getByUserId(int $userId, bool $isLock = false): Collection|null;
+    public function getByUserId(int $userId, bool $isLock = false): array|null;
 
-    public function getListByUserId(int $userId): Collection;
+    public function getListByUserId(int $userId): array;
 
     public function getByUserIdAndCode(int $userId, int $code, bool $isLock = false): Collection|null;
 

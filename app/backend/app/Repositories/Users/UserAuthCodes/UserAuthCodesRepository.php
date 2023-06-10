@@ -3,6 +3,7 @@
 namespace App\Repositories\Users\UserAuthCodes;
 
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Array\ArrayLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Users\UserAuthCodes;
 use App\Repositories\Users\BaseUserRepository;
@@ -28,10 +29,10 @@ class UserAuthCodesRepository extends BaseUserRepository implements UserAuthCode
      *
      * @param int $userId user id
      * @param bool $isLock exec lock For Update
-     * @return Collection|null
+     * @return array|null
      * @throws MyApplicationHttpException
      */
-    public function getByUserId(int $userId, bool $isLock = false): Collection|null
+    public function getByUserId(int $userId, bool $isLock = false): array|null
     {
         $query = $this->getQueryBuilder($userId)
             ->select(['*'])
@@ -57,23 +58,25 @@ class UserAuthCodesRepository extends BaseUserRepository implements UserAuthCode
             );
         }
 
-        return $collection;
+        // return $collection;
+        return ArrayLibrary::getFirst(ArrayLibrary::toArray($collection->toArray()));
     }
 
     /**
      * get list by user id.
      *
      * @param int $userId user id
-     * @return Collection
+     * @return array
      * @throws MyApplicationHttpException
      */
-    public function getListByUserId(int $userId): Collection
+    public function getListByUserId(int $userId): array
     {
         $query = $this->getQueryBuilder($userId)
             ->select(['*'])
             ->where(UserAuthCodes::USER_ID, '=', $userId);
 
-        return $query->get();
+        // return $query->get();
+        return ArrayLibrary::toArray($query->get()->toArray());
     }
 
     /**
