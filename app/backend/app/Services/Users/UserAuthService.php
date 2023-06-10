@@ -14,6 +14,7 @@ use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterfac
 use App\Repositories\Users\Users\UsersRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Auth\AuthCodeLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\User;
@@ -135,9 +136,10 @@ class UserAuthService
 
         DB::beginTransaction();
         try {
-            // TODO 全て取得して最新のコードを比較
-            $userAuthCode = $this->userAuthCodeRepository->getByUserIdAndCode($userId, $authCode);
-            if (is_null($existUser)) {
+            $userAuthCodeList = UserAuthCodes::sortByCreatedAt(
+                $this->userAuthCodeRepository->getListByUserId($userId)
+            );
+            if (empty($userAuthCodeList)) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     '認証コード情報が存在しません。',
@@ -145,13 +147,20 @@ class UserAuthService
                     false
                 );
             }
+            // 最新の認証コード
+            $userAuthCode = current($userAuthCodeList);
 
+            // 認証コードの検証
+            $isEnable = AuthCodeLibrary::validateAuthCode($userId, $$authCode, $userAuthCode);
+            $isUsed = $isEnable ? 1 : 0;
+
+            // 認証コード情報の更新
             $authCodeResource = UsersAuthCodeResource::toArrayForUpdate(
                 $userId,
                 UserAuthCodes::TYPE_REGISTER,
                 $userAuthCode[UserAuthCodes::CODE],
                 $userAuthCode[UserAuthCodes::COUNT] + 1,
-                $userAuthCode[UserAuthCodes::EXPIRED_AT]
+                $isUsed
             );
 
             $this->userAuthCodeRepository->update($userId, $authCode, $authCodeResource);
