@@ -422,7 +422,7 @@ class DebugController extends Controller
             [
                 'data' => [
                     'shardId' => $shardId,
-                    'databaseNumber' => ShardingLibrary::getUserDataBaseConnection($requstUserId),
+                    'databaseNumber' => ShardingLibrary::getUserDataBaseConnection($shardId),
                 ],
             ]
         );
