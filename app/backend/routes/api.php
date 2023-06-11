@@ -209,6 +209,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout'])->name('auth.user.logout');
             Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh'])->name('auth.user.refresh');
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
+            Route::group(['prefix' => 'signup'], function () {
+                Route::post('validate', [\App\Http\Controllers\Users\UserAuthController::class, 'valdiateAuthCode'])->name('auth.user.signup.validate');
+            });
         });
 
         // coins

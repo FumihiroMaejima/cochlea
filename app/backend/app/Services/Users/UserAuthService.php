@@ -172,7 +172,8 @@ class UserAuthService
                 StatusCodeMessages::STATUS_401,
                 '認証コードの検証処理に失敗しました。' . $e->getMessage(),
                 [],
-                false
+                false,
+                $e->getPrevious()
             );
         }
 

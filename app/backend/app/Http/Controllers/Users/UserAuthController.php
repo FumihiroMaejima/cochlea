@@ -57,4 +57,36 @@ class UserAuthController extends Controller
         // サービスの実行
         return $this->service->registUserByEmailAndSendAuthCode($request->email);
     }
+
+    /**
+     * register user by email.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function valdiateAuthCode(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'code' => ['required', 'int', 'min:1', 'max:999999'],
+            ]
+        );
+
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+                'validation error.',
+                $validator->errors()->toArray()
+            );
+        }
+
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
+
+        // サービスの実行
+        return $this->service->validateUserAuthCode($userId, $request->email);
+    }
 }
