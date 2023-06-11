@@ -313,6 +313,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('schema/size', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaSizeList'])->name('user.debug.databases.schema.size');
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
                 Route::get('table/size', [\App\Http\Controllers\Users\DebugController::class, 'getTableSizeList'])->name('user.debug.databases.table.size');
+                Route::get('shardId', [\App\Http\Controllers\Users\DebugController::class, 'getShardId'])->name('user.debug.databases.shard.id');
             });
         });
     }
