@@ -163,7 +163,11 @@ class UserAuthService
                 $isUsed
             );
 
-            $this->userAuthCodeRepository->update($userId, $authCode, $authCodeResource);
+            $this->userAuthCodeRepository->update(
+                $userId,
+                $userAuthCode[UserAuthCodes::CODE],
+                $authCodeResource
+            );
 
             DB::commit();
         } catch (Exception $e) {
