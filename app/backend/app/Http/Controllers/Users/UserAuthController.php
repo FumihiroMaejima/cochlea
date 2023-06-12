@@ -73,7 +73,7 @@ class UserAuthController extends Controller
                 'code' => ['required', 'int', 'min:1', 'max:999999'],
             ]
         );
-
+        // TODO with session.
 
         if ($validator->fails()) {
             throw new MyApplicationHttpException(
