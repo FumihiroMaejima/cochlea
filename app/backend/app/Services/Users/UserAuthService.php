@@ -151,7 +151,7 @@ class UserAuthService
             $userAuthCode = current($userAuthCodeList);
 
             // 認証コードの検証
-            $isEnable = AuthCodeLibrary::validateAuthCode($userId, $$authCode, $userAuthCode);
+            $isEnable = AuthCodeLibrary::validateAuthCode($userId, $authCode, $userAuthCode);
             $isUsed = $isEnable ? 1 : 0;
 
             // 認証コード情報の更新
@@ -174,6 +174,15 @@ class UserAuthService
                 [],
                 false,
                 $e->getPrevious()
+            );
+        }
+
+        if (!$isEnable) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                '認証コードの検証処理に失敗しました。 :認証コード不正',
+                ['code' => $authCode],
+                false
             );
         }
 
