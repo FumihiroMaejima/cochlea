@@ -53,8 +53,8 @@ class UserAuthService
      * @param string $email email
      * @return JsonResponse
      */
-    public function registUserByEmailAndSendAuthCode(string $email): JsonResponse {
-
+    public function registUserByEmailAndSendAuthCode(string $email): JsonResponse
+    {
         $existUser = $this->usersRepository->getByEmail($email);
         if (!is_null($existUser)) {
             return response()->json(
@@ -69,7 +69,7 @@ class UserAuthService
         }
         $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
-        $resource = UsersResource::toArrayForCreate($timeStamp,  $email, $token);
+        $resource = UsersResource::toArrayForCreate($timeStamp, $email, $token);
 
         DB::beginTransaction();
         try {
@@ -122,8 +122,8 @@ class UserAuthService
      * @param int $authCode auth code
      * @return JsonResponse
      */
-    public function validateUserAuthCode(int $userId , int $authCode): JsonResponse {
-
+    public function validateUserAuthCode(int $userId, int $authCode): JsonResponse
+    {
         $existUser = $this->usersRepository->getByUserId($userId);
         if (is_null($existUser)) {
             throw new MyApplicationHttpException(

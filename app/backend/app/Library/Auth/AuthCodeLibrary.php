@@ -106,7 +106,6 @@ class AuthCodeLibrary
      */
     public static function isGreaterThanMaxTrialCount(array $record): bool
     {
-
         return self::MAX_CODE_TRIAL_COUNT <= $record[UserAuthCodes::COUNT];
     }
 
@@ -118,7 +117,6 @@ class AuthCodeLibrary
      */
     public static function isMatchAuthCode(array $record, $code): bool
     {
-
         return $record[UserAuthCodes::CODE] === $code;
     }
 }
