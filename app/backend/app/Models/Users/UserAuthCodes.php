@@ -85,10 +85,10 @@ class UserAuthCodes extends BaseUserDataModel
     {
         $createdAtList = [];
         foreach ($records as $record) {
-            $createdAtList = TimeLibrary::strToTimeStamp($record[self::CREATED_AT]);
+            $createdAtList[] = TimeLibrary::strToTimeStamp($record[self::CREATED_AT]);
         }
 
-        array_multisort($createdAtList, SORT_ASC, $userAuthCodeList);
+        array_multisort($createdAtList, SORT_ASC, $records);
         return $records;
     }
 }

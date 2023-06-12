@@ -87,6 +87,6 @@ class UserAuthController extends Controller
         $userId = $this->getUserId($request);
 
         // サービスの実行
-        return $this->service->validateUserAuthCode($userId, $request->email);
+        return $this->service->validateUserAuthCode($userId, (int)$request->code);
     }
 }
