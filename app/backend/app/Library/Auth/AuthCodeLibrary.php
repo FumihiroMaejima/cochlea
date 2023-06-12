@@ -32,7 +32,7 @@ class AuthCodeLibrary
             );
         }
 
-        if ($userId === $record[UserAuthCodes::USER_ID]) {
+        if ($userId !== $record[UserAuthCodes::USER_ID]) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
                 'ユーザーIDが一致しません。',
@@ -59,7 +59,7 @@ class AuthCodeLibrary
             );
         }
 
-        if (self::isGreaterThanMaxTrialCount($record)) {
+        if (self::isLesserThanMaxTrialCount($record)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
                 '認証コードの利用回数の上限を超えています。',
@@ -104,7 +104,7 @@ class AuthCodeLibrary
      * @param array $record record
      * @return bool
      */
-    public static function isGreaterThanMaxTrialCount(array $record): bool
+    public static function isLesserThanMaxTrialCount(array $record): bool
     {
 
         return $record[UserAuthCodes::COUNT] < self::MAX_CODE_TRIAL_COUNT;
