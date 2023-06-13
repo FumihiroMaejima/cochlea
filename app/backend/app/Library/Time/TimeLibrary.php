@@ -18,6 +18,8 @@ class TimeLibrary
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
     public const DATE_TIME_FORMAT_YMDHIS = 'YmdHis'; // ex: 20220101125959
 
+    public const HALF_MINUTE_TIME_SECOND_VALUE = 1800; // 30分=1800秒
+
     // 偽装時刻
     private static ?int $fakerTimeStamp = null;
 
@@ -105,6 +107,20 @@ class TimeLibrary
     public static function getDays(string $dateTime): array
     {
         return (new Carbon($dateTime))->getDays();
+    }
+
+    /**
+     * add hours to dateTime parameter.
+     *
+     * @param string $dateTime 日時
+     * @param int $value 加算分数
+     * @param string $format datetime format
+     * @return string $dateTimeから$value日後の$dateTime
+     */
+    public static function addHours(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
+    {
+        return (new Carbon($dateTime))->addHours($value)->format($format);
+        // return date($format, strtotime("+$value hour"));
     }
 
     /**

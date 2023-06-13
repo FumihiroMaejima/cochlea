@@ -18,6 +18,7 @@ class RandomStringLibrary
 
     private const RANDOM_STRINGS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     private const RANDOM_SYMBOL_STRINGS = '!@#$%^&*()-_=+[{]}\|;:,<.>/?\'\"';
+    private const RANDOM_VALUES = '0123456789';
 
     // hash algorithm
     private const HASH_ALGORITHM_256 = 'sha256';
@@ -47,6 +48,18 @@ class RandomStringLibrary
     {
         // 同じ文字は2回出ない
         return mb_substr(str_shuffle(self::RANDOM_STRINGS), 0, $length);
+    }
+
+    /**
+     * ランダム数字の作成(パラメーターで長さ指定)
+     *
+     * @param int $length random string length
+     * @return int random int value
+     */
+    public static function getRandomShuffleInteger(int $length = self::DEFAULT_RANDOM_STRING_LENGTH): int
+    {
+        // 同じ文字は2回出ない
+        return mb_substr(str_shuffle(self::RANDOM_VALUES), 0, $length);
     }
 
     /**
