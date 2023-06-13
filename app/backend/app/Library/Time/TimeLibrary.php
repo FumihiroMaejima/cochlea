@@ -119,8 +119,8 @@ class TimeLibrary
      */
     public static function addHours(string $dateTime, int $value, string $format = self::DEFAULT_DATE_TIME_FORMAT): string
     {
-        // return (new Carbon($dateTime))->addHours($value)->format($format);
-        return date($format, strtotime("+$value hour"));
+        return (new Carbon($dateTime))->addHours($value)->format($format);
+        // return date($format, strtotime("+$value hour"));
     }
 
     /**

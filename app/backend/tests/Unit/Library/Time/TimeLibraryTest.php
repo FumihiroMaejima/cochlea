@@ -6,7 +6,6 @@ namespace Tests\Unit\Library\Time;
 
 use App\Library\Time\TimeLibrary;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class TimeLibraryTest extends TestCase
@@ -86,6 +85,22 @@ class TimeLibraryTest extends TestCase
 
         $this->assertEquals(date(TimeLibrary::DATE_TIME_FORMAT_YMD), TimeLibrary::format($dateTime, TimeLibrary::DATE_TIME_FORMAT_YMD));
         $this->assertEquals(date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY), TimeLibrary::format($dateTime, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY));
+    }
+
+    /**
+     * test add hours.
+     *
+     * @return void
+     */
+    public function testAddHours(): void
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+        $hours = 2;
+
+        $this->assertEquals(
+            date(TimeLibrary::DATE_TIME_FORMAT_YMDHIS, strtotime("+$hours hour")),
+            TimeLibrary::addHours($dateTime, $hours, TimeLibrary::DATE_TIME_FORMAT_YMDHIS)
+        );
     }
 
     /**
