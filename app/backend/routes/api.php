@@ -176,6 +176,9 @@ Route::group(['prefix' => 'v1'], function () {
     // no auth
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [\App\Http\Controllers\Users\AuthController::class, 'login'])->name('auth.user.login');
+        Route::group(['prefix' => 'signup'], function () {
+            Route::post('email', [\App\Http\Controllers\Users\UserAuthController::class, 'registerByEmail'])->name('auth.user.signup.email');
+        });
     });
 
     // coins
@@ -206,6 +209,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout'])->name('auth.user.logout');
             Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh'])->name('auth.user.refresh');
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
+            Route::group(['prefix' => 'signup'], function () {
+                Route::post('validate', [\App\Http\Controllers\Users\UserAuthController::class, 'valdiateAuthCode'])->name('auth.user.signup.validate');
+            });
         });
 
         // coins
@@ -310,6 +316,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('schema/size', [\App\Http\Controllers\Users\DebugController::class, 'getSchemaSizeList'])->name('user.debug.databases.schema.size');
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
                 Route::get('table/size', [\App\Http\Controllers\Users\DebugController::class, 'getTableSizeList'])->name('user.debug.databases.table.size');
+                Route::get('shardId', [\App\Http\Controllers\Users\DebugController::class, 'getShardId'])->name('user.debug.databases.shard.id');
             });
         });
     }

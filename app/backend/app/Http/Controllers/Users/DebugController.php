@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Database\DatabaseLibrary;
+use App\Library\Database\ShardingLibrary;
 use App\Library\Database\TableMemoryLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\File\QRCodeLibrary;
@@ -397,6 +398,33 @@ class DebugController extends Controller
     {
         return response()->json(
             ['data' => DatabaseLibrary::getTableStatusByConnection($request->table, $request->connection ?? null)]
+        );
+    }
+
+    /**
+     * シャード番号と対照データベースの取得
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getShardId(Request $request): JsonResponse
+    {
+        // ログイン中の設定が無い場合はリクエストデータからも指定出来る様にする
+        $sessionUserId = $this->getUserId($request, true);
+        if ($sessionUserId === 0) {
+            $requstUserId = $request->userId;
+        } else {
+            $requstUserId = $sessionUserId;
+        }
+
+        $shardId = ShardingLibrary::getShardIdByUserId($requstUserId);
+        return response()->json(
+            [
+                'data' => [
+                    'shardId' => $shardId,
+                    'databaseNumber' => ShardingLibrary::getUserDataBaseConnection($shardId),
+                ],
+            ]
         );
     }
 }
