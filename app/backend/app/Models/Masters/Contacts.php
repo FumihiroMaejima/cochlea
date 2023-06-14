@@ -12,15 +12,19 @@ class Contacts extends Model
     use SoftDeletes;
 
     // 問合せ
-    public const TYPE_QUESTION = 1; // 質問
-    public const TYPE_REQUST = 2; // 要望
+    public const TYPE_QUESTION = 1; // サービスに関する問合せ
+    public const TYPE_REQUST = 2; // ご意見・ご要望
     public const TYPE_FAILURE = 3; // 障害報告
+    public const TYPE_CHEAT_HARASMENT_REPORT = 4; // 不正・悪質行為報告
+    public const TYPE_COPYRIGHT = 5; // 著作物について
+    public const TYPE_COPORATION = 6; // 法人のお客様はこちら
     public const TYPE_ETC = 99; // その他
 
     // カラム一覧
     public const ID             = 'id';
-    public const NAME           = 'name';
+    public const EMAIL           = 'email';
     public const USER_ID        = 'user_id';
+    public const NAME           = 'name';
     public const TYPE           = 'type';
     public const DETAIL         = 'detail';
     public const FAILURE_DETAIL = 'failure_detail';
@@ -59,8 +63,9 @@ class Contacts extends Model
      * @var array
      */
     protected $fillable = [
-        self::NAME,
+        self::EMAIL,
         self::USER_ID,
+        self::NAME,
         self::TYPE,
         self::DETAIL,
         self::FAILURE_DETAIL,

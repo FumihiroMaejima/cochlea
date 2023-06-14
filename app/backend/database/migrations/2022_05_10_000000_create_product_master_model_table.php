@@ -100,8 +100,9 @@ class CreateProductMasterModelTable extends Migration
          */
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->default('')->comment('名前');
+            $table->string('email')->comment('メールアドレス');
             $table->integer('user_id')->unsigned()->default(0)->comment('ユーザーID');
+            $table->string('name', 255)->default('')->comment('名前');
             $table->tinyInteger('type')->unsigned()->comment('問合せ種類');
             $table->text('detail')->comment('詳細');
             $table->text('failure_detail')->nullable()->default(null)->comment('障害詳細');
