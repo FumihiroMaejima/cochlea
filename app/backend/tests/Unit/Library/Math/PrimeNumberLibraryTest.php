@@ -21,10 +21,10 @@ class PrimeNumberLibraryTest extends TestCase
     }
 
     /**
-     * decode token data
+     * prime number data
      * @return array
      */
-    public function decodeTokenHeaderDataProvider(): array
+    public function isPrimeNumberDataProvider(): array
     {
         $this->createApplication();
 
@@ -52,14 +52,14 @@ class PrimeNumberLibraryTest extends TestCase
     }
 
     /**
-     * test decode token header.
+     * test is prime number.
      *
-     * @dataProvider decodeTokenHeaderDataProvider
+     * @dataProvider isPrimeNumberDataProvider
      * @param int $value
      * @param bool $expect
      * @return void
      */
-    public function testDecodeTokenHeader(int $value, bool $expect): void
+    public function testIsPrimeNumber(int $value, bool $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::isPrimeNumber($value));
     }
