@@ -39,4 +39,24 @@ class PrimeNumberLibrary
 
         return true;
     }
+
+    /**
+     * get max prime number in parameter
+     *
+     * @param int $value value
+     * @return int
+     */
+    public static function getMaxPrimeNumber(int $value): int
+    {
+        $largestPrime = 0;
+        // 最大値の為パラメーターから減算して確認
+        for ($i = $value; 1 < $i; $i--) {
+            if (self::isPrimeNumber($i)) {
+                $largestPrime = $i;
+                break;
+            }
+        }
+
+        return $largestPrime;
+    }
 }
