@@ -50,7 +50,7 @@ class PrimeNumberLibrary
     {
         $largestPrime = 0;
         // 最大値の為パラメーターから減算して確認
-        for ($i = $value; 1 < $i; $i--) {
+        for ($i = $value; 0 < $i; $i--) {
             if (self::isPrimeNumber($i)) {
                 $largestPrime = $i;
                 break;

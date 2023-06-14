@@ -52,6 +52,34 @@ class PrimeNumberLibraryTest extends TestCase
     }
 
     /**
+     * max prime number data
+     * @return array
+     */
+    public function getMaxPrimeNumberDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            "0 is 9" => [
+                'value' => 0,
+                'expect' => 0,
+            ],
+            "1 is 0" => [
+                'value' => 1,
+                'expect' => 0,
+            ],
+            "2 is 2" => [
+                'value' => 2,
+                'expect' => 2,
+            ],
+            "4 is 3" => [
+                'value' => 4,
+                'expect' => 3,
+            ],
+        ];
+    }
+
+    /**
      * test is prime number.
      *
      * @dataProvider isPrimeNumberDataProvider
@@ -64,4 +92,16 @@ class PrimeNumberLibraryTest extends TestCase
         $this->assertSame($expect, PrimeNumberLibrary::isPrimeNumber($value));
     }
 
+    /**
+     * test get max prime number.
+     *
+     * @dataProvider getMaxPrimeNumberDataProvider
+     * @param int $value
+     * @param int $expect
+     * @return void
+     */
+    public function testGetMaxPrimeNumber(int $value, int $expect): void
+    {
+        $this->assertSame($expect, PrimeNumberLibrary::getMaxPrimeNumber($value));
+    }
 }
