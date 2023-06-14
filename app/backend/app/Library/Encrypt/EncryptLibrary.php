@@ -18,7 +18,7 @@ class EncryptLibrary
      * encrypt value
      *
      * @param string $value value
-     * @param bool $isCbc whichever using cbc mode
+     * @param bool $isCbc either using cbc mode
      * @return string encrypt value
      */
     public static function encrypt(string $value, bool $isCbc = true): string
@@ -38,7 +38,7 @@ class EncryptLibrary
      * decrypt value
      *
      * @param string $value value
-     * @param bool $isCbc whichever using cbc mode
+     * @param bool $isCbc either using cbc mode
      * @return string encrypt value
      */
     public static function decrypt(string $value, bool $isCbc = true): string

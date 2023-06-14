@@ -66,14 +66,14 @@ class ServiceBaseTestCase extends TestCase
         AdminsRolesTableSeeder::class,
     ];
 
-    /** @var bool $initialized whichever initialized.  */
+    /** @var bool $initialized either initialized.  */
     protected $initialized = false;
 
     /**
      * setup初期化処理
      * (setUpBeforeClass()で行いたいがArtisanコマンドなどが実行出来ないので各クラスのsetup()で1回だけ利用する。)
      *
-     * @param bool $isWipe whichever wipe database.
+     * @param bool $isWipe either wipe database.
      * @return array
      */
     protected function setUpInit(bool $isWipe = false): array

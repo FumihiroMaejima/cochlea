@@ -54,7 +54,7 @@ class UserServiceBaseTestCase extends TestCase
         UsersTableSeeder::class,
     ];
 
-    /** @var bool $initialized whichever initialized.  */
+    /** @var bool $initialized either initialized.  */
     protected $initialized = false;
 
     /**
