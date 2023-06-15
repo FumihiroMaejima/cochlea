@@ -16,6 +16,8 @@ use App\Repositories\Masters\Banners\BannersRepository;
 use App\Repositories\Masters\Banners\BannersRepositoryInterface;
 use App\Repositories\Masters\Coins\CoinsRepository;
 use App\Repositories\Masters\Coins\CoinsRepositoryInterface;
+use App\Repositories\Masters\Contacts\ContactsRepository;
+use App\Repositories\Masters\Contacts\ContactsRepositoryInterface;
 use App\Repositories\Masters\Events\EventsRepository;
 use App\Repositories\Masters\Events\EventsRepositoryInterface;
 use App\Repositories\Masters\HomeContents\HomeContentsGroupsRepository;
@@ -62,6 +64,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(BannersBlocksRepositoryInterface::class, BannersBlocksRepository::class);
         $this->app->bind(BannersRepositoryInterface::class, BannersRepository::class);
         $this->app->bind(CoinsRepositoryInterface::class, CoinsRepository::class);
+        $this->app->bind(ContactsRepositoryInterface::class, ContactsRepository::class);
         $this->app->bind(EventsRepositoryInterface::class, EventsRepository::class);
         $this->app->bind(HomeContentsGroupsRepositoryInterface::class, HomeContentsGroupsRepository::class);
         $this->app->bind(HomeContentsRepositoryInterface::class, HomeContentsRepository::class);
