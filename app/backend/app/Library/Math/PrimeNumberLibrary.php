@@ -29,7 +29,9 @@ class PrimeNumberLibrary
             return false;
         }
 
-        // 奇数で割り切れるかを判定(奇数だけを参照する為2ずつ増加)
+        // 奇数で割り切れるかを判定
+        // 自然数Nが合成数(1より大きい素数ではない自然数)の時は必ず√N以下の約数がある
+        // (奇数だけを参照する為2ずつ増加)
         $squareRoot = sqrt($value);
         for ($i = 3; $i <= $squareRoot; $i += 2) {
             if ($value % $i === 0) {
