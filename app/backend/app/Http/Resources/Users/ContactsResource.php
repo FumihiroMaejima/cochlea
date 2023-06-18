@@ -74,6 +74,30 @@ class ContactsResource extends JsonResource
     }
 
     /**
+     * Transform the resource into an array for get text => value list.
+     *
+     * @param Collection $collection
+     * @return array
+     */
+    public static function toArrayForGetTextAndValueListForCategories()
+    {
+        // レスポンス
+        $response = [];
+
+        // $this->resourceはCollection
+        // 各itemは1レコードずつのデータを持つRolesResourceクラス
+
+        foreach (Contacts::CONTACT_CATEGORIE_TEXT_LIST as $categoryId => $text) {
+            $response[] = [
+                self::RESOURCE_KEY_TEXT => $text,
+                self::RESOURCE_KEY_VALUE => $categoryId,
+            ];
+        }
+
+        return $response;
+    }
+
+    /**
      * Transform the resource into an array for create.
      *
      * @param string $email email

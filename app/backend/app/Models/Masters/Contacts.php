@@ -20,7 +20,7 @@ class Contacts extends Model
     public const TYPE_COPORATION = 6; // 法人のお客様はこちら
     public const TYPE_ETC = 99; // その他
 
-    public const CPNTACT_CATEGORIES = [
+    public const CONTACT_CATEGORIES = [
         self::TYPE_QUESTION,
         self::TYPE_REQUST,
         self::TYPE_FAILURE,
@@ -28,6 +28,16 @@ class Contacts extends Model
         self::TYPE_COPYRIGHT,
         self::TYPE_COPORATION,
         self::TYPE_ETC,
+    ];
+
+    public const CONTACT_CATEGORIE_TEXT_LIST = [
+        self::TYPE_QUESTION => 'サービスに関する問合せ',
+        self::TYPE_REQUST => 'ご意見・ご要望',
+        self::TYPE_FAILURE => '障害報告',
+        self::TYPE_CHEAT_HARASMENT_REPORT => '不正・悪質行為報告',
+        self::TYPE_COPYRIGHT => '著作物について',
+        self::TYPE_COPORATION => '法人のお客様はこちら',
+        self::TYPE_ETC => 'その他',
     ];
 
     // カラム一覧

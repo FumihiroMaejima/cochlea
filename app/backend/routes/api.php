@@ -181,14 +181,18 @@ Route::group(['prefix' => 'v1'], function () {
         });
     });
 
-    // coins
-    Route::group(['prefix' => 'coins'], function () {
-        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
-    });
     // banners
     Route::group(['prefix' => 'banners'], function () {
         Route::get('/', [\App\Http\Controllers\Users\BannersController::class, 'index'])->name('noAuth.banners.index');
         Route::get('/banner/image/{uuid}', [\App\Http\Controllers\Users\BannersController::class, 'getImage'])->name('noAuth.banners.image');
+    });
+    // coins
+    Route::group(['prefix' => 'coins'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
+    });
+    // contacts
+    Route::group(['prefix' => 'contacts'], function () {
+        Route::get('/categories', [\App\Http\Controllers\Users\ContactsController::class, 'categories'])->name('noAuth.contacts.categories');
     });
     // events
     Route::group(['prefix' => 'events'], function () {
