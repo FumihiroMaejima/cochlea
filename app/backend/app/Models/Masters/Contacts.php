@@ -20,6 +20,16 @@ class Contacts extends Model
     public const TYPE_COPORATION = 6; // 法人のお客様はこちら
     public const TYPE_ETC = 99; // その他
 
+    public const CPNTACT_CATEGORIES = [
+        self::TYPE_QUESTION,
+        self::TYPE_REQUST,
+        self::TYPE_FAILURE,
+        self::TYPE_CHEAT_HARASMENT_REPORT,
+        self::TYPE_COPYRIGHT,
+        self::TYPE_COPORATION,
+        self::TYPE_ETC,
+    ];
+
     // カラム一覧
     public const ID             = 'id';
     public const EMAIL           = 'email';
