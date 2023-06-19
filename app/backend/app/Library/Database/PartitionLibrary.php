@@ -86,14 +86,14 @@ class PartitionLibrary
     }
 
     /**
-     * delete partiion.
+     * drop a partiion.
      *
      * @param string $databaseName database name
      * @param string $tableName table name
      * @param string $partitionName partition name
      * @return void
      */
-    public static function deletePartition(string $databaseName, string $tableName, string $partitionName): void
+    public static function dropPartition(string $databaseName, string $tableName, string $partitionName): void
     {
         DB::statement(
             "
