@@ -100,23 +100,23 @@ class ContactsResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
-     * @param string $email email
      * @param int $userId user id
+     * @param string $email email
      * @param string $name name
      * @param int $type type
      * @param string $detail detail
-     * @param string $failureDetail failure detail
-     * @param string $failureAt failure datetime
+     * @param ?string $failureDetail failure detail
+     * @param ?string $failureAt failure datetime
      * @return array
      */
     public static function toArrayForCreate(
-        string $email,
         int $userId,
-        string $name,
+        string $email,
+        ?string $name,
         int $type,
         string $detail,
-        string $failureDetail,
-        string $failureAt
+        ?string $failureDetail,
+        ?string $failureAt
     ): array {
         $dateTime = TimeLibrary::getCurrentDateTime();
 

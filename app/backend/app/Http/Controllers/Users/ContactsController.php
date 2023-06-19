@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Users;
 // use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Contacts\ContactCreateRequest;
 use App\Services\Users\ContactsService;
+use App\Trait\CheckHeaderTrait;
 
 // use App\Trait\CheckHeaderTrait;
 
 class ContactsController extends Controller
 {
+    use CheckHeaderTrait;
     private ContactsService $service;
 
     /**
@@ -20,7 +23,7 @@ class ContactsController extends Controller
      */
     public function __construct(ContactsService $contactsService)
     {
-        $this->middleware('auth:api-users', ['except' => ['index', 'categories']]);
+        $this->middleware('auth:api-users', ['except' => ['index', 'categories', 'create']]);
         $this->service = $contactsService;
     }
 
@@ -44,5 +47,28 @@ class ContactsController extends Controller
     {
         // サービスの実行
         return $this->service->getCategories();
+    }
+
+    /**
+     * create a resource.
+     *
+     * @param ContactCreateRequest $request
+     * @return JsonResponse
+     */
+    public function create(ContactCreateRequest $request): JsonResponse
+    {
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
+
+        // サービスの実行
+        return $this->service->createContact(
+            $userId,
+            $request->email,
+            $request->name,
+            $request->type,
+            $request->detail,
+            $request->failureDetail,
+            $request->failureAt
+        );
     }
 }

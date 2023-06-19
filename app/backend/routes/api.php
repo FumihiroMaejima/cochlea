@@ -193,6 +193,7 @@ Route::group(['prefix' => 'v1'], function () {
     // contacts
     Route::group(['prefix' => 'contacts'], function () {
         Route::get('/categories', [\App\Http\Controllers\Users\ContactsController::class, 'categories'])->name('noAuth.contacts.categories');
+        Route::post('/contact', [\App\Http\Controllers\Users\ContactsController::class, 'create'])->name('noAuth.contacts.contact.create');
     });
     // events
     Route::group(['prefix' => 'events'], function () {

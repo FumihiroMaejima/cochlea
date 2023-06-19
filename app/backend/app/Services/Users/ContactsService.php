@@ -3,6 +3,7 @@
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
@@ -46,30 +47,58 @@ class ContactsService
     }
 
     /**
-     * get coins data
+     * create contact data
      *
+     * @param int $userId user id
+     * @param string $email email
+     * @param string $name name
+     * @param int $type type
+     * @param string $detail detail
+     * @param ?string $failureDetail failure detail
+     * @param ?string $failureAt failure datetime
      * @return JsonResponse
      * @throws Exception
      */
-    public function getCoins(): JsonResponse
-    {
-        $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_CONTACTS_LIST);
-        // hash型の検証
-        // $testCache = HashCacheLibrary::getByKey(self::CACHE_KEY_USER_CONTACTS_LIST.'_test');
+    public function createContact(
+        int $userId,
+        string $email,
+        ?string $name,
+        int $type,
+        string $detail,
+        ?string $failureDetail,
+        ?string $failureAt
+    ): JsonResponse {
 
-        // キャッシュチェック
-        if (is_null($cache)) {
-            $collection = $this->contactsRepository->getRecords();
-            $resourceCollection = CoinsResource::toArrayForGetTextAndValueList($collection);
+        // TODO bodyの連投チェック
+        $resource = ContactsResource::toArrayForCreate(
+            $userId,
+            $email,
+            $name,
+            $type,
+            $detail,
+            $failureDetail,
+            $failureAt
+        );
 
-            if (!empty($resourceCollection)) {
-                CacheLibrary::setCache(self::CACHE_KEY_USER_CONTACTS_LIST, $resourceCollection);
-                // HashCacheLibrary::setCache(self::CACHE_KEY_USER_CONTACTS_LIST.'_test', $resourceCollection);
-            }
-        } else {
-            $resourceCollection = $cache;
+        DB::beginTransaction();
+        try {
+            $this->contactsRepository->create($resource);
+
+            // ユーザーへメール送信
+            // (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
+
+            // 管理者へslack通知
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                '認証コード生成処理に失敗しました。' . $e->getMessage(),
+                [],
+                false
+            );
         }
 
-        return response()->json(['data' => $resourceCollection], StatusCodeMessages::STATUS_200);
+        return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
     }
 }

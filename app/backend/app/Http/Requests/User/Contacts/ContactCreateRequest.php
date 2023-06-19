@@ -32,7 +32,7 @@ class ContactCreateRequest extends ContactBaseRequest
         return [
             'name'           => 'string|between:1,50',
             'email'          => 'required|string|email:rfc|between:1,50',
-            'category'       => 'required|integer',
+            'type'           => 'required|integer',
             'detail'         => 'string|max:1000',
             'failure_detail' => 'string|max:1000',
             'failure_at'     => 'date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
