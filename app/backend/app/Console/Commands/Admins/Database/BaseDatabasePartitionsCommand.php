@@ -242,12 +242,12 @@ class BaseDatabasePartitionsCommand extends Command
     }
 
     /**
-     * remove partitions.
+     * drop partitions.
      *
      * @return void
      * @throws MyApplicationHttpException
      */
-    protected function removePartitions(): void
+    protected function dropPartitions(): void
     {
         // パーティションを設定する対象のテーブル情報の取得
         $partitionSettings = $this->getPartitionSettings();

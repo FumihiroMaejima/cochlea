@@ -44,7 +44,7 @@ class RemoveLogDatabasePartitionsCommand extends BaseDatabasePartitionsCommand
         echo 'Setting Partitions.' . "\n";
         echo 'Date: ' . TimeLibrary::getCurrentDateTime() . "\n";
 
-        $this->removePartitions();
+        $this->dropPartitions();
 
         echo 'Finish.' . "\n";
     }
