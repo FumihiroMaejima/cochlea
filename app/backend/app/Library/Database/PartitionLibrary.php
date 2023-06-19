@@ -18,7 +18,7 @@ class PartitionLibrary
     public const KEY_PARTITION_DESCRIPTION = 'PARTITION_DESCRIPTION';
 
     /**
-     * create partiions by range
+     * create partitions by range
      *
      * @param string $databaseName database name
      * @param string $tableName table name
@@ -39,7 +39,7 @@ class PartitionLibrary
     }
 
     /**
-     * create partiions by hash
+     * create partitions by hash
      * (指定カラムをパーティション化キーとして使用して HASH によって$countつのパーティションにパーティション化)
      *
      * @param string $databaseName database name
@@ -66,7 +66,7 @@ class PartitionLibrary
     }
 
     /**
-     * add partiions
+     * add partitions
      *
      * @param string $databaseName database name
      * @param string $tableName table name
@@ -86,7 +86,7 @@ class PartitionLibrary
     }
 
     /**
-     * drop a partiion.
+     * drop partition.
      *
      * @param string $databaseName database name
      * @param string $tableName table name
@@ -98,6 +98,22 @@ class PartitionLibrary
         DB::statement(
             "
                 ALTER TABLE $databaseName.$tableName DROP PARTITION $partitionName;
+            "
+        );
+    }
+
+    /**
+     * remove partition setting from table.
+     *
+     * @param string $databaseName database name
+     * @param string $tableName table name
+     * @return void
+     */
+    public static function removePartition(string $databaseName, string $tableName): void
+    {
+        DB::statement(
+            "
+                ALTER TABLE $databaseName.$tableName REMOVE PARTITIONING;
             "
         );
     }
