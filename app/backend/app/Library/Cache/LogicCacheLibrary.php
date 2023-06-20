@@ -46,13 +46,13 @@ class LogicCacheLibrary extends CacheLibrary
     }
 
     /**
-     * set contact body cache.
+     * get contact body cache.
      *
      * @param string $value
-     * @return void
+     * @return ?string
      */
-    public static function getContactCache(string $value): void
+    public static function getContactCache(string $value): ?string
     {
-        self::getByKey(self::getContactDetailKey($value));
+        return self::getByKey(self::getContactDetailKey($value));
     }
 }
