@@ -146,4 +146,23 @@ class CacheLibrary
     {
         return Config::get('app.env') === 'testing';
     }
+
+    /**
+     * get cache value by Key.
+     *
+     * @param string $key
+     * @return array
+     */
+    public static function getByAllKeys(): array
+    {
+        if (self::isTesting()) {
+            return null;
+        }
+
+        $keys = Redis::connection(self::REDIS_CONNECTION)->command('keys', ['*']);
+
+        if (is_array($keys)) {
+            return $keys;
+        }
+    }
 }
