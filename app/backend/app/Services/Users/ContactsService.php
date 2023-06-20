@@ -12,15 +12,11 @@ use App\Http\Resources\Users\CoinsResource;
 use App\Http\Resources\Users\ContactsResource;
 use App\Repositories\Masters\Contacts\ContactsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
-use App\Library\Cache\CacheLibrary;
 use App\Library\Cache\LogicCacheLibrary;
 use Exception;
 
 class ContactsService
 {
-    // cache keys
-    private const CACHE_KEY_USER_CONTACTS_LIST = 'cache_user_coins_list';
-
     protected ContactsRepositoryInterface $contactsRepository;
 
     /**

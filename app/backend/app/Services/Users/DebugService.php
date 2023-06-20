@@ -14,6 +14,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
+use App\Library\Cache\LogicCacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
@@ -381,5 +382,23 @@ class DebugService
         EOF;
 
         return response()->file(PdfLibrary::getPdfByHtmlString($fileName, $html));
+    }
+
+    /**
+     * get user coins by user id.
+     *
+     * @param int $userId user id
+     * @param bool $isLock exec lock For Update
+     * @return bool
+     */
+    public function removeCacheServerCache(int $type): bool
+    {
+        // キャッシュキーのプレフィックス
+        $prefix = 'cochlea_database_';
+        $keys = LogicCacheLibrary::getByAllKeys();
+        foreach ($keys as $key) {
+            LogicCacheLibrary::deleteCache(mb_substr($key, mb_strlen($prefix)), true);
+        }
+        return true;
     }
 }

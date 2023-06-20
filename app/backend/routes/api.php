@@ -323,6 +323,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('table/size', [\App\Http\Controllers\Users\DebugController::class, 'getTableSizeList'])->name('user.debug.databases.table.size');
                 Route::get('shardId', [\App\Http\Controllers\Users\DebugController::class, 'getShardId'])->name('user.debug.databases.shard.id');
             });
+
+            // キャッシュサーバー関係
+            Route::group(['prefix' => 'caches'], function () {
+                Route::delete('logic/remove', [\App\Http\Controllers\Users\DebugController::class, 'removeCacheServerCache'])->name('user.debug.caches.logic.remove');
+            });
         });
     }
 });

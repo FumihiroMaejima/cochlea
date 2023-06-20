@@ -427,4 +427,17 @@ class DebugController extends Controller
             ]
         );
     }
+
+    /**
+     * キャッシュサーバー上のキャッシュの削除
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removeCacheServerCache(Request $request): JsonResponse
+    {
+        return response()->json(
+            ['data' => $this->service->removeCacheServerCache(1)]
+        );
+    }
 }
