@@ -13,7 +13,7 @@ use App\Http\Resources\Users\ContactsResource;
 use App\Repositories\Masters\Contacts\ContactsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
-// use App\Library\Cache\HashCacheLibrary;
+use App\Library\Cache\LogicCacheLibrary;
 use Exception;
 
 class ContactsService
@@ -68,8 +68,12 @@ class ContactsService
         ?string $failureDetail,
         ?string $failureAt
     ): JsonResponse {
+        // キャッシュ確認(連投チェック)
+        $cache = LogicCacheLibrary::getContactCache($detail);
+        if ($cache) {
+            return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
+        }
 
-        // TODO bodyの連投チェック
         $resource = ContactsResource::toArrayForCreate(
             $userId,
             $email,
@@ -89,6 +93,9 @@ class ContactsService
 
             // 管理者へslack通知
             DB::commit();
+
+            // キャッシュ設定
+            LogicCacheLibrary::setContactCache($detail);
         } catch (Exception $e) {
             DB::rollBack();
             throw new MyApplicationHttpException(
