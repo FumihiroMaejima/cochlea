@@ -86,6 +86,16 @@ class EncryptLibrary
     }
 
     /**
+     * get chipher methods
+     *
+     * @return array
+     */
+    public static function getCipherMethods(): array
+    {
+        return openssl_get_cipher_methods(true);
+    }
+
+    /**
      * get ecb key.
      *
      * @return string
