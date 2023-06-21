@@ -40,7 +40,7 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
 
         if (is_null($cache)) {
             return $cache;
@@ -70,7 +70,7 @@ class CacheLibrary
             }
 
             /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(self::REDIS_CONNECTION)->set($key, $value);
+            $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
             $payload = $result->getPayload();
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
@@ -82,7 +82,7 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)
+            $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
                 ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
@@ -117,7 +117,7 @@ class CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::connection(self::REDIS_CONNECTION)->del($key);
+        $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -135,7 +135,7 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
 
         return $cache ? true : false;
     }
@@ -174,7 +174,7 @@ class CacheLibrary
             return [];
         }
 
-        $keys = Redis::connection(self::REDIS_CONNECTION)->command('keys', ['*']);
+        $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
 
         if (is_array($keys)) {
             return $keys;
