@@ -42,7 +42,7 @@ class HashLibrary
      */
     public static function check(string $value, string $hashedValue): bool
     {
-        return self::make($value) === $hashedValue;
+        return self::hash($value) === $hashedValue;
     }
 
     /**
