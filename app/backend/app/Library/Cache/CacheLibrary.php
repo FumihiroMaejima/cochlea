@@ -9,12 +9,9 @@ use Predis\Response\Status;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
-use App\Trait\CheckHeaderTrait;
 
 class CacheLibrary
 {
-    use CheckHeaderTrait;
-
     // キーの接頭辞
     public const KEY_PREFIX = '_database_';
 

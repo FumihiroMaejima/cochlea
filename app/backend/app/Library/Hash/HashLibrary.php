@@ -27,7 +27,7 @@ class HashLibrary
      * @param string $algorithm algorithm
      * @return string hash value
      */
-    public static function make(string $value, string $algorithm = self::ALGORITHM_SHA256): string
+    public static function hash(string $value, string $algorithm = self::ALGORITHM_SHA256): string
     {
         return hash($algorithm, $value);
     }

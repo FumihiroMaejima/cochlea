@@ -2,23 +2,16 @@
 
 namespace App\Library\Cache;
 
-use Illuminate\Redis\RedisManager;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redis;
-use Predis\Response\Status;
-use App\Exceptions\MyApplicationHttpException;
 use App\Library\Cache\CacheLibrary;
-use App\Library\Message\StatusCodeMessages;
+use App\Library\Hash\HashLibrary;
 use App\Library\Time\TimeLibrary;
-use App\Trait\CheckHeaderTrait;
 
 class LogicCacheLibrary extends CacheLibrary
 {
-    use CheckHeaderTrait;
-
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
 
+    // キャッシュキー
     private const CACHE_KEY_CONTACT_BODY = 'contact_body';
 
     /**
@@ -29,7 +22,7 @@ class LogicCacheLibrary extends CacheLibrary
      */
     public static function getContactDetailKey(string $body): string
     {
-        $hash = md5($body);
+        $hash = HashLibrary::hash($body, HashLibrary::ALGORITHM_MD5);
         // return self::CACHE_KEY_CONTACT_BODY . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
         return self::CACHE_KEY_CONTACT_BODY . '_' . $hash;
     }
