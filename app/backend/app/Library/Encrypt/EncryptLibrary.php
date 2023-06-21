@@ -27,6 +27,10 @@ class EncryptLibrary
         if ($isCbc) {
             [$cbcKey, $cbcIv] = self::generateCbcKeyAndIv();
             $output = openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
+            // $encode = mb_detect_encoding($output); // エンコード判定をするとSJISになった。
+            // binaryから16進数にすると可読性のある文字列に変換出来る
+            // $a = bin2hex($output);
+            // $b = hex2bin($a);
             return mb_convert_encoding($output, 'UTF-8');
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
