@@ -15,6 +15,9 @@ class CacheLibrary
 {
     use CheckHeaderTrait;
 
+    // キーの接頭辞
+    public const KEY_PREFIX = '_database_';
+
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
     protected const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
@@ -148,6 +151,18 @@ class CacheLibrary
     }
 
     /**
+     * get cache Key prefix.
+     *
+     * @param string $key
+     * @return string
+     */
+    public static function getKeyPrefix(): string
+    {
+        // appの名前がつく
+        return Config::get('app.name') . self::KEY_PREFIX;
+    }
+
+    /**
      * get cache value by Key.
      *
      * @param string $key
@@ -156,13 +171,15 @@ class CacheLibrary
     public static function getByAllKeys(): array
     {
         if (self::isTesting()) {
-            return null;
+            return [];
         }
 
         $keys = Redis::connection(self::REDIS_CONNECTION)->command('keys', ['*']);
 
         if (is_array($keys)) {
             return $keys;
+        } else {
+            return [];
         }
     }
 }

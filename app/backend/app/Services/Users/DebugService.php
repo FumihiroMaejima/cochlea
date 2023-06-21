@@ -394,7 +394,7 @@ class DebugService
     public function removeCacheServerCache(int $type): bool
     {
         // キャッシュキーのプレフィックス
-        $prefix = 'cochlea_database_';
+        $prefix = LogicCacheLibrary::getKeyPrefix();
         $keys = LogicCacheLibrary::getByAllKeys();
         foreach ($keys as $key) {
             LogicCacheLibrary::deleteCache(mb_substr($key, mb_strlen($prefix)), true);
