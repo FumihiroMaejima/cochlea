@@ -299,7 +299,7 @@ class DebugController extends Controller
      */
     public function encryptMail(Request $request): JsonResponse
     {
-        return response()->json(EncryptLibrary::encrypt($request->email ?? '', false));
+        return response()->json(EncryptLibrary::encrypt($request->email ?? '', (bool)$request->isCbc ?? false));
     }
 
     /**
@@ -311,7 +311,7 @@ class DebugController extends Controller
      */
     public function decryptMail(Request $request): JsonResponse
     {
-        return response()->json(EncryptLibrary::decrypt($request->email ?? '', false));
+        return response()->json(EncryptLibrary::decrypt($request->email ?? '', (bool)$request->isCbc ?? false));
     }
 
     /**
