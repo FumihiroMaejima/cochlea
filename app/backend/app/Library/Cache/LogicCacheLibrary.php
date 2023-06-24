@@ -9,7 +9,7 @@ use App\Library\Time\TimeLibrary;
 class LogicCacheLibrary extends CacheLibrary
 {
     // database.phpのキー名
-    protected const REDIS_CONNECTION = 'cache';
+    protected const REDIS_CONNECTION = 'logic';
 
     // キャッシュキー
     private const CACHE_KEY_CONTACT_BODY = 'contact_body';
