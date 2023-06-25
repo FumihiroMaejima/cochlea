@@ -20,7 +20,7 @@ use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use App\Models\Users\UserAuthCodes;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepositoryInterface;
-use App\Services\Admins\Notifications\AuthCodeNotificationService;
+use App\Services\Users\Notifications\AuthCodeNotificationService;
 use Exception;
 
 class UserAuthService
