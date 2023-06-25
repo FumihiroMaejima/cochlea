@@ -326,7 +326,7 @@ Route::group(['prefix' => 'v1'], function () {
 
             // キャッシュサーバー関係
             Route::group(['prefix' => 'caches'], function () {
-                Route::delete('logic/remove', [\App\Http\Controllers\Users\DebugController::class, 'removeCacheServerCache'])->name('user.debug.caches.logic.remove');
+                Route::delete('logic/remove/{type}', [\App\Http\Controllers\Users\DebugController::class, 'removeCacheServerCache'])->name('user.debug.caches.logic.allType');
             });
         });
     }

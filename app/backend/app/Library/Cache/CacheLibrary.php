@@ -13,7 +13,7 @@ use App\Library\Time\TimeLibrary;
 class CacheLibrary
 {
     // キーの接頭辞
-    public const KEY_PREFIX = '_database_';
+    private const KEY_PREFIX = '_database_';
 
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
@@ -153,10 +153,21 @@ class CacheLibrary
      * @param string $key
      * @return string
      */
-    public static function getKeyPrefix(): string
+    private static function getKeyPrefix(): string
     {
         // appの名前がつく
         return Config::get('app.name') . self::KEY_PREFIX;
+    }
+
+    /**
+     * get redis connection.
+     *
+     * @param string $key
+     * @return string
+     */
+    public static function getConnection(): string
+    {
+        return static::REDIS_CONNECTION;
     }
 
     /**
@@ -178,5 +189,28 @@ class CacheLibrary
         } else {
             return [];
         }
+    }
+
+    /**
+     * get cache value by Key.
+     *
+     * @param string $key
+     * @return array
+     */
+    public static function removeAllKeys(): void
+    {
+        if (self::isTesting()) {
+            return;
+        }
+
+        // キャッシュキーのプレフィックス
+        $prefix = self::getKeyPrefix();
+        $prefixLength = mb_strlen($prefix);
+
+        $keys = self::getByAllKeys();
+        foreach ($keys as $key) {
+            self::deleteCache(mb_substr($key, $prefixLength), true);
+        }
+
     }
 }

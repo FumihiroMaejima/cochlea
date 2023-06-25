@@ -15,6 +15,7 @@ use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\LogicCacheLibrary;
+use App\Library\Cache\MasterCacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
@@ -385,19 +386,25 @@ class DebugService
     }
 
     /**
-     * get user coins by user id.
+     * remove server cache.
      *
-     * @param int $userId user id
-     * @param bool $isLock exec lock For Update
+     * @param ?string $type cache connection.
      * @return bool
      */
-    public function removeCacheServerCache(int $type): bool
+    public function removeCacheServerCache(?string $type = 'all'): bool
     {
-        // キャッシュキーのプレフィックス
-        $prefix = LogicCacheLibrary::getKeyPrefix();
-        $keys = LogicCacheLibrary::getByAllKeys();
-        foreach ($keys as $key) {
-            LogicCacheLibrary::deleteCache(mb_substr($key, mb_strlen($prefix)), true);
+        switch ($type) {
+            case MasterCacheLibrary::getConnection():
+                MasterCacheLibrary::removeAllKeys();
+                break;
+            case LogicCacheLibrary::getConnection():
+                LogicCacheLibrary::removeAllKeys();
+                break;
+            default:
+                MasterCacheLibrary::removeAllKeys();
+                LogicCacheLibrary::removeAllKeys();
+            break;
+
         }
         return true;
     }

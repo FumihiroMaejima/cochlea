@@ -431,13 +431,14 @@ class DebugController extends Controller
     /**
      * キャッシュサーバー上のキャッシュの削除
      *
-     * @param Request $request
+     * @param Request $_
+     * @param string $type
      * @return JsonResponse
      */
-    public function removeCacheServerCache(Request $request): JsonResponse
+    public function removeCacheServerCache(Request $_, string $type): JsonResponse
     {
         return response()->json(
-            ['data' => $this->service->removeCacheServerCache(1)]
+            ['data' => $this->service->removeCacheServerCache($type ?? 'all')]
         );
     }
 }
