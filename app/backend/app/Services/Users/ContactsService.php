@@ -13,6 +13,8 @@ use App\Http\Resources\Users\ContactsResource;
 use App\Repositories\Masters\Contacts\ContactsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\LogicCacheLibrary;
+use App\Models\Masters\Contacts;
+use App\Services\Users\Notifications\ContactNotificationService;
 use Exception;
 
 class ContactsService
@@ -85,7 +87,13 @@ class ContactsService
             $this->contactsRepository->create($resource);
 
             // ユーザーへメール送信
-            // (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
+            (new ContactNotificationService($email))->send(
+                $email,
+                Contacts::CONTACT_CATEGORIE_TEXT_LIST[$type],
+                $detail,
+                $failureDetail ?? '',
+                $failureAt ?? ''
+            );
 
             // 管理者へslack通知
             DB::commit();
