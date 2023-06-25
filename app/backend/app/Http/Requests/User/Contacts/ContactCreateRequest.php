@@ -6,8 +6,10 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Validation\Rule;
 use App\Http\Requests\User\Contacts\ContactBaseRequest;
 use App\Library\Time\TimeLibrary;
+use App\Models\Masters\Contacts;
 
 class ContactCreateRequest extends ContactBaseRequest
 {
@@ -32,7 +34,7 @@ class ContactCreateRequest extends ContactBaseRequest
         return [
             'name'           => 'string|between:1,50',
             'email'          => 'required|string|email:rfc|between:1,50',
-            'type'           => 'required|integer',
+            'type'           => 'required|integer|' . Rule::in(Contacts::CONTACT_CATEGORIES),
             'detail'         => 'string|max:1000',
             'failure_detail' => 'string|max:1000',
             'failure_at'     => 'date|date_format:'.TimeLibrary::DEFAULT_DATE_TIME_FORMAT_SLASH,
