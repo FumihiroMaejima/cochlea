@@ -333,7 +333,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'performance'], function () {
                 Route::get('dau', [\App\Http\Controllers\Users\DebugController::class, 'getDailyActiveUser'])->name('user.debug.performance.dau');
                 Route::get('qps', [\App\Http\Controllers\Users\DebugController::class, 'getQueryPerSecond'])->name('user.debug.performance.qps');
-            });
+                Route::get('storage/size', [\App\Http\Controllers\Users\DebugController::class, 'getStorageSize'])->name('user.debug.performance.storage.size');
+             });
         });
     }
 });

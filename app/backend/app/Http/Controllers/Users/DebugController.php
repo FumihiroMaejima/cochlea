@@ -17,6 +17,7 @@ use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Performance\MemoryLibrary;
 use App\Library\Performance\PerformanceLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
@@ -494,6 +495,45 @@ class DebugController extends Controller
         }
         return response()->json(
             ['data' => PerformanceLibrary::getQueryPerSecond((int)$request->dau, (int)$request->qpu)]
+        );
+    }
+
+    /**
+     * get storage size by dau, qpu.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getStorageSize(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'dau' => ['required','int'],
+                'qpu' => ['required','int'],
+                'rate' => ['required','int'],
+                'size' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        $value = PerformanceLibrary::getStorageSize(
+            (int)$request->dau,
+            (int)$request->qpu,
+            (int)$request->rate,
+            (int)$request->size
+        );
+        return response()->json(
+            ['data' => [
+                'value' => $value,
+                'unit' => MemoryLibrary::convert($value),
+            ]
+            ]
         );
     }
 }
