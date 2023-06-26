@@ -482,7 +482,8 @@ class DebugController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'queryCount' => ['required','int'],
+                'dau' => ['required','int'],
+                'qpu' => ['required','int'],
             ]
         );
 
@@ -492,7 +493,7 @@ class DebugController extends Controller
             );
         }
         return response()->json(
-            ['data' => PerformanceLibrary::getQueryPerSecond((int)$request->queryCount)]
+            ['data' => PerformanceLibrary::getQueryPerSecond((int)$request->dau, (int)$request->qpu)]
         );
     }
 }

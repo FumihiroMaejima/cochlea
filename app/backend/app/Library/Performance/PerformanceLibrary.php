@@ -33,11 +33,12 @@ class PerformanceLibrary
     /**
      * get query count per second
      *
-     * @param int $queryCount
+     * @param int $dau daily active user
+     * @param int $qpu query per user
      * @return float
      */
-    public static function getQueryPerSecond(int $queryCount): float
+    public static function getQueryPerSecond(int $dau, int $qpu): float
     {
-        return floor($queryCount / self::ONE_DAY_HOURS / self::ONE_HOUR_SECONDS);
+        return floor(($dau * $qpu) / self::ONE_DAY_HOURS / self::ONE_HOUR_SECONDS);
     }
 }
