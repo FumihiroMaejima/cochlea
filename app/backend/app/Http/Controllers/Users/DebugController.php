@@ -17,6 +17,7 @@ use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Performance\PerformanceLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
@@ -439,6 +440,59 @@ class DebugController extends Controller
     {
         return response()->json(
             ['data' => $this->service->removeCacheServerCache($type ?? 'all')]
+        );
+    }
+
+    /**
+     * get active user in a day.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getDailyActiveUser(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'activeUser' => ['required','int'],
+                'rate' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        return response()->json(
+            ['data' => PerformanceLibrary::getDailyActiveUser((int)$request->activeUser, (int)$request->rate)]
+        );
+    }
+
+    /**
+     * get query a second.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getQueryPerSecond(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'queryCount' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        return response()->json(
+            ['data' => PerformanceLibrary::getQueryPerSecond((int)$request->queryCount)]
         );
     }
 }

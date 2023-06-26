@@ -328,6 +328,12 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'caches'], function () {
                 Route::delete('logic/remove/{type}', [\App\Http\Controllers\Users\DebugController::class, 'removeCacheServerCache'])->name('user.debug.caches.logic.allType');
             });
+
+            // パフォーマンス関係
+            Route::group(['prefix' => 'performance'], function () {
+                Route::get('dau', [\App\Http\Controllers\Users\DebugController::class, 'getDailyActiveUser'])->name('user.debug.performance.dau');
+                Route::get('qps', [\App\Http\Controllers\Users\DebugController::class, 'getQueryPerSecond'])->name('user.debug.performance.qps');
+            });
         });
     }
 });
