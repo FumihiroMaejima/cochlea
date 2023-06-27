@@ -536,4 +536,31 @@ class DebugController extends Controller
             ]
         );
     }
+
+    /**
+     * convert byte size
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function convertByteSize(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'byte' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        return response()->json(
+            ['data' => MemoryLibrary::convert((int)$request->byte)]
+        );
+    }
 }
