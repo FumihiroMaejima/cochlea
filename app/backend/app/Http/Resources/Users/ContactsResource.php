@@ -14,6 +14,16 @@ class ContactsResource extends JsonResource
     public const RESOURCE_KEY_TEXT = 'text';
     public const RESOURCE_KEY_VALUE = 'value';
 
+    public const RESOURCE_KEY_PRETEXT    = 'pretext';
+    public const RESOURCE_KEY_TITLE      = 'title';
+    public const RESOURCE_KEY_TITLE_LINK = 'titleLink';
+    public const RESOURCE_KEY_CONTENT    = 'content';
+    public const RESOURCE_KEY_COLOR      = 'color';
+    public const RESOURCE_KEY_ID         = 'id';
+    public const RESOURCE_KEY_NAME       = 'name';
+    public const RESOURCE_KEY_STATUS     = 'status';
+    public const RESOURCE_KEY_DETAIL     = 'detail';
+
     /**
      * Transform the resource into an array.
      *
@@ -178,6 +188,42 @@ class ContactsResource extends JsonResource
         return [
             Contacts::UPDATED_AT => $dateTime,
             Contacts::DELETED_AT => $dateTime
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for notification.
+     *
+     * @param string $email email
+     * @param int $userId user id
+     * @param string $name name
+     * @param int $type type
+     * @param string $detail detail
+     * @param string $failureDetail failure detail
+     * @param string $failureAt failure datetime
+     * @return array
+     */
+    public static function toArrayForNotifiaction(
+        string $email,
+        int $userId,
+        string $name,
+        int $type,
+        string $detail,
+        string $failureDetail,
+        string $failureAt
+    ): array {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        return [
+            self::RESOURCE_KEY_PRETEXT    => PHP_EOL,
+            self::RESOURCE_KEY_TITLE      => 'Send Contact Notification',
+            self::RESOURCE_KEY_TITLE_LINK => '',
+            self::RESOURCE_KEY_CONTENT    => 'content text' . PHP_EOL,
+            self::RESOURCE_KEY_COLOR      => 'good',
+            self::RESOURCE_KEY_ID         => $userId,
+            self::RESOURCE_KEY_NAME       => $name,
+            self::RESOURCE_KEY_STATUS     => ':ok:',
+            self::RESOURCE_KEY_DETAIL     => '```'. $detail . PHP_EOL . '```'
         ];
     }
 }
