@@ -110,7 +110,12 @@ class ContactNotification extends Notification
     public function toMail($notifiable)
     {
         if (static::$toMailCallback) {
-            return call_user_func(static::$toMailCallback, $notifiable, $this->code, $this->expiredAt);
+            return call_user_func(
+                static::$toMailCallback,
+                $notifiable,
+                $this->type,
+                $this->failureTime
+            );
         }
 
         return $this->buildMailMessage(
