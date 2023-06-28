@@ -110,18 +110,14 @@ class ContactsService
             );
         }
 
-        // slack通知
-        // $attachmentResource = app()->make(RoleUpdateNotificationResource::class, ['resource' => ":tada: Update Role Data \n"])->toArray($request);
-        $attachmentResource = ContactsResource::toArrayForCreate(
-            $userId,
+        // 管理者へslack通知
+        (new ContactNotificationService($email))->sendSlackMessage(
             $email,
-            $name,
-            $type,
+            Contacts::CONTACT_CATEGORIE_TEXT_LIST[$type],
             $detail,
-            $failureDetail,
-            $failureAt
+            $failureDetail ?? '',
+            $failureAt ?? ''
         );
-        // app()->make(RoleSlackNotificationService::class)->send('update role data.', $attachmentResource);
 
         return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
     }

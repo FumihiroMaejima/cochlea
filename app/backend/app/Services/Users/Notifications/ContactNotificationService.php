@@ -58,4 +58,46 @@ class ContactNotificationService
             ));
         }
     }
+
+    /**
+     * send contact notification
+     *
+     * @param  string $email
+     * @param  string $type
+     * @param  string $detail
+     * @param  string $failureDetail
+     * @param  string $failureTime
+     * @param  string $channel
+     * @return void
+     */
+    public function sendSlackMessage(
+        string $email,
+        string $type,
+        string $detail,
+        string $failureDetail,
+        string $failureTime,
+        string $channel = 'slack'
+    ): void {
+        if (Config::get('app.env') !== 'testing') {
+            $this->notify(new ContactNotification(
+                $email,
+                $type,
+                $detail,
+                $failureDetail,
+                $failureTime,
+                $channel
+            ));
+        }
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return Config::get('myapp.slack.url');
+    }
 }

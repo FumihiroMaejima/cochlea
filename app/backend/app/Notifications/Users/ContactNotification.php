@@ -5,7 +5,9 @@ namespace App\Notifications\Users;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Closure;
 
@@ -53,6 +55,13 @@ class ContactNotification extends Notification
     protected string $failureTime;
 
     /**
+     * channel
+     *
+     * @var string
+     */
+    protected string $channel;
+
+    /**
      * The callback that should be used to create the reset password URL.
      *
      * @var (\Closure(mixed, string): string)|null
@@ -81,13 +90,15 @@ class ContactNotification extends Notification
         string $type,
         string $detail,
         string $failureDetail,
-        string $failureTime
+        string $failureTime,
+        string $channel = self::DEFAULT_CAHNNEL
     ) {
         $this->email = $email;
         $this->type = $type;
         $this->detail = $detail;
         $this->failureDetail = $failureDetail;
         $this->failureTime = $failureTime;
+        $this->channel = $channel;
     }
 
     /**
@@ -98,7 +109,7 @@ class ContactNotification extends Notification
      */
     public function via($notifiable)
     {
-        return [self::DEFAULT_CAHNNEL];
+        return [$this->channel];
     }
 
     /**
@@ -176,5 +187,53 @@ class ContactNotification extends Notification
     public static function toMailUsing($callback)
     {
         static::$toMailCallback = $callback;
+    }
+
+    /**
+     * Get the Slack representation of the notification.
+     * ex: tada, gift, camera, computer, iphone, lock, key, memo, book, black_square_button, clipboard, calendar, email
+     *
+     * @param  mixed  $notifiable - class call this method.
+     * @return \Illuminate\Notifications\Messages\SlackMessage
+     */
+    public function toSlack($notifiable)
+    {
+        return (new SlackMessage())
+            ->from(Config::get('app.name') . ': ' . Config::get('myapp.slack.name'), Config::get('myapp.slack.icon'))
+            ->to(Config::get('myapp.slack.channel'))
+            ->content($this->detail . "\n")
+            ->attachment(function ($attachment) {
+                $attachment->pretext('pre text')
+                ->title('title')
+                ->content('attachement content')
+                ->fields([
+                    'Email'   => $this->email,
+                    'Type'   => $this->type,
+                    'Detail'   => $this->detail,
+                    'FailureTime'   => $this->failureTime,
+                    'FailureDetail'   => $this->failureDetail,
+                ])
+                ->footer(Config::get('app.name'));
+            });
+/*             ->content($this->messageContent . "\n" . $this->message)
+            ->attachment(function ($attachment) {
+                if (!empty($this->attachment)) {
+                    // Illuminate\Notifications\Messages\SlackAttachment $attachment
+                    $attachment->pretext($this->attachment[self::ATTACHMENT_KEY_PRE_TEXT])
+                        ->title(
+                            $this->attachment[self::ATTACHMENT_KEY_TITLE],
+                            $this->attachment[self::ATTACHMENT_KEY_TITLE_LINK]
+                        )
+                        ->content($this->attachment[self::ATTACHMENT_KEY_CONTENT])
+                        ->color($this->attachment[self::ATTACHMENT_KEY_COLOR])
+                        ->fields([
+                            'ID'     => $this->attachment['id'],
+                            'Name'   => $this->attachment['name'],
+                            'Status' => $this->attachment['status'],
+                            'Detail' => $this->attachment['detail'],
+                        ])
+                        ->footer($this->footerContent . Config::get('app.name'));
+                }
+            }); */
     }
 }
