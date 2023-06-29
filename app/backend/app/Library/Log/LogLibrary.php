@@ -117,7 +117,7 @@ class LogLibrary
     }
 
     /**
-     * whichever content type is able to output to log.
+     * check content type is able to output to log.
      *
      * @param ?string $contentType
      * @return bool

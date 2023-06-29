@@ -14,6 +14,8 @@ use App\Library\Message\StatusCodeMessages;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
 use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
+use App\Library\Cache\LogicCacheLibrary;
+use App\Library\Cache\MasterCacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\File\PdfLibrary;
 use App\Library\Random\RandomLibrary;
@@ -381,5 +383,28 @@ class DebugService
         EOF;
 
         return response()->file(PdfLibrary::getPdfByHtmlString($fileName, $html));
+    }
+
+    /**
+     * remove server cache.
+     *
+     * @param ?string $type cache connection.
+     * @return bool
+     */
+    public function removeCacheServerCache(?string $type = 'all'): bool
+    {
+        switch ($type) {
+            case MasterCacheLibrary::getConnection():
+                MasterCacheLibrary::removeAllKeys();
+                break;
+            case LogicCacheLibrary::getConnection():
+                LogicCacheLibrary::removeAllKeys();
+                break;
+            default:
+                MasterCacheLibrary::removeAllKeys();
+                LogicCacheLibrary::removeAllKeys();
+                break;
+        }
+        return true;
     }
 }

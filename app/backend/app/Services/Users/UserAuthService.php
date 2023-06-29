@@ -13,21 +13,17 @@ use App\Http\Resources\Users\UsersResource;
 use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterface;
 use App\Repositories\Users\Users\UsersRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
-use App\Library\Cache\CacheLibrary;
 use App\Library\Auth\AuthCodeLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use App\Models\Users\UserAuthCodes;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepositoryInterface;
-use App\Services\Admins\Notifications\AuthCodeNotificationService;
+use App\Services\Users\Notifications\AuthCodeNotificationService;
 use Exception;
 
 class UserAuthService
 {
-    // cache keys
-    private const CACHE_KEY_USER_COIN_COLLECTION_LIST = 'user_coin_collection_list';
-
     protected UserAuthCodesRepositoryInterface $userAuthCodeRepository;
     protected UsersRepositoryInterface $usersRepository;
     protected UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface;

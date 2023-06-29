@@ -14,25 +14,6 @@ class CreateProductMasterModelTable extends Migration
     public function up()
     {
         /**
-         * products table
-         */
-        Schema::create('coins', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255)->comment('コイン名');
-            $table->text('detail')->comment('詳細');
-            $table->integer('price')->unsigned()->comment('コインの購入価格');
-            $table->integer('cost')->unsigned()->comment('アプリケーション内のコインの価格');
-            $table->dateTime('start_at')->comment('公開開始日時');
-            $table->dateTime('end_at')->comment('公開終了日時');
-            $table->string('image', 255)->comment('イメージ');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
-            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
-
-            $table->comment('coins table');
-        });
-
-        /**
          * banners table
          */
         Schema::create('banners', function (Blueprint $table) {
@@ -93,6 +74,44 @@ class CreateProductMasterModelTable extends Migration
             $table->unique(['banner_block_id', 'banner_id']);
 
             $table->comment('banner block contents table');
+        });
+
+        /**
+         * coins table
+         */
+        Schema::create('coins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('コイン名');
+            $table->text('detail')->comment('詳細');
+            $table->integer('price')->unsigned()->comment('コインの購入価格');
+            $table->integer('cost')->unsigned()->comment('アプリケーション内のコインの価格');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->string('image', 255)->comment('イメージ');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('coins table');
+        });
+
+        /**
+         * contacts table
+         */
+        Schema::create('contacts', function (Blueprint $table) {
+            $table->id();
+            $table->string('email')->comment('メールアドレス');
+            $table->integer('user_id')->unsigned()->default(0)->comment('ユーザーID');
+            $table->string('name', 255)->default('')->comment('名前');
+            $table->tinyInteger('type')->unsigned()->comment('問合せ種類');
+            $table->text('detail')->comment('詳細');
+            $table->text('failure_detail')->nullable()->default(null)->comment('障害詳細');
+            $table->dateTime('failure_at')->nullable()->default(null)->comment('障害発生日時');
+            $table->dateTime('created_at')->comment('登録日時');
+            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('contacts table');
         });
 
         /**
@@ -245,10 +264,11 @@ class CreateProductMasterModelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coins');
         Schema::dropIfExists('banners');
         Schema::dropIfExists('banner_blocks');
         Schema::dropIfExists('banner_block_contents');
+        Schema::dropIfExists('coins');
+        Schema::dropIfExists('contacts');
         Schema::dropIfExists('events');
         Schema::dropIfExists('home_contents');
         Schema::dropIfExists('home_contents_groups');

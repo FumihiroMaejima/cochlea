@@ -181,14 +181,19 @@ Route::group(['prefix' => 'v1'], function () {
         });
     });
 
-    // coins
-    Route::group(['prefix' => 'coins'], function () {
-        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
-    });
     // banners
     Route::group(['prefix' => 'banners'], function () {
         Route::get('/', [\App\Http\Controllers\Users\BannersController::class, 'index'])->name('noAuth.banners.index');
         Route::get('/banner/image/{uuid}', [\App\Http\Controllers\Users\BannersController::class, 'getImage'])->name('noAuth.banners.image');
+    });
+    // coins
+    Route::group(['prefix' => 'coins'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\CoinsController::class, 'index'])->name('noAuth.coins.index');
+    });
+    // contacts
+    Route::group(['prefix' => 'contacts'], function () {
+        Route::get('/categories', [\App\Http\Controllers\Users\ContactsController::class, 'categories'])->name('noAuth.contacts.categories');
+        Route::post('/contact', [\App\Http\Controllers\Users\ContactsController::class, 'create'])->name('noAuth.contacts.contact.create');
     });
     // events
     Route::group(['prefix' => 'events'], function () {
@@ -317,6 +322,19 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('table', [\App\Http\Controllers\Users\DebugController::class, 'getTableStatus'])->name('user.debug.databases.table');
                 Route::get('table/size', [\App\Http\Controllers\Users\DebugController::class, 'getTableSizeList'])->name('user.debug.databases.table.size');
                 Route::get('shardId', [\App\Http\Controllers\Users\DebugController::class, 'getShardId'])->name('user.debug.databases.shard.id');
+            });
+
+            // キャッシュサーバー関係
+            Route::group(['prefix' => 'caches'], function () {
+                Route::delete('logic/remove/{type}', [\App\Http\Controllers\Users\DebugController::class, 'removeCacheServerCache'])->name('user.debug.caches.logic.allType');
+            });
+
+            // パフォーマンス関係
+            Route::group(['prefix' => 'performance'], function () {
+                Route::get('dau', [\App\Http\Controllers\Users\DebugController::class, 'getDailyActiveUser'])->name('user.debug.performance.dau');
+                Route::get('qps', [\App\Http\Controllers\Users\DebugController::class, 'getQueryPerSecond'])->name('user.debug.performance.qps');
+                Route::get('storage/size', [\App\Http\Controllers\Users\DebugController::class, 'getStorageSize'])->name('user.debug.performance.storage.size');
+                Route::get('byteSize/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertByteSize'])->name('user.debug.performance.byteSize.convert');
             });
         });
     }

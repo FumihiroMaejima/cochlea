@@ -17,6 +17,8 @@ use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Performance\MemoryLibrary;
+use App\Library\Performance\PerformanceLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
@@ -299,7 +301,7 @@ class DebugController extends Controller
      */
     public function encryptMail(Request $request): JsonResponse
     {
-        return response()->json(EncryptLibrary::encrypt($request->email ?? '', false));
+        return response()->json(EncryptLibrary::encrypt($request->email ?? '', (bool)$request->isCbc ?? false));
     }
 
     /**
@@ -311,7 +313,7 @@ class DebugController extends Controller
      */
     public function decryptMail(Request $request): JsonResponse
     {
-        return response()->json(EncryptLibrary::decrypt($request->email ?? '', false));
+        return response()->json(EncryptLibrary::decrypt($request->email ?? '', (bool)$request->isCbc ?? false));
     }
 
     /**
@@ -425,6 +427,140 @@ class DebugController extends Controller
                     'databaseNumber' => ShardingLibrary::getUserDataBaseConnection($shardId),
                 ],
             ]
+        );
+    }
+
+    /**
+     * キャッシュサーバー上のキャッシュの削除
+     *
+     * @param Request $_
+     * @param string $type
+     * @return JsonResponse
+     */
+    public function removeCacheServerCache(Request $_, string $type): JsonResponse
+    {
+        return response()->json(
+            ['data' => $this->service->removeCacheServerCache($type ?? 'all')]
+        );
+    }
+
+    /**
+     * get active user in a day.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getDailyActiveUser(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'activeUser' => ['required','int'],
+                'rate' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        return response()->json(
+            ['data' => PerformanceLibrary::getDailyActiveUser((int)$request->activeUser, (int)$request->rate)]
+        );
+    }
+
+    /**
+     * get query a second.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getQueryPerSecond(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'dau' => ['required','int'],
+                'qpu' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        return response()->json(
+            ['data' => PerformanceLibrary::getQueryPerSecond((int)$request->dau, (int)$request->qpu)]
+        );
+    }
+
+    /**
+     * get storage size by dau, qpu.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getStorageSize(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'dau' => ['required','int'],
+                'qpu' => ['required','int'],
+                'rate' => ['required','int'],
+                'size' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+        $value = PerformanceLibrary::getStorageSize(
+            (int)$request->dau,
+            (int)$request->qpu,
+            (int)$request->rate,
+            (int)$request->size
+        );
+        return response()->json(
+            ['data' => [
+                'value' => $value,
+                'unit' => MemoryLibrary::convert($value),
+            ]
+            ]
+        );
+    }
+
+    /**
+     * convert byte size
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function convertByteSize(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'byte' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        return response()->json(
+            ['data' => MemoryLibrary::convert((int)$request->byte)]
         );
     }
 }

@@ -73,7 +73,7 @@ class AuthCodeLibrary
     }
 
     /**
-     * whichever is used.
+     * check is used.
      *
      * @param array $record record
      * @return bool
@@ -84,7 +84,7 @@ class AuthCodeLibrary
     }
 
     /**
-     * whichever is expired.
+     * check is expired.
      *
      * @param array $record record
      * @param ?string $dateTime dateTime
@@ -99,7 +99,7 @@ class AuthCodeLibrary
     }
 
     /**
-     * whichever is over max trial count.
+     * check is over max trial count.
      *
      * @param array $record record
      * @return bool
@@ -110,7 +110,7 @@ class AuthCodeLibrary
     }
 
     /**
-     * whichever is match auth code of paramter & in record.
+     * check is match auth code of paramter & in record.
      *
      * @param array $record record
      * @return bool

@@ -9,11 +9,11 @@ use Predis\Response\Status;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
-use App\Trait\CheckHeaderTrait;
 
 class CacheLibrary
 {
-    use CheckHeaderTrait;
+    // キーの接頭辞
+    private const KEY_PREFIX = '_database_';
 
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
@@ -37,9 +37,13 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
 
         if (is_null($cache)) {
+            return $cache;
+        }
+
+        if (is_string($cache)) {
             return $cache;
         }
 
@@ -63,7 +67,7 @@ class CacheLibrary
             }
 
             /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(self::REDIS_CONNECTION)->set($key, $value);
+            $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
             $payload = $result->getPayload();
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
@@ -75,7 +79,7 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(self::REDIS_CONNECTION)
+            $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
                 ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
@@ -110,7 +114,7 @@ class CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::connection(self::REDIS_CONNECTION)->del($key);
+        $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -128,7 +132,7 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(self::REDIS_CONNECTION)->get($key);
+        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
 
         return $cache ? true : false;
     }
@@ -141,5 +145,71 @@ class CacheLibrary
     protected static function isTesting(): bool
     {
         return Config::get('app.env') === 'testing';
+    }
+
+    /**
+     * get cache Key prefix.
+     *
+     * @param string $key
+     * @return string
+     */
+    private static function getKeyPrefix(): string
+    {
+        // appの名前がつく
+        return Config::get('app.name') . self::KEY_PREFIX;
+    }
+
+    /**
+     * get redis connection.
+     *
+     * @param string $key
+     * @return string
+     */
+    public static function getConnection(): string
+    {
+        return static::REDIS_CONNECTION;
+    }
+
+    /**
+     * get cache value by Key.
+     *
+     * @param string $key
+     * @return array
+     */
+    public static function getByAllKeys(): array
+    {
+        if (self::isTesting()) {
+            return [];
+        }
+
+        $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
+
+        if (is_array($keys)) {
+            return $keys;
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * get cache value by Key.
+     *
+     * @param string $key
+     * @return array
+     */
+    public static function removeAllKeys(): void
+    {
+        if (self::isTesting()) {
+            return;
+        }
+
+        // キャッシュキーのプレフィックス
+        $prefix = self::getKeyPrefix();
+        $prefixLength = mb_strlen($prefix);
+
+        $keys = self::getByAllKeys();
+        foreach ($keys as $key) {
+            self::deleteCache(mb_substr($key, $prefixLength), true);
+        }
     }
 }

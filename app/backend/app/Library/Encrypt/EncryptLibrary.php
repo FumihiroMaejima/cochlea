@@ -18,7 +18,7 @@ class EncryptLibrary
      * encrypt value
      *
      * @param string $value value
-     * @param bool $isCbc whichever using cbc mode
+     * @param bool $isCbc either using cbc mode
      * @return string encrypt value
      */
     public static function encrypt(string $value, bool $isCbc = true): string
@@ -27,7 +27,12 @@ class EncryptLibrary
         if ($isCbc) {
             [$cbcKey, $cbcIv] = self::generateCbcKeyAndIv();
             $output = openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
-            return mb_convert_encoding($output, 'UTF-8');
+            // $encode = mb_detect_encoding($output); // エンコード判定をするとSJISになった。
+            // binaryから16進数にすると可読性のある文字列に変換出来る
+            // $a = bin2hex($output);
+            // $b = hex2bin($a);
+            // return mb_convert_encoding($output, 'UTF-8');
+            return bin2hex($output);
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
             return openssl_encrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::getEmailEBCEncryptKey());
@@ -38,7 +43,7 @@ class EncryptLibrary
      * decrypt value
      *
      * @param string $value value
-     * @param bool $isCbc whichever using cbc mode
+     * @param bool $isCbc either using cbc mode
      * @return string encrypt value
      */
     public static function decrypt(string $value, bool $isCbc = true): string
@@ -46,8 +51,9 @@ class EncryptLibrary
         // CBCモードで暗号化させる場合
         if ($isCbc) {
             [$cbcKey, $cbcIv] = self::generateCbcKeyAndIv();
-            $output = openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
-            return mb_convert_encoding($output, 'UTF-8');
+            // $output = openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
+            // return mb_convert_encoding($output, 'UTF-8');
+            return openssl_decrypt(hex2bin($value), self::MAIL_ENCRYPT_ALG_CBC, $cbcKey, OPENSSL_RAW_DATA, $cbcIv);
         } else {
             // プログラム上でやり取りする時があるなど、文字化けデータが含まれない様にする場合に利用する
             return openssl_decrypt($value, self::MAIL_ENCRYPT_ALG_ECB, self::getEmailEBCEncryptKey());
@@ -83,6 +89,16 @@ class EncryptLibrary
         // IVは16文字である必要がある。
         $iv    = hex2bin($IvHash);
         return [$key, $iv];
+    }
+
+    /**
+     * get chipher methods
+     *
+     * @return array
+     */
+    public static function getCipherMethods(): array
+    {
+        return openssl_get_cipher_methods(true);
     }
 
     /**

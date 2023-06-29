@@ -186,7 +186,7 @@ class Admins extends Authenticatable implements JWTSubject
      *
      * @param string $credential user email or name
      * @param string $password password
-     * @param bool $isDevelopment whichever local development mode
+     * @param bool $isDevelopment either local development mode
      * @return array|null
      */
     public function getRecordByCredential(string $credential, string $password, bool $isDevelopment): array|null
