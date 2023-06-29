@@ -154,7 +154,7 @@ class ContactNotification extends Notification
         string $detail,
         string $failureDetail,
         string $failureTime
-        ) {
+    ) {
         // TODO フロントエンドに合わせてURLやフォーマットの変更
         return (new MailMessage())
             ->subject('Contact Notification')

@@ -211,6 +211,5 @@ class CacheLibrary
         foreach ($keys as $key) {
             self::deleteCache(mb_substr($key, $prefixLength), true);
         }
-
     }
 }

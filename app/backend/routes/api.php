@@ -335,7 +335,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('qps', [\App\Http\Controllers\Users\DebugController::class, 'getQueryPerSecond'])->name('user.debug.performance.qps');
                 Route::get('storage/size', [\App\Http\Controllers\Users\DebugController::class, 'getStorageSize'])->name('user.debug.performance.storage.size');
                 Route::get('byteSize/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertByteSize'])->name('user.debug.performance.byteSize.convert');
-             });
+            });
         });
     }
 });

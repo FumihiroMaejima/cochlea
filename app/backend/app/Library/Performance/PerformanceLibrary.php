@@ -4,7 +4,6 @@ namespace App\Library\Performance;
 
 class PerformanceLibrary
 {
-
     public const ONE_DAY_HOURS = 24;
     public const ONE_HOUR_SECONDS = 3600;
 

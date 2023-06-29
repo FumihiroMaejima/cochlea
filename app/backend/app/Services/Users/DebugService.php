@@ -403,8 +403,7 @@ class DebugService
             default:
                 MasterCacheLibrary::removeAllKeys();
                 LogicCacheLibrary::removeAllKeys();
-            break;
-
+                break;
         }
         return true;
     }

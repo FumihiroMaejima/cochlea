@@ -10,7 +10,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 class PrimeNumberLibraryTest extends TestCase
 {
-
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
