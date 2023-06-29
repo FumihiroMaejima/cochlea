@@ -215,25 +215,5 @@ class ContactNotification extends Notification
                 ])
                 ->footer(Config::get('app.name'));
             });
-/*             ->content($this->messageContent . "\n" . $this->message)
-            ->attachment(function ($attachment) {
-                if (!empty($this->attachment)) {
-                    // Illuminate\Notifications\Messages\SlackAttachment $attachment
-                    $attachment->pretext($this->attachment[self::ATTACHMENT_KEY_PRE_TEXT])
-                        ->title(
-                            $this->attachment[self::ATTACHMENT_KEY_TITLE],
-                            $this->attachment[self::ATTACHMENT_KEY_TITLE_LINK]
-                        )
-                        ->content($this->attachment[self::ATTACHMENT_KEY_CONTENT])
-                        ->color($this->attachment[self::ATTACHMENT_KEY_COLOR])
-                        ->fields([
-                            'ID'     => $this->attachment['id'],
-                            'Name'   => $this->attachment['name'],
-                            'Status' => $this->attachment['status'],
-                            'Detail' => $this->attachment['detail'],
-                        ])
-                        ->footer($this->footerContent . Config::get('app.name'));
-                }
-            }); */
     }
 }
