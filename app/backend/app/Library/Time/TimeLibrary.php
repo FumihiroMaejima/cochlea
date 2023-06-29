@@ -215,7 +215,7 @@ class TimeLibrary
     }
 
     /**
-     * whichever dateTime is greater than target.
+     * check dateTime is greater than target.
      *
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付
@@ -228,7 +228,7 @@ class TimeLibrary
     }
 
     /**
-     * whichever dateTime is less than target.
+     * check dateTime is less than target.
      *
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付

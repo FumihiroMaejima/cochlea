@@ -15,6 +15,7 @@ class EncryptLibraryTest extends TestCase
 {
     private const TEST_EMAIL_VALUE = 'test1@example.com';
     private const TEST_ENCRYPT_EMAIL_VALUE = '9B7dbo96dqC5HKYx3+e19QhONeAQpKPumR3Zk4snXIw=';
+    private const TEST_ENCRYPT_EMAIL_CBC_VALUE = 'd13927e58dff1c242e85367ae86068f597345132d8bd8d779f6762788bee26b2';
 
     /**
      * 環境変数の置き換えなどに利用
@@ -62,6 +63,22 @@ class EncryptLibraryTest extends TestCase
         return [
             'decrypt email for ecb mode data' => [
                 'value' => self::TEST_ENCRYPT_EMAIL_VALUE,
+                'expect' => self::TEST_EMAIL_VALUE,
+            ],
+        ];
+    }
+
+    /**
+     * decrypt cbc string data
+     * @return array
+     */
+    public function decryptCbcStringDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            'decrypt email for ecb mode data' => [
+                'value' => self::TEST_ENCRYPT_EMAIL_CBC_VALUE,
                 'expect' => self::TEST_EMAIL_VALUE,
             ],
         ];
@@ -137,14 +154,14 @@ class EncryptLibraryTest extends TestCase
     /**
      * test decrypt string by CBC mode.
      *
-     * @dataProvider decryptStringDataProvider
+     * @dataProvider decryptCbcStringDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
     public function testDecryptByCbcMode(string $value, string $expect): void
     {
-        $this->assertNotSame($expect, EncryptLibrary::decrypt($value, true));
+        $this->assertSame($expect, EncryptLibrary::decrypt($value, true));
     }
 
     /**

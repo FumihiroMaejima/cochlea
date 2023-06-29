@@ -242,12 +242,12 @@ class BaseDatabasePartitionsCommand extends Command
     }
 
     /**
-     * remove partitions.
+     * drop partitions.
      *
      * @return void
      * @throws MyApplicationHttpException
      */
-    protected function removePartitions(): void
+    protected function dropPartitions(): void
     {
         // パーティションを設定する対象のテーブル情報の取得
         $partitionSettings = $this->getPartitionSettings();
@@ -282,7 +282,7 @@ class BaseDatabasePartitionsCommand extends Command
             echo var_dump($expiredPartions);
 
             foreach ($expiredPartions as $partion) {
-                PartitionLibrary::deletePartition(
+                PartitionLibrary::dropPartition(
                     $partion[PartitionLibrary::KEY_TABLE_SCHEMA],
                     $partion[PartitionLibrary::KEY_TABLE_NAME],
                     $partion[PartitionLibrary::KEY_PARTITION_NAME]
