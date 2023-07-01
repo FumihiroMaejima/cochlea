@@ -336,6 +336,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('storage/size', [\App\Http\Controllers\Users\DebugController::class, 'getStorageSize'])->name('user.debug.performance.storage.size');
                 Route::get('byteSize/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertByteSize'])->name('user.debug.performance.byteSize.convert');
             });
+
+            // 数学関係
+            Route::group(['prefix' => 'math'], function () {
+                Route::get('maxPrimeNumber', [\App\Http\Controllers\Users\DebugController::class, 'getMaxPrimeNumber'])->name('user.debug.math.maxPrimeNumber');
+            });
         });
     }
 });

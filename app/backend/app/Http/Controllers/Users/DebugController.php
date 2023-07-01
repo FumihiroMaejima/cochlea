@@ -17,6 +17,7 @@ use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Math\PrimeNumberLibrary;
 use App\Library\Performance\MemoryLibrary;
 use App\Library\Performance\PerformanceLibrary;
 use App\Library\Time\TimeLibrary;
@@ -561,6 +562,33 @@ class DebugController extends Controller
 
         return response()->json(
             ['data' => MemoryLibrary::convert((int)$request->byte)]
+        );
+    }
+
+    /**
+     * get max prime number
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getMaxPrimeNumber(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'value' => ['required','int'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+            );
+        }
+
+        return response()->json(
+            ['data' => PrimeNumberLibrary::getMaxPrimeNumber((int)$request->value)]
         );
     }
 }
