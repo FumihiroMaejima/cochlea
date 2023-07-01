@@ -91,6 +91,10 @@ class PrimeNumberLibraryTest extends TestCase
                 'value' => 30,
                 'expect' => [2,3,5],
             ],
+            "value is 33" => [
+                'value' => 33,
+                'expect' => [3,11],
+            ],
             "value is 84" => [
                 'value' => 84,
                 'expect' => [2,2,3,7],
