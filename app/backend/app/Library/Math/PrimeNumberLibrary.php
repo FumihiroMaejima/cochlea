@@ -106,4 +106,17 @@ class PrimeNumberLibrary
         // 絶対値に変換
         return abs($value1);
     }
+
+    /**
+     * check is greatest common divisor value is 1
+     *
+     * @param int $value1 value
+     * @param int $value2 compair value
+     * @return int
+     */
+    public static function isGcdIsOne(int $value1, int $value2): int
+    {
+        // 最大公約数が1=互いに素な値
+        return self::getGreatestCommonDivisor($value1, $value2) === 1;
+    }
 }
