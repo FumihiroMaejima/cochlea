@@ -79,6 +79,61 @@ class PrimeNumberLibraryTest extends TestCase
     }
 
     /**
+     * max get prime factorization data
+     * @return array
+     */
+    public function getPrimeFactorizationDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            "value is 30" => [
+                'value' => 30,
+                'expect' => [2,3,5],
+            ],
+            "value is 84" => [
+                'value' => 84,
+                'expect' => [2,2,3,7],
+            ],
+            "value is 100" => [
+                'value' => 100,
+                'expect' => [2,2,5,5],
+            ],
+            "value is 200" => [
+                'value' => 200,
+                'expect' => [2,2,2,5,5],
+            ],
+        ];
+    }
+
+    /**
+     * max get greated common divisor data
+     * @return array
+     */
+    public function getGreatestCommonDivisorDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            "value1=3/value2=7/expect=1" => [
+                'value1' => 3,
+                'value2' => 7,
+                'expect' => 1,
+            ],
+            "value1=5/value2=15/expect=5" => [
+                'value1' => 5,
+                'value2' => 15,
+                'expect' => 5,
+            ],
+            "value1=100/value2=24/expect=4" => [
+                'value1' => 100,
+                'value2' => 24,
+                'expect' => 4,
+            ],
+        ];
+    }
+
+    /**
      * test is prime number.
      *
      * @dataProvider isPrimeNumberDataProvider
@@ -102,5 +157,32 @@ class PrimeNumberLibraryTest extends TestCase
     public function testGetMaxPrimeNumber(int $value, int $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::getMaxPrimeNumber($value));
+    }
+
+    /**
+     * test get prime factorization.
+     *
+     * @dataProvider getPrimeFactorizationDataProvider
+     * @param int $value
+     * @param array $expect
+     * @return void
+     */
+    public function testGetPrimeFactorization(int $value, array $expect): void
+    {
+        $this->assertSame($expect, PrimeNumberLibrary::getPrimeFactorization($value));
+    }
+
+    /**
+     * test get greatest common divisor.
+     *
+     * @dataProvider getGreatestCommonDivisorDataProvider
+     * @param int $value1
+     * @param int $value2
+     * @param int $expect
+     * @return void
+     */
+    public function testGetGreatestCommonDivisor(int $value1, int $value2, int $expect): void
+    {
+        $this->assertSame($expect, PrimeNumberLibrary::getGreatestCommonDivisor($value1, $value2));
     }
 }

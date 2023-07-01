@@ -61,4 +61,49 @@ class PrimeNumberLibrary
 
         return $largestPrime;
     }
+
+    /**
+     * get prime factorization values (素因数分解)
+     *
+     * @param int $value value
+     * @return array
+     */
+    public static function getPrimeFactorization(int $value): array
+    {
+        $factors = [];
+        $divisor = 2;
+        $number = $value;
+
+        while ($number > 1) {
+            // 割り切れる場合
+            if ($number % $divisor === 0) {
+                // 素因数を格納
+                $factors[] = $divisor;
+                $number = $number / $divisor;
+            } else {
+                $divisor++;
+            }
+        }
+
+        return $factors;
+    }
+
+    /**
+     * get greatest common divisor value (GCD=最大公約数)
+     *
+     * @param int $value1 value
+     * @param int $value2 compair value
+     * @return int
+     */
+    public static function getGreatestCommonDivisor(int $value1, int $value2): int
+    {
+        // 割り切れたら終了
+        while ($value2 != 0) {
+            $remainder = $value1 % $value2;
+            $value1 = $value2;
+            $value2 = $remainder;
+        }
+        // 絶対値に変換
+        return abs($value1);
+    }
 }
