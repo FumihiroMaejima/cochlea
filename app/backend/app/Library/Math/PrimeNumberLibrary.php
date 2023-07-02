@@ -138,9 +138,9 @@ class PrimeNumberLibrary
      *
      * @param int $value1 value
      * @param int $value2 compair value
-     * @return int
+     * @return bool
      */
-    public static function isGcdIsOne(int $value1, int $value2): int
+    public static function isGcdIsOne(int $value1, int $value2): bool
     {
         // 最大公約数が1=互いに素な値
         return self::getGreatestCommonDivisor($value1, $value2) === 1;
