@@ -19,7 +19,7 @@ class MathLibrary
      */
     public static function getFermatsLittleTheorem(int $value, int $lightValue): array
     {
-        // a^(p-1)≡1(modp)の検証
+        // a**(p-1)≡1(mod p)の検証
         $squared = ($value - 1);
         $mod = $lightValue % $value;
 
