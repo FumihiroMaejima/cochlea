@@ -27,7 +27,9 @@ return new class extends Migration
             $table->rememberToken()->comment('リメンバートークン');
             // $table->foreignId('current_team_id')->nullable()->comment('チームID');
             // $table->string('profile_photo_path', 2048)->nullable()->comment('プロフィールアイコンパス');
-            $table->dateTime('code_verified_at')->nullable()->comment('認証コード検証日時');
+            $table->tinyInteger('is_left')->unsigned()->default(0)->comment('退会済みか');
+            $table->dateTime('code_verified_at')->nullable()->default(null)->comment('認証コード検証日時');
+            $table->dateTime('last_login_at')->nullable()->default(null)->comment('最終ログイン日時');
             $table->dateTime('created_at')->comment('登録日時');
             $table->dateTime('updated_at')->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');

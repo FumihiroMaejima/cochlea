@@ -38,7 +38,9 @@ class User extends Authenticatable implements JWTSubject
     public const REMEMBER_TOKEN = 'remember_token';
     // public const CURRENT_TEAM_ID = 'current_team_id';
     // public const PROFILE_PHOTO_PATH = 'profile_photo_path';
+    public const IS_LEFT = 'is_left';
     public const CODE_VERIFIED_AT = 'code_verified_at';
+    public const LAST_LOGIN_AT = 'last_login_at';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
@@ -69,6 +71,9 @@ class User extends Authenticatable implements JWTSubject
         self::NAME,
         self::EMAIL,
         self::PASSWORD,
+        self::IS_LEFT,
+        self::CODE_VERIFIED_AT,
+        self::LAST_LOGIN_AT,
     ];
 
     /**
