@@ -11,9 +11,9 @@ class RSAEncryptLibrary
     // 基準値
     private const MAX_PRIME_BASE_NUMBER = 300000000; // 3億
 
-    private const BASE_N_VALUE = 299999999;
-    private const BASE_E_VALUE = 17477;
-    private const BASE_D_VALUE = 15845;
+    private const BASE_N_VALUE = 299999995;
+    private const BASE_E_VALUE = 458891;
+    private const BASE_D_VALUE = 523;
 
     /**
      * max prime number value
