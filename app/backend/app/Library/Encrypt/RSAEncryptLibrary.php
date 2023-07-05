@@ -76,7 +76,8 @@ class RSAEncryptLibrary
             // 素数かつ割り切れる値
             if (
                 PrimeNumberLibrary::isPrimeNumber($i) &&
-                ($ed % $i === 0)
+                ($ed % $i === 0) &&
+                PrimeNumberLibrary::isPrimeNumber($ed / $i)
             ) {
                 $e = $i;
                 $d = $ed / $i;
