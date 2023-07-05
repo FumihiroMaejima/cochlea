@@ -118,7 +118,7 @@ class PrimeNumberLibrary
      * get max prime factorization has two values (素因数分解)
      *
      * @param int $value value
-     * @return array
+     * @return int
      */
     public static function getMaxTwoPairPrimeFactorization(int $value): int
     {
