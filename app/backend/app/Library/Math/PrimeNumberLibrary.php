@@ -115,6 +115,27 @@ class PrimeNumberLibrary
     }
 
     /**
+     * get max prime factorization has two values (素因数分解)
+     *
+     * @param int $value value
+     * @return array
+     */
+    public static function getMaxTwoPairPrimeFactorization(int $value): int
+    {
+        $result = 0;
+        // 最大値の為パラメーターから減算して確認
+        for ($i = $value; 0 < $i; $i--) {
+            // 素因数分解の結果2つだけ取得出来る数値を取得
+            if (count(self::getPrimeFactorization($i)) === 2) {
+                $result = $i;
+                break;
+            }
+
+        }
+        return $result;
+    }
+
+    /**
      * get greatest common divisor value (GCD=最大公約数)
      *
      * @param int $value1 value
@@ -144,5 +165,26 @@ class PrimeNumberLibrary
     {
         // 最大公約数が1=互いに素な値
         return self::getGreatestCommonDivisor($value1, $value2) === 1;
+    }
+
+    /**
+     * get max greatest common divisor number in parameter($value以下の数字で$targetと互いに素の値の最大値を取得)
+     *
+     * @param int $value
+     * @param int $target
+     * @return int
+     */
+    public static function getMaxGreatestCommonDivisor(int $value, int $target): int
+    {
+        $result = 0;
+        // 最大値の為パラメーターから減算して確認
+        for ($i = $value; 0 < $i; $i--) {
+            if (self::isGcdIsOne($i, $target)) {
+                $result = $i;
+                break;
+            }
+
+        }
+        return $result;
     }
 }
