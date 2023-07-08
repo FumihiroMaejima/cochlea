@@ -33,6 +33,8 @@ class RSAEncryptLibrary
      */
     public static function getEncryptBaseValueList(int $value): array
     {
+        $time = microtime(true);
+        $memory = memory_get_usage();
         // パラメーター以下でもっとも大きい$p,$qの値を素因数分解結果から取得
         // ケースによって$nの値を柔軟に取得出来る為最大値から＊個目を取得するか指定すると良い
         $n = PrimeNumberLibrary::getMaxTwoPairPrimeFactorization($value);
@@ -40,13 +42,17 @@ class RSAEncryptLibrary
 
         // E,Dの取得
         $ed = self::getEAndD($p, $q);
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
 
         return [
             'p' => $p,
             'q' => $q,
             'N' => $n,
             'E' => $ed['E'],
-            'D' => $ed['D']
+            'D' => $ed['D'],
+            'time' => $endTime,
+            'memory' => $usageMemory,
         ];
     }
 
