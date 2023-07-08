@@ -125,6 +125,9 @@ class PrimeNumberLibrary
         $result = 0;
         // 最大値の為パラメーターから減算して確認
         for ($i = $value; 0 < $i; $i--) {
+            if ($i / 2 === 0) {
+                continue;
+            }
             // 素因数分解の結果2つだけ取得出来る数値を取得
             if (count(self::getPrimeFactorization($i)) === 2) {
                 $result = $i;
