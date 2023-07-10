@@ -181,6 +181,12 @@ mysql-restore:
 	sh ./scripts/restore-dump.sh
 
 ##############################
+# redis container
+##############################
+redis-info:
+	docker-compose exec redis redis-cli info
+
+##############################
 # prometheus docker container
 ##############################
 prometheus-up:
