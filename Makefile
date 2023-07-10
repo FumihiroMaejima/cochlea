@@ -6,6 +6,10 @@ WOKER=1
 LOCUST_FILE=./loadTest/locust/locustfile.py
 LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
 
+# redis
+REDIS_DB=1
+REDIS_KEY=test_key
+
 ##############################
 # make docker environmental
 ##############################
@@ -183,8 +187,17 @@ mysql-restore:
 ##############################
 # redis container
 ##############################
+redis-server:
+	docker-compose exec redis redis-server --version
+
 redis-info:
 	docker-compose exec redis redis-cli info
+
+redis-keys:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) keys '*'
+
+redis-get:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
 
 ##############################
 # prometheus docker container
