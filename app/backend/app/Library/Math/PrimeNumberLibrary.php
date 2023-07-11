@@ -139,6 +139,30 @@ class PrimeNumberLibrary
     }
 
     /**
+     * get middle prime factorization has two values (素因数分解)
+     *
+     * @param int $value value
+     * @return int
+     */
+    public static function getMiddleTwoPairPrimeFactorization(int $value): int
+    {
+        $result = 0;
+        // 指定された値の中間値(切り捨て)から減算して確認
+        for ($i = (int)floor($value / 2); 0 < $i; $i--) {
+            if ($i / 2 === 0) {
+                continue;
+            }
+            // 素因数分解の結果2つだけ取得出来る数値を取得
+            if (count(self::getPrimeFactorization($i)) === 2) {
+                $result = $i;
+                break;
+            }
+
+        }
+        return $result;
+    }
+
+    /**
      * get greatest common divisor value (GCD=最大公約数)
      *
      * @param int $value1 value
