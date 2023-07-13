@@ -199,6 +199,12 @@ redis-keys:
 redis-get:
 	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
 
+redis-del:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) del $(REDIS_KEY)
+
+redis-hget:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
+
 ##############################
 # prometheus docker container
 ##############################
