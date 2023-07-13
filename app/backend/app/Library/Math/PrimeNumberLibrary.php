@@ -139,23 +139,27 @@ class PrimeNumberLibrary
     }
 
     /**
-     * get middle prime factorization has two values (素因数分解)
+     * get two pair factorization values at $maxCount (素因数分解)
      *
      * @param int $value value
      * @return int
      */
-    public static function getMiddleTwoPairPrimeFactorization(int $value): int
+    public static function getMaxCoountTwoPairPrimeFactorization(int $value, int $maxCount): int
     {
         $result = 0;
-        // 指定された値の中間値(切り捨て)から減算して確認
-        for ($i = (int)floor($value / 2); 0 < $i; $i--) {
+        $count = 0;
+        // 指定された値を最大値として2から$maxCount目の値を取得
+        for ($i = 2; 0 < $value; $i++) {
             if ($i / 2 === 0) {
                 continue;
             }
             // 素因数分解の結果2つだけ取得出来る数値を取得
             if (count(self::getPrimeFactorization($i)) === 2) {
                 $result = $i;
-                break;
+                ++$count;
+                if ($count === $maxCount) {
+                    break;
+                }
             }
 
         }
