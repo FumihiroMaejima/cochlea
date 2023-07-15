@@ -218,4 +218,17 @@ class PrimeNumberLibrary
         }
         return $result;
     }
+
+    /**
+     * get least common multiple value (LCM=最小公倍数)
+     *
+     * @param int $value1 value
+     * @param int $value2 compair value
+     * @return int
+     */
+    public static function getLeastCommonMultiple(int $value1, int $value2): int
+    {
+        $gcd = self::getGreatestCommonDivisor($value1, $value2);
+        return ($value1 * $value2) / $gcd;
+    }
 }
