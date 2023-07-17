@@ -234,6 +234,7 @@ class PrimeNumberLibrary
 
     /**
      * get GCD of $value1, $value2, And x,y (拡張ユークリッド互除法)
+     * ユークリッドの互除法を用いてex + ly = gcd(e,l)の解となる整数x,yの組を見つける
      *
      * @param int $value1 value
      * @param int $value2 compair value
