@@ -231,4 +231,35 @@ class PrimeNumberLibrary
         $gcd = self::getGreatestCommonDivisor($value1, $value2);
         return ($value1 * $value2) / $gcd;
     }
+
+    /**
+     * get GCD of $value1, $value2, And x,y (拡張ユークリッド互除法)
+     *
+     * @param int $value1 value
+     * @param int $value2 compair value
+     * @return array
+     */
+    public static function getExtendedEuclidean(int $value1, int $value2): array
+    {
+        if ($value2 === 0) {
+            return ['gcd' => $value1, 'x' => 1, 'y' => 0];
+        }
+
+        // 商
+        $quotient = intval($value1 / $value2);
+        // 余り
+        $remainder = $value1 & $value2;
+
+        // 再起的に取得
+        $result = self::getExtendedEuclidean($value2, $remainder);
+        $gcd = $result['gcd'];
+        $x = $result['y'];
+        $y = $result['x'] - $quotient * $result['y'];
+
+        return [
+            'gcd' => $gcd,
+            'x' => $x,
+            'y' => $y,
+        ];
+    }
 }
