@@ -254,7 +254,7 @@ class PrimeNumberLibrary
         $result = self::getExtendedEuclidean($value2, $remainder);
         $gcd = $result['gcd'];
         $x = $result['y'];
-        $y = $result['x'] - $quotient * $result['y'];
+        $y = $result['x'] - ($quotient * $result['y']);
 
         return [
             'gcd' => $gcd,
