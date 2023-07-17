@@ -249,7 +249,7 @@ class PrimeNumberLibrary
         // 商
         $quotient = intval($value1 / $value2);
         // 余り
-        $remainder = $value1 & $value2;
+        $remainder = $value1 % $value2;
 
         // 再起的に取得
         $result = self::getExtendedEuclidean($value2, $remainder);
