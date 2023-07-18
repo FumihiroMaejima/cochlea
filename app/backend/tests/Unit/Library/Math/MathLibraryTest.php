@@ -79,6 +79,33 @@ class MathLibraryTest extends TestCase
     }
 
     /**
+     * max get least common multiple data
+     * @return array
+     */
+    public function getLeastCommonMultipleDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            "value1=3/value2=7/expect=21" => [
+                'value1' => 3,
+                'value2' => 7,
+                'expect' => 21,
+            ],
+            "value1=5/value2=15/expect=15" => [
+                'value1' => 5,
+                'value2' => 15,
+                'expect' => 15,
+            ],
+            "value1=100/value2=24/expect=600" => [
+                'value1' => 100,
+                'value2' => 24,
+                'expect' => 600,
+            ],
+        ];
+    }
+
+    /**
      * test get prime factorization.
      *
      * @dataProvider getPrimeFactorizationDataProvider
@@ -103,5 +130,19 @@ class MathLibraryTest extends TestCase
     public function testGetGreatestCommonDivisor(int $value1, int $value2, int $expect): void
     {
         $this->assertSame($expect, MathLibrary::getGreatestCommonDivisor($value1, $value2));
+    }
+
+    /**
+     * test get least common multiple.
+     *
+     * @dataProvider getLeastCommonMultipleDataProvider
+     * @param int $value1
+     * @param int $value2
+     * @param int $expect
+     * @return void
+     */
+    public function testGetLeastCommonMultiple(int $value1, int $value2, int $expect): void
+    {
+        $this->assertSame($expect, MathLibrary::getLeastCommonMultiple($value1, $value2));
     }
 }
