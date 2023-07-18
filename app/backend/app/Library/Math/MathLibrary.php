@@ -2,8 +2,6 @@
 
 namespace App\Library\Math;
 
-use App\Library\Math\PrimeNumberLibrary;
-
 class MathLibrary
 {
     // フェルマーの小定理
