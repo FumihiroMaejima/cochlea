@@ -2,7 +2,7 @@
 
 namespace App\Library\Encrypt;
 
-use App\Library\Math\PrimeNumberLibrary;
+use App\Library\Math\MathLibrary;
 
 class RSAEncryptLibrary
 {
@@ -20,16 +20,6 @@ class RSAEncryptLibrary
     private const BASE_D_VALUE = 7;
 
     /**
-     * max prime number value
-     *
-     * @return int
-     */
-    public static function getMaxPrimeNumberForRSAEncrypt(): int
-    {
-        return PrimeNumberLibrary::getMaxPrimeNumber(self::MAX_PRIME_BASE_NUMBER);
-    }
-
-    /**
      * get encrypt base values
      *
      * @param int $value
@@ -42,9 +32,8 @@ class RSAEncryptLibrary
         $memory = memory_get_usage();
         // パラメーター以下でもっとも大きい$p,$qの値を素因数分解結果から取得
         // ケースによって$nの値を柔軟に取得出来る為最大値から＊個目を取得するか指定すると良い
-        $n = PrimeNumberLibrary::getMaxTwoPairPrimeFactorization($value);
-        // $n = PrimeNumberLibrary::getMaxCoountTwoPairPrimeFactorization($value, $maxCount);
-        [$p, $q] = PrimeNumberLibrary::getPrimeFactorization($n);
+        $n = MathLibrary::getMaxTwoPairPrimeFactorization($value);
+        [$p, $q] = MathLibrary::getPrimeFactorization($n);
 
         // E,Dの取得
         $ed = self::getEAndD($p, $q);
@@ -74,8 +63,8 @@ class RSAEncryptLibrary
         $memory = memory_get_usage();
         // パラメーター以下でもっとも大きい$p,$qの値を素因数分解結果から取得
         // ケースによって$nの値を柔軟に取得出来る為最大値から＊個目を取得するか指定すると良い
-        $n = PrimeNumberLibrary::getMaxTwoPairPrimeFactorization($value);
-        [$p, $q] = PrimeNumberLibrary::getPrimeFactorization($n);
+        $n = MathLibrary::getMaxTwoPairPrimeFactorization($value);
+        [$p, $q] = MathLibrary::getPrimeFactorization($n);
 
         // E,Dの取得
         $ed = self::getEAndDFix($p, $q);
@@ -119,8 +108,8 @@ class RSAEncryptLibrary
             }
             // (p-1),(q-1)とそれぞれ互いに素
             if (
-                PrimeNumberLibrary::isGcdIsOne($i, ($p - 1)) &&
-                PrimeNumberLibrary::isGcdIsOne($i, ($q - 1)) &&
+                MathLibrary::isGcdIsOne($i, ($p - 1)) &&
+                MathLibrary::isGcdIsOne($i, ($q - 1)) &&
                 ($ed % $i === 0)
             ) {
                 $e = $i;
@@ -162,14 +151,14 @@ class RSAEncryptLibrary
             if (
                 ($i < ($p - 1)) &&
                 ($i < ($q - 1)) &&
-                PrimeNumberLibrary::isGcdIsOne($i, ($p - 1)) &&
-                PrimeNumberLibrary::isGcdIsOne($i, ($q - 1))
+                MathLibrary::isGcdIsOne($i, ($p - 1)) &&
+                MathLibrary::isGcdIsOne($i, ($q - 1))
             ) {
                 $e = $i;
                 $d = 'X';
                 // $d = self::getD($e, $result['L']);
                 // $d = (1 / $e) % (($p-1) * ($q-1));
-                $euclidean = PrimeNumberLibrary::getExtendedEuclidean($e, $result['L']);
+                $euclidean = MathLibrary::getExtendedEuclidean($e, $result['L']);
                 if ($euclidean['x'] < 0) {
                     $d = $result['L'] + $euclidean['x'];
                 } else {
@@ -195,7 +184,7 @@ class RSAEncryptLibrary
      */
     public static function getL(int $p, int $q): int
     {   // L = (p - 1)と(q - 1)の最小公倍数
-        return PrimeNumberLibrary::getLeastCommonMultiple(($p - 1), ($q - 1));
+        return MathLibrary::getLeastCommonMultiple(($p - 1), ($q - 1));
     }
 
     /**
@@ -207,7 +196,7 @@ class RSAEncryptLibrary
      */
     public static function getD(int $e, int $l): int
     {   // de - yL = 1 の場合の(d, y)を求める 一次不定方程式
-        $gcd = PrimeNumberLibrary::getGreatestCommonDivisor($e, $l);
+        $gcd = MathLibrary::getGreatestCommonDivisor($e, $l);
 
         // d = (1 + yL) / e
         // d = (1 + L) / e // yはユークリッド互除法の結果1になる想定
