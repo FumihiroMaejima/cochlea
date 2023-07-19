@@ -16,6 +16,7 @@ return new class extends Migration
         /**
          * users table
          * SNS認証の都合上、email,passwordカラムはnullableにしている
+         * useCurrentOnUpdate()で`UPDATE CURRENT_TIMESTAMP`を設定
          */
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -31,7 +32,7 @@ return new class extends Migration
             $table->dateTime('code_verified_at')->nullable()->default(null)->comment('認証コード検証日時');
             $table->dateTime('last_login_at')->nullable()->default(null)->comment('最終ログイン日時');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();

@@ -76,6 +76,7 @@ class User extends Authenticatable implements JWTSubject
         self::IS_LEFT,
         self::CODE_VERIFIED_AT,
         self::LAST_LOGIN_AT,
+        self::UPDATED_AT,
     ];
 
     /**
