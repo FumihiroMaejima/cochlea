@@ -55,7 +55,7 @@ return new class extends Migration
             $table->string('code')->nullable()->default(null)->comment('認証コード');
             $table->string('state')->nullable()->default(null)->comment('認証ステータス');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // プライマリキー設定

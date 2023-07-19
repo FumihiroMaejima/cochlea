@@ -24,7 +24,7 @@ class CreateDevelopmentTable extends Migration
             $table->string('password')->comment('パスワード');
             $table->rememberToken();
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -52,7 +52,7 @@ class CreateDevelopmentTable extends Migration
             $table->id();
             $table->string('name')->comment('パーミッション名');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -69,7 +69,7 @@ class CreateDevelopmentTable extends Migration
             $table->string('code')->comment('ロールコード名');
             $table->string('detail')->comment('詳細');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -87,7 +87,7 @@ class CreateDevelopmentTable extends Migration
             $table->foreignId('role_id')->constrained('roles')->comment('ロールID');
             $table->foreignId('permission_id')->constrained('permissions')->comment('パーミッションID');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -103,7 +103,7 @@ class CreateDevelopmentTable extends Migration
             $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
             $table->foreignId('role_id')->constrained('roles')->unique()->comment('ロールID');
             $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
