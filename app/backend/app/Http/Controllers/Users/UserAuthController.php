@@ -89,4 +89,19 @@ class UserAuthController extends Controller
         // サービスの実行
         return $this->service->validateUserAuthCode($userId, (int)$request->code);
     }
+
+    /**
+     * leave from service.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function leaveUser(Request $request): JsonResponse
+    {
+        // ユーザーIDの取得
+        $userId = $this->getUserId($request);
+
+        // サービスの実行
+        return $this->service->leaveUser($userId);
+    }
 }

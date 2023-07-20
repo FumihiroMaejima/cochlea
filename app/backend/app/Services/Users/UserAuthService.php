@@ -194,4 +194,50 @@ class UserAuthService
             ]
         );
     }
+
+    /**
+     * leave from user
+     *
+     * @param int $userId  user id
+     * @return JsonResponse
+     */
+    public function leaveUser(int $userId): JsonResponse
+    {
+        $user = $this->usersRepository->getByUserId($userId);
+        if (is_null($user)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                'ユーザー情報が存在しません。',
+                ['userId' => $userId],
+                false
+            );
+        }
+
+        DB::beginTransaction();
+        try {
+            // 退会後のデータ情報に更新
+            $result = (new User())->updateIsLeft($userId, TimeLibrary::getCurrentDateTime());
+            if (empty($result)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    '退会処理に失敗しました。',
+                    ['userId' => $userId],
+                    false
+                );
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => 'Success',
+                'data' => [],
+            ]
+        );
+    }
 }

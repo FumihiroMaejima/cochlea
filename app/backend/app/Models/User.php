@@ -228,7 +228,7 @@ class User extends Authenticatable implements JWTSubject
                     self::PASSWORD => null,
                     self::IS_LEFT => self::IS_LEFT_FROM_SERVICE,
                     self::DELETED_AT => $dateTime,
-                    ]
+                ]
             );
 
         return $result > 0;
