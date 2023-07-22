@@ -165,6 +165,20 @@ class UserAuthService
                 $authCodeResource
             );
 
+            // 認証コード検証日時を更新
+            $updateCodeVerifiedAtResult = (new User())->updateCodeVerifiedAt(
+                $userId,
+                TimeLibrary::getCurrentDateTime()
+            );
+            if (!$updateCodeVerifiedAtResult) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    '退会処理に失敗しました。',
+                    ['userId' => $userId],
+                    false
+                );
+            }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
