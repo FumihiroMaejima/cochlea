@@ -25,9 +25,21 @@ showMessage() {
 # process start
 showMessage ${START_MESSAGE}
 
+# parameter check
+if [ "$1" != '' ]; then
+  if [ "$1" == 'zcat' ]; then
+    # zcat ${OUTPUT_FILE}.gz | docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME}
+    # mac OS only command.
+    gzcat ${OUTPUT_FILE}.gz
+  fi
+else
+  # dump command.
+  docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+fi
+
 # dump command.
 # docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
-docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+# docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
 
 # メッセージ出力
 showMessage 'restore data base dump.'
