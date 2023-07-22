@@ -23,8 +23,18 @@ showMessage() {
 # process start
 showMessage ${START_MESSAGE}
 
+# parameter check
+if [ "$1" != '' ]; then
+  if [ "$1" == 'gzip' ]; then
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} | gzip > ${OUTPUT_FILE}.gzip
+  fi
+else
+  # dump command.
+  docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
+fi
+
 # dump command.
-docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
+# docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
 
 # 現在のDocker コンテナの状態を出力
 showMessage 'get data base dump.'

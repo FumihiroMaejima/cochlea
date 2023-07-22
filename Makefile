@@ -10,6 +10,9 @@ LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
 REDIS_DB=1
 REDIS_KEY=test_key
 
+# etc
+TMP_PARAM=
+
 ##############################
 # make docker environmental
 ##############################
@@ -179,10 +182,10 @@ mysql:
 	docker-compose exec db bash -c 'mysql -u $$DB_USER -p$$MYSQL_PASSWORD $$DB_DATABASE'
 
 mysql-dump:
-	sh ./scripts/get-dump.sh
+	sh ./scripts/get-dump.sh $(TMP_PARAM)
 
 mysql-restore:
-	sh ./scripts/restore-dump.sh
+	sh ./scripts/restore-dump.sh $(TMP_PARAM)
 
 ##############################
 # redis container
