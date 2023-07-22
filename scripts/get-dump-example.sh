@@ -25,8 +25,8 @@ showMessage ${START_MESSAGE}
 
 # parameter check
 if [ "$1" != '' ]; then
-  if [ "$1" == 'gzip' ]; then
-    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} | gzip > ${OUTPUT_FILE}.gzip
+  if [ "$1" == 'gz' ]; then
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} | gzip > ${OUTPUT_FILE}.gz
   fi
 else
   # dump command.
