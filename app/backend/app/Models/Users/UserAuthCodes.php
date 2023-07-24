@@ -79,16 +79,17 @@ class UserAuthCodes extends BaseUserDataModel
      * sort by created at.
      *
      * @param array $records record list
+     * @param int $order order
      * @return array
      */
-    public static function sortByCreatedAt(array $records): array
+    public static function sortByCreatedAt(array $records, int $order = SORT_ASC): array
     {
         $createdAtList = [];
         foreach ($records as $record) {
             $createdAtList[] = TimeLibrary::strToTimeStamp($record[self::CREATED_AT]);
         }
 
-        array_multisort($createdAtList, SORT_ASC, $records);
+        array_multisort($createdAtList, $order, $records);
         return $records;
     }
 }
