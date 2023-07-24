@@ -29,10 +29,12 @@ class LogLibrary
         'email' => 'email',
         'password' => 'password',
         'password_confirmation' => 'password_confirmation',
-        'email' => 'email',
         'token' => 'token',
         'tokenPayload' => 'tokenPayload',
         'tokenHeader' => 'tokenHeader',
+        'body' => 'body',
+        'detail' => 'detail',
+        'name' => 'name',
     ];
 
     /**
