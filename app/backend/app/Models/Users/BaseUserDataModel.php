@@ -250,9 +250,10 @@ class BaseUserDataModel extends Model
      */
     public static function sortByUpdatedAt(array $records, int $order = SORT_ASC): array
     {
-        $timeStamps = array_map(function ($record) {
-            return  TimeLibrary::strToTimeStamp($record[self::UPDATED_AT]);
-        }, $records);
+        $timeStamps = [];
+        foreach ($records as $record) {
+            $timeStamps[] = TimeLibrary::strToTimeStamp($record[self::UPDATED_AT]);
+        }
 
         // ソート
         array_multisort($timeStamps, $order, $records);
