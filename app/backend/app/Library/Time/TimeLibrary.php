@@ -17,6 +17,8 @@ class TimeLibrary
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
     public const DATE_TIME_FORMAT_YMDHIS = 'YmdHis'; // ex: 20220101125959
+    public const DATE_TIME_FORMAT_START_DATE = 'Y-m-d 00:00:00'; // ex: 2022-01-01 00:00:00
+    public const DATE_TIME_FORMAT_END_DATE = 'Y-m-d 23:59:59'; // ex: 2022-01-01 23:59:59
 
     public const HALF_MINUTE_TIME_SECOND_VALUE = 1800; // 30分=1800秒
 
