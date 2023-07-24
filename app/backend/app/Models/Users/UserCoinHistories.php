@@ -4,8 +4,11 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\BaseUserDataModel;
+use App\Library\Array\ArrayLibrary;
+use App\Library\Time\TimeLibrary;
 
 class UserCoinHistories extends BaseUserDataModel
 {
@@ -115,4 +118,29 @@ class UserCoinHistories extends BaseUserDataModel
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * get all records by gain type of expire at & start date of expire
+     *
+     * @param string $connection connection
+     * @param int $shardId shard id
+     * @param string $expireAt expire at
+     * @return array<int, array>
+     */
+    public function getAllByConnectionAndShardIdAndGainAndExpireAt(
+        string $connection,
+        int $shardId,
+        string $expireAt
+    ): array {
+        $startDate = TimeLibrary::format($expireAt, TimeLibrary::DATE_TIME_FORMAT_START_DATE);
+
+        $records = DB::connection($connection)
+            ->table($this->getTable() . $shardId)
+            ->where(self::TYPE, self::USER_COINS_HISTORY_TYPE_STRING_GAIN)
+            ->whereBetween(self::EXPIRED_AT, [$startDate, $expireAt])
+            ->get()
+            ->toArray();
+
+        return ArrayLibrary::toArray($records);
+    }
 }
