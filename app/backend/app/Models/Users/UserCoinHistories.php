@@ -143,4 +143,24 @@ class UserCoinHistories extends BaseUserDataModel
 
         return ArrayLibrary::toArray($records);
     }
+
+    /**
+     * update expired coin record.
+     *
+     * @param string $connection connection
+     * @param int $shardId shard id
+     * @param array $resource values
+     * @return array<int, array>
+     */
+    public function insertExpiredCoinRecords(
+        string $connection,
+        int $shardId,
+        array $resource
+    ): bool {
+        $result = DB::connection($connection)
+            ->table($this->getTable() . $shardId)
+            ->insert($resource);
+
+        return $result;
+    }
 }
