@@ -124,20 +124,20 @@ class UserCoinHistories extends BaseUserDataModel
      *
      * @param string $connection connection
      * @param int $shardId shard id
-     * @param string $expireAt expire at
+     * @param string $expiredAt expire at
      * @return array<int, array>
      */
     public function getAllByConnectionAndShardIdAndGainAndExpireAt(
         string $connection,
         int $shardId,
-        string $expireAt
+        string $expiredAt
     ): array {
-        $startDate = TimeLibrary::format($expireAt, TimeLibrary::DATE_TIME_FORMAT_START_DATE);
+        $startAt = TimeLibrary::format($expiredAt, TimeLibrary::DATE_TIME_FORMAT_START_DATE);
 
         $records = DB::connection($connection)
             ->table($this->getTable() . $shardId)
             ->where(self::TYPE, self::USER_COINS_HISTORY_TYPE_STRING_GAIN)
-            ->whereBetween(self::EXPIRED_AT, [$startDate, $expireAt])
+            ->whereBetween(self::EXPIRED_AT, [$startAt, $expiredAt])
             ->get()
             ->toArray();
 
