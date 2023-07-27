@@ -26,6 +26,20 @@ class TimeLibrary
     private static ?int $fakerTimeStamp = null;
 
     /**
+     * setFaker time stamp.
+     *
+     * @param int $timeStamp timestamp
+     * @return void
+     */
+    public static function setFakerTimeStamp(int $timeStamp): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'productinon') {
+            static::$fakerTimeStamp = $timeStamp;
+        }
+    }
+
+    /**
      * get current date time.
      *
      * @param string $format datetime format
@@ -243,16 +257,46 @@ class TimeLibrary
     }
 
     /**
-     * setFaker time stamp.
+     * check date format.(Y/m/d)
      *
-     * @param int $timeStamp timestamp
-     * @return void
+     * @param string $date 日
+     * @return bool
      */
-    public static function setFakerTimeStamp(int $timeStamp): void
+    public static function checkDateFormat(string $date): bool
     {
-        // production環境以外で設定する
-        if (config('app.env') !== 'productinon') {
-            static::$fakerTimeStamp = $timeStamp;
-        }
+        return preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}$/', $date);
+    }
+
+    /**
+     * check date format separated by hyphen.(Y-m-d)
+     *
+     * @param string $date 日時
+     * @return bool
+     */
+    public static function checkDateFormatByHyphen(string $date): bool
+    {
+        return preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2}$/', $date);
+    }
+
+    /**
+     * check dateTime format.(Y/m/d H:i:s)
+     *
+     * @param string $dateTime 日時
+     * @return bool 日数
+     */
+    public static function checkDateTimeFormat(string $dateTime): bool
+    {
+        return preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
+    }
+
+    /**
+     * check dateTime format separated by hyphen.(Y-m-d H:i:s)
+     *
+     * @param string $dateTime 日時
+     * @return bool
+     */
+    public static function checkDateTimeFormatByHyphen(string $dateTime): bool
+    {
+        return preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
     }
 }
