@@ -162,6 +162,9 @@ remove-users-partitions:
 debug-seed-user-coin-histories:
 	docker-compose exec app php artisan debug:seed-user-coin-histories
 
+debug-seed-user-coin-histories-expired:
+	docker-compose exec app php artisan debug:seed-user-coin-histories-expired $(TMP_PARAM)
+
 ##############################
 # web server(nginx)
 ##############################
