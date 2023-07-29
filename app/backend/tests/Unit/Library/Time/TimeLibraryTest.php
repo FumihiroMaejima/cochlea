@@ -286,6 +286,39 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test check date data.
+     * @return array
+     */
+    public function checkDateDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => true,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check date
+     * @dataProvider checkDateDataProvider
+     * @return void
+     */
+    public function testCheckDete(string $date, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateFormat($date)
+        );
+    }
+
+    /**
      * test faker time current date time.
      *
      * @return void
