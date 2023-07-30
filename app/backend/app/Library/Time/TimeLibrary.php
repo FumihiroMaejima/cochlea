@@ -28,10 +28,10 @@ class TimeLibrary
     /**
      * setFaker time stamp.
      *
-     * @param int $timeStamp timestamp
+     * @param ?int $timeStamp timestamp
      * @return void
      */
-    public static function setFakerTimeStamp(int $timeStamp): void
+    public static function setFakerTimeStamp(?int $timeStamp): void
     {
         // production環境以外で設定する
         if (config('app.env') !== 'productinon') {

@@ -20,6 +20,30 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test faker time current date time.
+     *
+     * @return void
+     */
+    public function testFakerTimeCurrentDateTime(): void
+    {
+        // 検証値
+        $timeStamp = 1672327993; // 2022-12-30 00:33:13
+        TimeLibrary::setFakerTimeStamp($timeStamp);
+
+        $currentDateTime = TimeLibrary::getCurrentDateTime();
+        $currentDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT);
+        $fakerDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp);
+
+        // 現在日時とは異なる
+        $this->assertNotSame($currentDateTimeExpect, $currentDateTime);
+        // 偽装時刻として設定した日時と合致する
+        $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
+
+        // 初期化
+        TimeLibrary::setFakerTimeStamp(null);
+    }
+
+    /**
      * test get current dateTime test.
      *
      * @return void
@@ -302,11 +326,39 @@ class TimeLibraryTest extends TestCase
                 'value' => '2023-01-12',
                 'expect' => false,
             ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => false,
+            ],
         ];
     }
 
     /**
-     * test check date
+     * test check date data.
+     * @return array
+     */
+    public function checkDateDataByHyphenProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => true,
+            ],
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check date for hyphen
      * @dataProvider checkDateDataProvider
      * @return void
      */
@@ -319,23 +371,15 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
-     * test faker time current date time.
-     *
+     * test check date separated by hyphen.
+     * @dataProvider checkDateDataByHyphenProvider
      * @return void
      */
-    public function testFakerTimeCurrentDateTime(): void
+    public function testCheckDeteByHyphen(string $date, bool $expect): void
     {
-        // 検証値
-        $timeStamp = 1672327993; // 2022-12-30 00:33:13
-        TimeLibrary::setFakerTimeStamp($timeStamp);
-
-        $currentDateTime = TimeLibrary::getCurrentDateTime();
-        $currentDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT);
-        $fakerDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp);
-
-        // 現在日時とは異なる
-        $this->assertNotSame($currentDateTimeExpect, $currentDateTime);
-        // 偽装時刻として設定した日時と合致する
-        $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateFormatByHyphen($date)
+        );
     }
 }
