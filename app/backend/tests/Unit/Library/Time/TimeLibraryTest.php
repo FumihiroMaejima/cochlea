@@ -334,7 +334,7 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
-     * test check date data.
+     * test check date separated by hyphen data.
      * @return array
      */
     public function checkDateDataByHyphenProvider(): array
@@ -358,8 +358,98 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test check datetime data.
+     * @return array
+     */
+    public function checkDateDataTimeProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => true,
+            ],
+            '2023/01/12 23:59:59' => [
+                'value' => '2023/01/12 23:59:59',
+                'expect' => true,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:00:00' => [
+                'value' => '2023/01/12 24:00:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:60:00' => [
+                'value' => '2023/01/12 23:60:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:00:60' => [
+                'value' => '2023/01/12 23:00:60',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check datetime separated by hyphen data.
+     * @return array
+     */
+    public function checkDateDataTimeByHyphenProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => true,
+            ],
+            '2023-01-12 23:59:59' => [
+                'value' => '2023-01-12 23:59:59',
+                'expect' => true,
+            ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:00:00' => [
+                'value' => '2023-01-12 24:00:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:60:00' => [
+                'value' => '2023-01-12 23:60:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:00:60' => [
+                'value' => '2023-01-12 23:00:60',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
      * test check date for hyphen
      * @dataProvider checkDateDataProvider
+     * @param string $date
+     * @param bool $expect
      * @return void
      */
     public function testCheckDete(string $date, bool $expect): void
@@ -373,6 +463,8 @@ class TimeLibraryTest extends TestCase
     /**
      * test check date separated by hyphen.
      * @dataProvider checkDateDataByHyphenProvider
+     * @param string $date
+     * @param bool $expect
      * @return void
      */
     public function testCheckDeteByHyphen(string $date, bool $expect): void
@@ -380,6 +472,36 @@ class TimeLibraryTest extends TestCase
         $this->assertEquals(
             $expect,
             TimeLibrary::checkDateFormatByHyphen($date)
+        );
+    }
+
+    /**
+     * test check datetime
+     * @dataProvider checkDateDataTimeProvider
+     * @param string $dateTime
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheckTimeDete(string $dateTime, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateTimeFormat($dateTime)
+        );
+    }
+
+    /**
+     * test check datetime for hyphen
+     * @dataProvider checkDateDataTimeByHyphenProvider
+     * @param string $dateTime
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheckTimeByHyphenDete(string $dateTime, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateTimeFormatByHyphen($dateTime)
         );
     }
 }
