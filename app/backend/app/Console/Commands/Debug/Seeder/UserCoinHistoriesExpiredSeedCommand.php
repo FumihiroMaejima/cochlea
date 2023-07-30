@@ -62,8 +62,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
             echo 'Invalid Date Format: ' . $date . "\n";
             return;
         }
-        // TODO インサートの実行
-        // $this->createResource($date);
+        $this->createResource($date);
     }
 
     /**
@@ -75,6 +74,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
     public function createResource(string $date)
     {
         $now = TimeLibrary::getCurrentDateTime();
+        $timestamp =  TimeLibrary::strToTimeStamp($now);
 
         $template = [
             UserCoinHistories::USER_ID                    => 0,
@@ -90,7 +90,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
             UserCoinHistories::EXPIRED_AT                 => null,
             UserCoinHistories::OEDER_ID                   => null,
             UserCoinHistories::PRODUCT_ID                 => 0,
-            UserCoinHistories::CREATED_AT                 => $now,
+            UserCoinHistories::CREATED_AT                 => $now, // パーティション設定の都合上、指定しない
             UserCoinHistories::UPDATED_AT                 => $now,
         ];
 
@@ -128,11 +128,13 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
 
         $userCoinHistriesModel = (new UserCoinHistories());
         $userCoinModel = (new UserCoins());
-        $userIds = array_column($data, UserCoinHistories::USER_ID);
+        $userIds = array_unique(array_column($data, UserCoinHistories::USER_ID));
 
         // ユーザーのコイン情報(ユーザーIDで連想配列化)
         $useCoins = $userCoinModel->getAllByUserIds($userIds);
         $useCoins = array_column($useCoins, null, UserCoins::USER_ID);
+
+        // TODO 削除するコイン履歴が複数場合、userCoinの更新反映が正しく無い為解消する
         DB::beginTransaction();
         try {
             // 購入の場合の購入ステータステーブルの設定は省略する
@@ -170,7 +172,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
                     // + $row[UserCoinHistories::GET_LIMITED_TIME_COINS]
                     // - $row[UserCoinHistories::USED_LIMITED_TIME_COINS]
                     - $row[UserCoinHistories::EXPIRED_LIMITED_TIME_COINS];
-                // ランダムで設定した期限切れコイン数が保有コイン数を超過する場合
+                // 期限切れコイン数が保有コイン数を超過する場合
                 if ($limitedCoin < UserCoins::DEFAULT_COIN_COUNT) {
                     continue;
                 }
@@ -184,10 +186,16 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
                 );
                 $userCoinModel->updateByUserId($userId, $userCoinResource);
 
-                $resouces[$userId] = $row;
+                // primary keyを考慮して作成日時を加算する
+                if (!empty($resouces[$userId])) {
+                    $row[UserCoinHistories::CREATED_AT] =
+                    TimeLibrary::timeStampToDate($timestamp + count($resouces[$userId]));
+                }
+
+                $resouces[$userId][] = $row;
             }
             // コイン履歴の作成
-            $userCoinHistriesModel->insertByUserIds($userIds, $resouces);
+            $userCoinHistriesModel->insertByUserIdsForMultiUserRecords($userIds, $resouces);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
