@@ -134,7 +134,6 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
         $useCoins = $userCoinModel->getAllByUserIds($userIds);
         $useCoins = array_column($useCoins, null, UserCoins::USER_ID);
 
-        // TODO 削除するコイン履歴が複数場合、userCoinの更新反映が正しく無い為解消する
         DB::beginTransaction();
         try {
             // 購入の場合の購入ステータステーブルの設定は省略する
@@ -193,6 +192,10 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
                 }
 
                 $resouces[$userId][] = $row;
+
+                // 削除対象レコードが複数あるケースを考慮してユーザーレコード変数を更新する
+                $userCoin[UserCoins::LIMITED_TIME_COINS] = $limitedCoin;
+                $useCoins[$userId] = $userCoin;
             }
             // コイン履歴の作成
             $userCoinHistriesModel->insertByUserIdsForMultiUserRecords($userIds, $resouces);
