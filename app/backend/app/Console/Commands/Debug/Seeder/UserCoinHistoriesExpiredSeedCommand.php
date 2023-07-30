@@ -56,13 +56,14 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
     {
         $date = $this->argument('date');
         echo TimeLibrary::getCurrentDateTime() . "\n";
-        echo $date . "\n";
+        echo 'target Date is ' . $date . "\n";
         // 入力チェック
         if (!TimeLibrary::checkDateFormatByHyphen($date)) {
+            echo 'Invalid Date Format: ' . $date . "\n";
             return;
         }
         // TODO インサートの実行
-        // $this->createResource();
+        // $this->createResource($date);
     }
 
     /**
