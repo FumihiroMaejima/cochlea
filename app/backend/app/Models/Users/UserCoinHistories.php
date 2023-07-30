@@ -136,7 +136,8 @@ class UserCoinHistories extends BaseUserDataModel
 
         $records = DB::connection($connection)
             ->table($this->getTable() . $shardId)
-            ->where(self::TYPE, self::USER_COINS_HISTORY_TYPE_STRING_GAIN)
+            // ->where(self::TYPE, self::USER_COINS_HISTORY_TYPE_GAIN)
+            ->whereIn(self::TYPE, [self::USER_COINS_HISTORY_TYPE_GAIN, self::USER_COINS_HISTORY_TYPE_COMPENSATION])
             ->whereBetween(self::EXPIRED_AT, [$startAt, $expiredAt])
             ->get()
             ->toArray();
