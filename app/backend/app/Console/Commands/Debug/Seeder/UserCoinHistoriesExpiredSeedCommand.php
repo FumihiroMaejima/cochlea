@@ -57,6 +57,10 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
         $date = $this->argument('date');
         echo TimeLibrary::getCurrentDateTime() . "\n";
         echo $date . "\n";
+        // 入力チェック
+        if (!TimeLibrary::checkDateFormatByHyphen($date)) {
+            return;
+        }
         // TODO インサートの実行
         // $this->createResource();
     }
@@ -64,9 +68,10 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
     /**
      * Run the database seeds.
      *
+     * @param string $date
      * @return void
      */
-    public function createResource()
+    public function createResource(string $date)
     {
         $now = TimeLibrary::getCurrentDateTime();
 
@@ -91,7 +96,8 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
         // insert用データ
         $data = [];
 
-        $expiredAt ='2023-08-01 23:59:59';
+        // $expiredAt ='2023-08-01 23:59:59';
+        $expiredAt ="$date 23:59:59";
 
         foreach (ShardingLibrary::getShardingSetting() as $node => $shardIds) {
             $connection = ShardingLibrary::getConnectionByNodeNumber($node);
