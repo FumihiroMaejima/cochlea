@@ -75,8 +75,7 @@ class RSAEncryptLibrary
                 continue;
             }
             // (p-1),(q-1)とそれぞれ互いに素
-            if (
-                ($i < ($p - 1)) &&
+            if (($i < ($p - 1)) &&
                 ($i < ($q - 1)) &&
                 MathLibrary::isGcdIsOne($i, ($p - 1)) &&
                 MathLibrary::isGcdIsOne($i, ($q - 1))
@@ -106,7 +105,8 @@ class RSAEncryptLibrary
      * @return int
      */
     public static function getL(int $p, int $q): int
-    {   // L = (p - 1)と(q - 1)の最小公倍数
+    {
+        // L = (p - 1)と(q - 1)の最小公倍数
         return MathLibrary::getLeastCommonMultiple(($p - 1), ($q - 1));
     }
 
