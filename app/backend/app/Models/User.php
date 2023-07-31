@@ -166,6 +166,17 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * insert record.
+     *
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertUser(array $resource): bool
+    {
+        return DB::table($this->getTable())->insert($resource);
+    }
+
+    /**
      * insert record & get record id.
      *
      * @param array $resource resource
