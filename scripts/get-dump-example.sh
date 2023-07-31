@@ -10,8 +10,8 @@ TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
 # CHANGE Variable.
 DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
-DATABASE_NAME=database_name
 DATABASE_PASSWORD=database_password
+DATABASE_NAME=database_name
 OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
 
 # @param {string} message
@@ -23,8 +23,18 @@ showMessage() {
 # process start
 showMessage ${START_MESSAGE}
 
+# parameter check
+if [ "$1" != '' ]; then
+  if [ "$1" == 'gz' ]; then
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} | gzip > ${OUTPUT_FILE}.gz
+  fi
+else
+  # dump command.
+  docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
+fi
+
 # dump command.
-docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
+# docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} > ${OUTPUT_FILE}
 
 # 現在のDocker コンテナの状態を出力
 showMessage 'get data base dump.'

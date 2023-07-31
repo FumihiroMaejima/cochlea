@@ -23,8 +23,8 @@ class CreateDevelopmentTable extends Migration
             $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス確認日時');
             $table->string('password')->comment('パスワード');
             $table->rememberToken();
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -51,8 +51,8 @@ class CreateDevelopmentTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('パーミッション名');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -68,8 +68,8 @@ class CreateDevelopmentTable extends Migration
             $table->string('name')->comment('ロール名');
             $table->string('code')->comment('ロールコード名');
             $table->string('detail')->comment('詳細');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -86,8 +86,8 @@ class CreateDevelopmentTable extends Migration
             $table->string('short_name')->comment('省略名');
             $table->foreignId('role_id')->constrained('roles')->comment('ロールID');
             $table->foreignId('permission_id')->constrained('permissions')->comment('パーミッションID');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();
@@ -102,8 +102,8 @@ class CreateDevelopmentTable extends Migration
             $table->id();
             $table->foreignId('admin_id')->constrained('admins')->comment('管理者ID');
             $table->foreignId('role_id')->constrained('roles')->unique()->comment('ロールID');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
             // $table->timestamps();
             // $table->softDeletes();

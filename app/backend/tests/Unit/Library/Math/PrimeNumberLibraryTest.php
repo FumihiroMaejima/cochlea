@@ -59,7 +59,7 @@ class PrimeNumberLibraryTest extends TestCase
         $this->createApplication();
 
         return [
-            "0 is 9" => [
+            "0 is 0" => [
                 'value' => 0,
                 'expect' => 0,
             ],
@@ -74,6 +74,43 @@ class PrimeNumberLibraryTest extends TestCase
             "4 is 3" => [
                 'value' => 4,
                 'expect' => 3,
+            ],
+        ];
+    }
+
+    /**
+     * max greater prime numbers data
+     * @return array
+     */
+    public function getGreaterPrimeNumbersDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            "value=0/count=1/expect=[]" => [
+                'value' => 0,
+                'count' => 1,
+                'expect' => [],
+            ],
+            "value=1/count=1/expect=[]" => [
+                'value' => 1,
+                'count' => 1,
+                'expect' => [],
+            ],
+            "value=2/count=1/expect=[2]" => [
+                'value' => 2,
+                'count' => 1,
+                'expect' => [2],
+            ],
+            "value=4/count=1/expect=[3]" => [
+                'value' => 4,
+                'count' => 1,
+                'expect' => [3],
+            ],
+            "value=4/count=2/expect=[3,2]" => [
+                'value' => 4,
+                'count' => 2,
+                'expect' => [3,2],
             ],
         ];
     }
@@ -102,5 +139,19 @@ class PrimeNumberLibraryTest extends TestCase
     public function testGetMaxPrimeNumber(int $value, int $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::getMaxPrimeNumber($value));
+    }
+
+    /**
+     * test get greter prime numbers.
+     *
+     * @dataProvider getGreaterPrimeNumbersDataProvider
+     * @param int $value
+     * @param int $count
+     * @param array $expect
+     * @return void
+     */
+    public function testGetGreaterPrimeNumbers(int $value, int $count, array $expect): void
+    {
+        $this->assertSame($expect, PrimeNumberLibrary::getGreaterPrimeNumbers($value, $count));
     }
 }

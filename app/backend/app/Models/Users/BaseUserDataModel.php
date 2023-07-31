@@ -128,6 +128,30 @@ class BaseUserDataModel extends Model
     }
 
     /**
+     * get connectio and shard id and multi resources group by user ids.
+     *
+     * @param array $userIds user ids
+     * @return array
+     */
+    public static function getConnectionAndShardIdAndMultiResourcesGroupByUserIds(array $userIds, array $resources): array
+    {
+        $result = [];
+        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
+        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
+            foreach ($tmpUserIds as $userId) {
+                if (empty($resources[$userId])) {
+                    continue;
+                }
+                $resourcesGroupByUserId = $resources[$userId];
+                foreach ($resourcesGroupByUserId as $tmpResource) {
+                    $result[$connection][self::getShardId($userId)][] = $tmpResource;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
      * get all records by user id.
      *
      * @param int $userId user id
@@ -226,6 +250,28 @@ class BaseUserDataModel extends Model
     }
 
     /**
+     * insert multi user records.
+     *
+     * @param array $userIds user ids
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertByUserIdsForMultiUserRecords(array $userIds, array $resources): bool
+    {
+        $connections = self::getConnectionAndShardIdAndMultiResourcesGroupByUserIds($userIds, $resources);
+        $result = [];
+        foreach ($connections as $connection => $shardIds) {
+            foreach ($shardIds as $shardId => $tmpResources) {
+                $result[] = DB::connection($connection)
+                    ->table($this->getTable() . $shardId)
+                    ->insert($tmpResources);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * insert record.
      *
      * @param int $userId user id
@@ -250,9 +296,10 @@ class BaseUserDataModel extends Model
      */
     public static function sortByUpdatedAt(array $records, int $order = SORT_ASC): array
     {
-        $timeStamps = array_map(function ($record) {
-            return  TimeLibrary::strToTimeStamp($record[self::UPDATED_AT]);
-        }, $records);
+        $timeStamps = [];
+        foreach ($records as $record) {
+            $timeStamps[] = TimeLibrary::strToTimeStamp($record[self::UPDATED_AT]);
+        }
 
         // ソート
         array_multisort($timeStamps, $order, $records);

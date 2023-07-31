@@ -27,12 +27,15 @@ class UsersTableSeeder extends BaseSeeder
         $now = TimeLibrary::getCurrentDateTime();
 
         $template = [
-            User::NAME       => '',
-            User::EMAIL      => '',
-            User::PASSWORD   => bcrypt(Config::get('myappSeeder.seeder.password.testuser')),
-            User::ROLE       => 10,
-            User::CREATED_AT => $now,
-            User::UPDATED_AT => $now
+            User::NAME             => '',
+            User::EMAIL            => '',
+            User::PASSWORD         => bcrypt(Config::get('myappSeeder.seeder.password.testuser')),
+            User::ROLE             => 10,
+            User::IS_LEFT          => 0,
+            User::CODE_VERIFIED_AT => $now,
+            User::LAST_LOGIN_AT    => $now,
+            User::CREATED_AT       => $now,
+            User::UPDATED_AT       => $now
         ];
 
         // insert用データ

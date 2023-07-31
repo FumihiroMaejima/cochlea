@@ -20,6 +20,30 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test faker time current date time.
+     *
+     * @return void
+     */
+    public function testFakerTimeCurrentDateTime(): void
+    {
+        // 検証値
+        $timeStamp = 1672327993; // 2022-12-30 00:33:13
+        TimeLibrary::setFakerTimeStamp($timeStamp);
+
+        $currentDateTime = TimeLibrary::getCurrentDateTime();
+        $currentDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT);
+        $fakerDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp);
+
+        // 現在日時とは異なる
+        $this->assertNotSame($currentDateTimeExpect, $currentDateTime);
+        // 偽装時刻として設定した日時と合致する
+        $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
+
+        // 初期化
+        TimeLibrary::setFakerTimeStamp(null);
+    }
+
+    /**
      * test get current dateTime test.
      *
      * @return void
@@ -286,23 +310,198 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
-     * test faker time current date time.
-     *
+     * test check date data.
+     * @return array
+     */
+    public function checkDateDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => true,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check date separated by hyphen data.
+     * @return array
+     */
+    public function checkDateDataByHyphenProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => true,
+            ],
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check datetime data.
+     * @return array
+     */
+    public function checkDateDataTimeProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => true,
+            ],
+            '2023/01/12 23:59:59' => [
+                'value' => '2023/01/12 23:59:59',
+                'expect' => true,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:00:00' => [
+                'value' => '2023/01/12 24:00:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:60:00' => [
+                'value' => '2023/01/12 23:60:00',
+                'expect' => false,
+            ],
+            '2023/01/12 24:00:60' => [
+                'value' => '2023/01/12 23:00:60',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check datetime separated by hyphen data.
+     * @return array
+     */
+    public function checkDateDataTimeByHyphenProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            '2023/01/12' => [
+                'value' => '2023/01/12',
+                'expect' => false,
+            ],
+            '2023-01-12' => [
+                'value' => '2023-01-12',
+                'expect' => false,
+            ],
+            '2023-01-12 00:00:00' => [
+                'value' => '2023-01-12 00:00:00',
+                'expect' => true,
+            ],
+            '2023-01-12 23:59:59' => [
+                'value' => '2023-01-12 23:59:59',
+                'expect' => true,
+            ],
+            '2023/01/12 00:00:00' => [
+                'value' => '2023/01/12 00:00:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:00:00' => [
+                'value' => '2023-01-12 24:00:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:60:00' => [
+                'value' => '2023-01-12 23:60:00',
+                'expect' => false,
+            ],
+            '2023-01-12 24:00:60' => [
+                'value' => '2023-01-12 23:00:60',
+                'expect' => false,
+            ],
+        ];
+    }
+
+    /**
+     * test check date for hyphen
+     * @dataProvider checkDateDataProvider
+     * @param string $date
+     * @param bool $expect
      * @return void
      */
-    public function testFakerTimeCurrentDateTime(): void
+    public function testCheckDete(string $date, bool $expect): void
     {
-        // 検証値
-        $timeStamp = 1672327993; // 2022-12-30 00:33:13
-        TimeLibrary::setFakerTimeStamp($timeStamp);
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateFormat($date)
+        );
+    }
 
-        $currentDateTime = TimeLibrary::getCurrentDateTime();
-        $currentDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT);
-        $fakerDateTimeExpect = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, $timeStamp);
+    /**
+     * test check date separated by hyphen.
+     * @dataProvider checkDateDataByHyphenProvider
+     * @param string $date
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheckDeteByHyphen(string $date, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateFormatByHyphen($date)
+        );
+    }
 
-        // 現在日時とは異なる
-        $this->assertNotSame($currentDateTimeExpect, $currentDateTime);
-        // 偽装時刻として設定した日時と合致する
-        $this->assertEquals($fakerDateTimeExpect, $currentDateTime);
+    /**
+     * test check datetime
+     * @dataProvider checkDateDataTimeProvider
+     * @param string $dateTime
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheckTimeDete(string $dateTime, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateTimeFormat($dateTime)
+        );
+    }
+
+    /**
+     * test check datetime for hyphen
+     * @dataProvider checkDateDataTimeByHyphenProvider
+     * @param string $dateTime
+     * @param bool $expect
+     * @return void
+     */
+    public function testCheckTimeByHyphenDete(string $dateTime, bool $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::checkDateTimeFormatByHyphen($dateTime)
+        );
     }
 }

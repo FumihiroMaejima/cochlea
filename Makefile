@@ -6,6 +6,13 @@ WOKER=1
 LOCUST_FILE=./loadTest/locust/locustfile.py
 LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
 
+# redis
+REDIS_DB=1
+REDIS_KEY=test_key
+
+# etc
+TMP_PARAM=
+
 ##############################
 # make docker environmental
 ##############################
@@ -155,6 +162,19 @@ remove-users-partitions:
 debug-seed-user-coin-histories:
 	docker-compose exec app php artisan debug:seed-user-coin-histories
 
+debug-seed-user-coin-histories-expired:
+	docker-compose exec app php artisan debug:seed-user-coin-histories-expired $(TMP_PARAM)
+
+init-dev-db-setting: # DB initialization & Partition Setting
+	docker-compose exec app php artisan db:wipe --database mysql && \
+	docker-compose exec app php artisan db:wipe --database mysql_logs && \
+	docker-compose exec app php artisan db:wipe --database mysql_user1 && \
+	docker-compose exec app php artisan db:wipe --database mysql_user2 && \
+	docker-compose exec app php artisan db:wipe --database mysql_user3 && \
+	docker-compose exec app php artisan migrate:fresh --seed && \
+	docker-compose exec app php artisan admins:add-logs-partitions && \
+	docker-compose exec app php artisan admins:add-users-partitions
+
 ##############################
 # web server(nginx)
 ##############################
@@ -175,10 +195,31 @@ mysql:
 	docker-compose exec db bash -c 'mysql -u $$DB_USER -p$$MYSQL_PASSWORD $$DB_DATABASE'
 
 mysql-dump:
-	sh ./scripts/get-dump.sh
+	sh ./scripts/get-dump.sh $(TMP_PARAM)
 
 mysql-restore:
-	sh ./scripts/restore-dump.sh
+	sh ./scripts/restore-dump.sh $(TMP_PARAM)
+
+##############################
+# redis container
+##############################
+redis-server:
+	docker-compose exec redis redis-server --version
+
+redis-info:
+	docker-compose exec redis redis-cli info
+
+redis-keys:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) keys '*'
+
+redis-get:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
+
+redis-del:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) del $(REDIS_KEY)
+
+redis-hget:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
 
 ##############################
 # prometheus docker container

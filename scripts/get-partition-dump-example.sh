@@ -12,8 +12,8 @@ TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
 # CHANGE Variable.
 DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
-DATABASE_NAME=database_name
 DATABASE_PASSWORD=database_password
+DATABASE_NAME=database_name
 TABLE_NAME=table_name
 COLUMN_NAME=colume_name
 START_DATE=start_datetime # ex: '2023-01-14 00:00:00'
