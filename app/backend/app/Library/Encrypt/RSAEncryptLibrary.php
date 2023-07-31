@@ -91,7 +91,6 @@ class RSAEncryptLibrary
 
                 break;
             }
-
         }
         $result['E'] = $e;
         $result['D'] = $d;

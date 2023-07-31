@@ -82,7 +82,6 @@ class PrimeNumberLibrary
                     break;
                 }
             }
-
         }
 
         return $primeNumberList;

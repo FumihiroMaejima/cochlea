@@ -20,7 +20,6 @@ use App\Models\Users\UserCoins;
 use Database\Seeders\BaseSeeder;
 use Exception;
 
-
 class UserCoinHistoriesExpiredSeedCommand extends Command
 {
     /**

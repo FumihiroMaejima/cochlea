@@ -32,7 +32,7 @@ class MathLibrary
         $result = false;
         $leftValue = 0;
         // $valueより小さい値からループ開始
-        for($i = ($value - 1); $i >= 0; $i--) {
+        for ($i = ($value - 1); $i >= 0; $i--) {
             $checkValue = ($i ** $squared);
             // 余りが一致する場合
             if ($checkValue % $value === $mod) {
@@ -124,7 +124,6 @@ class MathLibrary
                 $result = $i;
                 break;
             }
-
         }
         return $result;
     }
@@ -152,7 +151,6 @@ class MathLibrary
                     break;
                 }
             }
-
         }
         return $result;
     }
@@ -205,7 +203,6 @@ class MathLibrary
                 $result = $i;
                 break;
             }
-
         }
         return $result;
     }
