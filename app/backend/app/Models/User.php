@@ -28,6 +28,8 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use SoftDeletes;
 
+    public const IS_LEFT_FROM_SERVICE = 1;
+
     // カラム一覧
     public const ID = 'id';
     public const NAME = 'name';
@@ -38,6 +40,9 @@ class User extends Authenticatable implements JWTSubject
     public const REMEMBER_TOKEN = 'remember_token';
     // public const CURRENT_TEAM_ID = 'current_team_id';
     // public const PROFILE_PHOTO_PATH = 'profile_photo_path';
+    public const IS_LEFT = 'is_left';
+    public const CODE_VERIFIED_AT = 'code_verified_at';
+    public const LAST_LOGIN_AT = 'last_login_at';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
@@ -68,6 +73,10 @@ class User extends Authenticatable implements JWTSubject
         self::NAME,
         self::EMAIL,
         self::PASSWORD,
+        self::IS_LEFT,
+        self::CODE_VERIFIED_AT,
+        self::LAST_LOGIN_AT,
+        self::UPDATED_AT,
     ];
 
     /**
@@ -165,5 +174,63 @@ class User extends Authenticatable implements JWTSubject
     public function insertUserAndGetId(array $resource): int
     {
         return DB::table($this->getTable())->insertGetId($resource);
+    }
+
+    /**
+     * update code verified at.
+     *
+     * @param int $userId user id
+     * @param string $codeVerifiedAt code verified at
+     * @return bool
+     */
+    public function updateCodeVerifiedAt(int $userId, string $codeVerifiedAt): bool
+    {
+        $result = DB::table($this->getTable())
+            ->where(self::ID, '=', $userId)
+            ->where(self::DELETED_AT, '=', null)
+            ->update([self::CODE_VERIFIED_AT => $codeVerifiedAt]);
+
+        return $result > 0;
+    }
+
+    /**
+     * update last login at.
+     *
+     * @param int $userId user id
+     * @param string $lastLoginAt last login at
+     * @return bool
+     */
+    public function updateLastLoginAt(int $userId, string $lastLoginAt): bool
+    {
+        $result = DB::table($this->getTable())
+            ->where(self::ID, '=', $userId)
+            ->where(self::DELETED_AT, '=', null)
+            ->update([self::LAST_LOGIN_AT => $lastLoginAt]);
+
+        return $result > 0;
+    }
+
+    /**
+     * update is left at & reset user auth data.
+     *
+     * @param int $userId user id
+     * @param string $dateTime date time
+     * @return bool
+     */
+    public function updateIsLeft(int $userId, string $dateTime): bool
+    {
+        $result = DB::table($this->getTable())
+            ->where(self::ID, '=', $userId)
+            ->where(self::DELETED_AT, '=', null)
+            ->update(
+                [
+                    self::EMAIL => null,
+                    self::PASSWORD => null,
+                    self::IS_LEFT => self::IS_LEFT_FROM_SERVICE,
+                    self::DELETED_AT => $dateTime,
+                ]
+            );
+
+        return $result > 0;
     }
 }

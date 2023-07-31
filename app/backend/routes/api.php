@@ -214,6 +214,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('logout', [\App\Http\Controllers\Users\AuthController::class, 'logout'])->name('auth.user.logout');
             Route::post('refresh', [\App\Http\Controllers\Users\AuthController::class, 'refresh'])->name('auth.user.refresh');
             Route::post('self', [\App\Http\Controllers\Users\AuthController::class, 'getAuthUser'])->name('auth.user.self');
+            Route::post('leave', [\App\Http\Controllers\Users\UserAuthController::class, 'leaveUser'])->name('auth.user.leave');
             Route::group(['prefix' => 'signup'], function () {
                 Route::post('validate', [\App\Http\Controllers\Users\UserAuthController::class, 'valdiateAuthCode'])->name('auth.user.signup.validate');
             });
@@ -335,6 +336,11 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('qps', [\App\Http\Controllers\Users\DebugController::class, 'getQueryPerSecond'])->name('user.debug.performance.qps');
                 Route::get('storage/size', [\App\Http\Controllers\Users\DebugController::class, 'getStorageSize'])->name('user.debug.performance.storage.size');
                 Route::get('byteSize/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertByteSize'])->name('user.debug.performance.byteSize.convert');
+            });
+
+            // 数学関係
+            Route::group(['prefix' => 'math'], function () {
+                Route::get('maxPrimeNumber', [\App\Http\Controllers\Users\DebugController::class, 'getMaxPrimeNumber'])->name('user.debug.math.maxPrimeNumber');
             });
         });
     }

@@ -29,8 +29,8 @@ class CreateProductMasterModelTable extends Migration
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
             $table->string('url', 255)->comment('遷移先URL');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // index設定
@@ -48,8 +48,8 @@ class CreateProductMasterModelTable extends Migration
             $table->integer('order')->unsigned()->comment('順番');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('banner blocks table');
@@ -66,8 +66,8 @@ class CreateProductMasterModelTable extends Migration
             $table->integer('order')->unsigned()->comment('順番');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // uniqueキー設定
@@ -88,8 +88,8 @@ class CreateProductMasterModelTable extends Migration
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
             $table->string('image', 255)->comment('イメージ');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('coins table');
@@ -107,8 +107,8 @@ class CreateProductMasterModelTable extends Migration
             $table->text('detail')->comment('詳細');
             $table->text('failure_detail')->nullable()->default(null)->comment('障害詳細');
             $table->dateTime('failure_at')->nullable()->default(null)->comment('障害発生日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('contacts table');
@@ -124,8 +124,8 @@ class CreateProductMasterModelTable extends Migration
             $table->text('detail')->comment('詳細');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('events table');
@@ -141,8 +141,8 @@ class CreateProductMasterModelTable extends Migration
             $table->integer('contents_id')->unsigned()->comment('コンテンツのID');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('home contents table');
@@ -157,8 +157,8 @@ class CreateProductMasterModelTable extends Migration
             $table->integer('order')->unsigned()->comment('順番');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('home contents groups table');
@@ -176,8 +176,8 @@ class CreateProductMasterModelTable extends Migration
             $table->string('mime_type', 255)->comment('mimeType');
             $table->string('s3_key', 255)->nullable()->comment('AWS S3のkey');
             $table->integer('version')->unsigned()->comment('ファイルのバージョン(更新日時のタイムスタンプ)');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             // index設定
@@ -196,8 +196,8 @@ class CreateProductMasterModelTable extends Migration
             $table->text('detail')->comment('詳細');
             $table->dateTime('start_at')->comment('公開開始日時');
             $table->dateTime('end_at')->comment('公開終了日時');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('informations table');
@@ -219,8 +219,8 @@ class CreateProductMasterModelTable extends Migration
             $table->dateTime('purchase_start_at')->comment('購入開始日時');
             $table->dateTime('purchase_end_at')->comment('購入終了日時');
             $table->string('image', 255)->comment('イメージ');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('products table');
@@ -233,8 +233,8 @@ class CreateProductMasterModelTable extends Migration
             $table->id();
             $table->string('name', 255)->comment('種類名');
             $table->text('detail')->comment('詳細');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('type of product table');
@@ -249,8 +249,8 @@ class CreateProductMasterModelTable extends Migration
             $table->text('detail')->comment('詳細');
             $table->string('address', 255)->comment('住所');
             $table->string('tel', 255)->comment('電話番号');
-            $table->dateTime('created_at')->comment('登録日時');
-            $table->dateTime('updated_at')->comment('更新日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
 
             $table->comment('manufacturers table');

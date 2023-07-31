@@ -10,8 +10,8 @@ TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
 # CHANGE Variable.
 DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
-DATABASE_NAME=database_name
 DATABASE_PASSWORD=database_password
+DATABASE_NAME=database_name
 OUTPUT_FILE=sample/dump/dump.sql
 # TIME_STAMPを使う場合
 # OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
@@ -25,9 +25,23 @@ showMessage() {
 # process start
 showMessage ${START_MESSAGE}
 
+# parameter check
+if [ "$1" != '' ]; then
+  if [ "$1" == 'zcat' ]; then
+    # zcat ${OUTPUT_FILE}.gz | docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME}
+    # mac OS only command.
+    gzcat ${OUTPUT_FILE}.gz
+  elif ["$1" == 'gzcat' ]; then
+    gzcat ${OUTPUT_FILE}.gz
+  fi
+else
+  # dump command.
+  docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+fi
+
 # dump command.
 # docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
-docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
+# docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME} < ${OUTPUT_FILE}
 
 # メッセージ出力
 showMessage 'restore data base dump.'

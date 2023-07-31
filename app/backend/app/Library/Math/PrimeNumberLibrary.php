@@ -61,4 +61,29 @@ class PrimeNumberLibrary
 
         return $largestPrime;
     }
+
+    /**
+     * get greater prime number in parameter
+     *
+     * @param int $value value
+     * @param int $maxCount get count
+     * @return array
+     */
+    public static function getGreaterPrimeNumbers(int $value, int $maxCount = 1): array
+    {
+        $primeNumberList = [];
+        $count = 0;
+        // 最大値の為パラメーターから減算して確認
+        for ($i = $value; 0 < $i; $i--) {
+            if (self::isPrimeNumber($i)) {
+                $primeNumberList[] = $i;
+                $count++;
+                if ($count === $maxCount) {
+                    break;
+                }
+            }
+        }
+
+        return $primeNumberList;
+    }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Users;
 
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -101,6 +103,10 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $user = auth('api-users')->user();
+
+        // ログイン日時を更新
+        (new User())->updateLastLoginAt($user->id, TimeLibrary::getCurrentDateTime());
+
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
         // ユーザー情報を返す。

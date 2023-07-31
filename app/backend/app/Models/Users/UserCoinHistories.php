@@ -4,8 +4,11 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\BaseUserDataModel;
+use App\Library\Array\ArrayLibrary;
+use App\Library\Time\TimeLibrary;
 
 class UserCoinHistories extends BaseUserDataModel
 {
@@ -115,4 +118,50 @@ class UserCoinHistories extends BaseUserDataModel
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * get all records by gain type of expire at & start date of expire
+     *
+     * @param string $connection connection
+     * @param int $shardId shard id
+     * @param string $expiredAt expire at
+     * @return array<int, array>
+     */
+    public function getAllByConnectionAndShardIdAndGainAndExpireAt(
+        string $connection,
+        int $shardId,
+        string $expiredAt
+    ): array {
+        $startAt = TimeLibrary::format($expiredAt, TimeLibrary::DATE_TIME_FORMAT_START_DATE);
+
+        $records = DB::connection($connection)
+            ->table($this->getTable() . $shardId)
+            // ->where(self::TYPE, self::USER_COINS_HISTORY_TYPE_GAIN)
+            ->whereIn(self::TYPE, [self::USER_COINS_HISTORY_TYPE_GAIN, self::USER_COINS_HISTORY_TYPE_COMPENSATION])
+            ->whereBetween(self::EXPIRED_AT, [$startAt, $expiredAt])
+            ->get()
+            ->toArray();
+
+        return ArrayLibrary::toArray($records);
+    }
+
+    /**
+     * update expired coin record.
+     *
+     * @param string $connection connection
+     * @param int $shardId shard id
+     * @param array $resource values
+     * @return array<int, array>
+     */
+    public function insertExpiredCoinRecords(
+        string $connection,
+        int $shardId,
+        array $resource
+    ): bool {
+        $result = DB::connection($connection)
+            ->table($this->getTable() . $shardId)
+            ->insert($resource);
+
+        return $result;
+    }
 }
