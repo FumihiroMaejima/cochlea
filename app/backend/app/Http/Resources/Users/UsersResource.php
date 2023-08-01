@@ -43,12 +43,14 @@ class UsersResource extends JsonResource
     /**
      * Transform the resource into an array for create.
      *
+     * @param int $userId ユーザ-ID
      * @param string $name ユーザー名
      * @param string $email メールアドレス
      * @param string $password パスワード
      * @return array
      */
     public static function toArrayForCreate(
+        int $userId,
         string $name,
         string $email,
         string $password
@@ -56,6 +58,7 @@ class UsersResource extends JsonResource
         $dateTime = TimeLibrary::getCurrentDateTime();
 
         return [
+            User::ID => $userId,
             User::NAME => $name,
             User::EMAIL => $email,
             User::PASSWORD => bcrypt($password),
