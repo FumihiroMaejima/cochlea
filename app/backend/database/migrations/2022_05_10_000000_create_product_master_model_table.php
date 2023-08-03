@@ -261,6 +261,7 @@ class CreateProductMasterModelTable extends Migration
          */
         Schema::create('service_terms', function (Blueprint $table) {
             $table->id();
+            $table->integer('version')->unsigned()->comment('バージョン');
             $table->text('terms')->comment('利用規約');
             $table->text('privacy_policy')->comment('プライバシーポリシー');
             $table->string('memo', 255)->comment('メモ');
