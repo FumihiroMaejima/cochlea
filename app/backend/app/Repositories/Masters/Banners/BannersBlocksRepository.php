@@ -71,7 +71,7 @@ class BannersBlocksRepository implements BannersBlocksRepositoryInterface
     }
 
     /**
-     * get Latest Coin data.
+     * get Latest Record data.
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */

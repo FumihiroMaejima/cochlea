@@ -71,7 +71,7 @@ class CoinsRepository implements CoinsRepositoryInterface
     }
 
     /**
-     * get Latest Coin data.
+     * get Latest Record data.
      *
      * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
