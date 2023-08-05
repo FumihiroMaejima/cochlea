@@ -12,21 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Resources\Admins\HomeContentsGroupsResource;
-use App\Http\Resources\Admins\HomeContentsResource;
-use App\Repositories\Masters\HomeContents\HomeContentsGroupsRepositoryInterface;
-use App\Repositories\Masters\HomeContents\HomeContentsRepositoryInterface;
-use App\Exports\Masters\HomeContents\HomeContentsBulkInsertTemplateExport;
-use App\Exports\Masters\HomeContents\HomeContentsExport;
-use App\Exports\Masters\HomeContents\HomeContentsGroupsBulkInsertTemplateExport;
-use App\Exports\Masters\HomeContents\HomeContentsGroupsExport;
-use App\Imports\Masters\HomeContents\HomeContentsGroupsImport;
-use App\Imports\Masters\HomeContents\HomeContentsImport;
+use App\Http\Resources\Admins\ServiceTermsResource;
+use App\Repositories\Masters\ServiceTerms\ServiceTermsRepositoryInterface;
+use App\Exports\Masters\ServiceTerms\ServiceTermsBulkInsertTemplateExport;
+use App\Exports\Masters\ServiceTerms\ServiceTermsExport;
+use App\Imports\Masters\ServiceTerms\ServiceTermsImport;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\Time\TimeLibrary;
-use App\Models\Masters\HomeContentsGroups;
-use App\Models\Masters\HomeContents;
 use Exception;
 
 class ServiceTermsService
@@ -34,60 +27,56 @@ class ServiceTermsService
     // cache keys
     private const CACHE_KEY_HOME_CONTENTS_COLLECTION_LIST = 'admin_home_contents_collection_list';
 
-    protected HomeContentsGroupsRepositoryInterface $homeContentsGroupsRepository;
-    protected HomeContentsRepositoryInterface $homeContentsRepository;
+    protected ServiceTermsRepositoryInterface $serviceTermsRepository;
 
     /**
      * create service instance
      *
-     * @param HomeContentsGroupsRepositoryInterface $homeContentsGroupsRepository
-     * @param HomeContentsRepositoryInterface $homeContentsRepository
+     * @param ServiceTermsRepositoryInterface $serviceTermsRepository
      * @return void
      */
     public function __construct(
-        HomeContentsGroupsRepositoryInterface $homeContentsGroupsRepository,
-        HomeContentsRepositoryInterface $homeContentsRepository,
+        ServiceTermsRepositoryInterface $serviceTermsRepository,
     ) {
-        $this->homeContentsGroupsRepository = $homeContentsGroupsRepository;
-        $this->homeContentsRepository = $homeContentsRepository;
+        $this->serviceTermsRepository = $serviceTermsRepository;
     }
 
     /**
-     * download home contents data service
+     * download service terms data service
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadCSVForHomeContents()
+    public function downloadCSVForServiceTerms()
     {
-        $data = $this->homeContentsRepository->getRecords();
+        $data = $this->serviceTermsRepository->getRecords();
 
-        return Excel::download(new HomeContentsExport($data), 'home_contents_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
+        return Excel::download(new ServiceTermsExport($data), 'service_terms_info_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv');
     }
 
     /**
-     * download home contents template data service
+     * download service terms template data service
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadTemplateForHomeContents()
+    public function downloadTemplateForServiceTerms()
     {
         return Excel::download(
-            new HomeContentsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.homeContents.template'))),
-            'master_home_contents_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
+            new ServiceTermsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.serviceTerms.template'))),
+            'master_service_terms_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
         );
     }
 
 
     /**
-     * imort home contents by template data service
+     * imort service terms by template data service
      *
      * @param UploadedFile $file
      * @return JsonResponse
      */
-    public function importTemplateForHomeContents(UploadedFile $file)
+    public function importTemplateForServiceTerms(UploadedFile $file)
     {
         // ファイル名チェック
-        if (!preg_match('/^master_home_contents_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
+        if (!preg_match('/^master_service_terms_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_422,
                 'no include title.'
@@ -96,11 +85,11 @@ class ServiceTermsService
 
         DB::beginTransaction();
         try {
-            $fileData = Excel::toArray(new HomeContentsImport($file), $file, null, \Maatwebsite\Excel\Excel::CSV);
+            $fileData = Excel::toArray(new ServiceTermsImport($file), $file, null, \Maatwebsite\Excel\Excel::CSV);
 
-            $resource = HomeContentsResource::toArrayForBulkInsert(current($fileData));
+            $resource = ServiceTermsResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->homeContentsRepository->create($resource);
+            $insertCount = $this->serviceTermsRepository->create($resource);
 
             DB::commit();
 

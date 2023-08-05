@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Illuminate\Http\UploadedFile;
 
-class ServiceTermsImportImport implements ToModel
+class ServiceTermsImport implements ToModel
 {
     use Importable;
     private array $resource;
