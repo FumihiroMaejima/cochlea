@@ -34,6 +34,8 @@ use App\Repositories\Masters\RolePermissions\RolePermissionsRepository;
 use App\Repositories\Masters\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Masters\Roles\RolesRepository;
 use App\Repositories\Masters\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\ServiceTerms\ServiceTermsRepository;
+use App\Repositories\Masters\ServiceTerms\ServiceTermsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepository;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepository;
@@ -73,6 +75,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);
         $this->app->bind(RolePermissionsRepositoryInterface::class, RolePermissionsRepository::class);
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
+        $this->app->bind(ServiceTermsRepositoryInterface::class, ServiceTermsRepository::class);
         $this->app->bind(UserCoinPaymentLogRepositoryInterface::class, UserCoinPaymentLogRepository::class);
         $this->app->bind(UserAuthCodesRepositoryInterface::class, UserAuthCodesRepository::class);
         $this->app->bind(UserCoinPaymentStatusRepositoryInterface::class, UserCoinPaymentStatusRepository::class);
