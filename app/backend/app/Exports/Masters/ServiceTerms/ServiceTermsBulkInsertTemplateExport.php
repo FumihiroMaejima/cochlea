@@ -68,7 +68,7 @@ class ServiceTermsBulkInsertTemplateExport implements FromCollection, WithHeadin
         return [
             'version'        => $item->{ServiceTerms::VERSION},
             'terms'          => $item->{ServiceTerms::TERMS},
-            'privacy_poricy' => $item->{ServiceTerms::PRIVACY_POLICY},
+            'privacy_policy' => $item->{ServiceTerms::PRIVACY_POLICY},
             'memo'           => $item->{ServiceTerms::MEMO},
             'start_at'       => $item->{ServiceTerms::START_AT},
             'end_at'         => $item->{ServiceTerms::END_AT},
