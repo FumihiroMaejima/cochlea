@@ -60,9 +60,12 @@ class ServiceTermsService
      */
     public function downloadTemplateForServiceTerms()
     {
+        // ElocuentからCollectionを取得する時と異なり個別にcontent-typeを指定する必要がある。
         return Excel::download(
             new ServiceTermsBulkInsertTemplateExport(collect(Config::get('myappFile.service.admins.serviceTerms.template'))),
-            'master_service_terms_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv'
+            'master_service_terms_template_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMDHIS) . '.csv',
+            null,
+            ['content-type' => 'text/csv; charset=UTF-8']
         );
     }
 
