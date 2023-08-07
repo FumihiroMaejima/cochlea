@@ -84,7 +84,7 @@ class InformationsController extends Controller
     }
 
     /**
-     * import coin data by file.
+     * import record data by file.
      *
      * @param InformationImportRequest $request
      * @return \Illuminate\Http\JsonResponse

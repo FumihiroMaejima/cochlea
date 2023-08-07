@@ -111,7 +111,7 @@ class HomeContentsController extends Controller
     }
 
     /**
-     * import coin data by file.
+     * import record data by file.
      *
      * @param HomeContentsImportRequest $request
      * @return \Illuminate\Http\JsonResponse
