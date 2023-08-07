@@ -35,7 +35,8 @@ class LogicCacheLibrary extends CacheLibrary
      */
     public static function setContactCache(string $value): void
     {
-        self::setCache(self::getContactDetailKey($value), $value);
+        // json型で保存する為に連想配列にする
+        self::setCache(self::getContactDetailKey($value), ['body' => $value]);
     }
 
     /**
@@ -46,6 +47,8 @@ class LogicCacheLibrary extends CacheLibrary
      */
     public static function getContactCache(string $value): ?string
     {
-        return self::getByKey(self::getContactDetailKey($value));
+        // json型で保存した為key指定でvalueを取得
+        $cache = self::getByKey(self::getContactDetailKey($value));
+        return $cache['body'] ?? null;
     }
 }
