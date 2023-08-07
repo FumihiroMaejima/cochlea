@@ -16,6 +16,7 @@ class MasterCacheLibrary extends CacheLibrary
     private const CACHE_KEY_COINS_ALL = 'coins_all';
     private const CACHE_KEY_EVENTS_ALL = 'events_all';
     private const CACHE_KEY_INFORMATIONS_ALL = 'informations_all';
+    private const CACHE_KEY_SERVICE_TERMS_ALL = 'service_terms_all';
 
     /**
      * get cache key of banners.
@@ -139,5 +140,36 @@ class MasterCacheLibrary extends CacheLibrary
     public static function getInformationsCache(): ?string
     {
         return self::getByKey(self::getInformationsAllKey());
+    }
+
+    /**
+     * get cache key of service terms.
+     *
+     * @return string
+     */
+    public static function getServiceTermsAllKey(): string
+    {
+        return self::CACHE_KEY_SERVICE_TERMS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
+    }
+
+    /**
+     * set cache of service terms.
+     *
+     * @param array $value
+     * @return void
+     */
+    public static function setServiceTermsCache(array $value): void
+    {
+        self::setCache(self::getServiceTermsAllKey(), $value);
+    }
+
+    /**
+     * get cache of service terms.
+     *
+     * @return ?string
+     */
+    public static function getServiceTermsCache(): ?string
+    {
+        return self::getByKey(self::getServiceTermsAllKey());
     }
 }
