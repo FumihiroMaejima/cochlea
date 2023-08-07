@@ -214,6 +214,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'informations'], function () {
         Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
     });
+    // service terms
+    Route::group(['prefix' => 'serviceTerms'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\ServiceTermsController::class, 'index'])->name('noAuth.serviceTerms.index');
+    });
 
     // user auth
     Route::middleware(['middleware' => 'auth:api-users'])->group(function () {

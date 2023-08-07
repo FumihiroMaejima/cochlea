@@ -166,9 +166,9 @@ class MasterCacheLibrary extends CacheLibrary
     /**
      * get cache of service terms.
      *
-     * @return ?string
+     * @return ?array
      */
-    public static function getServiceTermsCache(): ?string
+    public static function getServiceTermsCache(): ?array
     {
         return self::getByKey(self::getServiceTermsAllKey());
     }

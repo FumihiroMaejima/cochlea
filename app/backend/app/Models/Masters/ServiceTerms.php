@@ -66,4 +66,19 @@ class ServiceTerms extends Model
     public function __construct()
     {
     }
+
+    /**
+     * sort by version.
+     *
+     * @param array $records record list
+     * @param int $order order
+     * @return array
+     */
+    public static function sortByVersion(array $records, int $order = SORT_ASC): array
+    {
+        $versions = array_column($records, self::VERSION);
+
+        array_multisort($versions, $order, $records);
+        return $records;
+    }
 }
