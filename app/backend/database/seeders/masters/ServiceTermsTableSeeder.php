@@ -19,6 +19,18 @@ class ServiceTermsTableSeeder extends BaseSeeder
     // 終了日時として設定する加算年数
     private const END_DATE_ADDITIONAL_YEARS = 5;
 
+    public const TEMPALTE = [
+        ServiceTerms::VERSION        => 1,
+        ServiceTerms::TERMS          => '',
+        ServiceTerms::PRIVACY_POLICY => '',
+        ServiceTerms::MEMO           => '',
+        ServiceTerms::START_AT       => '',
+        ServiceTerms::END_AT         => '',
+        ServiceTerms::CREATED_AT     => '',
+        ServiceTerms::UPDATED_AT     => '',
+        ServiceTerms::DELETED_AT     => null
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -31,16 +43,11 @@ class ServiceTermsTableSeeder extends BaseSeeder
         $now = TimeLibrary::getCurrentDateTime();
         $endDate = TimeLibrary::addYears($now, self::END_DATE_ADDITIONAL_YEARS);
 
-        $template = [
-            ServiceTerms::VERSION        => 1,
-            ServiceTerms::TERMS          => '',
-            ServiceTerms::PRIVACY_POLICY => '',
-            ServiceTerms::MEMO           => '',
-            ServiceTerms::START_AT       => $now,
-            ServiceTerms::END_AT         => $endDate,
-            ServiceTerms::CREATED_AT     => $now,
-            ServiceTerms::UPDATED_AT     => $now
-        ];
+        $template = self::TEMPALTE;
+        $template[ServiceTerms::START_AT] = $now;
+        $template[ServiceTerms::END_AT] = $endDate;
+        $template[ServiceTerms::CREATED_AT] = $now;
+        $template[ServiceTerms::UPDATED_AT] = $now;
 
         // insert用データ
         $data = [];
