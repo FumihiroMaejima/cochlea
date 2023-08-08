@@ -35,6 +35,9 @@ if [ "$1" != '' ]; then
   elif [ "$1" == 'tsv' ]; then
     # no --fields-terminated-by option
     docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} --tab=${SECURE_FILE_PRIV_DIR} ${DATABASE_NAME}
+  else
+    # parameter is table name.
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} $1 > ${OUTPUT_FILE}
   fi
 else
   # dump command.
