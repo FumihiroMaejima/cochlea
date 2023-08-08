@@ -32,6 +32,9 @@ if [ "$1" != '' ]; then
   elif [ "$1" == 'csv' ]; then
     # only ouput in docker container
     docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} --tab=${SECURE_FILE_PRIV_DIR} --fields-terminated-by=, ${DATABASE_NAME}
+  elif [ "$1" == 'tsv' ]; then
+    # no --fields-terminated-by option
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} --tab=${SECURE_FILE_PRIV_DIR} ${DATABASE_NAME}
   fi
 else
   # dump command.
