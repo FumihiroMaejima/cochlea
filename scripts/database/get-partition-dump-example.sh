@@ -18,7 +18,7 @@ TABLE_NAME=table_name
 COLUMN_NAME=colume_name
 START_DATE=start_datetime # ex: '2023-01-14 00:00:00'
 END_DATE=end_datetime # ex: '2023-01-14 23:59:59'
-OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある
+OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
 
 # @param {string} message
 showMessage() {

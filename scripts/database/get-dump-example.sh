@@ -12,9 +12,9 @@ DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
 DATABASE_PASSWORD=database_password
 DATABASE_NAME=database_name
-OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
+OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
 SECURE_FILE_PRIV_DIR=/var/lib/mysql-files
-OUTPUT_CSV_FILE=scripts/dump_${TIME_STAMP}.csv
+OUTPUT_CSV_FILE=scripts/database/dump_${TIME_STAMP}.csv
 
 # @param {string} message
 showMessage() {

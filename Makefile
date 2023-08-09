@@ -195,10 +195,10 @@ mysql:
 	docker-compose exec db bash -c 'mysql -u $$DB_USER -p$$MYSQL_PASSWORD $$DB_DATABASE'
 
 mysql-dump:
-	sh ./scripts/get-dump.sh $(TMP_PARAM)
+	sh ./scripts/database/get-dump.sh $(TMP_PARAM)
 
 mysql-restore:
-	sh ./scripts/restore-dump.sh $(TMP_PARAM)
+	sh ./scripts/database/restore-dump.sh $(TMP_PARAM)
 
 ##############################
 # redis container
