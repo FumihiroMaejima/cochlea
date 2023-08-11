@@ -2,7 +2,7 @@
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
 DELIMITER_LINE='------------------------------------------------------'
-START_MESSAGE='start Get S3 List'
+START_MESSAGE='start Get AWS S3 List'
 
 AWS_CLI_PATH=/usr/local/bin/aws
 
@@ -19,5 +19,5 @@ showMessage "$START_MESSAGE"
 # iam users
 $AWS_CLI_PATH s3 ls
 
-showMessage "Get S3 Users"
+showMessage "Get AWS S3 Users"
 

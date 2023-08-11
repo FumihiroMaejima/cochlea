@@ -2,7 +2,7 @@
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
 DELIMITER_LINE='------------------------------------------------------'
-START_MESSAGE='start Get IAM User List'
+START_MESSAGE='start Get AWS IAM User List'
 
 # 事前にaws-cliのconfig設定が必要
 AWS_CLI_PATH=/usr/local/bin/aws
@@ -20,5 +20,5 @@ showMessage "$START_MESSAGE"
 # iam users
 $AWS_CLI_PATH iam list-users
 
-showMessage "Get IAM List Users"
+showMessage "Get AWS IAM List Users"
 

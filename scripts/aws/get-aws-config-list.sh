@@ -2,7 +2,7 @@
 
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
 DELIMITER_LINE='------------------------------------------------------'
-START_MESSAGE='start Get AWS Cloudformation Stack List'
+START_MESSAGE='start Get AWS Config List'
 
 # 事前にaws-cliのconfig設定が必要
 AWS_CLI_PATH=/usr/local/bin/aws
@@ -18,7 +18,7 @@ showMessage() {
 showMessage "$START_MESSAGE"
 
 # iam users
-$AWS_CLI_PATH cloudformation list-stacks
+$AWS_CLI_PATH configure list
 
-showMessage "Get AWS Cloudformation List Stacks"
+showMessage "Get AWS Config List"
 
