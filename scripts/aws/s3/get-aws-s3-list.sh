@@ -16,7 +16,6 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-# iam users
 $AWS_CLI_PATH s3 ls
 
 showMessage "Get AWS S3 Users"

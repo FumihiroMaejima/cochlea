@@ -17,7 +17,6 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-# iam users
 $AWS_CLI_PATH cloudformation list-stacks
 
 showMessage "Get AWS Cloudformation List Stacks"

@@ -17,8 +17,12 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-# iam users
-$AWS_CLI_PATH configure list
+# parameter check
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH configure list --profile $1
+else
+  $AWS_CLI_PATH configure list
+fi
 
 showMessage "Get AWS Config List"
 

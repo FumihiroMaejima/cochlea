@@ -17,7 +17,6 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-# iam users
 $AWS_CLI_PATH iam list-groups
 
 showMessage "Get AWS IAM List Groups"
