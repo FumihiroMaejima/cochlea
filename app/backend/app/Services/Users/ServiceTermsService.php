@@ -44,25 +44,8 @@ class ServiceTermsService
      */
     public function getLatestServiceTerms(): JsonResponse
     {
-        $cache = MasterCacheLibrary::getServiceTermsCache();
-
-        // キャッシュチェック
-        if (is_null($cache)) {
-            $collection = $this->serviceTermsRepository->getRecords();
-            if (empty($collection)) {
-                return [];
-            }
-            $records = ArrayLibrary::toArray($collection->toArray());
-
-            if (!empty($records)) {
-                MasterCacheLibrary::setServiceTermsCache($records);
-            }
-        } else {
-            $records = $cache;
-        }
-        $serviceTermList = ServiceTerms::sortByVersion($records, SORT_DESC);
-
-        return response()->json(['data' =>current($serviceTermList)]);
+        $serviceTermList = $this->getServiceTermList();
+        return response()->json(['data' => current($serviceTermList)]);
     }
 
     /**
@@ -74,14 +57,22 @@ class ServiceTermsService
      */
     public function createUserServiceTerm(int $userId, int $serviceTermId): JsonResponse
     {
-        // お知らせの取得
-        $information = $this->getServiceTermById($userId, $serviceTermId);
+        // 利用規約の取得
+        $serviceTermList = $this->getServiceTermList();
+        $serviceTerm = current($serviceTermList);
         // TODO 期間判定
-        // TODO 公開中の最新のバージョンのみ登録出来るようにする
-        if (is_null($information)) {
+        if (empty($serviceTerm)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
                 'Service Term Not Exist.'
+            );
+        }
+
+        // 最新のIDでは無い場合
+        if ($serviceTerm[ServiceTerms::ID] !== $serviceTermId) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'Don\'t Match Service Term ID of Current Version.'
             );
         }
 
@@ -126,26 +117,28 @@ class ServiceTermsService
     }
 
     /**
-     * get resource by rocord id.
+     * get record list & sort by version.
      *
-     * @param int $serviceTermId service term id
      * @return array
      */
-    private function getServiceTermById(int $serviceTermId): array
+    private function getServiceTermList(): array
     {
-        // 更新用途で使う為lockをかける
-        $serviceTerms = $this->serviceTermsRepository->getById($serviceTermId, true);
+        $cache = MasterCacheLibrary::getServiceTermsCache();
 
-        if (empty($serviceTerms)) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'not exist serviceTerm.: ' . $serviceTermId,
-                ['serviceTermId' => $serviceTermId, 'serviceTerm' => $serviceTerms],
-                true
-            );
+        // キャッシュチェック
+        if (is_null($cache)) {
+            $collection = $this->serviceTermsRepository->getRecords();
+            if (empty($collection)) {
+                // 空配列もキャッシュとして設定する
+                MasterCacheLibrary::setServiceTermsCache([]);
+                return [];
+            }
+            $records = ArrayLibrary::toArray($collection->toArray());
+
+            MasterCacheLibrary::setServiceTermsCache($records);
+        } else {
+            $records = $cache;
         }
-
-        // 複数チェックはrepository側で実施済み
-        return ArrayLibrary::toArray(ArrayLibrary::getFirst($serviceTerms->toArray()));
+        return ServiceTerms::sortByVersion($records, SORT_DESC);
     }
 }
