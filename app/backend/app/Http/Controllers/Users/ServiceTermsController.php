@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\ServiceTerms\UserServiceTermsCreateRequest;
 use App\Services\Users\ServiceTermsService;
 use App\Trait\CheckHeaderTrait;
 
@@ -41,5 +42,21 @@ class ServiceTermsController extends Controller
     {
         // サービスの実行
         return $this->service->getLatestServiceTerms();
+    }
+
+    /**
+     * create user service term request handling.
+     *
+     * @param UserServiceTermsCreateRequest $request
+     * @param int $informationId
+     * @return JsonResponse
+     */
+    public function createUserServiceTerm(UserServiceTermsCreateRequest $request): JsonResponse
+    {
+        // ユーザーIDの取得
+        $userId = self::getUserId($request);
+
+        // サービスの実行
+        return $this->service->createUserServiceTerm($userId, $request->{UserServiceTermsCreateRequest::KEY_ID});
     }
 }
