@@ -77,6 +77,7 @@ class ServiceTermsService
         // お知らせの取得
         $information = $this->getServiceTermById($userId, $serviceTermId);
         // TODO 期間判定
+        // TODO 公開中の最新のバージョンのみ登録出来るようにする
         if (is_null($information)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
