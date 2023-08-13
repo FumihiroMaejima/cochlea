@@ -71,7 +71,7 @@ class TrancateTables extends Command
     {
         // 対象のDBの設定
         $connection = ShardingLibrary::getSingleConnectionByConfig();
-        $database = Config::get("database.connections.${connection}.database");
+        $database = Config::get("database.connections.$connection.database");
 
         try {
             if ($connection === self::CONNECTION_NAME_FOR_CI) {
@@ -80,7 +80,7 @@ class TrancateTables extends Command
                 // ATTACHはDB::statement間で共通になる為初回だけ実行
                 DB::statement(
                     "
-                        ATTACH DATABASE '${database}' as db;
+                        ATTACH DATABASE '$database' as db;
                     "
                 );
             }
@@ -91,14 +91,14 @@ class TrancateTables extends Command
                     // TRUNCATE文が無いのでDELETE文でデータを削除し、シーケンスも初期化する
                     DB::statement(
                         "
-                            DELETE FROM db.${table};
-                            DELETE FROM sqlite_sequence WHERE name = db.${table};
+                            DELETE FROM db.$table;
+                            DELETE FROM sqlite_sequence WHERE name = db.$table;
                         "
                     );
                 } else {
                     DB::statement(
                         "
-                            TRUNCATE TABLE ${database}.${table};
+                            TRUNCATE TABLE $database.$table;
                         "
                     );
                 }
