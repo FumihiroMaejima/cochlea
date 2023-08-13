@@ -34,14 +34,14 @@ class InformationsServiceTest extends UserServiceBaseTestCase
         parent::setUp();
 
         // 各クラスで1回だけ行たい処理
-        if (!$this->initialized) {
+        if (!static::$initialized) {
             $loginUser = $this->setUpInit(
                 [
                     // (new Informations())->getTable(),
                     // (new UserReadInformationsRepository())->getTable(), // $userIdからshardIdを設定する必要がある。
                 ]
             );
-            $this->initialized = true;
+            static::$initialized = true;
 
             $this->withHeaders([
                 Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],
@@ -84,9 +84,9 @@ class InformationsServiceTest extends UserServiceBaseTestCase
      */
     public function testCreateUserReadInformationSuccess(int $informationId): void
     {
-        $response = $this->json(
-            'POST',
-            route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId])
+        $response = $this->post(
+            route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId]),
+            headers: self::getHeaders()
         );
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
