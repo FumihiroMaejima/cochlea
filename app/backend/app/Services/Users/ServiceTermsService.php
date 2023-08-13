@@ -61,7 +61,7 @@ class ServiceTermsService
         $serviceTermList = $this->getServiceTermList();
         $serviceTerm = current($serviceTermList);
         echo "test service term \n";
-        echo var_dump($serviceTerm) . "\n";
+        echo $$serviceTerm[ServiceTerms::ID] . "\n";
         // TODO 期間判定
         if (empty($serviceTerm)) {
             throw new MyApplicationHttpException(
