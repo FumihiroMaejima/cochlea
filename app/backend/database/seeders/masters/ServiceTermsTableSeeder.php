@@ -55,6 +55,10 @@ class ServiceTermsTableSeeder extends BaseSeeder
         // データ数
         $this->count = $this->getSeederDataLengthByEnv();
 
+        echo  "test check app env \n";
+        echo  Config::get('app.env') . "\n";
+        echo $this->count . "\n";
+
         // 1~$this->countの数字の配列でforを回す
         foreach (range(1, $this->count) as $i) {
             $row = $template;

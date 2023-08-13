@@ -88,8 +88,6 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
      */
     public function testCreateUserServiceTermSuccess(int $serviceTermId, int $expect): void
     {
-        echo  "test check app env \n";
-        echo config('app.env') . "\n";
         $response = $this->json(
             'POST',
             route(
