@@ -134,7 +134,7 @@ class BannersController extends Controller
     }
 
     /**
-     * import coin data by file.
+     * import record data by file.
      *
      * @param BannersImportRequest $request
      * @return \Illuminate\Http\JsonResponse

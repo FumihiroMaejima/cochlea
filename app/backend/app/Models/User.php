@@ -30,6 +30,9 @@ class User extends Authenticatable implements JWTSubject
 
     public const IS_LEFT_FROM_SERVICE = 1;
 
+    public const MIN_USER_ID = 100000000;
+    public const MAX_USER_ID = 300000000;
+
     // カラム一覧
     public const ID = 'id';
     public const NAME = 'name';
@@ -163,6 +166,17 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return ArrayLibrary::toArray($record);
+    }
+
+    /**
+     * insert record.
+     *
+     * @param array $resource resource
+     * @return bool
+     */
+    public function insertUser(array $resource): bool
+    {
+        return DB::table($this->getTable())->insert($resource);
     }
 
     /**

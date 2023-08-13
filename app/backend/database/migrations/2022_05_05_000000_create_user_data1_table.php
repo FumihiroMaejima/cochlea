@@ -150,6 +150,22 @@ class CreateUserData1Table extends Migration
 
                     $table->comment('about user read informations table');
                 });
+
+                /**
+                 * user_service_terms table
+                 */
+                Schema::connection($connectionName)->create('user_service_terms'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->unsigned()->comment('ユーザーID');
+                    $table->integer('service_term_id')->unsigned()->comment('お知らせID');
+                    $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+                    $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+                    // プライマリキー設定
+                    $table->primary(['user_id', 'service_term_id'], 'user_service_terms_primary');
+
+                    $table->comment('about user read service terms table');
+                });
             }
         }
     }
@@ -172,6 +188,7 @@ class CreateUserData1Table extends Migration
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_read_informations'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_service_terms'.$shardId);
             }
         }
     }

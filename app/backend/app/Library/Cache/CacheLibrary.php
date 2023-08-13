@@ -43,9 +43,9 @@ class CacheLibrary
             return $cache;
         }
 
-        if (is_string($cache)) {
+        /* if (is_string($cache)) {
             return $cache;
-        }
+        } */
 
         return json_decode($cache, true);
     }

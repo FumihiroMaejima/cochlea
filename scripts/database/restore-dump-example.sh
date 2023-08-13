@@ -12,7 +12,7 @@ DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
 DATABASE_PASSWORD=database_password
 DATABASE_NAME=database_name
-OUTPUT_FILE=sample/dump/dump.sql
+OUTPUT_FILE=sample/dump/dump.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
 # TIME_STAMPを使う場合
 # OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
 

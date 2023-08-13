@@ -21,7 +21,7 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
   showMessage 'Up Docker Container!'
   docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
 else
-　# コンテナが立ち上がっている状態の時
+  # コンテナが立ち上がっている状態の時
   showMessage 'Down Docker Container!'
   docker-compose -f ${DOCKER_COMPOSE_FILE} down
 fi

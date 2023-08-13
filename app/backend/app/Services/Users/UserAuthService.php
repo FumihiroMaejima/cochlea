@@ -28,6 +28,8 @@ class UserAuthService
     protected UsersRepositoryInterface $usersRepository;
     protected UserCoinHistoriesRepositoryInterface $userCoinHistoriesRepositoryInterface;
 
+    private const USER_CREATE_MAX_COUNT = 3; // ユーザー作成処理のリトライ数
+
     /**
      * create instance
      *
@@ -65,39 +67,48 @@ class UserAuthService
         }
         $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
-        $resource = UsersResource::toArrayForCreate($timeStamp, $email, $token);
+        $randomUserId = rand(User::MIN_USER_ID, User::MAX_USER_ID);
+        $resource = UsersResource::toArrayForCreate($randomUserId, $timeStamp, $email, $token);
 
-        DB::beginTransaction();
-        try {
-            // ユーザーの登録
-            $userId = (new User())->insertUserAndGetId($resource);
+        // IDの競合を考慮して設定回数までリトライを行う
+        foreach (range(1, self::USER_CREATE_MAX_COUNT) as $count) {
+            DB::beginTransaction();
+            try {
+                // ユーザーの登録
+                $userId = (new User())->insertUserAndGetId($resource);
 
-            // 6文字のランダム文字列
-            $code = RandomStringLibrary::getRandomShuffleInteger(6);
-            $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
+                // 6文字のランダム文字列
+                $code = RandomStringLibrary::getRandomShuffleInteger(6);
+                $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
 
-            $authCodeResource = UsersAuthCodeResource::toArrayForCreate(
-                $userId,
-                UserAuthCodes::TYPE_REGISTER,
-                $code,
-                0,
-                0,
-                $expiredAt
-            );
+                $authCodeResource = UsersAuthCodeResource::toArrayForCreate(
+                    $userId,
+                    UserAuthCodes::TYPE_REGISTER,
+                    $code,
+                    0,
+                    0,
+                    $expiredAt
+                );
 
-            $this->userAuthCodeRepository->create($userId, $authCodeResource);
+                $this->userAuthCodeRepository->create($userId, $authCodeResource);
 
-            // メール送信
-            (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_401,
-                '認証コード生成処理に失敗しました。' . $e->getMessage(),
-                [],
-                false
-            );
+                // メール送信
+                (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
+                DB::commit();
+
+                break;
+            } catch (Exception $e) {
+                if ($count < self::USER_CREATE_MAX_COUNT) {
+                    continue;
+                }
+                DB::rollBack();
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    '認証コード生成処理に失敗しました。' . $e->getMessage(),
+                    [],
+                    false
+                );
+            }
         }
 
         return response()->json(

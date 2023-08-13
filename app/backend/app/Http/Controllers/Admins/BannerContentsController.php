@@ -65,7 +65,7 @@ class BannerContentsController extends Controller
     }
 
     /**
-     * import banner blocks data by file.
+     * import record data by file.
      *
      * @param BannerBlocksImportRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -111,7 +111,7 @@ class BannerContentsController extends Controller
     }
 
     /**
-     * import banner block contents data by file.
+     * import record contents data by file.
      *
      * @param BannerBlockContentsImportRequest $request
      * @return \Illuminate\Http\JsonResponse

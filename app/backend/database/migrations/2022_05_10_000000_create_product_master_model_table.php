@@ -255,6 +255,24 @@ class CreateProductMasterModelTable extends Migration
 
             $table->comment('manufacturers table');
         });
+
+        /**
+         * service_terms table
+         */
+        Schema::create('service_terms', function (Blueprint $table) {
+            $table->id();
+            $table->integer('version')->unsigned()->comment('バージョン');
+            $table->text('terms')->comment('利用規約');
+            $table->text('privacy_policy')->comment('プライバシーポリシー');
+            $table->string('memo', 255)->comment('メモ');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('terms of service table');
+        });
     }
 
     /**
@@ -277,5 +295,6 @@ class CreateProductMasterModelTable extends Migration
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('manufactureres');
+        Schema::dropIfExists('service_terms');
     }
 }

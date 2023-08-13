@@ -37,7 +37,7 @@ elif [ ${LINES_LENGTH} -eq 22 ]; then
   echo ${DELIMITER_LINE}
   docker-compose down
 else
-　# コンテナが立ち上がっている状態の時
+  # コンテナが立ち上がっている状態の時
   echo 'Down Docker Container!'
   echo ${DELIMITER_LINE}
   docker-compose down

@@ -3,5 +3,3 @@ check-performance.sh
 get-dump.sh
 get-partition-dump.sh
 restore-dump.sh
-create-aws-s3-bucket.sh
-remove-aws-s3-bucket.sh

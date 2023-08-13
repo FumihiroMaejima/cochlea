@@ -18,6 +18,7 @@ return [
             'events'       => ['master', 'administrator', 'develop'],
             'home'         => ['master', 'administrator', 'develop'],
             'informations' => ['master', 'administrator', 'develop'],
+            'serviceTerms' => ['master', 'administrator', 'develop'],
             'debug'        => ['master', 'administrator', 'develop'],
         ]
     ],
