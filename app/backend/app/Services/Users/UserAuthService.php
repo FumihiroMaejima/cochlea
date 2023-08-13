@@ -71,7 +71,7 @@ class UserAuthService
         $resource = UsersResource::toArrayForCreate($randomUserId, $timeStamp, $email, $token);
 
         // IDの競合を考慮して設定回数までリトライを行う
-        foreach(range(1, self::USER_CREATE_MAX_COUNT) as $count) {
+        foreach (range(1, self::USER_CREATE_MAX_COUNT) as $count) {
             DB::beginTransaction();
             try {
                 // ユーザーの登録
