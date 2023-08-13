@@ -84,7 +84,7 @@ class EventsController extends Controller
     }
 
     /**
-     * import coin data by file.
+     * import record data by file.
      *
      * @param EventImportRequest $request
      * @return \Illuminate\Http\JsonResponse

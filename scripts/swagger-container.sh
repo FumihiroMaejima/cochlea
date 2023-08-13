@@ -30,7 +30,7 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
 
   LAST_MESSAGE="Swagger Local Host is Here EDIOTER ${BASE_HOST}:${SWAGGER_EDIOTER_PORT} & UI ${BASE_HOST}:${SWAGGER_UI_PORT} & MOCK ${BASE_HOST}:${SWAGGER_MOCK_PORT}"
 else
-　# コンテナが立ち上がっている状態の時
+  # コンテナが立ち上がっている状態の時
   showMessage 'Down Docker Container!'
   docker-compose -f ${DOCKER_COMPOSE_FILE} down
 fi

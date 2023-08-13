@@ -34,7 +34,7 @@ class CoinsServiceTest extends UserServiceBaseTestCase
         parent::setUp();
 
         // 各クラスで1回だけ行たい処理
-        if (!$this->initialized) {
+        if (!static::$initialized) {
             // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
             $loginUser = $this->setUpInit(
                 [
@@ -42,7 +42,7 @@ class CoinsServiceTest extends UserServiceBaseTestCase
                     (new User())->getTable(),
                 ]
             );
-            $this->initialized = true;
+            static::$initialized = true;
 
             $this->withHeaders([
                 Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],

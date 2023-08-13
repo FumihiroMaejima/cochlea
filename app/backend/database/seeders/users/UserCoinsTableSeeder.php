@@ -10,7 +10,6 @@ use App\Library\Time\TimeLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
-use App\Models\Users\UserReadInformations;
 use Database\Seeders\BaseSeeder;
 
 class UserCoinsTableSeeder extends BaseSeeder

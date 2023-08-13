@@ -171,5 +171,24 @@ return [
                 ]
             ],
         ],
+        'serviceTerms' => [
+            'import' => [
+                'success' => [
+                    'fileName'  => 'master_service_terms_template_20220404000000.csv',
+                    'mimeType'  => 'text/csv; charset=UTF-8',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'version'        => 999,
+                        'terms'          => 'terms.',
+                        'privacy_policy' => 'privacy policy.',
+                        'memo'           => 'serviceTerms`s memo.',
+                        'start_at'       => '2022/05/10 00:00:00',
+                        'end_at'         => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
+        ],
     ],
 ];

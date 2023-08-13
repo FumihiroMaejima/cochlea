@@ -12,7 +12,9 @@ DATABASE_CONTAINER_NAME=database_container_name
 DATABASE_USER=database_user
 DATABASE_PASSWORD=database_password
 DATABASE_NAME=database_name
-OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql
+OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
+SECURE_FILE_PRIV_DIR=/var/lib/mysql-files
+OUTPUT_CSV_FILE=scripts/database/dump_${TIME_STAMP}.csv
 
 # @param {string} message
 showMessage() {
@@ -27,6 +29,15 @@ showMessage ${START_MESSAGE}
 if [ "$1" != '' ]; then
   if [ "$1" == 'gz' ]; then
     docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} | gzip > ${OUTPUT_FILE}.gz
+  elif [ "$1" == 'csv' ]; then
+    # only ouput in docker container
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} --tab=${SECURE_FILE_PRIV_DIR} --fields-terminated-by=, ${DATABASE_NAME}
+  elif [ "$1" == 'tsv' ]; then
+    # no --fields-terminated-by option
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} --tab=${SECURE_FILE_PRIV_DIR} ${DATABASE_NAME}
+  else
+    # parameter is table name.
+    docker exec -it ${DATABASE_CONTAINER_NAME} mysqldump -u ${DATABASE_USER} -p${DATABASE_PASSWORD} ${DATABASE_NAME} $1 > ${OUTPUT_FILE}
   fi
 else
   # dump command.

@@ -33,13 +33,13 @@ class BannerServiceTest extends UserServiceBaseTestCase
         parent::setUp();
 
         // 各クラスで1回だけ行たい処理
-        if (!$this->initialized) {
+        if (!static::$initialized) {
             $loginUser = $this->setUpInit(
                 [
                     (new Banners())->getTable(),
                 ]
             );
-            $this->initialized = true;
+            static::$initialized = true;
 
             $this->withHeaders([
                 Config::get('myapp.headers.id')        => $loginUser[self::INIT_REQUEST_RESPONSE_USER_ID],

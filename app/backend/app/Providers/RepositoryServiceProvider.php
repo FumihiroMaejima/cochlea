@@ -34,6 +34,8 @@ use App\Repositories\Masters\RolePermissions\RolePermissionsRepository;
 use App\Repositories\Masters\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Masters\Roles\RolesRepository;
 use App\Repositories\Masters\Roles\RolesRepositoryInterface;
+use App\Repositories\Masters\ServiceTerms\ServiceTermsRepository;
+use App\Repositories\Masters\ServiceTerms\ServiceTermsRepositoryInterface;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepository;
 use App\Repositories\Logs\UserCoinPaymentLog\UserCoinPaymentLogRepositoryInterface;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepository;
@@ -48,6 +50,8 @@ use App\Repositories\Users\UserReadInformations\UserReadInformationsRepository;
 use App\Repositories\Users\UserReadInformations\UserReadInformationsRepositoryInterface;
 use App\Repositories\Users\Users\UsersRepository;
 use App\Repositories\Users\Users\UsersRepositoryInterface;
+use App\Repositories\Users\UserServiceTerms\UserServiceTermsRepository;
+use App\Repositories\Users\UserServiceTerms\UserServiceTermsRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -73,6 +77,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);
         $this->app->bind(RolePermissionsRepositoryInterface::class, RolePermissionsRepository::class);
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
+        $this->app->bind(ServiceTermsRepositoryInterface::class, ServiceTermsRepository::class);
         $this->app->bind(UserCoinPaymentLogRepositoryInterface::class, UserCoinPaymentLogRepository::class);
         $this->app->bind(UserAuthCodesRepositoryInterface::class, UserAuthCodesRepository::class);
         $this->app->bind(UserCoinPaymentStatusRepositoryInterface::class, UserCoinPaymentStatusRepository::class);
@@ -80,6 +85,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserCoinsRepositoryInterface::class, UserCoinsRepository::class);
         $this->app->bind(UserReadInformationsRepositoryInterface::class, UserReadInformationsRepository::class);
         $this->app->bind(UsersRepositoryInterface::class, UsersRepository::class);
+        $this->app->bind(UserServiceTermsRepositoryInterface::class, UserServiceTermsRepository::class);
     }
 
     /**

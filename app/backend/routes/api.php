@@ -151,6 +151,13 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::get('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'template'])->name('admin.informations.download.template');
             Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
+
+        // service terms
+        Route::group(['prefix' => 'serviceTerms'], function () {
+            Route::get('/csv', [\App\Http\Controllers\Admins\ServiceTermsController::class, 'downloadServiceTerms'])->name('admin.serviceTerms.download.csv');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\ServiceTermsController::class, 'templateServiceTerms'])->name('admin.serviceTerms.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\ServiceTermsController::class, 'uploadTemplateServiceTerms'])->name('admin.serviceTerms.upload.template');
+        });
     });
 
     // debug API
@@ -207,6 +214,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'informations'], function () {
         Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
     });
+    // service terms
+    Route::group(['prefix' => 'serviceTerms'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\ServiceTermsController::class, 'index'])->name('noAuth.serviceTerms.index');
+    });
 
     // user auth
     Route::middleware(['middleware' => 'auth:api-users'])->group(function () {
@@ -244,6 +255,13 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'information'], function () {
                 Route::post('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'createUserReadInformation'])->name('user.informations.information.read.create');
                 Route::delete('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'deleteUserReadInformation'])->name('user.informations.information.read.delete');
+            });
+        });
+
+        // service terms
+        Route::group(['prefix' => 'serviceTerms'], function () {
+            Route::group(['prefix' => 'serviceTerm'], function () {
+                Route::post('/{id}/agree', [\App\Http\Controllers\Users\ServiceTermsController::class, 'createUserServiceTerm'])->name('user.serviceTerms.serviceTerm.agree.create');
             });
         });
     });

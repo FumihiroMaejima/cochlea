@@ -54,8 +54,26 @@ class UserServiceBaseTestCase extends TestCase
         UsersTableSeeder::class,
     ];
 
-    /** @var bool $initialized either initialized.  */
-    protected $initialized = false;
+    /** @var static bool $initialized either initialized.  */
+    protected static bool $initialized = false;
+
+    /** @var static int $id user id.  */
+    protected static int $id = 0;
+    /** @var static string $authorization session.  */
+    protected static string $authorization = '';
+
+    /**
+     * This method is called before the first test of this test class is run.
+     * Can't using Laravel methods.
+     */
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        // 初期化済みフラグの解消
+        static::$initialized = false;
+        // セッション等の初期化など
+    }
 
     /**
      * setup初期化処理
@@ -84,6 +102,12 @@ class UserServiceBaseTestCase extends TestCase
             'password' => Config::get('myappTest.test.user.login.password')
         ], ['Content-Type' => 'application/json'])->json();
 
+        // 認証ヘッダー設定
+        self::setHeaders(
+            $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
+            self::TOKEN_PREFIX . ($response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '')
+        );
+
         return [
             self::INIT_REQUEST_RESPONSE_TOKEN     => $response[self::LOGIN_RESEPONSE_KEY_ACCESS_TOKEN] ?? '',
             self::INIT_REQUEST_RESPONSE_USER_ID   => $response[self::LOGIN_RESEPONSE_KEY_USER][self::ADMIN_RESOURCE_KEY_ID] ?? 0,
@@ -98,5 +122,32 @@ class UserServiceBaseTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+    }
+
+    /**
+     * get headers.
+     *
+     * @return array
+     */
+    protected static function getHeaders(): array
+    {
+        // ログインリクエスト
+        return [
+            Config::get('myapp.headers.id') => static::$id,
+            Config::get('myapp.headers.authorization') => static::$authorization,
+        ];
+    }
+
+    /**
+     * set headers.
+     *
+     * @param int $id
+     * @param string $authorization
+     * @return void
+     */
+    protected static function setHeaders(int $id, string $authorization): void
+    {
+        static::$id = $id;
+        static::$authorization = $authorization;
     }
 }
