@@ -261,7 +261,7 @@ Route::group(['prefix' => 'v1'], function () {
         // service terms
         Route::group(['prefix' => 'serviceTerms'], function () {
             Route::group(['prefix' => 'serviceTerm'], function () {
-                Route::post('/{id}/agree', [\App\Http\Controllers\Users\ServiceTermsController::class, 'createUserServiceTerm'])->name('user.serviceTerms.serviceTerm.read.create');
+                Route::post('/{id}/agree', [\App\Http\Controllers\Users\ServiceTermsController::class, 'createUserServiceTerm'])->name('user.serviceTerms.serviceTerm.agree.create');
             });
         });
     });

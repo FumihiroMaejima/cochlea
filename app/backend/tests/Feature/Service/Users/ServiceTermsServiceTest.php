@@ -8,11 +8,10 @@ use Tests\UserServiceBaseTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Http\Requests\User\ServiceTerms\UserServiceTermsCreateRequest;
 use App\Library\Message\StatusCodeMessages;
-use App\Models\Masters\Coins;
-use App\Models\User;
+use App\Models\Masters\ServiceTerms;
 use Database\Seeders\Masters\ServiceTermsTableSeeder;
-use Database\Seeders\UsersTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,7 +21,6 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
     // target seeders.
     protected const SEEDER_CLASSES = [
         ServiceTermsTableSeeder::class,
-        UsersTableSeeder::class,
     ];
 
     /**
@@ -38,8 +36,7 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
             // user系サービスの1番最初のテストのテストの為usersテーブルを初期化する
             $loginUser = $this->setUpInit(
                 [
-                    (new Coins())->getTable(),
-                    (new User())->getTable(),
+                    (new ServiceTerms())->getTable(),
                 ]
             );
             $this->initialized = true;
@@ -62,5 +59,42 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
         // idカラムの数を加算してチェック
         $response->assertStatus(StatusCodeMessages::STATUS_200)
             ->assertJsonCount(count(ServiceTermsTableSeeder::TEMPALTE) + 1, self::RESPONSE_KEY_DATA);
+    }
+
+    /**
+     * user service term crerate data
+     * @return array
+     */
+    public function createUserServiceTermDataProvider(): array
+    {
+        $this->createApplication();
+
+        return [
+            'create user service term error: not latest serivce term' => [
+                UserServiceTermsCreateRequest::KEY_ID => 1,
+                'expect' => StatusCodeMessages::STATUS_404,
+            ],
+            'create user service term success: latest serivce term' => [
+                UserServiceTermsCreateRequest::KEY_ID => 5, // ServiceTermsTableSeeder::SEEDER_DATA_TESTING_LENGTH
+                'expect' => StatusCodeMessages::STATUS_201,
+            ],
+        ];
+    }
+
+    /**
+     * user service term create request test.
+     * @dataProvider createUserServiceTermDataProvider
+     * @return void
+     */
+    public function testCreateUserServiceTermSuccess(int $serviceTermId, int $expect): void
+    {
+        $response = $this->json(
+            'POST',
+            route(
+                'user.serviceTerms.serviceTerm.agree.create',
+                [UserServiceTermsCreateRequest::KEY_ID => $serviceTermId]
+            )
+        );
+        $response->assertStatus($expect);
     }
 }
