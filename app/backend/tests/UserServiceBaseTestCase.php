@@ -97,10 +97,7 @@ class UserServiceBaseTestCase extends TestCase
         }
 
         // ログインリクエスト
-        $response = $this->json('POST', route('auth.user.login'), [
-            'email'    => Config::get('myappTest.test.user.login.email'),
-            'password' => Config::get('myappTest.test.user.login.password')
-        ], ['Content-Type' => 'application/json'])->json();
+        $response = $this->login();
 
         // 認証ヘッダー設定
         self::setHeaders(
@@ -122,6 +119,20 @@ class UserServiceBaseTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+    }
+
+    /**
+     * login request.
+     *
+     * @return array
+     */
+    protected function login(): array
+    {
+        // ログインリクエスト
+        return $this->json('POST', route('auth.user.login'), [
+            'email'    => Config::get('myappTest.test.user.login.email'),
+            'password' => Config::get('myappTest.test.user.login.password')
+        ], ['Content-Type' => 'application/json'])->json();
     }
 
     /**
