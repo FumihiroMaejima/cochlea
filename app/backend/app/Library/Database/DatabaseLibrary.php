@@ -75,4 +75,15 @@ class DatabaseLibrary
 
         return array_values($tableColumnList);
     }
+
+    /**
+     * disconnect from database.
+     *
+     * @param string $connection connection name
+     * @return void
+     */
+    public static function disconnect(string $connection): void
+    {
+        DB::connection($connection)->disconnect();
+    }
 }
