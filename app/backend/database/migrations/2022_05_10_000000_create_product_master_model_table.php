@@ -257,6 +257,24 @@ class CreateProductMasterModelTable extends Migration
         });
 
         /**
+         * questionnaires table
+         */
+        Schema::create('questionnaires', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->comment('アンケート名');
+            $table->text('detail')->comment('詳細');
+            $table->json('questions')->comment('アンケート項目');
+            $table->dateTime('start_at')->comment('公開開始日時');
+            $table->dateTime('end_at')->comment('公開終了日時');
+            $table->dateTime('expired_at')->comment('解答終了日時');
+            $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+            $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
+            $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+            $table->comment('questionnaires table');
+        });
+
+        /**
          * service_terms table
          */
         Schema::create('service_terms', function (Blueprint $table) {
@@ -294,6 +312,7 @@ class CreateProductMasterModelTable extends Migration
         Schema::dropIfExists('informations');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_types');
+        Schema::dropIfExists('questionnaires');
         Schema::dropIfExists('manufactureres');
         Schema::dropIfExists('service_terms');
     }
