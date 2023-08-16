@@ -87,7 +87,7 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
      * @dataProvider createUserServiceTermDataProvider
      * @return void
      */
-    /* public function testCreateUserServiceTermSuccess(int $serviceTermId, int $expect): void
+    public function testCreateUserServiceTermSuccess(int $serviceTermId, int $expect): void
     {
         $response = $this->post(
             route(
@@ -97,5 +97,5 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
             headers: self::getHeaders()
         );
         $response->assertStatus($expect);
-    } */
+    }
 }

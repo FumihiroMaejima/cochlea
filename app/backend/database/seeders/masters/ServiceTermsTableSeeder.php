@@ -68,6 +68,7 @@ class ServiceTermsTableSeeder extends BaseSeeder
         }
 
         // テーブルへの格納
+        DB::table($this->tableName)->truncate();
         DB::table($this->tableName)->insert($data);
     }
 }
