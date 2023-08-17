@@ -30,6 +30,8 @@ use App\Repositories\Masters\Informations\InformationsRepository;
 use App\Repositories\Masters\Informations\InformationsRepositoryInterface;
 use App\Repositories\Masters\Permissions\PermissionsRepository;
 use App\Repositories\Masters\Permissions\PermissionsRepositoryInterface;
+use App\Repositories\Masters\Questionaiers\QuestionaiersRepository;
+use App\Repositories\Masters\Questionaiers\QuestionaiersRepositoryInterface;
 use App\Repositories\Masters\RolePermissions\RolePermissionsRepository;
 use App\Repositories\Masters\RolePermissions\RolePermissionsRepositoryInterface;
 use App\Repositories\Masters\Roles\RolesRepository;
@@ -75,6 +77,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ImagesRepositoryInterface::class, ImagesRepository::class);
         $this->app->bind(InformationsRepositoryInterface::class, InformationsRepository::class);
         $this->app->bind(PermissionsRepositoryInterface::class, PermissionsRepository::class);
+        $this->app->bind(QuestionaiersRepositoryInterface::class, QuestionaiersRepository::class);
         $this->app->bind(RolePermissionsRepositoryInterface::class, RolePermissionsRepository::class);
         $this->app->bind(RolesRepositoryInterface::class, RolesRepository::class);
         $this->app->bind(ServiceTermsRepositoryInterface::class, ServiceTermsRepository::class);

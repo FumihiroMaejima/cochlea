@@ -10,16 +10,17 @@ return [
     ],
     'executionRole' => [
         'services' => [
-            'admins'       => ['master', 'administrator', 'develop'],
-            'permissions'  => ['master', 'administrator', 'develop'],
-            'roles'        => ['master', 'administrator', 'develop'],
-            'banners'      => ['master', 'administrator', 'develop'],
-            'coins'        => ['master', 'administrator', 'develop'],
-            'events'       => ['master', 'administrator', 'develop'],
-            'home'         => ['master', 'administrator', 'develop'],
-            'informations' => ['master', 'administrator', 'develop'],
-            'serviceTerms' => ['master', 'administrator', 'develop'],
-            'debug'        => ['master', 'administrator', 'develop'],
+            'admins'         => ['master', 'administrator', 'develop'],
+            'permissions'    => ['master', 'administrator', 'develop'],
+            'roles'          => ['master', 'administrator', 'develop'],
+            'banners'        => ['master', 'administrator', 'develop'],
+            'coins'          => ['master', 'administrator', 'develop'],
+            'events'         => ['master', 'administrator', 'develop'],
+            'home'           => ['master', 'administrator', 'develop'],
+            'informations'   => ['master', 'administrator', 'develop'],
+            'questionnaires' => ['master', 'administrator', 'develop'],
+            'serviceTerms'   => ['master', 'administrator', 'develop'],
+            'debug'          => ['master', 'administrator', 'develop'],
         ]
     ],
     'file' => [
