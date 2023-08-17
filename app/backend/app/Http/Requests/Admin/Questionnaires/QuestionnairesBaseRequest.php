@@ -8,16 +8,16 @@ use App\Http\Requests\BaseRequest;
 class QuestionnairesBaseRequest extends BaseRequest
 {
     // attribute keys
-    public const KEY_ID            = 'id';
-    public const KEY_NAME          = 'name';
-    public const KEY_DETAIL        = 'detail';
-    public const KEY_QUESTIONS     = 'questions';
-    public const KEY_MEMO          = 'memo';
-    public const KEY_START_AT      = 'start_at';
-    public const KEY_END_AT        = 'end_at';
-    public const KEY_EXPIRED_AT    = 'expired_at';
-    public const KEY_IMAGE         = 'image';
-    public const KEY_SERVICE_TERMS = 'serviceTerms';
+    public const KEY_ID             = 'id';
+    public const KEY_NAME           = 'name';
+    public const KEY_DETAIL         = 'detail';
+    public const KEY_QUESTIONS      = 'questions';
+    public const KEY_MEMO           = 'memo';
+    public const KEY_START_AT       = 'start_at';
+    public const KEY_END_AT         = 'end_at';
+    public const KEY_EXPIRED_AT     = 'expired_at';
+    public const KEY_IMAGE          = 'image';
+    public const KEY_QUESTIONNAIRES = 'questionnaires';
 
     // attribute keys options
     public const KEY_FILE = 'file';
@@ -29,7 +29,7 @@ class QuestionnairesBaseRequest extends BaseRequest
      */
     public function authorize()
     {
-        $this->requestAuthorities = Config::get('myapp.executionRole.services.serviceTerms');
+        $this->requestAuthorities = Config::get('myapp.executionRole.services.questionnaires');
         return parent::authorize();
     }
 

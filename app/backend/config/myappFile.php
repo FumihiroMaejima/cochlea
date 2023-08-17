@@ -121,6 +121,20 @@ return [
                     ]
                 ]
             ],
+            'questionnaires' => [
+                'template' => [
+                    (object)[
+                        'name'      => 'test name',
+                        'detail'    => 'test detail',
+                        'questions' => json_encode(
+                            ['key' => 1, 'text' => 'question text', 'type' => 1, 'defaultText' => '']
+                        ),
+                        'start_at'   => '2022/05/10 00:00:00',
+                        'end_at'     => '2030/12/31 23:59:59',
+                        'expired_at' => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
             'serviceTerms' => [
                 'template' => [
                     (object)[
