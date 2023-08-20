@@ -40,7 +40,7 @@ class ServiceTermsServiceTest extends AdminServiceBaseTestCase
      *
      * @return void
      */
-    public function testDownloadInformationsCsvFile(): void
+    public function testDownloadServiceTermsCsvFile(): void
     {
         $response = $this->get(route('admin.serviceTerms.download.csv'), self::getHeaders());
         $response->assertStatus(200)
@@ -53,7 +53,7 @@ class ServiceTermsServiceTest extends AdminServiceBaseTestCase
      *
      * @return void
      */
-    public function testDownloadInformationsTemplateFile(): void
+    public function testDownloadServiceTermsTemplateFile(): void
     {
         $response = $this->get(route('admin.serviceTerms.download.template'), self::getHeaders());
         $response->assertStatus(200)
@@ -65,7 +65,7 @@ class ServiceTermsServiceTest extends AdminServiceBaseTestCase
      *
      * @return void
      */
-    public function testImportInformations(): void
+    public function testImportServiceTerms(): void
     {
         $name = Config::get('myappTest.test.serviceTerms.import.success')['fileName'];
 
