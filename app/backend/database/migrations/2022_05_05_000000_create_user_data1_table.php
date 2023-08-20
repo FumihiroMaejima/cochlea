@@ -136,6 +136,23 @@ class CreateUserData1Table extends Migration
                 });
 
                 /**
+                 * user_questionnaires table
+                 */
+                Schema::connection($connectionName)->create('user_questionnaires'.$shardId, function (Blueprint $table) {
+                    $table->integer('user_id')->unsigned()->comment('ユーザーID');
+                    $table->integer('questionnaire_id')->unsigned()->comment('アンケートID');
+                    $table->json('questions')->comment('質問項目に対する解答情報');
+                    $table->dateTime('created_at')->useCurrent()->comment('登録日時');
+                    $table->dateTime('updated_at')->useCurrentOnUpdate()->comment('更新日時');
+                    $table->dateTime('deleted_at')->nullable()->default(null)->comment('削除日時');
+
+                    // プライマリキー設定
+                    $table->primary(['user_id', 'questionnaire_id'], 'user_questionnaire_primary');
+
+                    $table->comment('about user questionnaires table');
+                });
+
+                /**
                  * user_read_informations table
                  */
                 Schema::connection($connectionName)->create('user_read_informations'.$shardId, function (Blueprint $table) {
@@ -187,6 +204,7 @@ class CreateUserData1Table extends Migration
                 Schema::connection($connectionName)->dropIfExists('user_coins'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_payments'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_comments'.$shardId);
+                Schema::connection($connectionName)->dropIfExists('user_questionnaires'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_read_informations'.$shardId);
                 Schema::connection($connectionName)->dropIfExists('user_service_terms'.$shardId);
             }

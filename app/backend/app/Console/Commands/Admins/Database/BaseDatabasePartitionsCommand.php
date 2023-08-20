@@ -18,6 +18,7 @@ use App\Models\Logs\UserReadInformationLog;
 use App\Models\Users\UserAuthCodes;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoinPaymentStatus;
+use App\Models\Users\UserQuestionnaires;
 use App\Models\Users\UserReadInformations;
 use App\Models\Users\UserServiceTerms;
 use App\Library\Time\TimeLibrary;
@@ -623,6 +624,18 @@ class BaseDatabasePartitionsCommand extends Command
                             self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => null,
                             self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => $dateTime,
                             self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => 3,
+                            self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
+                        ],
+                        [
+                            self::PRTITION_SETTING_KEY_CONNECTION_NAME            => $connection,
+                            self::PRTITION_SETTING_KEY_TABLE_NAME                 => (new UserQuestionnaires())->getTable().$shardId,
+                            self::PRTITION_SETTING_KEY_PARTITION_TYPE             => self::PARTITION_TYPE_HASH_ID,
+                            self::PRTITION_SETTING_KEY_COLUMN_NAME                => UserQuestionnaires::USER_ID,
+                            self::ID_PRTITION_SETTING_KEY_TARGET_ID               => null,
+                            self::ID_PRTITION_SETTING_KEY_BASE_NUMBER             => 16,
+                            self::ID_PRTITION_SETTING_KEY_PARTITION_COUNT         => 16,
+                            self::NAME_PRTITION_SETTING_KEY_TARGET_DATE           => null,
+                            self::NAME_PRTITION_SETTING_KEY_PARTITION_MONTH_COUNT => null,
                             self::NAME_PRTITION_SETTING_KEY_STORE_MONTH_COUNT     => null,
                         ],
                         [
