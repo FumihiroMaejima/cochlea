@@ -16,6 +16,7 @@ class MasterCacheLibrary extends CacheLibrary
     private const CACHE_KEY_COINS_ALL = 'coins_all';
     private const CACHE_KEY_EVENTS_ALL = 'events_all';
     private const CACHE_KEY_INFORMATIONS_ALL = 'informations_all';
+    private const CACHE_KEY_QUESTIONNAIRES_ALL = 'questionnaires_all';
     private const CACHE_KEY_SERVICE_TERMS_ALL = 'service_terms_all';
 
     /**
@@ -140,6 +141,37 @@ class MasterCacheLibrary extends CacheLibrary
     public static function getInformationsCache(): ?string
     {
         return self::getByKey(self::getInformationsAllKey());
+    }
+
+    /**
+     * get cache key of questionnaires.
+     *
+     * @return string
+     */
+    public static function getQuestionnairesAllKey(): string
+    {
+        return self::CACHE_KEY_QUESTIONNAIRES_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
+    }
+
+    /**
+     * set cache of questionnaires.
+     *
+     * @param array $value
+     * @return void
+     */
+    public static function setQuestionnairesCache(array $value): void
+    {
+        self::setCache(self::getQuestionnairesAllKey(), $value);
+    }
+
+    /**
+     * get cache of questionnaires.
+     *
+     * @return ?array
+     */
+    public static function getQuestionnairesCache(): ?array
+    {
+        return self::getByKey(self::getQuestionnairesAllKey());
     }
 
     /**
