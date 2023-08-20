@@ -152,6 +152,13 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
 
+        // questionnaires
+        Route::group(['prefix' => 'questionnaires'], function () {
+            Route::get('/csv', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'downloadQuestionnaires'])->name('admin.questionnaires.download.csv');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'templateQuestionnaires'])->name('admin.questionnaires.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'uploadTemplateQuestionnaires'])->name('admin.questionnaires.upload.template');
+        });
+
         // service terms
         Route::group(['prefix' => 'serviceTerms'], function () {
             Route::get('/csv', [\App\Http\Controllers\Admins\ServiceTermsController::class, 'downloadServiceTerms'])->name('admin.serviceTerms.download.csv');
