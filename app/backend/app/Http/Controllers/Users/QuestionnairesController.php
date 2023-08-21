@@ -12,6 +12,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Questionnaires\UserQuestionnairesCreateRequest;
+use App\Http\Requests\User\Questionnaires\UserQuestionnairesUpdateRequest;
 use App\Services\Users\QuestionnairesService;
 use App\Trait\CheckHeaderTrait;
 
@@ -61,6 +62,26 @@ class QuestionnairesController extends Controller
             $userId,
             $request->{UserQuestionnairesCreateRequest::KEY_ID},
             $request->{UserQuestionnairesCreateRequest::KEY_QUESTIONS}
+        );
+    }
+
+    /**
+     * update user questionnaires request handling.
+     *
+     * @param UserQuestionnairesUpdateRequest $request
+     * @param int $informationId
+     * @return JsonResponse
+     */
+    public function updateUserQuestionnaire(UserQuestionnairesUpdateRequest $request): JsonResponse
+    {
+        // ユーザーIDの取得
+        $userId = self::getUserId($request);
+
+        // サービスの実行
+        return $this->service->updateUserQuestionnaire(
+            $userId,
+            $request->{UserQuestionnairesUpdateRequest::KEY_ID},
+            $request->{UserQuestionnairesUpdateRequest::KEY_QUESTIONS}
         );
     }
 }
