@@ -221,6 +221,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'informations'], function () {
         Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
     });
+    // questionnaires
+    Route::group(['prefix' => 'questionnaires'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\QuestionnairesController::class, 'index'])->name('noAuth.questionnaires.index');
+    });
     // service terms
     Route::group(['prefix' => 'serviceTerms'], function () {
         Route::get('/', [\App\Http\Controllers\Users\ServiceTermsController::class, 'index'])->name('noAuth.serviceTerms.index');
@@ -262,6 +266,13 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'information'], function () {
                 Route::post('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'createUserReadInformation'])->name('user.informations.information.read.create');
                 Route::delete('/{id}/alreadyRead', [\App\Http\Controllers\Users\InformationsController::class, 'deleteUserReadInformation'])->name('user.informations.information.read.delete');
+            });
+        });
+
+        // questionnaires
+        Route::group(['prefix' => 'questionnaires'], function () {
+            Route::group(['prefix' => 'questionnaire'], function () {
+                Route::post('/{id}/answer', [\App\Http\Controllers\Users\QuestionnairesController::class, 'createUserQuestionnaire'])->name('user.questionnaires.questionnaire.answer.create');
             });
         });
 
