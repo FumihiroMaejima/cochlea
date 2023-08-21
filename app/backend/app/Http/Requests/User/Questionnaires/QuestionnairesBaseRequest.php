@@ -17,6 +17,7 @@ class QuestionnairesBaseRequest extends BaseRequest
     public const KEY_EXPIRED_AT     = 'expired_at';
     public const KEY_IMAGE          = 'image';
     public const KEY_QUESTIONNAIRES = 'questionnaires';
+    public const KEY_QUESTIONS      = 'questions';
 
     // attribute keys options
     public const KEY_FILE = 'file';
