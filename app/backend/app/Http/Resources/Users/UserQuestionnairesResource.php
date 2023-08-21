@@ -72,10 +72,30 @@ class UserQuestionnairesResource extends JsonResource
         return [
             UserQuestionnaires::USER_ID => $userId,
             UserQuestionnaires::QUESTIONNAIRE_ID => $questionnaireId,
-            UserQuestionnaires::QUESTIONS => $questions,
+            UserQuestionnaires::QUESTIONS => json_encode($questions),
             UserQuestionnaires::CREATED_AT => $dateTime,
             UserQuestionnaires::UPDATED_AT => $dateTime,
             UserQuestionnaires::DELETED_AT => null,
+        ];
+    }
+
+    /**
+     * Transform the resource into an array for update.
+     *
+     * @param int $userId ユーザーID
+     * @param int $questionnaireId アンケートID
+     * @param array $questions 解答情報
+     * @return array
+     */
+    public static function toArrayForUpdate(int $userId, int $questionnaireId, array $questions): array
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        return [
+            UserQuestionnaires::USER_ID => $userId,
+            UserQuestionnaires::QUESTIONNAIRE_ID => $questionnaireId,
+            UserQuestionnaires::QUESTIONS => json_encode($questions),
+            UserQuestionnaires::UPDATED_AT => $dateTime,
         ];
     }
 

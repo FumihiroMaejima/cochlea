@@ -61,20 +61,13 @@ class QuestionnairesService
     {
         // 利用規約の取得
         $questionnaireList = $this->getQuestionnaireList();
-        $serviceTerm = current($questionnaireList);
+        $questionnaireList = array_column($questionnaireList, null, Questionnaires::ID);
+        $questionnaire = $questionnaireList[$questionnaireId] ?? null;
         // TODO 期間判定
-        if (empty($serviceTerm)) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'questionnaires Not Exist.'
-            );
-        }
-
-        // 最新のIDでは無い場合
-        if ($serviceTerm[Questionnaires::ID] !== $questionnaireId) {
+        if (empty($questionnaire)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
-                'Don\'t Match Questionnaire ID of Current Version.'
+                'questionnaire Not Exist.'
             );
         }
 
