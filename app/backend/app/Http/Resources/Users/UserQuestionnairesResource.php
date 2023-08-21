@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Library\Time\TimeLibrary;
+use App\Models\Masters\Questionnaires;
 use App\Models\Users\UserQuestionnaires;
 
 class UserQuestionnairesResource extends JsonResource
@@ -27,6 +28,33 @@ class UserQuestionnairesResource extends JsonResource
         return [
             self::RESOURCE_KEY_DATA => $this->resource->toArray($request)
         ];
+    }
+
+    /**
+     * Transform the resource into an array for list.
+     *
+     * @param array $questions 解答情報
+     * @return array
+     */
+    public static function toArrayForList(array $questionnaires): array
+    {
+        $dateTime = TimeLibrary::getCurrentDateTime();
+
+        $response = [];
+        foreach($questionnaires as $questionnaire) {
+            $response[] = [
+                Questionnaires::ID => $questionnaire[Questionnaires::ID],
+                Questionnaires::NAME => $questionnaire[Questionnaires::NAME],
+                Questionnaires::DETAIL => $questionnaire[Questionnaires::DETAIL],
+                Questionnaires::QUESTIONS => json_decode($questionnaire[Questionnaires::QUESTIONS], true),
+                Questionnaires::START_AT => $questionnaire[Questionnaires::START_AT],
+                Questionnaires::END_AT => $questionnaire[Questionnaires::END_AT],
+                Questionnaires::EXPIRED_AT => $questionnaire[Questionnaires::EXPIRED_AT],
+            ];
+
+        }
+
+        return $response;
     }
 
     /**

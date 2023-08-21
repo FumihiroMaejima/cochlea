@@ -15,6 +15,7 @@ use App\Http\Resources\Users\UserQuestionnairesResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
 use App\Models\Masters\Questionnaires;
+use App\Models\Users\UserQuestionnaires;
 use Exception;
 
 class QuestionnairesService
@@ -45,7 +46,7 @@ class QuestionnairesService
     public function getQuestionnaires(): JsonResponse
     {
         $questionnaireList = $this->getQuestionnaireList();
-        return response()->json(['data' => $questionnaireList]);
+        return response()->json(['data' => UserQuestionnairesResource::toArrayForList($questionnaireList)]);
     }
 
     /**
