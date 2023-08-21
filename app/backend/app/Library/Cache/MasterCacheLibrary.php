@@ -24,7 +24,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getBannersAllKey(): string
+    private static function getBannersAllKey(): string
     {
         return self::CACHE_KEY_BANNERS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -55,7 +55,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getCoinsAllKey(): string
+    private static function getCoinsAllKey(): string
     {
         return self::CACHE_KEY_COINS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -86,7 +86,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getEventsAllKey(): string
+    private static function getEventsAllKey(): string
     {
         return self::CACHE_KEY_EVENTS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -117,7 +117,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getInformationsAllKey(): string
+    private static function getInformationsAllKey(): string
     {
         return self::CACHE_KEY_INFORMATIONS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -148,7 +148,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getQuestionnairesAllKey(): string
+    private static function getQuestionnairesAllKey(): string
     {
         return self::CACHE_KEY_QUESTIONNAIRES_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -179,7 +179,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getServiceTermsAllKey(): string
+    private static function getServiceTermsAllKey(): string
     {
         return self::CACHE_KEY_SERVICE_TERMS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
