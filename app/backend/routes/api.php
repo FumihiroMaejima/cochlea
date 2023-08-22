@@ -272,6 +272,7 @@ Route::group(['prefix' => 'v1'], function () {
         // questionnaires
         Route::group(['prefix' => 'questionnaires'], function () {
             Route::group(['prefix' => 'questionnaire'], function () {
+                Route::get('/{id}', [\App\Http\Controllers\Users\QuestionnairesController::class, 'detail'])->name('user.questionnaires.questionnaire.detail');
                 Route::post('/{id}/answer', [\App\Http\Controllers\Users\QuestionnairesController::class, 'createUserQuestionnaire'])->name('user.questionnaires.questionnaire.answer.create');
                 Route::patch('/{id}/answer', [\App\Http\Controllers\Users\QuestionnairesController::class, 'updateUserQuestionnaire'])->name('user.questionnaires.questionnaire.answer.update');
             });

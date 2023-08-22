@@ -33,13 +33,11 @@ class UserQuestionnairesResource extends JsonResource
     /**
      * Transform the resource into an array for list.
      *
-     * @param array $questions 解答情報
+     * @param array $questionnaires 解答情報配列
      * @return array
      */
     public static function toArrayForList(array $questionnaires): array
     {
-        $dateTime = TimeLibrary::getCurrentDateTime();
-
         $response = [];
         foreach($questionnaires as $questionnaire) {
             $response[] = [
@@ -55,6 +53,25 @@ class UserQuestionnairesResource extends JsonResource
         }
 
         return $response;
+    }
+
+    /**
+     * Transform the resource into an array for list.
+     *
+     * @param array $questionnaire 解答情報
+     * @return array
+     */
+    public static function toArrayForDetail(array $questionnaire): array
+    {
+        return [
+            Questionnaires::ID => $questionnaire[Questionnaires::ID],
+            Questionnaires::NAME => $questionnaire[Questionnaires::NAME],
+            Questionnaires::DETAIL => $questionnaire[Questionnaires::DETAIL],
+            Questionnaires::QUESTIONS => json_decode($questionnaire[Questionnaires::QUESTIONS], true),
+            Questionnaires::START_AT => $questionnaire[Questionnaires::START_AT],
+            Questionnaires::END_AT => $questionnaire[Questionnaires::END_AT],
+            Questionnaires::EXPIRED_AT => $questionnaire[Questionnaires::EXPIRED_AT],
+        ];
     }
 
     /**

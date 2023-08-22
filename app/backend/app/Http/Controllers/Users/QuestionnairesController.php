@@ -46,6 +46,19 @@ class QuestionnairesController extends Controller
     }
 
     /**
+     * Display of the resource.
+     *
+     * @param Request $request
+     * @param int $questionnaireId
+     * @return JsonResponse
+     */
+    public function detail(Request $request, int $questionnaireId): JsonResponse
+    {
+        // サービスの実行
+        return $this->service->getQuestionnaire(self::getUserId($request), $questionnaireId);
+    }
+
+    /**
      * create user questionnaires request handling.
      *
      * @param UserQuestionnairesCreateRequest $request

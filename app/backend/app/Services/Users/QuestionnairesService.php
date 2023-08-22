@@ -39,7 +39,7 @@ class QuestionnairesService
     }
 
     /**
-     * get latest questionnaires
+     * get questionnaires
      *
      * @return JsonResponse
      */
@@ -47,6 +47,29 @@ class QuestionnairesService
     {
         $questionnaireList = $this->getQuestionnaireList();
         return response()->json(['data' => UserQuestionnairesResource::toArrayForList($questionnaireList)]);
+    }
+
+    /**
+     * get questionnaire datail.
+     *
+     * @param int $userId user id
+     * @param string $questionnaireId questionnaire id.
+     * @return JsonResponse
+     */
+    public function getQuestionnaire(int $userId, int $questionnaireId): JsonResponse
+    {
+        $questionnaireList = $this->getQuestionnaireList();
+        $questionnaireList = array_column($questionnaireList, null, Questionnaires::ID);
+        $questionnaire = $questionnaireList[$questionnaireId] ?? null;
+        if (empty($questionnaire)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'questionnaire Not Exist.'
+            );
+        }
+        $userQuestionnaire = $this->userQuestionnairesRepository->getByUserIdAndQuestionnaireId($userId, $questionnaireId);
+
+        return response()->json(['data' => UserQuestionnairesResource::toArrayForDetail($questionnaire)]);
     }
 
     /**
@@ -59,7 +82,7 @@ class QuestionnairesService
      */
     public function createUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): JsonResponse
     {
-        // 利用規約の取得
+        // アンケート情報の取得
         $questionnaireList = $this->getQuestionnaireList();
         $questionnaireList = array_column($questionnaireList, null, Questionnaires::ID);
         $questionnaire = $questionnaireList[$questionnaireId] ?? null;
@@ -121,7 +144,7 @@ class QuestionnairesService
      */
     public function updateUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): JsonResponse
     {
-        // 利用規約の取得
+        // アンケート情報の取得
         $questionnaireList = $this->getQuestionnaireList();
         $questionnaireList = array_column($questionnaireList, null, Questionnaires::ID);
         $questionnaire = $questionnaireList[$questionnaireId] ?? null;
