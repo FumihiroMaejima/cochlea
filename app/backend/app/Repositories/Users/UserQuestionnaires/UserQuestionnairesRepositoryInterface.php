@@ -13,7 +13,7 @@ interface UserQuestionnairesRepositoryInterface
 
     public function create(int $userId, array $resource): int;
 
-    public function update(int $userId, array $resource): int;
+    public function update(int $userId, int $questionnaireId, array $resource): int;
 
     public function delete(int $userId, array $resource): int;
 }

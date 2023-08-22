@@ -53,7 +53,7 @@ class QuestionnairesService
      * get questionnaire datail.
      *
      * @param int $userId user id
-     * @param string $questionnaireId questionnaire id.
+     * @param int $questionnaireId questionnaire id.
      * @return JsonResponse
      */
     public function getQuestionnaire(int $userId, int $questionnaireId): JsonResponse
@@ -67,7 +67,7 @@ class QuestionnairesService
                 'questionnaire Not Exist.'
             );
         }
-        $userQuestionnaire = $this->userQuestionnairesRepository->getByUserIdAndQuestionnaireId($userId, $questionnaireId);
+        $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
 
         return response()->json(['data' => UserQuestionnairesResource::toArrayForDetail($questionnaire)]);
     }
@@ -76,7 +76,7 @@ class QuestionnairesService
      * create user rercord.
      *
      * @param int $userId user id
-     * @param string $questionnaireId questionnaire id.
+     * @param int $questionnaireId questionnaire id.
      * @param array $userQuestions user answer questions informations.
      * @return JsonResponse
      */
@@ -94,7 +94,7 @@ class QuestionnairesService
             );
         }
 
-        $userQuestionnaire = $this->userQuestionnairesRepository->getByUserIdAndQuestionnaireId($userId, $questionnaireId);
+        $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
         if ($userQuestionnaire) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_500,
@@ -138,7 +138,7 @@ class QuestionnairesService
      * update user rercord.
      *
      * @param int $userId user id
-     * @param string $questionnaireId questionnaire id.
+     * @param int $questionnaireId questionnaire id.
      * @param array $userQuestions user answer questions informations.
      * @return JsonResponse
      */
@@ -156,7 +156,7 @@ class QuestionnairesService
             );
         }
 
-        $userQuestionnaire = $this->userQuestionnairesRepository->getByUserIdAndQuestionnaireId($userId, $questionnaireId);
+        $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
         if (is_null($userQuestionnaire)) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
@@ -168,7 +168,7 @@ class QuestionnairesService
         DB::beginTransaction();
         try {
             $resource = UserQuestionnairesResource::toArrayForUpdate($userId, $questionnaireId, $userQuestions);
-            $updateCount = $this->userQuestionnairesRepository->update($userId, $resource);
+            $updateCount = $this->userQuestionnairesRepository->update($userId, $questionnaireId, $resource);
 
             if ($updateCount <= 0) {
                 throw new MyApplicationHttpException(
@@ -220,5 +220,22 @@ class QuestionnairesService
             $records = $cache;
         }
         return Questionnaires::sortByStartAt($records, SORT_DESC);
+    }
+
+    /**
+     * get user questionnaire by user id & questionnaire id.
+     *
+     * @param int $userId user id
+     * @param string $questionnaireId questionnaire id.
+     * @return ?array
+     */
+    private function getUserQuestionnaire(int $userId, int $questionnaireId): ?array
+    {
+        $userQuestionnaire = $this->userQuestionnairesRepository->getByUserIdAndQuestionnaireId($userId, $questionnaireId);
+        if (empty($userQuestionnaire)) {
+            return null;
+        }
+
+        return ArrayLibrary::getFirst(ArrayLibrary::toArray($userQuestionnaire->toArray()));
     }
 }

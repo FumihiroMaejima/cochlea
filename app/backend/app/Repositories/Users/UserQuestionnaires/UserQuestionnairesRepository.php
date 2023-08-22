@@ -118,15 +118,17 @@ class UserQuestionnairesRepository extends BaseUserRepository implements UserQue
      * update record.
      *
      * @param int $userId user id
+     * @param int $questionnaireId questionnaire id.
      * @param array $resource update data
      * @return int
      */
-    public function update(int $userId, array $resource): int
+    public function update(int $userId, int $questionnaireId, array $resource): int
     {
         // Query Builderのupdate
         return $this->getQueryBuilder($userId)
             // ->whereIn('id', [$id])
             ->where(UserQuestionnaires::USER_ID, '=', $userId)
+            ->where(UserQuestionnaires::QUESTIONNAIRE_ID, '=', $questionnaireId)
             ->where(UserQuestionnaires::DELETED_AT, '=', null)
             ->update($resource);
     }
