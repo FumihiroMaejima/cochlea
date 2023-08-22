@@ -43,8 +43,6 @@ class UserQuestionnairesResource extends JsonResource
             $response[] = [
                 Questionnaires::ID => $questionnaire[Questionnaires::ID],
                 Questionnaires::NAME => $questionnaire[Questionnaires::NAME],
-                Questionnaires::DETAIL => $questionnaire[Questionnaires::DETAIL],
-                Questionnaires::QUESTIONS => json_decode($questionnaire[Questionnaires::QUESTIONS], true),
                 Questionnaires::START_AT => $questionnaire[Questionnaires::START_AT],
                 Questionnaires::END_AT => $questionnaire[Questionnaires::END_AT],
                 Questionnaires::EXPIRED_AT => $questionnaire[Questionnaires::EXPIRED_AT],
