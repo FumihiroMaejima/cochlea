@@ -17,6 +17,12 @@ class Questionnaires extends Model
     public const QUESTION_TYPE_CHECK_BOX = 3; // チェックボックス
     public const QUESTION_TYPE_RADIO_BUTTON = 4; // ラジオボタン
 
+    public const QUESTION_TYPE_LIST = [
+        self::QUESTION_TYPE_TEXT,
+        self::QUESTION_TYPE_TEXT_AREA,
+        self::QUESTION_TYPE_CHECK_BOX,
+        self::QUESTION_TYPE_RADIO_BUTTON,
+    ];
     public const SELECT_QUESTION_TYPE_LIST = [
         self::QUESTION_TYPE_CHECK_BOX,
         self::QUESTION_TYPE_RADIO_BUTTON,
