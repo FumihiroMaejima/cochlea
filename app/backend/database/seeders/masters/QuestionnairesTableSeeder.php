@@ -34,7 +34,7 @@ class QuestionnairesTableSeeder extends BaseSeeder
         Questionnaires::QUESTION_KEY_KEY => 1,
         Questionnaires::QUESTION_KEY_TEXT => '',
         Questionnaires::QUESTION_KEY_TYPE => 1,
-        Questionnaires::QUESTION_KEY_CHOICE => [],
+        Questionnaires::QUESTION_KEY_CHOICES => [],
         Questionnaires::QUESTION_KEY_DEFAULT_TEXT => '',
     ];
 
@@ -91,7 +91,7 @@ class QuestionnairesTableSeeder extends BaseSeeder
                         $choice = self::QUESCTION_CHOICE_TEMPALTE;
                         $choice[Questionnaires::CHOICE_KEY_KEY] = $c;
                         $choice[Questionnaires::CHOICE_KEY_NAME] = '選択肢内容_' . (string)$c;
-                        $question[Questionnaires::QUESTION_KEY_CHOICE][] = $choice;
+                        $question[Questionnaires::QUESTION_KEY_CHOICES][] = $choice;
                     }
                 } else {
                     $question[Questionnaires::QUESTION_KEY_DEFAULT_TEXT] = 'デフォルトテキスト_' . (string)$j;

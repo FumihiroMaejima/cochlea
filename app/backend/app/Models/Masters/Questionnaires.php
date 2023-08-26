@@ -32,7 +32,7 @@ class Questionnaires extends Model
     public const QUESTION_KEY_KEY = 'key';
     public const QUESTION_KEY_TEXT = 'text';
     public const QUESTION_KEY_TYPE = 'type';
-    public const QUESTION_KEY_CHOICE = 'chocies';
+    public const QUESTION_KEY_CHOICES = 'chocies';
     public const QUESTION_KEY_DEFAULT_TEXT = 'defaultText';
 
     // questionsカラム内の選択肢の要素
