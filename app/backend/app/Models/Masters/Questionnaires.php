@@ -39,6 +39,9 @@ class Questionnaires extends Model
     public const CHOICE_KEY_KEY = 'key';
     public const CHOICE_KEY_NAME = 'name';
 
+    public const TEXT_MAX_COUNT = 100;
+    public const TEXT_AREA_MAX_COUNT = 1000;
+
     // カラム一覧
     public const ID         = 'id';
     public const NAME       = 'name';
