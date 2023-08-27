@@ -16,6 +16,7 @@ class MasterCacheLibrary extends CacheLibrary
     private const CACHE_KEY_COINS_ALL = 'coins_all';
     private const CACHE_KEY_EVENTS_ALL = 'events_all';
     private const CACHE_KEY_INFORMATIONS_ALL = 'informations_all';
+    private const CACHE_KEY_QUESTIONNAIRES_ALL = 'questionnaires_all';
     private const CACHE_KEY_SERVICE_TERMS_ALL = 'service_terms_all';
 
     /**
@@ -23,7 +24,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getBannersAllKey(): string
+    private static function getBannersAllKey(): string
     {
         return self::CACHE_KEY_BANNERS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -54,7 +55,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getCoinsAllKey(): string
+    private static function getCoinsAllKey(): string
     {
         return self::CACHE_KEY_COINS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -85,7 +86,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getEventsAllKey(): string
+    private static function getEventsAllKey(): string
     {
         return self::CACHE_KEY_EVENTS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -116,7 +117,7 @@ class MasterCacheLibrary extends CacheLibrary
      *
      * @return string
      */
-    public static function getInformationsAllKey(): string
+    private static function getInformationsAllKey(): string
     {
         return self::CACHE_KEY_INFORMATIONS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }
@@ -143,11 +144,42 @@ class MasterCacheLibrary extends CacheLibrary
     }
 
     /**
+     * get cache key of questionnaires.
+     *
+     * @return string
+     */
+    private static function getQuestionnairesAllKey(): string
+    {
+        return self::CACHE_KEY_QUESTIONNAIRES_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
+    }
+
+    /**
+     * set cache of questionnaires.
+     *
+     * @param array $value
+     * @return void
+     */
+    public static function setQuestionnairesCache(array $value): void
+    {
+        self::setCache(self::getQuestionnairesAllKey(), $value);
+    }
+
+    /**
+     * get cache of questionnaires.
+     *
+     * @return ?array
+     */
+    public static function getQuestionnairesCache(): ?array
+    {
+        return self::getByKey(self::getQuestionnairesAllKey());
+    }
+
+    /**
      * get cache key of service terms.
      *
      * @return string
      */
-    public static function getServiceTermsAllKey(): string
+    private static function getServiceTermsAllKey(): string
     {
         return self::CACHE_KEY_SERVICE_TERMS_ALL . '_' . TimeLibrary::getCurrentDateTime(TimeLibrary::DATE_TIME_FORMAT_YMD);
     }

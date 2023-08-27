@@ -11,73 +11,73 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Library\Message\StatusCodeMessages;
-use App\Exports\Masters\ServiceTerms\ServiceTermsBulkInsertTemplateExport;
+use App\Exports\Masters\Questionnaires\QuestionnairesBulkInsertTemplateExport;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\PermissionsTableSeeder;
+use Database\Seeders\Masters\QuestionnairesTableSeeder;
 use Database\Seeders\Masters\RolePermissionsTableSeeder;
 use Database\Seeders\Masters\RolesTableSeeder;
-use Database\Seeders\Masters\ServiceTermsTableSeeder;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ServiceTermsServiceTest extends AdminServiceBaseTestCase
+class QuestionnairesServiceTest extends AdminServiceBaseTestCase
 {
     // target seeders.
     protected const SEEDER_CLASSES = [
         AdminsTableSeeder::class,
-        ServiceTermsTableSeeder::class,
         PermissionsTableSeeder::class,
+        QuestionnairesTableSeeder::class,
         RolesTableSeeder::class,
         RolePermissionsTableSeeder::class,
         AdminsRolesTableSeeder::class,
     ];
 
     /**
-     * service terms file download test.
+     * questionnaires file download test.
      * output dir storage/framework/laravel-excel
      *
      * @return void
      */
-    public function testDownloadServiceTermsCsvFile(): void
+    public function testDownloadQuestionnairesCsvFile(): void
     {
-        $response = $this->get(route('admin.serviceTerms.download.csv'), self::getHeaders());
+        $response = $this->get(route('admin.questionnaires.download.csv'), self::getHeaders());
         $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
     /**
-     * service terms template file download test.
+     * questionnaires template file download test.
      * output dir storage/framework/laravel-excel
      *
      * @return void
      */
-    public function testDownloadServiceTermsTemplateFile(): void
+    public function testDownloadQuestionnairesTemplateFile(): void
     {
-        $response = $this->get(route('admin.serviceTerms.download.template'), self::getHeaders());
+        $response = $this->get(route('admin.questionnaires.download.template'), self::getHeaders());
         $response->assertStatus(200)
             ->assertHeader('content-type', self::CONTENT_TYPE_TEXT_CSV_WITH_UTF8);
     }
 
     /**
-     * import service terms filee request test.
+     * import questionnaires filee request test.
      *
      * @return void
      */
-    public function testImportServiceTerms(): void
+    public function testImportQuestionnaires(): void
     {
-        $name = Config::get('myappTest.test.serviceTerms.import.success')['fileName'];
+        $name = Config::get('myappTest.test.questionnaires.import.success')['fileName'];
 
         /* make file */
         // Symfony file package extends SplFileInfo
         $symfonyFile = Excel::download(
-            new ServiceTermsBulkInsertTemplateExport(collect(Config::get('myappTest.test.serviceTerms.import.fileData'))),
+            new QuestionnairesBulkInsertTemplateExport(collect(Config::get('myappTest.test.questionnaires.import.fileData'))),
             $name
         )->getFile();
         $file = UploadedFile::fake()->createWithContent($name, $symfonyFile->getContent());
 
-        $response = $this->json('POST', route('admin.serviceTerms.upload.template'), [
+        $response = $this->json('POST', route('admin.questionnaires.upload.template'), [
             'file' => $file
         ], self::getHeaders());
         $response->assertStatus(201);

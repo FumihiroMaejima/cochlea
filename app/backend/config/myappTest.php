@@ -171,6 +171,28 @@ return [
                 ]
             ],
         ],
+        'questionnaires' => [
+            'import' => [
+                'success' => [
+                    'fileName'  => 'master_questionnaires_template_20220404000000.csv',
+                    'mimeType'  => 'text/csv; charset=UTF-8',
+                    'size'      => 1000
+                ],
+                'fileData' => [
+                    (object)[
+                        'name'      => 'questionnaires.',
+                        'detail'    => 'questionnaires detail.',
+                        'questions' => json_encode(
+                            ['key' => 1, 'text' => 'question text', 'type' => 1, 'defaultText' => '']
+                        ),
+                        'memo'       => 'serviceTerms`s memo.',
+                        'start_at'   => '2022/05/10 00:00:00',
+                        'end_at'     => '2030/12/31 23:59:59',
+                        'expired_at' => '2030/12/31 23:59:59',
+                    ]
+                ]
+            ],
+        ],
         'serviceTerms' => [
             'import' => [
                 'success' => [

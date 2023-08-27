@@ -38,4 +38,19 @@ class ArrayLibrary
     {
         return current($items);
     }
+
+    /**
+     * paging array elements.
+     *
+     * @param array $items
+     * @param int $page
+     * @param ?int $limit
+     * @return array
+     */
+    public static function paging(array $items, int $page, ?int $limit): array
+    {
+        // 切り捨てでoffset作成
+        $offset = is_null($limit) ? 0 : (int)floor($page * $limit);
+        return array_slice($items, $offset, $limit);
+    }
 }
