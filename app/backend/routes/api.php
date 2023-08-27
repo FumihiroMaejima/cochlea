@@ -318,6 +318,7 @@ Route::group(['prefix' => 'v1'], function () {
 
             Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.string.random');
             Route::get('emoji', [\App\Http\Controllers\Users\DebugController::class, 'checkIsEmoji'])->name('user.debug.string.emoji');
+            Route::get('unicode/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertUnicode'])->name('user.debug.string.unicode.convert');
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');

@@ -20,6 +20,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Library\Math\PrimeNumberLibrary;
 use App\Library\Performance\MemoryLibrary;
 use App\Library\Performance\PerformanceLibrary;
+use App\Library\String\Unicode;
 use App\Library\Time\TimeLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\DebugService;
@@ -220,6 +221,17 @@ class DebugController extends Controller
     public function checkIsEmoji(Request $request): JsonResponse
     {
         return $this->service->checkIsEmoji($request->emoji);
+    }
+
+    /**
+     * Complete Stipe Checkout Session.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function convertUnicode(Request $request): JsonResponse
+    {
+        return response()->json(['data' => Unicode::convertUnicodeToJapanese($request->unicode)]);
     }
 
     /**
