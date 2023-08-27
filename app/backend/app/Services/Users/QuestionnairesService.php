@@ -4,9 +4,7 @@ namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Repositories\Masters\Questionnaires\QuestionnairesRepositoryInterface;
@@ -14,6 +12,7 @@ use App\Repositories\Users\UserQuestionnaires\UserQuestionnairesRepositoryInterf
 use App\Http\Resources\Users\UserQuestionnairesResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
+use App\Library\Questionnaire\QuestionnaireLibrary;
 use App\Models\Masters\Questionnaires;
 use App\Models\Users\UserQuestionnaires;
 use Exception;
@@ -102,6 +101,12 @@ class QuestionnairesService
             );
         }
 
+        // 入力値の検証
+        QuestionnaireLibrary::validateQuestionnaireAnswer(
+            $userQuestions,
+            json_decode($questionnaire[Questionnaires::QUESTIONS], true)
+        );
+
         // DB 登録
         DB::beginTransaction();
         try {
@@ -163,6 +168,12 @@ class QuestionnairesService
                 'User Questionnaire is Not Exist.'
             );
         }
+
+        // 入力値の検証
+        QuestionnaireLibrary::validateQuestionnaireAnswer(
+            $userQuestions,
+            json_decode($questionnaire[Questionnaires::QUESTIONS], true)
+        );
 
         // DB 登録
         DB::beginTransaction();

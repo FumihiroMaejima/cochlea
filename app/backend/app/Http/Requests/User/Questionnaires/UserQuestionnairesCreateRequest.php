@@ -33,7 +33,6 @@ class UserQuestionnairesCreateRequest extends QuestionnairesBaseRequest
             'questions.*.text'           => 'nullable|string',
             'questions.*.chocies'        => 'required|array',
             'questions.*.chocies.*.key'  => 'required|int|min:1',
-            'questions.*.chocies.*.name' => 'required|string',
             'questions.*.defaultText'    => 'nullable|string',
 
         ];
