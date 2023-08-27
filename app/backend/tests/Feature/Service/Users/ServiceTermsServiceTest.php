@@ -81,7 +81,6 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
         ];
     }
 
-    // TODO CI上のみレコードが初期化されない為一旦skip
     /**
      * user service term create request test.
      * @dataProvider createUserServiceTermDataProvider

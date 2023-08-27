@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Array\ArrayLibrary;
 use App\Library\File\FileLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Stripe\StripeLibrary;
@@ -82,12 +83,16 @@ class LogLibrary
      * @param string|null $date
      * @param string|null $name
      * @param int $sort
+     * @param int $page
+     * @param int $limit
      * @return array
      */
     public static function getLogFileContentAsAssociative(
         ?string $date = null,
         ?string $name = self::FILE_NAME_ACCESS,
         int $sort = SORT_ASC,
+        ?int $page = 0,
+        ?int $limit = null,
     ): array {
         if (is_null($name)) {
             $name = self::FILE_NAME_ACCESS;
@@ -115,7 +120,8 @@ class LogLibrary
             }
         }
 
-        return $response;
+        // return $response;
+        return ArrayLibrary::paging($response, $page, $limit);
     }
 
     /**

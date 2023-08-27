@@ -119,35 +119,13 @@ class ShardingLibrary
     }
 
     /**
-     * begin transaction in sharding table.
+     * get connection by user id.
      *
-     * @param string $connection connection name
-     * @return void
+     * @param int $userId user id
+     * @return int
      */
-    public static function beginTransaction(string $connection): void
+    public static function getConnectionByUserId(int $userId): int
     {
-        DB::connection($connection)->beginTransaction();
-    }
-
-    /**
-     * commit active database transaction.
-     *
-     * @param string $connection connection name
-     * @return void
-     */
-    public static function commit(string $connection): void
-    {
-        DB::connection($connection)->commit();
-    }
-
-    /**
-     * rollback active database transaction.
-     *
-     * @param string $connection connection name
-     * @return void
-     */
-    public static function rollback(string $connection): void
-    {
-        DB::connection($connection)->rollback();
+        return self::getUserDataBaseConnection(self::getShardIdByUserId($userId));
     }
 }

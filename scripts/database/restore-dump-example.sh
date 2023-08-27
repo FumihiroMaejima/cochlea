@@ -29,9 +29,9 @@ showMessage ${START_MESSAGE}
 if [ "$1" != '' ]; then
   if [ "$1" == 'zcat' ]; then
     # zcat ${OUTPUT_FILE}.gz | docker exec -i ${DATABASE_CONTAINER_NAME} mysql -h localhost -u ${DATABASE_USER} -p${DATABASE_PASSWORD} -D ${DATABASE_NAME}
-    # mac OS only command.
     gzcat ${OUTPUT_FILE}.gz
   elif ["$1" == 'gzcat' ]; then
+    # mac OS only command.
     gzcat ${OUTPUT_FILE}.gz
   fi
 else

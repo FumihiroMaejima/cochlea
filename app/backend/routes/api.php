@@ -152,6 +152,13 @@ Route::group(['prefix' => 'v1/admin'], function () {
             Route::post('/file/template', [\App\Http\Controllers\Admins\InformationsController::class, 'uploadTemplate'])->name('admin.informations.upload.template');
         });
 
+        // questionnaires
+        Route::group(['prefix' => 'questionnaires'], function () {
+            Route::get('/csv', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'downloadQuestionnaires'])->name('admin.questionnaires.download.csv');
+            Route::get('/file/template', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'templateQuestionnaires'])->name('admin.questionnaires.download.template');
+            Route::post('/file/template', [\App\Http\Controllers\Admins\QuestionnairesController::class, 'uploadTemplateQuestionnaires'])->name('admin.questionnaires.upload.template');
+        });
+
         // service terms
         Route::group(['prefix' => 'serviceTerms'], function () {
             Route::get('/csv', [\App\Http\Controllers\Admins\ServiceTermsController::class, 'downloadServiceTerms'])->name('admin.serviceTerms.download.csv');
@@ -214,6 +221,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'informations'], function () {
         Route::get('/', [\App\Http\Controllers\Users\InformationsController::class, 'index'])->name('noAuth.informations.index');
     });
+    // questionnaires
+    Route::group(['prefix' => 'questionnaires'], function () {
+        Route::get('/', [\App\Http\Controllers\Users\QuestionnairesController::class, 'index'])->name('noAuth.questionnaires.index');
+    });
     // service terms
     Route::group(['prefix' => 'serviceTerms'], function () {
         Route::get('/', [\App\Http\Controllers\Users\ServiceTermsController::class, 'index'])->name('noAuth.serviceTerms.index');
@@ -258,6 +269,15 @@ Route::group(['prefix' => 'v1'], function () {
             });
         });
 
+        // questionnaires
+        Route::group(['prefix' => 'questionnaires'], function () {
+            Route::group(['prefix' => 'questionnaire'], function () {
+                Route::get('/{id}', [\App\Http\Controllers\Users\QuestionnairesController::class, 'detail'])->name('user.questionnaires.questionnaire.detail');
+                Route::post('/{id}/answer', [\App\Http\Controllers\Users\QuestionnairesController::class, 'createUserQuestionnaire'])->name('user.questionnaires.questionnaire.answer.create');
+                Route::patch('/{id}/answer', [\App\Http\Controllers\Users\QuestionnairesController::class, 'updateUserQuestionnaire'])->name('user.questionnaires.questionnaire.answer.update');
+            });
+        });
+
         // service terms
         Route::group(['prefix' => 'serviceTerms'], function () {
             Route::group(['prefix' => 'serviceTerm'], function () {
@@ -298,6 +318,7 @@ Route::group(['prefix' => 'v1'], function () {
 
             Route::get('random', [\App\Http\Controllers\Users\DebugController::class, 'debugRandomValue'])->name('user.debug.string.random');
             Route::get('emoji', [\App\Http\Controllers\Users\DebugController::class, 'checkIsEmoji'])->name('user.debug.string.emoji');
+            Route::get('unicode/convert', [\App\Http\Controllers\Users\DebugController::class, 'convertUnicode'])->name('user.debug.string.unicode.convert');
 
             // PDF出力
             Route::get('sample-pdf', [\App\Http\Controllers\Users\DebugController::class, 'getSamplePDF'])->name('user.debug.samplePdf.get');
