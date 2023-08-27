@@ -7,18 +7,23 @@ use App\Library\Message\StatusCodeMessages;
 
 class WebConsole
 {
+    // オプションは1つのみを有効にする想定
     private const ENABLE_COMMAND_OPTION_LIST = [
-        'ls' => ['-a', '-l','-al'],
+        'ls' => ['-a', '-l', '-al'],
         'cd' => null,
         'cat' => null,
         'date' => null,
         'time' => null,
+        'head' => ['-n'],
+        'tail' => ['-n'],
     ];
 
     // オプション特定不可のコマンドはパイプ処理をさせない様にする。
     private const FORBIDDEN_LIST = [
         '||',
         '&&',
+        '>',
+        '>>',
     ];
 
     /**
