@@ -49,6 +49,8 @@ class ArrayLibrary
      */
     public static function paging(array $items, int $page, ?int $limit): array
     {
-        return array_splice($items, $page, $limit);
+        // 切り捨てでoffset作成
+        $offset = is_null($limit) ? 0 : (int)floor($page * $limit);
+        return array_slice($items, $offset, $limit);
     }
 }
