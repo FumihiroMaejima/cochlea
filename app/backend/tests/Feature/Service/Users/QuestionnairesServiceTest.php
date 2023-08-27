@@ -62,6 +62,24 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
     }
 
     /**
+     * questionnaire detail get request test.
+     *
+     * @return void
+     */
+    public function testGetQuestionnaireDetail(): void
+    {
+        $response = $this->get(
+            route('user.questionnaires.questionnaire.detail', [Questionnaires::ID => 1]),
+            headers: self::getHeaders()
+        );
+
+        // 表示するカラムの数をチェック
+        $count = 7;
+        $response->assertStatus(StatusCodeMessages::STATUS_200)
+            ->assertJsonCount($count, self::RESPONSE_KEY_DATA);
+    }
+
+    /**
      * user Questionnaire crerate data
      * @return array
      */
