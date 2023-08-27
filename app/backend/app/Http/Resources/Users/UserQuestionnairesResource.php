@@ -39,7 +39,7 @@ class UserQuestionnairesResource extends JsonResource
     public static function toArrayForList(array $questionnaires): array
     {
         $response = [];
-        foreach($questionnaires as $questionnaire) {
+        foreach ($questionnaires as $questionnaire) {
             $response[] = [
                 Questionnaires::ID => $questionnaire[Questionnaires::ID],
                 Questionnaires::NAME => $questionnaire[Questionnaires::NAME],
@@ -47,7 +47,6 @@ class UserQuestionnairesResource extends JsonResource
                 Questionnaires::END_AT => $questionnaire[Questionnaires::END_AT],
                 Questionnaires::EXPIRED_AT => $questionnaire[Questionnaires::EXPIRED_AT],
             ];
-
         }
 
         return $response;

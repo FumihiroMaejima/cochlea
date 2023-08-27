@@ -87,7 +87,7 @@ class QuestionnairesTableSeeder extends BaseSeeder
 
                 if ($isSelectType) {
                     // 選択肢設定
-                    foreach(range(1, 3) as $c) {
+                    foreach (range(1, 3) as $c) {
                         $choice = self::QUESCTION_CHOICE_TEMPALTE;
                         $choice[Questionnaires::CHOICE_KEY_KEY] = $c;
                         $choice[Questionnaires::CHOICE_KEY_NAME] = '選択肢内容_' . (string)$c;
