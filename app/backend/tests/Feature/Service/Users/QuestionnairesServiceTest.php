@@ -104,15 +104,59 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
     }
 
     /**
+     * user Questionnaire update data
+     * @return array
+     */
+    public function updateUserQuestionnairesDataProvider(): array
+    {
+        $this->createApplication();
+
+        $requestBody = [Questionnaires::QUESTIONS => [self::createRequestBodyOfQuestionAnswer(1, 'test update text')]];
+
+        return [
+            'update user questionnaire error: not exist record' => [
+                UserQuestionnairesCreateRequest::KEY_ID => 5, // QuestionnairesTableSeeder::SEEDER_DATA_TESTING_LENGTH
+                'requestBody' => $requestBody,
+                'expect' => StatusCodeMessages::STATUS_404,
+            ],
+            'update user questionnaire success: exist record' => [
+                UserQuestionnairesCreateRequest::KEY_ID => 1, // QuestionnairesTableSeeder::SEEDER_DATA_TESTING_LENGTH
+                'requestBody' => $requestBody,
+                'expect' => StatusCodeMessages::STATUS_200,
+            ],
+        ];
+    }
+
+    /**
      * user Questionnaire create request test.
      * @dataProvider createUserQuestionnairesDataProvider
      * @return void
      */
     public function testCreateUserQuestionnairesSuccess(int $questionnaireId, array $requestBody, int $expect): void
     {
+        // TODO UserQuestionnaireの初期化処理
         $response = $this->post(
             route(
                 'user.questionnaires.questionnaire.answer.create',
+                [UserQuestionnairesCreateRequest::KEY_ID => $questionnaireId]
+            ),
+            $requestBody,
+            headers: self::getHeaders()
+        );
+        $response->assertStatus($expect);
+    }
+
+    /**
+     * user Questionnaire update request test.
+     * @dataProvider updateUserQuestionnairesDataProvider
+     * @return void
+     */
+    public function testUpdateUserQuestionnairesSuccess(int $questionnaireId, array $requestBody, int $expect): void
+    {
+        // TODO UserQuestionnaireの初期化処理
+        $response = $this->patch(
+            route(
+                'user.questionnaires.questionnaire.answer.update',
                 [UserQuestionnairesCreateRequest::KEY_ID => $questionnaireId]
             ),
             $requestBody,
