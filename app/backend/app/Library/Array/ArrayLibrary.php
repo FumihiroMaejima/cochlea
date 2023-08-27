@@ -55,7 +55,7 @@ class ArrayLibrary
     }
 
     /**
-     * sort array elements.
+     * sort array elements. for Associative array(連想配列).
      *
      * @param array $items
      * @param string $key
