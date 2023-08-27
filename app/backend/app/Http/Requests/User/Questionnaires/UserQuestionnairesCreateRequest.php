@@ -54,6 +54,7 @@ class UserQuestionnairesCreateRequest extends QuestionnairesBaseRequest
             'questions.*.text'           => '質問名',
             'questions.*.type'           => '質問タイプ',
             'questions.*.chocies'        => '質問選択肢',
+            'questions.*.chocies.*'      => '質問選択肢キー',
             'questions.*.chocies.*.key'  => '質問選択肢キー',
             'questions.*.chocies.*.name' => '質問選択肢名',
             'questions.*.defaultText'    => '質問デフォルトテキスト',
