@@ -29,7 +29,7 @@ class UserQuestionnairesCreateRequest extends QuestionnairesBaseRequest
         return [
             'questions'                  => 'required|array',
             'questions.*.key'            => 'required|int|min:1',
-            'questions.*.type'           => 'required|int|min:1|'. Rule::in(Questionnaires::QUESTION_TYPE_LIST),
+            // 'questions.*.type'           => 'required|int|min:1|'. Rule::in(Questionnaires::QUESTION_TYPE_LIST),
             'questions.*.text'           => 'nullable|string',
             'questions.*.chocies'        => 'required|array',
             'questions.*.chocies.*.key'  => 'required|int|min:1',
