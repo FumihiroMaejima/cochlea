@@ -77,6 +77,11 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
                 'requestBody' => $requestBody,
                 'expect' => StatusCodeMessages::STATUS_201,
             ],
+            'create user questionnaire error: deplicate record' => [
+                UserQuestionnairesCreateRequest::KEY_ID => 1, // QuestionnairesTableSeeder::SEEDER_DATA_TESTING_LENGTH
+                'requestBody' => $requestBody,
+                'expect' => StatusCodeMessages::STATUS_500,
+            ],
         ];
     }
 
