@@ -38,4 +38,17 @@ class ArrayLibrary
     {
         return current($items);
     }
+
+    /**
+     * paging array elements.
+     *
+     * @param array $items
+     * @param int $page
+     * @param ?int $limit
+     * @return array
+     */
+    public static function paging(array $items, int $page, ?int $limit): array
+    {
+        return array_splice($items, $page, $limit);
+    }
 }
