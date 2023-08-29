@@ -60,6 +60,28 @@ class ShardingLibrary
     }
 
     /**
+     * get shard id by string.
+     *
+     * @param int string $value shard key.
+     * @return int shard id
+     */
+    public static function getShardIdByString(string $value): int
+    {
+        $hex = bin2hex($value);
+        // 0～9以外は空白に変換して文字列だけを取得する。
+        $tmpIntValue = preg_replace('/[^0-9]/', '', $hex);
+        // 終端から8文字取得 するとkeyが重複する
+        // $shardKey = mb_substr($tmpIntValue, -8);
+        $shardKey = mb_substr($tmpIntValue, 16);
+
+        // 除算の余りを求める
+        $shardCount = Config::get('myapp.database.users.shardCount');
+        $shardId = $shardKey % $shardCount;
+        // 割り切れる場合は$shardCount自体がshardIDとなる
+        return $shardId !== 0 ? $shardId : $shardCount;
+    }
+
+    /**
      * get user database connection name by shard id.
      *
      * @param int $shardId shard id.
