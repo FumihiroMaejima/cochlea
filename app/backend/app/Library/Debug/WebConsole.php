@@ -16,6 +16,7 @@ class WebConsole
         'time' => null,
         'head' => ['-n'],
         'tail' => ['-n'],
+        'less' => null,
     ];
 
     // オプション特定不可のコマンドはパイプ処理をさせない様にする。
