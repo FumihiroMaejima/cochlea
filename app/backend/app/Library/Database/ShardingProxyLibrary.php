@@ -65,8 +65,6 @@ class ShardingProxyLibrary
         array $columns = ['*'],
         ?array $wheres = null
     ): array {
-        $records = [];
-
         $connections = self::getConnectionAndShardIdGroupByShardIds(range(1, 16));
         $result = [];
         foreach ($connections as $connection => $shardIds) {
