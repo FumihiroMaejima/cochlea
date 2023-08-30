@@ -60,6 +60,21 @@ class ShardingLibrary
     }
 
     /**
+     * get shard id by number key.
+     *
+     * @param int $value shard key.
+     * @return int shard id
+     */
+    public static function getShardIdByNumber(int $value): int
+    {
+        // 除算の余りを求める
+        $shardCount = Config::get('myapp.database.users.shardCount');
+        $shardId = $value % $shardCount;
+        // 割り切れる場合は$shardCount自体がshardIDとなる
+        return $shardId !== 0 ? $shardId : $shardCount;
+    }
+
+    /**
      * get shard id by string.
      *
      * @param int string $value shard key.
