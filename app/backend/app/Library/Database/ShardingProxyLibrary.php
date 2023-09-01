@@ -57,13 +57,17 @@ class ShardingProxyLibrary
      *
      * @param string $table table name
      * @param array $columns columns
-     * @param ?array $wheres conditions
+     * @param ?array $equals condition values of where
+     * @param ?array $ins condition values of whereIn
      * @return array
+     * @example App\Library\Database\ShardingProxyLibrary::select('user_coins', ['user_id']);
+     * @example App\Library\Database\ShardingProxyLibrary::select('user_coins', ins: ['user_id' => [1,2,3]])
      */
     public static function select(
         string $table,
         array $columns = ['*'],
-        ?array $wheres = null
+        ?array $equals = null,
+        ?array $ins = null
     ): array {
         $connections = self::getConnectionAndShardIdGroupByShardIds(range(1, 16));
         $result = [];
@@ -73,9 +77,15 @@ class ShardingProxyLibrary
                     ->table($table . $shardId)
                     ->select($columns);
 
-                if (!is_null($wheres)) {
-                    foreach ($wheres as $column => $condition) {
+                if (!is_null($equals)) {
+                    foreach ($equals as $column => $condition) {
                         $query = $query->where($column, '=', $condition);
+                    }
+                }
+
+                if (!is_null($ins)) {
+                    foreach ($ins as $column => $conditions) {
+                        $query = $query->whereIn($column, $conditions);
                     }
                 }
 
