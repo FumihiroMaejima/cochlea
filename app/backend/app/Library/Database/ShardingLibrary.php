@@ -163,6 +163,6 @@ class ShardingLibrary
      */
     public static function getConnectionByUserId(int $userId): int
     {
-        return self::getUserDataBaseConnection(self::getShardIdByUserId($userId));
+        return self::getUserDataBaseConnection(self::getShardIdByNumber($userId));
     }
 }

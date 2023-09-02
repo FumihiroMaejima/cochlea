@@ -441,7 +441,7 @@ class DebugController extends Controller
             $requstUserId = $sessionUserId;
         }
 
-        $shardId = ShardingLibrary::getShardIdByUserId($requstUserId);
+        $shardId = ShardingLibrary::getShardIdByNumber($requstUserId);
         return response()->json(
             [
                 'data' => [

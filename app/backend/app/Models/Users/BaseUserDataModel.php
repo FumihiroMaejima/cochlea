@@ -48,7 +48,7 @@ class BaseUserDataModel extends Model
     public static function getShardId(int $userId): int
     {
         // 除算の余り
-        return ShardingLibrary::getShardIdByUserId($userId);
+        return ShardingLibrary::getShardIdByNumber($userId);
     }
 
     /**
