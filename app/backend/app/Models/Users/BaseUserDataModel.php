@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Database\ShardingLibrary;
+use App\Library\Database\ShardingProxyLibrary;
 use App\Library\Time\TimeLibrary;
 
 class BaseUserDataModel extends Model
@@ -75,38 +76,6 @@ class BaseUserDataModel extends Model
     }
 
     /**
-     * group connectio by user ids.
-     *
-     * @param array $userIds user ids
-     * @return array
-     */
-    public static function groupUserIdsByConnection(array $userIds): array
-    {
-        return array_reduce($userIds, function (array $groups, int $userId) {
-            $groups[self::getConnectionNameByUserId($userId)][] = $userId;
-            return $groups;
-        }, []);
-    }
-
-    /**
-     * get connectio and shard id group by user ids.
-     *
-     * @param array $userIds user ids
-     * @return array
-     */
-    public static function getConnectionAndShardIdGroupByUserIds(array $userIds): array
-    {
-        $result = [];
-        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
-        foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
-            foreach ($tmpUserIds as $userId) {
-                $result[$connection][self::getShardId($userId)][] = $userId;
-            }
-        }
-        return $result;
-    }
-
-    /**
      * get connectio and shard id ans resources group by user ids.
      *
      * @param array $userIds user ids
@@ -115,7 +84,7 @@ class BaseUserDataModel extends Model
     public static function getConnectionAndShardIdAndResourcesGroupByUserIds(array $userIds, array $resources): array
     {
         $result = [];
-        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
+        $userIdsGroupByConnection = ShardingProxyLibrary::groupShardKeysByConnection($userIds);
         foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
             foreach ($tmpUserIds as $userId) {
                 if (empty($resources[$userId])) {
@@ -136,7 +105,7 @@ class BaseUserDataModel extends Model
     public static function getConnectionAndShardIdAndMultiResourcesGroupByUserIds(array $userIds, array $resources): array
     {
         $result = [];
-        $userIdsGroupByConnection = self::groupUserIdsByConnection($userIds);
+        $userIdsGroupByConnection = ShardingProxyLibrary::groupShardKeysByConnection($userIds);
         foreach ($userIdsGroupByConnection as $connection => $tmpUserIds) {
             foreach ($tmpUserIds as $userId) {
                 if (empty($resources[$userId])) {
@@ -173,7 +142,7 @@ class BaseUserDataModel extends Model
      */
     public function getAllByUserIds(array $userIds): array
     {
-        $connections = self::getConnectionAndShardIdGroupByUserIds($userIds);
+        $connections = ShardingProxyLibrary::getConnectionAndShardIdGroupByShardKeys($userIds);
         $result = [];
         foreach ($connections as $connection => $shardIds) {
             foreach ($shardIds as $shardId => $tmpUserIds) {
