@@ -26,7 +26,7 @@ class ShardingProxyLibrary
      * @param array $shardKeys example: user ids
      * @return array
      */
-    public static function groupSharadKeysByConnection(array $shardKeys): array
+    public static function groupShardKeysByConnection(array $shardKeys): array
     {
         return array_reduce($shardKeys, function (array $groups, int $shardKey) {
             $groups[self::getConnectionNameByShardKey($shardKey)][] = $shardKey;
@@ -43,7 +43,7 @@ class ShardingProxyLibrary
     public static function getConnectionAndShardIdGroupByShardKeys(array $shardKeys): array
     {
         $result = [];
-        $shardKeysGroupByConnection = self::groupSharadKeysByConnection($shardKeys);
+        $shardKeysGroupByConnection = self::groupShardKeysByConnection($shardKeys);
         foreach ($shardKeysGroupByConnection as $connection => $tmpShardKeys) {
             foreach ($tmpShardKeys as $shardKey) {
                 $result[$connection][ShardingLibrary::getShardIdByNumber($shardKey)][] = $shardKey;
