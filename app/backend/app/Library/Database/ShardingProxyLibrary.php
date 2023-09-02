@@ -60,6 +60,7 @@ class ShardingProxyLibrary
      * @param ?array $equals condition values of where
      * @param ?array $ins condition values of whereIn
      * @param ?int $limit limit conditions.
+     * @param ?int $offset offset conditions.
      * @return array
      * @example App\Library\Database\ShardingProxyLibrary::select('user_coins', ['user_id']);
      * @example App\Library\Database\ShardingProxyLibrary::select('user_coins', ins: ['user_id' => [1,2,3]])
@@ -69,7 +70,8 @@ class ShardingProxyLibrary
         array $columns = ['*'],
         ?array $equals = null,
         ?array $ins = null,
-        ?int $limit = null
+        ?int $limit = null,
+        ?int $offset = null
     ): array {
         $connections = self::getConnectionAndShardIdGroupByShardIds(range(1, 16));
         $result = [];
@@ -93,6 +95,10 @@ class ShardingProxyLibrary
 
                 if (!is_null($limit)) {
                     $query = $query->limit($limit);
+                }
+
+                if (!is_null($offset)) {
+                    $query = $query->offset($offset);
                 }
 
                 $records = $query->get()->toArray();
