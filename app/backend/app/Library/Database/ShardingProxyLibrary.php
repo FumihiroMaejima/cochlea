@@ -21,12 +21,12 @@ class ShardingProxyLibrary
     }
 
     /**
-     * group connectio by shard ids.
+     * get connections & group connectio by shard keys.
      *
-     * @param array $shardKeys user ids
+     * @param array $shardKeys example: user ids
      * @return array
      */
-    public static function groupSharadIdsByConnection(array $shardKeys): array
+    public static function groupSharadKeysByConnection(array $shardKeys): array
     {
         return array_reduce($shardKeys, function (array $groups, int $shardKey) {
             $groups[self::getConnectionNameByShardKey($shardKey)][] = $shardKey;
@@ -40,10 +40,10 @@ class ShardingProxyLibrary
      * @param array $shardKeys shard keys
      * @return array
      */
-    public static function getConnectionAndShardIdGroupByShardIds(array $shardKeys): array
+    public static function getConnectionAndShardIdGroupByShardKeys(array $shardKeys): array
     {
         $result = [];
-        $shardKeysGroupByConnection = self::groupSharadIdsByConnection($shardKeys);
+        $shardKeysGroupByConnection = self::groupSharadKeysByConnection($shardKeys);
         foreach ($shardKeysGroupByConnection as $connection => $tmpShardKeys) {
             foreach ($tmpShardKeys as $shardKey) {
                 $result[$connection][ShardingLibrary::getShardIdByNumber($shardKey)][] = $shardKey;
@@ -73,7 +73,7 @@ class ShardingProxyLibrary
         ?int $limit = null,
         ?int $offset = null
     ): array {
-        $connections = self::getConnectionAndShardIdGroupByShardIds(range(1, 16));
+        $connections = self::getConnectionAndShardIdGroupByShardKeys(range(1, 16));
         $result = [];
         foreach ($connections as $connection => $shardIds) {
             foreach ($shardIds as $shardId => $_) {
