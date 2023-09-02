@@ -112,8 +112,9 @@ class BaseUserDataModel extends Model
                     continue;
                 }
                 $resourcesGroupByUserId = $resources[$userId];
+                $shardId = self::getShardId($userId);
                 foreach ($resourcesGroupByUserId as $tmpResource) {
-                    $result[$connection][self::getShardId($userId)][] = $tmpResource;
+                    $result[$connection][$shardId][] = $tmpResource;
                 }
             }
         }
