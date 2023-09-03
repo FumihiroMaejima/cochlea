@@ -293,6 +293,24 @@ jenkins-quiet: # down jenkins.
 	curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d '{}' localhost:8080/quietDown
 
 ##############################
+# sqldef docker environmental
+##############################
+sqldef-up:
+	docker-compose -f ./docker-compose.sqldef.yml up -d
+
+sqldef-down:
+	docker-compose -f ./docker-compose.sqldef.yml down
+
+sqldef-down-rmi:
+	docker-compose -f ./docker-compose.sqldef.yml down --rmi all
+
+sqldef-ps:
+	docker-compose -f ./docker-compose.sqldef.yml ps
+
+sqldef-dev:
+	sh ./scripts/sqldef-dev.sh
+
+##############################
 # circle ci
 ##############################
 circleci:
