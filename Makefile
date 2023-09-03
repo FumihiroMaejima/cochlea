@@ -31,7 +31,7 @@ ps:
 	docker-compose ps
 
 rebuild: # 個別のコンテナを作り直し
-	docker-compose build --no-cache $(CONTAINER)
+	docker-compose build -f docker-compose.yml --no-cache $(CONTAINER)
 
 dev:
 	sh ./scripts/container.sh && \
