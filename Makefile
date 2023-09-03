@@ -34,11 +34,11 @@ rebuild: # 個別のコンテナを作り直し
 	docker-compose build -f docker-compose.yml --no-cache $(CONTAINER)
 
 dev:
-	sh ./scripts/container.sh && \
+	sh ./scripts/docker/container-dev.sh && \
 	${SHELL} ./scripts/change-db-host.sh db-next db
 
 # ssr:
-# 	sh ./scripts/container-nextjs.sh && \
+# 	sh ./scripts/docker/container-nextjs.sh && \
 # 	${SHELL} ./scripts/change-db-host.sh db db-next
 
 ##############################
@@ -239,7 +239,7 @@ prometheus-ps:
 	docker-compose -f ./docker-compose.prometheus.yml ps
 
 prometheus-dev:
-	sh ./scripts/prometheus-container.sh
+	sh ./scripts/docker/prometheus-container.sh
 
 ##############################
 # locust docker environmental
@@ -266,7 +266,7 @@ endif
 
 locust-dev:
 #	 sh ./scripts/locust-dev.sh
-	sh ./scripts/locust-dev.sh $(WOKER)
+	sh ./scripts/docker/locust-dev.sh $(WOKER)
 
 ##############################
 # jenkins
@@ -308,7 +308,7 @@ sqldef-ps:
 	docker-compose -f ./docker-compose.sqldef.yml ps
 
 sqldef-dev:
-	sh ./scripts/sqldef-dev.sh
+	sh ./scripts/docker/sqldef-dev.sh
 
 ##############################
 # circle ci
@@ -344,7 +344,7 @@ swagger-ps:
 	docker-compose -f ./docker-compose.swagger.yml ps
 
 swagger-dev:
-	sh ./scripts/swagger-container.sh
+	sh ./scripts/docker/swagger-container.sh
 
 ##############################
 # swagger codegen mock-server
