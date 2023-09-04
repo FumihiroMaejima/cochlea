@@ -8,7 +8,8 @@ START_MESSAGE='start export database dump.'
 TIME_STAMP=$(date "+%Y%m%d_%H%M%S")
 
 # CHANGE Variable.
-DATABASE_CONTAINER_NAME=database_container_name
+SERVICE_NAME=sqldef
+SERVICE_BIN_PATH=/mysqldef
 DATABASE_HOST=host.docker.internal
 DATABASE_PORT=3306
 DATABASE_USER=database_user
@@ -28,7 +29,7 @@ showMessage() {
 showMessage ${START_MESSAGE}
 
 # command.
-docker-compose exec sqldef /mysqldef -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export
+docker-compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export
 
 showMessage 'export data base.'
 
