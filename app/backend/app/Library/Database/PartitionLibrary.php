@@ -16,6 +16,7 @@ class PartitionLibrary
     public const KEY_TABLE_ROWS = 'TABLE_ROWS';
     public const KEY_CREATE_TIME = 'CREATE_TIME';
     public const KEY_PARTITION_DESCRIPTION = 'PARTITION_DESCRIPTION';
+    public const KEY_PARTITION_EXPRESSION = 'PARTITION_EXPRESSION';
 
     /**
      * create partitions by range
@@ -146,7 +147,8 @@ class PartitionLibrary
                 PARTITION_ORDINAL_POSITION,
                 TABLE_ROWS,
                 CREATE_TIME,
-                PARTITION_DESCRIPTION
+                PARTITION_DESCRIPTION,
+                PARTITION_EXPRESSION
             "))
             ->where('TABLE_SCHEMA', '=', $schema)
             ->where('TABLE_NAME', '=', $tableName)
