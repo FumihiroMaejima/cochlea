@@ -310,8 +310,11 @@ sqldef-ps:
 sqldef-dev:
 	sh ./scripts/docker/sqldef-dev.sh
 
-sqldef-info:
+sqldef-export:
 	sh ./sqldef/src/scripts/export.sh
+
+sqldef-import:
+	sh ./sqldef/src/scripts/import.sh
 
 ##############################
 # circle ci
