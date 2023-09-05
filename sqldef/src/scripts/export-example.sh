@@ -15,7 +15,7 @@ DATABASE_PORT=3306
 DATABASE_USER=database_user
 DATABASE_PASSWORD=database_password
 DATABASE_NAME=database_name
-OUTPUT_FILE=sample/dump/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
+OUTPUT_FILE=sqldef/src/sqls/dump_${TIME_STAMP}.sql # 存在するディレクトリである必要がある(scripts/databaseなど)
 SECURE_FILE_PRIV_DIR=/var/lib/mysql-files
 OUTPUT_CSV_FILE=scripts/database/dump_${TIME_STAMP}.csv
 
@@ -29,7 +29,7 @@ showMessage() {
 showMessage ${START_MESSAGE}
 
 # command.
-docker-compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export
+docker-compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export > ${OUTPUT_FILE}
 
 showMessage 'export data base.'
 
