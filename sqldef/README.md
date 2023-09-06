@@ -103,6 +103,8 @@ ALTER TABLE `test_2` ADD UNIQUE KEY `user_test_user_id_expired_at_unique` (`user
 
 UNIQUE KEYを設定する前のDDLを読み込めばUNIQUE KEYを外せる。
 
+カラム追加等も追加前のDDLをimportすれば元に戻せる。
+
 ```shell
 /mysqldef -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} < ${IMPORT_FILE}
 
