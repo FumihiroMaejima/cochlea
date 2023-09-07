@@ -12,6 +12,7 @@ REDIS_KEY=test_key
 
 # etc
 TMP_PARAM=
+TMP_PARAM2=
 
 ##############################
 # make docker environmental
@@ -311,10 +312,13 @@ sqldef-dev:
 	sh ./scripts/docker/sqldef-dev.sh
 
 sqldef-export:
-	sh ./sqldef/src/scripts/export.sh
+	sh ./sqldef/src/scripts/export.sh $(TMP_PARAM)
 
 sqldef-import:
-	sh ./sqldef/src/scripts/import.sh
+	sh ./sqldef/src/scripts/import.sh $(TMP_PARAM) $(TMP_PARAM2)
+
+sqldef-help:
+	docker-compose exec sqldef /mysqldef --help
 
 ##############################
 # circle ci
