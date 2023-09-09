@@ -67,7 +67,7 @@ class WebConsole
 
         if (is_null($enableOptions)) {
             // オプションが許可されていないコマンドの場合はパイプライン有無のチェックのみ行う
-            foreach(self::FORBIDDEN_LIST as $v) {
+            foreach (self::FORBIDDEN_LIST as $v) {
                 $pattern = '/' . $v . '/';
                 if (preg_match($pattern, $value)) {
                     throw new MyApplicationHttpException(

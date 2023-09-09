@@ -106,6 +106,6 @@ class ShardingProxyLibrary
             }
         }
 
-        return ArrayLibrary::toArray($result);;
+        return ArrayLibrary::toArray($result);
     }
 }

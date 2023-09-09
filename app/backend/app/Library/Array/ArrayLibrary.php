@@ -65,7 +65,7 @@ class ArrayLibrary
     public static function sort(array $items, string $key = 'id', int $order = SORT_ASC): array
     {
         $sortValues = [];
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $sortValues[] = $item[$key];
         }
 
