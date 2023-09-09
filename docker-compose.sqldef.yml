@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  sqldef:
+    build: ./sqldef
+    platform: 'linux/amd64'
+    container_name: ${PROJECT_NAME}_sqldef
+    ports:
+     - "${LOCUST_PORT}:8089"
+    volumes:
+      - ./sqldef/src:/usr/local/src
+    tty: true
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+networks:
+  default:
+    external: true
+    name: ${NETWORK_NAME}

@@ -4,8 +4,8 @@ services:
     container_name: ${PROJECT_NAME:-testProject}_swagger-editor
     image: 'swaggerapi/swagger-editor'
     volumes:
-      - ./api/api.yaml:/tmp/swagger.yaml
-      - ./api/data/:/tmp/data/
+      - ./swagger/api.yaml:/tmp/swagger.yaml
+      - ./swagger/data/:/tmp/data/
     ports:
       - 8100:8080
     environment:
@@ -16,7 +16,7 @@ services:
     container_name: ${PROJECT_NAME:-testProject}_swagger-ui
     image: 'swaggerapi/swagger-ui'
     volumes:
-      - ./api:/usr/share/nginx/html/docs
+      - ./swagger:/usr/share/nginx/html/docs
     ports:
       - 8200:8080
     environment:
@@ -26,8 +26,8 @@ services:
     container_name: ${PROJECT_NAME:-testProject}_swagger-api
     image: 'stoplight/prism'
     volumes:
-      - ./api/api.yaml:/tmp/openapi.yaml
-      - ./api/data/:/tmp/data/
+      - ./swagger/api.yaml:/tmp/openapi.yaml
+      - ./swagger/data/:/tmp/data/
     ports:
       # api.yamlで定義しているmockサーバーのport
       - 3200:4010

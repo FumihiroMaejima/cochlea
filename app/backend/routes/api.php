@@ -381,6 +381,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::group(['prefix' => 'math'], function () {
                 Route::get('maxPrimeNumber', [\App\Http\Controllers\Users\DebugController::class, 'getMaxPrimeNumber'])->name('user.debug.math.maxPrimeNumber');
             });
+
+            // コンソール
+            Route::get('console/exec', [\App\Http\Controllers\Users\DebugController::class, 'execConsoleCommand'])->name('user.debug.console.exec');
         });
     }
 });

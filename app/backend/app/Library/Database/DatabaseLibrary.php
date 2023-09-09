@@ -86,4 +86,16 @@ class DatabaseLibrary
     {
         DB::connection($connection)->disconnect();
     }
+
+    /**
+     * trunacte table.
+     *
+     * @param string $connection connection name
+     * @param string $table table name
+     * @return void
+     */
+    public static function truncate(string $connection, string $table): void
+    {
+        DB::connection($connection)->table($table)->truncate();
+    }
 }

@@ -11,6 +11,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Database\DatabaseLibrary;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Database\TableMemoryLibrary;
+use App\Library\Debug\WebConsole;
 use App\Library\File\PdfLibrary;
 use App\Library\File\QRCodeLibrary;
 use App\Library\Encrypt\EncryptLibrary;
@@ -440,7 +441,7 @@ class DebugController extends Controller
             $requstUserId = $sessionUserId;
         }
 
-        $shardId = ShardingLibrary::getShardIdByUserId($requstUserId);
+        $shardId = ShardingLibrary::getShardIdByNumber($requstUserId);
         return response()->json(
             [
                 'data' => [
@@ -609,6 +610,36 @@ class DebugController extends Controller
 
         return response()->json(
             ['data' => PrimeNumberLibrary::getMaxPrimeNumber((int)$request->value)]
+        );
+    }
+
+    /**
+     * exec console commnad.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function execConsoleCommand(Request $request): JsonResponse
+    {
+        // バリデーションチェック
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'command' => ['required','string'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_422,
+                'validation error',
+                $validator->errors()->toArray(),
+                true
+            );
+        }
+
+        return response()->json(
+            ['data' => WebConsole::exec($request->command)]
         );
     }
 }

@@ -53,4 +53,23 @@ class ArrayLibrary
         $offset = is_null($limit) ? 0 : (int)floor($page * $limit);
         return array_slice($items, $offset, $limit);
     }
+
+    /**
+     * sort array elements. for Associative array(連想配列).
+     *
+     * @param array $items
+     * @param string $key
+     * @param int $order
+     * @return array
+     */
+    public static function sort(array $items, string $key = 'id', int $order = SORT_ASC): array
+    {
+        $sortValues = [];
+        foreach ($items as $item) {
+            $sortValues[] = $item[$key];
+        }
+
+        array_multisort($sortValues, $order, $items);
+        return $items;
+    }
 }

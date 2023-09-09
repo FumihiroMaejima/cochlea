@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Database\DatabaseLibrary;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Time\TimeLibrary;
 use Exception;
@@ -107,6 +108,34 @@ class TrancateTables extends Command
                         TRUNCATE TABLE ${database}.${table};
                     "
                 ); */
+            }
+        } catch (Exception $e) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                'テスト用バッチ実行エラー。データの初期化に失敗しました。 ' . TimeLibrary::getCurrentDateTime(),
+                ['tables' => $tables],
+                false,
+                $e
+            );
+        }
+    }
+
+    /**
+     * truncate some tables.
+     *
+     * @param array $tables table name
+     * @param int $mounthCount add partition count as month
+     * @return void
+     */
+    private static function truncateTableForDbFacade(array $tables): void
+    {
+        // 対象のDBの設定
+        $connection = ShardingLibrary::getSingleConnectionByConfig();
+
+        try {
+            // TRUNCATEの実行
+            foreach ($tables as $table) {
+                DatabaseLibrary::truncate($connection, $table);
             }
         } catch (Exception $e) {
             throw new MyApplicationHttpException(
