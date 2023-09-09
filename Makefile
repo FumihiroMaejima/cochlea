@@ -360,19 +360,19 @@ swagger-dev:
 # swagger codegen mock-server
 ##############################
 codegen-mock:
-	rm -rf api/node-mock/* && \
-	swagger-codegen generate -i api/api.yaml -l nodejs-server -o api/node-mock && \
-	sed -i -e "s/serverPort = 8080/serverPort = 3200/g" api/node-mock/index.js && \
-	cd api/node-mock && npm run prestart
+	rm -rf swagger/node-mock/* && \
+	swagger-codegen generate -i swagger/api.yaml -l nodejs-server -o swagger/node-mock && \
+	sed -i -e "s/serverPort = 8080/serverPort = 3200/g" swagger/node-mock/index.js && \
+	cd swagger/node-mock && npm run prestart
 
 codegen-changeport:
-	sed -i -e "s/serverPort = 8080/serverPort = 3200/g" api/node-mock/index.js
+	sed -i -e "s/serverPort = 8080/serverPort = 3200/g" swagger/node-mock/index.js
 
 codegen-prestart:
-	cd api/node-mock && npm run prestart
+	cd swagger/node-mock && npm run prestart
 
 codegen-start:
-	cd api/node-mock && npm run start
+	cd swagger/node-mock && npm run start
 
 ##############################
 # etc
