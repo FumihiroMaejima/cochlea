@@ -22,6 +22,7 @@ class WebConsole
 
     // オプション特定不可のコマンドはパイプ処理をさせない様にする。
     private const FORBIDDEN_LIST = [
+        '|',
         '||',
         '&&',
         '>',
