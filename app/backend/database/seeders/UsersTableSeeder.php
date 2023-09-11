@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\User;
 use Database\Seeders\BaseSeeder;
@@ -30,7 +31,7 @@ class UsersTableSeeder extends BaseSeeder
             User::NAME             => '',
             User::EMAIL            => '',
             User::PASSWORD         => bcrypt(Config::get('myappSeeder.seeder.password.testuser')),
-            User::ROLE             => 10,
+            User::SALT             => '',
             User::IS_LEFT          => 0,
             User::CODE_VERIFIED_AT => $now,
             User::LAST_LOGIN_AT    => $now,
@@ -50,6 +51,7 @@ class UsersTableSeeder extends BaseSeeder
 
             $row[User::NAME]  = 'user' . (string)($i);
             $row[User::EMAIL] = 'testuser' . (string)($i) . '@example.com';
+            $row[User::SALT] = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
 
             $data[] = $row;
         }
