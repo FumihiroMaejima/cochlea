@@ -40,6 +40,9 @@ return [
         'url'     => env('APP_SLACK_WEBHOOK_URL', 'https://hooks.slack.com/services/test'),
     ],
     'service' => [],
+    'hash' => [
+        'pepper' => env('PEPPER'),
+    ],
     'database' => [
         'logs' => [
             'baseConnectionName' => env('DB_LOGS_BASE_CONNECTION'),
