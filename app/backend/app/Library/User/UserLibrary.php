@@ -20,7 +20,6 @@ class UserLibrary
     {
         $pepper = HashLibrary::getPepper();
         $taget = $value. $user[User::SALT] . $pepper;
-        $hashedvalue = $user[User::PASSWORD];
         // 現在のパスワードのチェック
         if (!Hash::check($taget, $user[User::PASSWORD])) {
             throw new MyApplicationHttpException(

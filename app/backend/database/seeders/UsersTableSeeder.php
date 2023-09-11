@@ -51,7 +51,7 @@ class UsersTableSeeder extends BaseSeeder
 
             $row[User::NAME]  = 'user' . (string)($i);
             $row[User::EMAIL] = 'testuser' . (string)($i) . '@example.com';
-            $row[User::SALT] = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
+            $row[User::SALT] = RandomStringLibrary::getRandomShuffleString(RandomStringLibrary::RANDOM_STRING_LENGTH_36);
 
             $data[] = $row;
         }
