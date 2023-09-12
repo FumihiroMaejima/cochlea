@@ -30,4 +30,25 @@ class UserLibrary
 
         return true;
     }
+
+    /**
+     * get user record & lock for update user record
+     *
+     * @param int $userId
+     * @return array
+     */
+    public static function lockUser(int $userId): array
+    {
+        $user = (new User())->getRecordByUserId($userId, true);
+
+        if (is_null($user)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_404,
+                'not exist user',
+                ['userId' => $userId]
+            );
+        }
+
+        return $user;
+    }
 }
