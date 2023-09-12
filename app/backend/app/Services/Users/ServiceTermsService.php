@@ -14,6 +14,7 @@ use App\Repositories\Users\UserServiceTerms\UserServiceTermsRepositoryInterface;
 use App\Http\Resources\Users\UserServiceTermsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
+use App\Library\User\UserLibrary;
 use App\Models\Masters\ServiceTerms;
 use Exception;
 
@@ -76,17 +77,21 @@ class ServiceTermsService
             );
         }
 
-        $userServiceterm = $this->userServiceTermsRepository->getByUserIdAndServiceTermId($userId, $serviceTermId);
-        if ($userServiceterm) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'User Service Term is Aready Exist.'
-            );
-        }
-
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // ユーザー情報取得
+            $userServiceterm = $this->userServiceTermsRepository->getByUserIdAndServiceTermId($userId, $serviceTermId);
+            if ($userServiceterm) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'User Service Term is Aready Exist.'
+                );
+            }
+
             $resource = UserServiceTermsResource::toArrayForCreate($userId, $serviceTermId);
             $createCount = $this->userServiceTermsRepository->create($userId, $resource);
 
