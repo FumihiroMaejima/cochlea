@@ -4,15 +4,11 @@ namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Http\Resources\Logs\UserCoinPaymentLogResource;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
