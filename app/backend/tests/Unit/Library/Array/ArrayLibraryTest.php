@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Config;
 
 class ArrayLibraryTest extends TestCase
 {
+
+    private const MUITIDIMENTIONAL_ARRAY_KEY_ID = 'id';
+    private const MUITIDIMENTIONAL_ARRAY_KEY_KEY1 = 'key1';
+    private const MUITIDIMENTIONAL_ARRAY_KEY_KEY2 = 'key2';
+    private const MUITIDIMENTIONAL_ARRAY_TEMPLATE = [
+        self::MUITIDIMENTIONAL_ARRAY_KEY_ID => 1,
+        self::MUITIDIMENTIONAL_ARRAY_KEY_KEY1 => 1,
+        self::MUITIDIMENTIONAL_ARRAY_KEY_KEY2 => 'id=',
+    ];
+
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
@@ -66,6 +76,17 @@ class ArrayLibraryTest extends TestCase
         $this->createApplication();
 
         $testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        // 多次元配列
+        $testMultidimensionalAarray = [];
+        foreach(range(1, 10) as $i) {
+            $tmp = self::MUITIDIMENTIONAL_ARRAY_TEMPLATE;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_ID] = $i;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_KEY1] = $i;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_KEY2] .= $i;
+            $testMultidimensionalAarray[] = $tmp;
+        }
+
         return [
             'page:0/limit:3/result:[1,2,3]' => [
                 'items'  => $testArray,
@@ -102,6 +123,46 @@ class ArrayLibraryTest extends TestCase
                 'page'   => 0,
                 'limit'  => null,
                 'expect' => $testArray,
+            ],
+            'multiDimentionalArray/page:0/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 0,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[0],
+                    $testMultidimensionalAarray[1],
+                    $testMultidimensionalAarray[2],
+                ],
+            ],
+            'multiDimentionalArray/page:1/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 1,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[3],
+                    $testMultidimensionalAarray[4],
+                    $testMultidimensionalAarray[5],
+                ],
+            ],
+            'multiDimentionalArray/page:3/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 3,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[9],
+                ],
+            ],
+            'multiDimentionalArray/page:1/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 4,
+                'limit'  => 3,
+                'expect' => [],
+            ],
+            'multiDimentionalArray/page:0/limit:null/result:origin' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 0,
+                'limit'  => null,
+                'expect' => $testMultidimensionalAarray,
             ],
         ];
     }
