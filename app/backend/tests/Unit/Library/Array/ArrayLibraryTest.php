@@ -67,31 +67,37 @@ class ArrayLibraryTest extends TestCase
 
         $testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         return [
-            'page:0/limit:3' => [
+            'page:0/limit:3/result:[1,2,3]' => [
                 'items'  => $testArray,
                 'page'   => 0,
                 'limit'  => 3,
                 'expect' => [1, 2, 3],
             ],
-            'page:1/limit:3' => [
+            'page:1/limit:3/result:[4,5,6]' => [
                 'items'  => $testArray,
                 'page'   => 1,
                 'limit'  => 3,
                 'expect' => [4, 5, 6],
             ],
-            'page:3/limit:3' => [
+            'page:3/limit:3/result:[3]' => [
                 'items'  => $testArray,
                 'page'   => 3,
                 'limit'  => 3,
                 'expect' => [10],
             ],
-            'page:4/limit:3' => [
+            'page:2/limit:4/result:[9,10]' => [
+                'items'  => $testArray,
+                'page'   => 2,
+                'limit'  => 4,
+                'expect' => [9,10],
+            ],
+            'page:4/limit:3/result:[]' => [
                 'items'  => $testArray,
                 'page'   => 4,
                 'limit'  => 3,
                 'expect' => [],
             ],
-            'page:0/limit:null' => [
+            'page:0/limit:null/result:origin' => [
                 'items'  => $testArray,
                 'page'   => 0,
                 'limit'  => null,
