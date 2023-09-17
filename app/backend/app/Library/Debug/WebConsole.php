@@ -18,6 +18,9 @@ class WebConsole
         'tail' => ['-n'],
         'less' => null,
         'free' => null,
+        'hostname' => null,
+        'ifconfig' => null,
+        'uname' => ['-a', '-r'],
     ];
 
     // オプション特定不可のコマンドはパイプ処理をさせない様にする。
