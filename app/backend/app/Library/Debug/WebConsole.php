@@ -26,11 +26,13 @@ class WebConsole
         'uname' => ['-a', '-r'],
         'ifconfig' => null,
         'netstat' => ['-a', '-C', '-e','-g', '-i', '-l', '-p', '-r', '-s', '-t', '-u'],
+        'ipcalc' => null,
         // 'ping' => null,
         'iostat' => ['-c', '-d', '-g', '-h', '-k', '-m', '-N', '-t', '-T', '-x'],
         'getopt' => null,
         'pidof' => null,
         'printenv' => null,
+        'mpstat' => ['-A', '-I', '-u'],
     ];
 
     // オプション特定不可のコマンドはパイプ処理をさせない様にする。
