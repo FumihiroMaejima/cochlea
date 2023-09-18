@@ -37,6 +37,9 @@ docker volume create ${PROJECT_NAME}-db-store
 docker volume create ${PROJECT_NAME}-redis-store
 docker volume create ${PROJECT_NAME}-mail-store
 docker network create --gateway=172.19.0.1 --subnet=172.19.0.0/16 ${PROJECT_NAME}-net
+
+### volumeの作り直しをする時
+docker volume rm ${PROJECT_NAME}-db-store
 ```
 
 
