@@ -47,8 +47,9 @@ services:
     build: ./mysql
     container_name: ${PROJECT_NAME}_db
     volumes:
-      - app-volume-store:/var/lib/mysql # データの永続化
-      - ./mysql/sql:/docker-entrypoint-initdb.d
+      - db-volume:/var/lib/mysql # データの永続化
+      # - ./mysql/sql:/docker-entrypoint-initdb.d # SQLで設定する場合
+      - ./mysql/initdb:/docker-entrypoint-initdb.d
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}" # MYSQL_TCP_PORTによってコンテナ側の接続すべきportが変わる
     environment:
@@ -78,7 +79,7 @@ services:
       default:
 
   redis:
-    image: redis:7.0-alpine
+    image: redis:7.2-alpine
     container_name: ${PROJECT_NAME}_redis
     volumes:
       - redis-volume:/data
@@ -112,7 +113,7 @@ volumes:
   mail-volume:
     name: ${MAIL_VOLUME_NAME}
     external: true
-  app-volume-store:
+  db-volume:
     name: ${VOLUME_NAME}
     # driver: local
     external: true

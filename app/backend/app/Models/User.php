@@ -54,13 +54,6 @@ class User extends Authenticatable implements JWTSubject
     protected $table = 'users';
 
     /**
-     * used in initializeSoftDeletes()
-     *
-     * @var array
-     */
-    protected $dates = [self::DELETED_AT];
-
-    /**
      * The primary key for the model.
      *
      * @var string
@@ -100,6 +93,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         self::EMAIL_VERIFIED_AT => 'datetime',
+        self::DELETED_AT => 'datetime',
     ];
 
     /**
