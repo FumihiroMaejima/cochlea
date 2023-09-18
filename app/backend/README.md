@@ -310,6 +310,16 @@ vendor/bin/phpunit --testdox --coverage-text --colors=never > storage/logs/cover
 XDEBUG_MODE=coverage or xdebug.mode=coverage
 ```
 
+*phpunitのバージョンアップについて
+
+メジャーアップデートされると`phpunit.xml`の内容を更新をかける必要がある時がある。
+
+下記の通り`--migrate-configuratio`オプションを一緒につけてテストを実行すると`phpunit.xml`が自動更新される。
+
+```shell
+vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox --migrate-configuration
+```
+
 
 ## マイグレーションについて
 
