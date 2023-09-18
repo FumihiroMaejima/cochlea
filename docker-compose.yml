@@ -47,7 +47,7 @@ services:
     build: ./mysql
     container_name: ${PROJECT_NAME}_db
     volumes:
-      - app-volume-store:/var/lib/mysql # データの永続化
+      - db-volume:/var/lib/mysql # データの永続化
       # - ./mysql/sql:/docker-entrypoint-initdb.d # SQLで設定する場合
       - ./mysql/initdb:/docker-entrypoint-initdb.d
     ports:
@@ -113,7 +113,7 @@ volumes:
   mail-volume:
     name: ${MAIL_VOLUME_NAME}
     external: true
-  app-volume-store:
+  db-volume:
     name: ${VOLUME_NAME}
     # driver: local
     external: true
