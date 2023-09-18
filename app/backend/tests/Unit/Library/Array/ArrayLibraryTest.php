@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Config;
 
 class ArrayLibraryTest extends TestCase
 {
+
+    private const MUITIDIMENTIONAL_ARRAY_KEY_ID = 'id';
+    private const MUITIDIMENTIONAL_ARRAY_KEY_KEY1 = 'key1';
+    private const MUITIDIMENTIONAL_ARRAY_KEY_KEY2 = 'key2';
+    private const MUITIDIMENTIONAL_ARRAY_TEMPLATE = [
+        self::MUITIDIMENTIONAL_ARRAY_KEY_ID => 1,
+        self::MUITIDIMENTIONAL_ARRAY_KEY_KEY1 => 1,
+        self::MUITIDIMENTIONAL_ARRAY_KEY_KEY2 => 'id=',
+    ];
+
     /**
      * setUpは各テストメソッドが実行される前に実行する
      * 親クラスのsetUpを必ず実行する
@@ -58,6 +68,106 @@ class ArrayLibraryTest extends TestCase
     }
 
     /**
+     * array paging data
+     * @return array
+     */
+    public function pagingDataProvider(): array
+    {
+        $this->createApplication();
+
+        $testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        // 多次元配列
+        $testMultidimensionalAarray = [];
+        foreach (range(1, 10) as $i) {
+            $tmp = self::MUITIDIMENTIONAL_ARRAY_TEMPLATE;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_ID] = $i;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_KEY1] = $i;
+            $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_KEY2] .= $i;
+            $testMultidimensionalAarray[] = $tmp;
+        }
+
+        return [
+            'page:0/limit:3/result:[1,2,3]' => [
+                'items'  => $testArray,
+                'page'   => 0,
+                'limit'  => 3,
+                'expect' => [1, 2, 3],
+            ],
+            'page:1/limit:3/result:[4,5,6]' => [
+                'items'  => $testArray,
+                'page'   => 1,
+                'limit'  => 3,
+                'expect' => [4, 5, 6],
+            ],
+            'page:3/limit:3/result:[3]' => [
+                'items'  => $testArray,
+                'page'   => 3,
+                'limit'  => 3,
+                'expect' => [10],
+            ],
+            'page:2/limit:4/result:[9,10]' => [
+                'items'  => $testArray,
+                'page'   => 2,
+                'limit'  => 4,
+                'expect' => [9,10],
+            ],
+            'page:4/limit:3/result:[]' => [
+                'items'  => $testArray,
+                'page'   => 4,
+                'limit'  => 3,
+                'expect' => [],
+            ],
+            'page:0/limit:null/result:origin' => [
+                'items'  => $testArray,
+                'page'   => 0,
+                'limit'  => null,
+                'expect' => $testArray,
+            ],
+            'multiDimentionalArray/page:0/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 0,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[0],
+                    $testMultidimensionalAarray[1],
+                    $testMultidimensionalAarray[2],
+                ],
+            ],
+            'multiDimentionalArray/page:1/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 1,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[3],
+                    $testMultidimensionalAarray[4],
+                    $testMultidimensionalAarray[5],
+                ],
+            ],
+            'multiDimentionalArray/page:3/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 3,
+                'limit'  => 3,
+                'expect' => [
+                    $testMultidimensionalAarray[9],
+                ],
+            ],
+            'multiDimentionalArray/page:1/limit:3' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 4,
+                'limit'  => 3,
+                'expect' => [],
+            ],
+            'multiDimentionalArray/page:0/limit:null/result:origin' => [
+                'items'  => $testMultidimensionalAarray,
+                'page'   => 0,
+                'limit'  => null,
+                'expect' => $testMultidimensionalAarray,
+            ],
+        ];
+    }
+
+    /**
      * test to array.
      *
      * @dataProvider arraySampleDataProvider
@@ -89,5 +199,16 @@ class ArrayLibraryTest extends TestCase
         // echo var_dump($result);
 
         $this->assertEquals(current(json_decode(json_encode($data), true)), ArrayLibrary::getFirst($result));
+    }
+
+    /**
+     * test paging array items.
+     *
+     * @dataProvider pagingDataProvider
+     * @return void
+     */
+    public function testPaging(array $items, int $page, ?int $limit, array $expect): void
+    {
+        $this->assertEquals($expect, ArrayLibrary::paging($items, $page, $limit));
     }
 }

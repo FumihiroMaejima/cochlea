@@ -73,4 +73,25 @@ class HashLibrary
     {
         return password_get_info($hash);
     }
+
+    /**
+     * get password_algos.
+     * equal password_algos()
+     *
+     * @return array
+     */
+    public static function passwordAlgos(): array
+    {
+        return password_algos();
+    }
+
+    /**
+     * get service password pepper.
+     *
+     * @return string
+     */
+    public static function getPepper(): string
+    {
+        return config('myApp.hash.pepper');
+    }
 }

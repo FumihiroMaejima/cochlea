@@ -16,6 +16,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Auth\AuthCodeLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
+use App\Library\User\UserLibrary;
 use App\Models\User;
 use App\Models\Users\UserAuthCodes;
 use App\Repositories\Users\UserAuthCodes\UserAuthCodesRepositoryInterface;
@@ -143,6 +144,10 @@ class UserAuthService
 
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // ユーザー情報取得
             $userAuthCodeList = UserAuthCodes::sortByCreatedAt(
                 $this->userAuthCodeRepository->getListByUserId($userId)
             );
@@ -240,6 +245,9 @@ class UserAuthService
 
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
             // 退会後のデータ情報に更新
             $result = (new User())->updateIsLeft($userId, TimeLibrary::getCurrentDateTime());
             if (empty($result)) {

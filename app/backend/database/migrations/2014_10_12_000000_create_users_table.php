@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('email')->nullable()->default(null)->unique()->comment('メールアドレス');
             $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス検証日');
             $table->string('password')->nullable()->default(null)->comment('パスワード');
-            $table->tinyInteger('role')->unsigned()->default(0)->comment('ロール');
+            $table->string('salt')->comment('ソルト');
             $table->rememberToken()->comment('リメンバートークン');
             // $table->foreignId('current_team_id')->nullable()->comment('チームID');
             // $table->string('profile_photo_path', 2048)->nullable()->comment('プロフィールアイコンパス');

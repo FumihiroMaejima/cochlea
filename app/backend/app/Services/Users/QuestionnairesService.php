@@ -13,6 +13,7 @@ use App\Http\Resources\Users\UserQuestionnairesResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
 use App\Library\Questionnaire\QuestionnaireLibrary;
+use App\Library\User\UserLibrary;
 use App\Models\Masters\Questionnaires;
 use App\Models\Users\UserQuestionnaires;
 use Exception;
@@ -93,23 +94,27 @@ class QuestionnairesService
             );
         }
 
-        $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
-        if ($userQuestionnaire) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'User Questionnaire is Aready Exist.'
-            );
-        }
-
-        // 入力値の検証
-        QuestionnaireLibrary::validateQuestionnaireAnswer(
-            $userQuestions,
-            json_decode($questionnaire[Questionnaires::QUESTIONS], true)
-        );
-
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // ユーザー情報取得
+            $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
+            if ($userQuestionnaire) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'User Questionnaire is Aready Exist.'
+                );
+            }
+
+            // 入力値の検証
+            QuestionnaireLibrary::validateQuestionnaireAnswer(
+                $userQuestions,
+                json_decode($questionnaire[Questionnaires::QUESTIONS], true)
+            );
+
             $resource = UserQuestionnairesResource::toArrayForCreate($userId, $questionnaireId, $userQuestions);
             $createCount = $this->userQuestionnairesRepository->create($userId, $resource);
 

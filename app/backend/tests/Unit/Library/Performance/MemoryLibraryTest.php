@@ -68,27 +68,27 @@ class MemoryLibraryTest extends TestCase
         return [
             'lenght 100' => [
                 'value' => 100,
-                'expect' => '8.05 KB',
+                'expect' => '2.55 KB',
             ],
             'lenght 1000' => [
                 'value' => 1000,
-                'expect' => '36.05 KB',
+                'expect' => '20.05 KB',
             ],
             'lenght 10000' => [
                 'value' => 10000,
-                'expect' => '516.05 KB',
+                'expect' => '260.05 KB',
             ],
             'lenght 100000' => [
                 'value' => 100000,
-                'expect' => '4 MB',
+                'expect' => '2 MB',
             ],
             'lenght 1000000' => [
                 'value' => 1000000,
-                'expect' => '32 MB',
+                'expect' => '16 MB',
             ],
             'lenght 10000000' => [
                 'value' => 10000000,
-                'expect' => '512 MB',
+                'expect' => '256 MB',
             ],
         ];
     }

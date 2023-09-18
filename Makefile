@@ -32,7 +32,7 @@ ps:
 	docker-compose ps
 
 rebuild: # 個別のコンテナを作り直し
-	docker-compose build -f docker-compose.yml --no-cache $(CONTAINER)
+	docker-compose -f ./docker-compose.yml build --no-cache $(SEVICE_NAME)
 
 dev:
 	sh ./scripts/docker/container-dev.sh && \
