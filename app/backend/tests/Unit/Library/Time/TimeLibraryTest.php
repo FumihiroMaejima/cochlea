@@ -357,10 +357,8 @@ class TimeLibraryTest extends TestCase
      * test check datetime data.
      * @return array
      */
-    public function checkDateDataTimeDataProvider(): array
+    public static function checkDateDataTimeDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             '2023/01/12' => [
                 'value' => '2023/01/12',
