@@ -8,9 +8,9 @@ My Application.
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.1.9(php:8.1.9-fpm-alpine) |
+| PHP | 8.2(php:8.2-fpm-alpine3.17) |
 | MySQL | 5.7 |
-| Nginx | 1.23(nginx:1.23-alpine) |
+| Nginx | 1.25(nginx:1.25-alpine) |
 | Laravel | 9.* |
 
 [backend/README](./app/backend/README.md)
