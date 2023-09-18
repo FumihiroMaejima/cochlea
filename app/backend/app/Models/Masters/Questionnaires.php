@@ -69,7 +69,7 @@ class Questionnaires extends Model
      *
      * @var array
      */
-    protected $dates = [self::DELETED_AT];
+    protected $casts = [self::DELETED_AT => 'datetime'];
 
     /**
      * The primary key for the model.

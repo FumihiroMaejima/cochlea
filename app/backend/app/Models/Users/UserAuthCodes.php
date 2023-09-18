@@ -36,7 +36,7 @@ class UserAuthCodes extends BaseUserDataModel
     public $timestamps = true;
 
     // ソフトデリートの有効化(日付へキャストする属性)
-    // protected $dates = [];
+    // protected $casts = [];
 
     /**
      * The primary key for the model.

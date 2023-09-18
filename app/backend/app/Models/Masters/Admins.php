@@ -44,13 +44,6 @@ class Admins extends Authenticatable implements JWTSubject
     public $timestamps = true;
 
     /**
-     * used in initializeSoftDeletes()
-     *
-     * @var array
-     */
-    protected $dates = [self::DELETED_AT];
-
-    /**
      * The primary key for the model.
      *
      * @var string
@@ -87,6 +80,7 @@ class Admins extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        self::DELETED_AT => 'datetime',
     ];
 
     /**

@@ -43,7 +43,7 @@ class UserCoinPaymentLog extends BaseLogDataModel
     public $timestamps = true;
 
     // ソフトデリートの有効化(日付へキャストする属性)
-    protected $dates = [self::DELETED_AT];
+    protected $casts = [self::DELETED_AT => 'datetime'];
 
     /**
      * The primary key for the model.

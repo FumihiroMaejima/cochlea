@@ -8,9 +8,9 @@ My Application.
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.1.9(php:8.1.9-fpm-alpine) |
+| PHP | 8.2(php:8.2-fpm-alpine3.17) |
 | MySQL | 5.7 |
-| Nginx | 1.23(nginx:1.23-alpine) |
+| Nginx | 1.25(nginx:1.25-alpine) |
 | Laravel | 9.* |
 
 [backend/README](./app/backend/README.md)
@@ -37,6 +37,9 @@ docker volume create ${PROJECT_NAME}-db-store
 docker volume create ${PROJECT_NAME}-redis-store
 docker volume create ${PROJECT_NAME}-mail-store
 docker network create --gateway=172.19.0.1 --subnet=172.19.0.0/16 ${PROJECT_NAME}-net
+
+### volumeの作り直しをする時
+docker volume rm ${PROJECT_NAME}-db-store
 ```
 
 

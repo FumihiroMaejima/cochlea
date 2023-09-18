@@ -184,7 +184,7 @@ class TimeLibraryTest extends TestCase
         // echo TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD) . "\n";
 
         $this->assertEquals(
-            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+${years} year")),
+            date(TimeLibrary::DATE_TIME_FORMAT_YMD, strtotime("+$years year")),
             TimeLibrary::addYears($dateTime, $years, TimeLibrary::DATE_TIME_FORMAT_YMD)
         );
     }

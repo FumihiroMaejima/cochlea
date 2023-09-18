@@ -5,12 +5,12 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.0",
         "chillerlan/php-qrcode": "^4.3",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.2",
+        "laravel/framework": "^10.2",
         "laravel/jetstream": "^2.7",
-        "laravel/sanctum": "^2.14.1",
+        "laravel/sanctum": "^3.2",
         "laravel/slack-notification-channel": "^2.4",
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.7",
@@ -21,7 +21,7 @@
         "psr/simple-cache": "^1.0",
         "stripe/stripe-php": "^8.9",
         "tecnickcom/tcpdf": "^6.5",
-        "tymon/jwt-auth": "^1.0.2"
+        "tymon/jwt-auth": "^2.0.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -36,8 +36,8 @@
         "phpmd/phpmd": "^2.12",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.9",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0",
         "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
@@ -84,6 +84,6 @@
             "phpstan/extension-installer": false
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
