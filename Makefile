@@ -26,6 +26,9 @@ stop:
 down:
 	docker-compose down
 
+down-volume:
+	docker-compose down -v
+
 down-rmi:
 	docker-compose down --rmi all
 ps:
