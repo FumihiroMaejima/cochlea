@@ -1,6 +1,8 @@
 # FROM php:7.4-fpm-alpine
 # FROM php:8.0.22-fpm-alpine
-FROM php:8.1.9-fpm-alpine
+# FROM php:8.1.9-fpm-alpine
+FROM php:8.2-fpm-alpine3.17
+# FROM php:8.2-rc-fpm-alpine
 
 # tinker(psysh)
 ARG PSYSH_DIR=/usr/local/share/psysh
@@ -15,7 +17,7 @@ ENV COMPOSER_HOME /composer
 ENV PHP_CS_FIXER_IGNORE_ENV 1
 
 RUN apk update && \
-  apk add --update --no-cache --virtual=.build-dependencies \
+  apk add --update --no-cache linux-headers --virtual=.build-dependencies \
   #   autoconf=~2.69 \
   #   gcc=~9.2 \
   #   g++=~9.2 \
