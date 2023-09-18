@@ -12,7 +12,8 @@
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <!-- <coverage processUncoveredFiles="true"> for laravel10-->
+    <coverage>
         <include>
             <directory suffix=".php">./app</directory>
         </include>
