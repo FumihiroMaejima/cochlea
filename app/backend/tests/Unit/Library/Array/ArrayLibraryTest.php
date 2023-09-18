@@ -79,7 +79,7 @@ class ArrayLibraryTest extends TestCase
 
         // 多次元配列
         $testMultidimensionalAarray = [];
-        foreach(range(1, 10) as $i) {
+        foreach (range(1, 10) as $i) {
             $tmp = self::MUITIDIMENTIONAL_ARRAY_TEMPLATE;
             $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_ID] = $i;
             $tmp[self::MUITIDIMENTIONAL_ARRAY_KEY_KEY1] = $i;
