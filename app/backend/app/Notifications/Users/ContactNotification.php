@@ -64,14 +64,14 @@ class ContactNotification extends Notification
     /**
      * The callback that should be used to create the reset password URL.
      *
-     * @var (\Closure(mixed, string): string)|null
+     * @var (Closure(mixed, string): string)|null
      */
     public static $createUrlCallback;
 
     /**
      * The callback that should be used to build the mail message.
      *
-     * @var (\Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage)|null
+     * @var (Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage)|null
      */
     public static $toMailCallback;
 
