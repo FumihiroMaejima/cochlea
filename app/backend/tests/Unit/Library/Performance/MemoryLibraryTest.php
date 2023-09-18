@@ -29,10 +29,8 @@ class MemoryLibraryTest extends TestCase
      * test convert memory usage data
      * @return array
      */
-    public function convertToMemoryUsageDataProvider(): array
+    public static function convertToMemoryUsageDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'memory usage 100' => [
                 'value' => 100,
@@ -61,10 +59,8 @@ class MemoryLibraryTest extends TestCase
      * test int value list length data
      * @return array
      */
-    public function intValueUsageListDataProvider(): array
+    public static function intValueUsageListDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'lenght 100' => [
                 'value' => 100,

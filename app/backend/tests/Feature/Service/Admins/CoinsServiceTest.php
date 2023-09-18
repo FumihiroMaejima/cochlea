@@ -258,10 +258,8 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
      * coin delete data
      * @return array
      */
-    public function coinRemoveValidationErrorDataProvider(): array
+    public static function coinRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist coins'             => [CoinBaseRequest::KEY_COINS => [100]],
             'not integer value in array' => [CoinBaseRequest::KEY_COINS => ['string']]

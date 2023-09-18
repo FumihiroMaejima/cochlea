@@ -171,10 +171,8 @@ class RolesServiceTest extends AdminServiceBaseTestCase
      * role delete data
      * @return array
      */
-    public function roleRemoveValidationErrorDataProvider(): array
+    public static function roleRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist roles'             => [RoleBaseRequest::KEY_ROLES => [100]],
             'not integer value in array' => [RoleBaseRequest::KEY_ROLES => ['string']]

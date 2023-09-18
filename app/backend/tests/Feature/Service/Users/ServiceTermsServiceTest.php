@@ -65,10 +65,8 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
      * user service term crerate data
      * @return array
      */
-    public function createUserServiceTermDataProvider(): array
+    public static function createUserServiceTermDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'create user service term error: not latest serivce term' => [
                 UserServiceTermsCreateRequest::KEY_ID => 1,

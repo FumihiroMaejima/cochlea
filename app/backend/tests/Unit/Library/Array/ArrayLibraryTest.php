@@ -31,10 +31,8 @@ class ArrayLibraryTest extends TestCase
      * array sample data
      * @return array
      */
-    public function arraySampleDataProvider(): array
+    public static function arraySampleDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'convert array to array' => [
                 [
@@ -71,10 +69,8 @@ class ArrayLibraryTest extends TestCase
      * array paging data
      * @return array
      */
-    public function pagingDataProvider(): array
+    public static function pagingDataProvider(): array
     {
-        $this->createApplication();
-
         $testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         // 多次元配列

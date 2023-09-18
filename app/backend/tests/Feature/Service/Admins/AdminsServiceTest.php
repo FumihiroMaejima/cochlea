@@ -188,10 +188,8 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin remove data
      * @return array
      */
-    public function adminRemoveDataProvider(): array
+    public static function adminRemoveDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'id is 3' => [AdminBaseRequest::KEY_ID => 3]
         ];
@@ -213,10 +211,8 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin delete data
      * @return array
      */
-    public function adminRemoveValidationErrorDataProvider(): array
+    public static function adminRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist id' => [AdminBaseRequest::KEY_ID => 100],
             'not inteder value' => [AdminBaseRequest::KEY_ID => (int)('string value')]

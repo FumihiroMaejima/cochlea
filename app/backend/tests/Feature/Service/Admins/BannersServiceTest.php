@@ -289,10 +289,8 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner delete data
      * @return array
      */
-    public function bannerRemoveValidationErrorDataProvider(): array
+    public static function bannerRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist banners'            => [BannerBaseRequest::KEY_BANNERS => [100]],
             'not integer value in array' => [BannerBaseRequest::KEY_BANNERS => ['string']]

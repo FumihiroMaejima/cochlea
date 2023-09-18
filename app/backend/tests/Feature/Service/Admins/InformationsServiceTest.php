@@ -242,10 +242,8 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
      * information delete data
      * @return array
      */
-    public function informationRemoveValidationErrorDataProvider(): array
+    public static function informationRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist informations'      => [InformationBaseRequest::KEY_INFORMATIONS => [100]],
             'not integer value in array' => [InformationBaseRequest::KEY_INFORMATIONS => ['string']]

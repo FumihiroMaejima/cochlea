@@ -40,10 +40,8 @@ class EncryptLibraryTest extends TestCase
      * encrypt string data
      * @return array
      */
-    public function encryptStringDataProvider(): array
+    public static function encryptStringDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'encrypt email for ecb mode data' => [
                 'value' => self::TEST_EMAIL_VALUE,
@@ -56,10 +54,8 @@ class EncryptLibraryTest extends TestCase
      * decrypt string data
      * @return array
      */
-    public function decryptStringDataProvider(): array
+    public static function decryptStringDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'decrypt email for ecb mode data' => [
                 'value' => self::TEST_ENCRYPT_EMAIL_VALUE,
@@ -72,10 +68,8 @@ class EncryptLibraryTest extends TestCase
      * decrypt cbc string data
      * @return array
      */
-    public function decryptCbcStringDataProvider(): array
+    public static function decryptCbcStringDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'decrypt email for ecb mode data' => [
                 'value' => self::TEST_ENCRYPT_EMAIL_CBC_VALUE,
@@ -88,10 +82,8 @@ class EncryptLibraryTest extends TestCase
      * create iv length data
      * @return array
      */
-    public function createIvDataProvider(): array
+    public static function createIvDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             /* 'length 0' => [
                 'length' => 0,

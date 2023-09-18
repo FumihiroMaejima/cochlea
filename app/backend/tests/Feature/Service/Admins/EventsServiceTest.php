@@ -241,10 +241,8 @@ class EventsServiceTest extends AdminServiceBaseTestCase
      * event delete data
      * @return array
      */
-    public function eventRemoveValidationErrorDataProvider(): array
+    public static function eventRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist events'            => [EventBaseRequest::KEY_EVENTS => [100]],
             'not integer value in array' => [EventBaseRequest::KEY_EVENTS => ['string']]

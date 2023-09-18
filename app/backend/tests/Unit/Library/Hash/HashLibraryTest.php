@@ -30,10 +30,8 @@ class HashLibraryTest extends TestCase
      * hash string data
      * @return array
      */
-    public function makeHashDataProvider(): array
+    public static function makeHashDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'string value' => [
                 'value' => self::TEST_HASH_TARGET_VALUE,
@@ -45,10 +43,8 @@ class HashLibraryTest extends TestCase
      * hash check data
      * @return array
      */
-    public function makeHashCheckDataProvider(): array
+    public static function makeHashCheckDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'same hash value' => [
                 'value1' => self::TEST_HASH_TARGET_VALUE,
@@ -67,10 +63,8 @@ class HashLibraryTest extends TestCase
      * encrypt string data
      * @return array
      */
-    public function encryptStringDataProvider(): array
+    public static function encryptStringDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'encrypt email for ecb mode data' => [
                 'value' => self::TEST_EMAIL_VALUE,

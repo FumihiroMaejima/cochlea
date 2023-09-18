@@ -66,10 +66,8 @@ class InformationsServiceTest extends UserServiceBaseTestCase
      * user read information crerate data
      * @return array
      */
-    public function userReadInformationCreateDataProvider(): array
+    public static function userReadInformationCreateDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'create user read information' => [
                 InformationBaseRequest::KEY_ID => 1
