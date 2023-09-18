@@ -37,6 +37,10 @@ ps:
 rebuild: # 個別のコンテナを作り直し
 	docker-compose -f ./docker-compose.yml build --no-cache $(SEVICE_NAME)
 
+recreate-volume:
+	docker volume rm $(VOLUME_NAME) && \
+	docker volume create $(VOLUME_NAME) && \
+
 dev:
 	sh ./scripts/docker/container-dev.sh && \
 	${SHELL} ./scripts/change-db-host.sh db-next db
