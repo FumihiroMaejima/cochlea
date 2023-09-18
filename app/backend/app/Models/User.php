@@ -39,7 +39,7 @@ class User extends Authenticatable implements JWTSubject
     public const EMAIL = 'email';
     public const EMAIL_VERIFIED_AT = 'email_verified_at';
     public const PASSWORD = 'password';
-    public const ROLE = 'role';
+    public const SALT = 'salt';
     public const REMEMBER_TOKEN = 'remember_token';
     // public const CURRENT_TEAM_ID = 'current_team_id';
     // public const PROFILE_PHOTO_PATH = 'profile_photo_path';
@@ -76,6 +76,7 @@ class User extends Authenticatable implements JWTSubject
         self::NAME,
         self::EMAIL,
         self::PASSWORD,
+        self::SALT,
         self::IS_LEFT,
         self::CODE_VERIFIED_AT,
         self::LAST_LOGIN_AT,

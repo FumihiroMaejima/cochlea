@@ -4,15 +4,11 @@ namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Http\Requests\Admin\Coins\CoinCreateRequest;
-use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
-use App\Http\Requests\Admin\Coins\CoinUpdateRequest;
 use App\Http\Resources\Admins\CoinsResource;
 use App\Http\Resources\Logs\UserCoinPaymentLogResource;
 use App\Http\Resources\Users\UserCoinHistoriesResource;
@@ -27,6 +23,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
 use App\Library\Stripe\CheckoutLibrary;
 use App\Library\String\UuidLibrary;
+use App\Library\User\UserLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoinPaymentStatus;
@@ -92,12 +89,15 @@ class UserCoinPaymentService
 
         $orderId = UuidLibrary::uuidVersion4();
 
-        // stripeへのAPIリクエスト&セッションの作成
-        $session = CheckoutLibrary::createSession($orderId, $lineItems);
-
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // stripeへのAPIリクエスト&セッションの作成
+            $session = CheckoutLibrary::createSession($orderId, $lineItems);
+
             // ステータスの設定
             $status = $this->getPaymentStatusFromStripeResponse($session->status);
             $stateResource = UserCoinPaymentStatusResource::toArrayForCreate($userId, $orderId, $coinId, $status, $session->id);
@@ -141,6 +141,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
             // ロックをかけて再取得
             $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
 
@@ -197,6 +200,9 @@ class UserCoinPaymentService
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
             // ロックをかけて再取得
             $userCoinPaymentStatus = $this->getUserCoinPaymentStatusByUserId($userId, $orderId, true);
 

@@ -16,6 +16,7 @@ use App\Repositories\Masters\Informations\InformationsRepositoryInterface;
 use App\Repositories\Users\UserReadInformations\UserReadInformationsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\User\UserLibrary;
 use Exception;
 
 class InformationsService
@@ -86,17 +87,21 @@ class InformationsService
             );
         }
 
-        $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
-        if ($userReadInformation) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'User Read Information is Aready Exist.'
-            );
-        }
-
         // DB 登録
         DB::beginTransaction();
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // ユーザー情報取得
+            $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
+            if ($userReadInformation) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'User Read Information is Aready Exist.'
+                );
+            }
+
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
             $createCount = $this->userReadInformationsRepository->create($userId, $resource);
 
