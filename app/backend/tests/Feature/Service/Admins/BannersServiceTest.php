@@ -204,7 +204,6 @@ class BannersServiceTest extends AdminServiceBaseTestCase
     {
         $name = Config::get('myappTest.test.banners.import.success')['fileName'];
 
-        $a = Config::get('myappTest.test.banners.import.fileData');
         /* make file */
         // Symfony file package extends SplFileInfo
         $symfonyFile = Excel::download(
