@@ -22,10 +22,8 @@ class QRCodeLibraryTest extends TestCase
      * test get QRCode data
      * @return array
      */
-    public function getQRCodeByUrlDataProvider(): array
+    public static function getQRCodeByUrlDataProvider(): array
     {
-        $this->createApplication();
-
         $url = 'http://localhost/test';
 
         return [

@@ -53,9 +53,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner crerate data
      * @return array
      */
-    public function bannerCreateDataProvider(): array
+    public static function bannerCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create banner data' => Config::get('myappTest.test.banners.create.success')
@@ -98,9 +98,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner crerate 422 error data
      * @return array
      */
-    public function bannerCreate422FailedDataProvider(): array
+    public static function bannerCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = [
             'no_name',
@@ -204,7 +204,6 @@ class BannersServiceTest extends AdminServiceBaseTestCase
     {
         $name = Config::get('myappTest.test.banners.import.success')['fileName'];
 
-        $a = Config::get('myappTest.test.banners.import.fileData');
         /* make file */
         // Symfony file package extends SplFileInfo
         $symfonyFile = Excel::download(
@@ -289,10 +288,8 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner delete data
      * @return array
      */
-    public function bannerRemoveValidationErrorDataProvider(): array
+    public static function bannerRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist banners'            => [BannerBaseRequest::KEY_BANNERS => [100]],
             'not integer value in array' => [BannerBaseRequest::KEY_BANNERS => ['string']]

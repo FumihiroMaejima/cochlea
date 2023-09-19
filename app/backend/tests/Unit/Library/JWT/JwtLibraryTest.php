@@ -28,10 +28,8 @@ class JwtLibraryTest extends TestCase
      * decode token data
      * @return array
      */
-    public function decodeTokenHeaderDataProvider(): array
+    public static function decodeTokenHeaderDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'decode string' => [
                 'value' => self::TEST_VALUE,
@@ -43,10 +41,8 @@ class JwtLibraryTest extends TestCase
      * encode token data
      * @return array
      */
-    public function encodeTokenHeaderDataProvider(): array
+    public static function encodeTokenHeaderDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'encode token header value' => [
                 'value' => '{"typ":"JWT","alg":"none"}',

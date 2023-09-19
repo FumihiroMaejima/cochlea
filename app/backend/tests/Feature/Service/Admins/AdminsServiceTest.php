@@ -69,9 +69,9 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin crerate data
      * @return array
      */
-    public function adminCreateDataProvider(): array
+    public static function adminCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create admin data' => Config::get('myappTest.test.admin.create.success')
@@ -99,9 +99,9 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin crerate 422 error data
      * @return array
      */
-    public function adminCreate422FailedDataProvider(): array
+    public static function adminCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = ['no_name', 'no_email', 'no_exist_role', 'no_password', 'no_password_confirmation', 'not_same_password'];
 
@@ -188,10 +188,8 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin remove data
      * @return array
      */
-    public function adminRemoveDataProvider(): array
+    public static function adminRemoveDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'id is 3' => [AdminBaseRequest::KEY_ID => 3]
         ];
@@ -213,10 +211,8 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin delete data
      * @return array
      */
-    public function adminRemoveValidationErrorDataProvider(): array
+    public static function adminRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist id' => [AdminBaseRequest::KEY_ID => 100],
             'not inteder value' => [AdminBaseRequest::KEY_ID => (int)('string value')]
