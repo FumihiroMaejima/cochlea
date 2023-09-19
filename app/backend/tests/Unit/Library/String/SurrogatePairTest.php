@@ -21,10 +21,8 @@ class SurrogatePairTest extends TestCase
      * test surrogate pair data
      * @return array
      */
-    public function checkSurrogatePairDataProvider(): array
+    public static function checkSurrogatePairDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'simple string value' => [
                 'value' => 'stringValue',

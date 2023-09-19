@@ -22,10 +22,8 @@ class FileLibraryTest extends TestCase
      * test get QRCode data
      * @return array
      */
-    public function getQRCodeByUrlDataProvider(): array
+    public static function getQRCodeByUrlDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'testing env is local dick' => [
                 'expect' => FileLibrary::STORAGE_DISK_LOCAL,

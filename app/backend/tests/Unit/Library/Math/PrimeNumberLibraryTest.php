@@ -23,10 +23,8 @@ class PrimeNumberLibraryTest extends TestCase
      * prime number data
      * @return array
      */
-    public function isPrimeNumberDataProvider(): array
+    public static function isPrimeNumberDataProvider(): array
     {
-        $this->createApplication();
-
         $trueValue = true;
         $falseValue = false;
 
@@ -54,10 +52,8 @@ class PrimeNumberLibraryTest extends TestCase
      * max prime number data
      * @return array
      */
-    public function getMaxPrimeNumberDataProvider(): array
+    public static function getMaxPrimeNumberDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             "0 is 0" => [
                 'value' => 0,
@@ -82,10 +78,8 @@ class PrimeNumberLibraryTest extends TestCase
      * max greater prime numbers data
      * @return array
      */
-    public function getGreaterPrimeNumbersDataProvider(): array
+    public static function getGreaterPrimeNumbersDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             "value=0/count=1/expect=[]" => [
                 'value' => 0,

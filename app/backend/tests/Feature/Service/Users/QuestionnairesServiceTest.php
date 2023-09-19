@@ -83,10 +83,8 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
      * user Questionnaire crerate data
      * @return array
      */
-    public function createUserQuestionnairesDataProvider(): array
+    public static function createUserQuestionnairesDataProvider(): array
     {
-        $this->createApplication();
-
         $requestBody = [Questionnaires::QUESTIONS => [self::createRequestBodyOfQuestionAnswer(1, 'test text')]];
 
         return [
@@ -107,10 +105,8 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
      * user Questionnaire update data
      * @return array
      */
-    public function updateUserQuestionnairesDataProvider(): array
+    public static function updateUserQuestionnairesDataProvider(): array
     {
-        $this->createApplication();
-
         $requestBody = [Questionnaires::QUESTIONS => [self::createRequestBodyOfQuestionAnswer(1, 'test update text')]];
 
         return [

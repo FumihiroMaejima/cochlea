@@ -44,9 +44,9 @@ class RolesServiceTest extends AdminServiceBaseTestCase
      * role crerate data
      * @return array
      */
-    public function roleCreateDataProvider(): array
+    public static function roleCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create role data' => Config::get('myappTest.test.roles.create.success')
@@ -73,9 +73,9 @@ class RolesServiceTest extends AdminServiceBaseTestCase
      * role crerate 422 error data
      * @return array
      */
-    public function roleCreate422FailedDataProvider(): array
+    public static function roleCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = ['no_name', 'no_code', 'no_detail', 'no_permission', 'no_exist_permission'];
         $testCase = [];
@@ -171,10 +171,8 @@ class RolesServiceTest extends AdminServiceBaseTestCase
      * role delete data
      * @return array
      */
-    public function roleRemoveValidationErrorDataProvider(): array
+    public static function roleRemoveValidationErrorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             'no exist roles'             => [RoleBaseRequest::KEY_ROLES => [100]],
             'not integer value in array' => [RoleBaseRequest::KEY_ROLES => ['string']]

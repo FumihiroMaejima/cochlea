@@ -313,10 +313,8 @@ class TimeLibraryTest extends TestCase
      * test check date data.
      * @return array
      */
-    public function checkDateDataProvider(): array
+    public static function checkDateDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             '2023/01/12' => [
                 'value' => '2023/01/12',
@@ -337,10 +335,8 @@ class TimeLibraryTest extends TestCase
      * test check date separated by hyphen data.
      * @return array
      */
-    public function checkDateDataByHyphenProvider(): array
+    public static function checkDateDataByHyphenDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             '2023-01-12' => [
                 'value' => '2023-01-12',
@@ -361,10 +357,8 @@ class TimeLibraryTest extends TestCase
      * test check datetime data.
      * @return array
      */
-    public function checkDateDataTimeProvider(): array
+    public static function checkDateDataTimeDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             '2023/01/12' => [
                 'value' => '2023/01/12',
@@ -405,10 +399,8 @@ class TimeLibraryTest extends TestCase
      * test check datetime separated by hyphen data.
      * @return array
      */
-    public function checkDateDataTimeByHyphenProvider(): array
+    public static function checkDateDataTimeByHyphenDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             '2023/01/12' => [
                 'value' => '2023/01/12',
@@ -462,7 +454,7 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check date separated by hyphen.
-     * @dataProvider checkDateDataByHyphenProvider
+     * @dataProvider checkDateDataByHyphenDataProvider
      * @param string $date
      * @param bool $expect
      * @return void
@@ -477,7 +469,7 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check datetime
-     * @dataProvider checkDateDataTimeProvider
+     * @dataProvider checkDateDataTimeDataProvider
      * @param string $dateTime
      * @param bool $expect
      * @return void
@@ -492,7 +484,7 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check datetime for hyphen
-     * @dataProvider checkDateDataTimeByHyphenProvider
+     * @dataProvider checkDateDataTimeByHyphenDataProvider
      * @param string $dateTime
      * @param bool $expect
      * @return void

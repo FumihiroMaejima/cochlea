@@ -23,10 +23,8 @@ class MathLibraryTest extends TestCase
      * max get prime factorization data
      * @return array
      */
-    public function getPrimeFactorizationDataProvider(): array
+    public static function getPrimeFactorizationDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             "value is 30" => [
                 'value' => 30,
@@ -55,10 +53,8 @@ class MathLibraryTest extends TestCase
      * max get greated common divisor data
      * @return array
      */
-    public function getGreatestCommonDivisorDataProvider(): array
+    public static function getGreatestCommonDivisorDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             "value1=3/value2=7/expect=1" => [
                 'value1' => 3,
@@ -82,10 +78,8 @@ class MathLibraryTest extends TestCase
      * max get least common multiple data
      * @return array
      */
-    public function getLeastCommonMultipleDataProvider(): array
+    public static function getLeastCommonMultipleDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             "value1=3/value2=7/expect=21" => [
                 'value1' => 3,
