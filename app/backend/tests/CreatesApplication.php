@@ -26,7 +26,7 @@ trait CreatesApplication
      *
      * @return Application
      */
-    public function createApplicationForStaticDataProvider(): Application
+    public static function createApplicationForStaticDataProvider(): Application
     {
         $app = require __DIR__.'/../bootstrap/app.php';
 
