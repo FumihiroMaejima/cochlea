@@ -53,9 +53,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner crerate data
      * @return array
      */
-    public function bannerCreateDataProvider(): array
+    public static function bannerCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create banner data' => Config::get('myappTest.test.banners.create.success')
@@ -98,9 +98,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
      * banner crerate 422 error data
      * @return array
      */
-    public function bannerCreate422FailedDataProvider(): array
+    public static function bannerCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = [
             'no_name',

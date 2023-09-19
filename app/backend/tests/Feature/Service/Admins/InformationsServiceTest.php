@@ -51,9 +51,9 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
      * information crerate data
      * @return array
      */
-    public function informationCreateDataProvider(): array
+    public static function informationCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create information data' => Config::get('myappTest.test.informations.create.success')
@@ -87,9 +87,9 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
      * information crerate 422 error data
      * @return array
      */
-    public function informationCreate422FailedDataProvider(): array
+    public static function informationCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = [
             'no_name',

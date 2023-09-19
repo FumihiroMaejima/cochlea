@@ -69,9 +69,9 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin crerate data
      * @return array
      */
-    public function adminCreateDataProvider(): array
+    public static function adminCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create admin data' => Config::get('myappTest.test.admin.create.success')
@@ -99,9 +99,9 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
      * admin crerate 422 error data
      * @return array
      */
-    public function adminCreate422FailedDataProvider(): array
+    public static function adminCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = ['no_name', 'no_email', 'no_exist_role', 'no_password', 'no_password_confirmation', 'not_same_password'];
 

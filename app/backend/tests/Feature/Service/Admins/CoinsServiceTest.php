@@ -52,9 +52,9 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
      * coin crerate data
      * @return array
      */
-    public function coinCreateDataProvider(): array
+    public static function coinCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create coin data' => Config::get('myappTest.test.coins.create.success')
@@ -91,9 +91,9 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
      * coin crerate 422 error data
      * @return array
      */
-    public function coinCreate422FailedDataProvider(): array
+    public static function coinCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = [
             'no_name',

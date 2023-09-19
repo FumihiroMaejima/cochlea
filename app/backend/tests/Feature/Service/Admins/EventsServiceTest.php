@@ -51,9 +51,9 @@ class EventsServiceTest extends AdminServiceBaseTestCase
      * event crerate data
      * @return array
      */
-    public function eventCreateDataProvider(): array
+    public static function eventCreateDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         return [
             'create event data' => Config::get('myappTest.test.events.create.success')
@@ -86,9 +86,9 @@ class EventsServiceTest extends AdminServiceBaseTestCase
      * event crerate 422 error data
      * @return array
      */
-    public function eventCreate422FailedDataProvider(): array
+    public static function eventCreate422FailedDataProvider(): array
     {
-        $this->createApplication();
+        self::createApplicationForStaticDataProvider();
 
         $caseKeys = [
             'no_name',
