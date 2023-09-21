@@ -251,4 +251,42 @@ class MathLibrary
             'y' => $y,
         ];
     }
+
+    /**
+     * get maskin value base setting list.
+     * @param int $searchValue value
+     * @param int $base value
+     * @return array
+     */
+    public static function getMaskingBaseValueList(int $searchValue = 1, int $base = 268435455): array
+    {
+        // 時間計測用
+        $time = microtime(true);
+        $memory = memory_get_usage();
+
+        $response = [];
+        // ループの最小値は$baseの半分
+        $min = (int)floor($base / 2);
+        $min2 = (int)floor($min / 2);
+        for($i = $base; $i>= $min; $i--) {
+            $e = ($searchValue * $i) & $base;
+            for($j = 1; $j < $min2; $j++) {
+                $d = ($e * $j) & $base;
+                if ($d === $searchValue) {
+                    $response['e.base'] = $i;
+                    $response['d.base'] = $j;
+                    break;
+                }
+            }
+
+        }
+
+        // 時間計測用
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
+        $response['time'] = $endTime;
+        $response['memory'] = $usageMemory;
+
+        return $response;
+    }
 }
