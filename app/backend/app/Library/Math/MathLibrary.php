@@ -278,7 +278,6 @@ class MathLibrary
                     break;
                 }
             }
-
         }
 
         // 時間計測用
