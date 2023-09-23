@@ -19,6 +19,10 @@ class RSAEncryptLibrary
     private const BASE_E_VALUE = 3;
     private const BASE_D_VALUE = 7;
 
+    private const BASE = 268435455;
+    private const E_VALUE1 = 3033169;
+    private const D_VALUE2 = 177;
+
     /**
      * get encrypt base values
      *
@@ -118,8 +122,7 @@ class RSAEncryptLibrary
      */
     public static function encrypt(int $value): int
     {
-        return ($value ** self::BASE_E_VALUE) % self::BASE_N_VALUE;
-        // return ($value * self::BASE_E_VALUE) & self::BASE_N_VALUE;
+        return ($value * self::E_VALUE1) & self::BASE;
     }
 
     /**
@@ -130,7 +133,6 @@ class RSAEncryptLibrary
      */
     public static function decrypt(int $value): int
     {
-        return ($value ** self::BASE_D_VALUE) % self::BASE_N_VALUE;
-        // return ($value * self::BASE_D_VALUE) & self::BASE_N_VALUE;
+        return ($value * self::D_VALUE2) & self::BASE;
     }
 }

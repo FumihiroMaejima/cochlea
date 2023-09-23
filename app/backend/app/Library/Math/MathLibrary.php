@@ -254,36 +254,38 @@ class MathLibrary
 
     /**
      * get maskin value base setting list.
-     * @param int $searchValue value
-     * @param int $base value
+     * @param int $log 対数
      * @return array
      */
-    public static function getMaskingBaseValueList(int $searchValue = 1, int $base = 268435455): array
+    public static function getMaskingBaseValueList(int $log = 28): array
     {
         // 時間計測用
         $time = microtime(true);
         $memory = memory_get_usage();
 
-        $response = [];
-        // ループの最小値は$baseの半分
-        $min = (int)floor($base / 2);
-        $min2 = (int)floor($min / 2);
-        for($i = $base; $i>= $min; $i--) {
-            $e = ($searchValue * $i) & $base;
-            for($j = 1; $j < $min2; $j++) {
-                $d = ($e * $j) & $base;
-                if ($d === $searchValue) {
-                    $response['e.base'] = $i;
-                    $response['d.base'] = $j;
-                    break;
-                }
-            }
-        }
+        $base = pow(2, $log);
+        $encryptBase = $base - 1;
+        $nextBase = $base + 1;
+        $rand = rand(1, 10);
+        $randNextBase = pow(2, $log + $rand) + 1;
+        $primeFactorization = self::getPrimeFactorization($randNextBase);
+
+        $response = [
+            'base' => $base,
+            'decbin(base)' => decbin($base),
+            'encryptBase' => $encryptBase,
+            'decbin(encryptBase)' => decbin($encryptBase),
+            'nextBase' => $nextBase,
+            'decbin(nextBase)' => decbin($nextBase),
+            'randNextBase' => $randNextBase,
+            'decbin(randNextBase)' => decbin($randNextBase),
+            'primeFactorization' => $primeFactorization,
+        ];
 
         // 時間計測用
         $endTime = microtime(true) - $time;
         $usageMemory = memory_get_usage() - $memory;
-        $response['time'] = $endTime;
+        $response['time'] = floor($endTime);
         $response['memory'] = $usageMemory;
 
         return $response;
