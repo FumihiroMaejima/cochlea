@@ -34,7 +34,8 @@ class CheckMaintenanceMode
 
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_503,
-                'Now Maintenance.'
+                'Now Maintenance.',
+                isResponseMessage: true
             );
         }
 
