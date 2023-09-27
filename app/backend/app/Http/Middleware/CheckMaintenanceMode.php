@@ -19,8 +19,10 @@ class CheckMaintenanceMode
      */
     public function handle($request, Closure $next)
     {
-        // メンテナンス中か
-        if (MaintenanceLibrary::isMaintenance() && MaintenanceLibrary::isMaintenancePeriod()) {
+        // メンテナンス設定中もしくはメンテナンス期間中か
+        // 緊急メンテナンスなどを実施する場合はフラグを設定
+        // 定期メンテナンスなどは期間を入れる
+        if (MaintenanceLibrary::isMaintenance() || MaintenanceLibrary::isMaintenancePeriod()) {
             // 通過可能設定有りか
             if (MaintenanceLibrary::isEnabplePass()) {
                 $path = $request->getRequestUri();
