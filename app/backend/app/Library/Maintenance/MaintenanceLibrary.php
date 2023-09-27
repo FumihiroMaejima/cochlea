@@ -17,11 +17,11 @@ class MaintenanceLibrary
     }
 
     /**
-     * is maintenace term.
+     * is maintenace period.
      *
      * @return bool
      */
-    public static function isMaintenanceTerm(): bool
+    public static function isMaintenancePeriod(): bool
     {
         $currentDateTimestamp = TimeLibrary::getCurrentDateTimeTimeStamp();
         $startTimeStamp = TimeLibrary::strToTimeStamp(config('myappMaintenance.startTime'));
@@ -57,5 +57,25 @@ class MaintenanceLibrary
     public static function getExceptIps(): array
     {
         return config('myappMaintenance.exceptIps');
+    }
+
+    /**
+     * is maintenace except route.
+     * @param string $path path
+     * @return bool
+     */
+    public static function isExceptRoute(string $path): bool
+    {
+        return in_array($path, self::getExceptRoutes(), true);
+    }
+
+    /**
+     * is maintenace except ip address.
+     * @param string $ip ip address
+     * @return bool
+     */
+    public static function isExceptIp(string $ip): bool
+    {
+        return in_array($ip, self::getExceptIps(), true);
     }
 }
