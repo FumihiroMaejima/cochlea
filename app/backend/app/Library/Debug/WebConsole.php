@@ -26,6 +26,7 @@ class WebConsole
         'hostname' => null,
         'uname' => ['-a', '-r'],
         'ifconfig' => null,
+        'route' => null,
         'netstat' => ['-a', '-C', '-e','-g', '-i', '-l', '-p', '-r', '-s', '-t', '-u'],
         'ipcalc' => null,
         'iproute' => null,
