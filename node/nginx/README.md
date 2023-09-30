@@ -96,5 +96,13 @@ RUN apk update && \
   jq
 ```
 
+コマンド実行例
+
+```shell
+echo '{"a": 123, "b": "b123", "c": {"d": 1}}' | jq .
+
+cat test.json | jq
+```
+
 ---
 
