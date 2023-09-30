@@ -85,3 +85,16 @@ access_log  /var/log/nginx/access.log ltsv;
 
 ---
 
+### jqコマンドのインストール
+
+`Dockerfile`にて下記のコマンドでインストールする。
+
+```dockerfile
+# その他、brew,yum,aptなどの各パッケージマネージャーでインストール出来る
+RUN apk update && \
+  apk add --update --no-cache linux-headers --virtual=.build-dependencies \
+  jq
+```
+
+---
+
