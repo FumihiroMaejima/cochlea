@@ -57,4 +57,44 @@ class CsvLibrary
 
         return $fileData;
     }
+
+    /**
+     * filter lesser than threshold.
+     *
+     * @param array $items
+     * @param int $threshold
+     * @return array
+     * @throws Exception
+     */
+    public static function filteringIsLower(array $items, int $threshold = 30): array
+    {
+        $response = [];
+        foreach($items as $item) {
+            if ($item <= $threshold) {
+                $response = $item;
+            }
+        }
+        return $response;
+    }
+
+
+    /**
+     * get average of item column.
+     *
+     * @param array $items
+     * string $columnName column name
+     * @return int
+     * @throws Exception
+     */
+    public static function getAverage(array $items, string $columnName): int
+    {
+        $count = count($items);
+        $values = array_column($items, $columnName);
+        $sum = 0;
+        foreach($values as $value) {
+            $sum = $value;
+        }
+
+        return (int)floor($sum / $count);
+    }
 }
