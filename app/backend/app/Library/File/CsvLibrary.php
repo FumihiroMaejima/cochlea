@@ -5,6 +5,7 @@ namespace App\Library\File;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\String\PregLibrary;
 use Exception;
 
 class CsvLibrary
@@ -60,7 +61,7 @@ class CsvLibrary
         // average
         $list2 = self::getAverage($fileData, 3);
 
-        printf('lower: %s' . "\n", json_encode($list1));
+        printf('lower filtering count: %s' . "\n", count($list1));
         printf('average: %s' . "\n", $list2);
 
         return $fileData;
@@ -79,7 +80,7 @@ class CsvLibrary
     {
         $response = [];
         foreach($items as $item) {
-            $value = (int)preg_replace('/[^0-9]/', '', $item[$columnName]);
+            $value = PregLibrary::filteringByNumber($item[$columnName]);
             if ($value <= $threshold) {
                 $response[] = $item;
             }
@@ -102,7 +103,7 @@ class CsvLibrary
         $values = [];
         foreach($items as $item) {
             // 数字以外の文字は空文字列に差し替えてから格納
-            $values[] = (int)preg_replace('/[^0-9]/', '', $item[$columnName]);
+            $values[] = PregLibrary::filteringByNumber($item[$columnName]);
         }
         $sum = array_sum($values);
 
