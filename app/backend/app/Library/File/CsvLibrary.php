@@ -7,6 +7,7 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\String\PregLibrary;
 use Exception;
+use SplFileObject;
 
 class CsvLibrary
 {
@@ -34,7 +35,7 @@ class CsvLibrary
         echo 'file: ' . $file . "\n";
 
         $headers = [];
-        $fileData = [];
+        $fileRecords = [];
 
         // ファイルの内容を一行ずつ配列に代入
         $tmp = [];
@@ -51,7 +52,7 @@ class CsvLibrary
                 $headers = $value;
             } else {
                 // カンマを境目に配列データとする
-                $fileData[] = explode(',', $value);
+                $fileRecords[] = explode(',', $value);
             }
         }
 
@@ -59,19 +60,49 @@ class CsvLibrary
         fclose($file);
 
         // filtering
-        $list1 = self::filteringIsLower($fileData, 3, 50);
+        $list1 = self::filteringIsLower($fileRecords, 3, 50);
         // average
-        $list2 = self::getAverage($fileData, 3);
+        $list2 = self::getAverage($fileRecords, 3);
 
         printf('lower filtering count: %s' . "\n", count($list1));
         printf('average: %s' . "\n", $list2);
+
         $endTime = microtime(true) - $time;
         $usageMemory = memory_get_usage() - $memory;
 
         printf('time: %s' . "\n", $endTime);
         printf('usageMemory: %s' . "\n", $usageMemory);
 
-        return $fileData;
+        return $fileRecords;
+    }
+
+    /**
+     * get csv file contents by SplFileObject
+     *
+     * @param string $path fileName file name & extention.
+     * @return array
+     * @throws Exception
+     */
+    public static function getFileStoreamBySplFileObject(string $fileName = 'default/test1.csv'): array
+    {
+        $time = microtime(true);
+        $memory = memory_get_usage();
+        // storageまでのパスを追加してルートからのパスの整形
+        $path = storage_path(self::DIRECTORY . $fileName);
+
+        $file = new SplFileObject($path);
+        $file->setFlags(SplFileObject::READ_CSV);
+        foreach ($file as $line) {
+            $fileRecords[] = $line;
+        }
+
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
+
+        printf('time: %s' . "\n", $endTime);
+        printf('usageMemory: %s' . "\n", $usageMemory);
+
+        return $fileRecords;
     }
 
     /**
