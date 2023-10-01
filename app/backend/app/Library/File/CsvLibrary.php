@@ -21,6 +21,8 @@ class CsvLibrary
      */
     public static function getFileStoream(string $fileName = 'default/test1.csv'): array
     {
+        $time = microtime(true);
+        $memory = memory_get_usage();
         // storageまでのパスを追加してルートからのパスの整形
         $path = storage_path(self::DIRECTORY . $fileName);
         // $path = self::DIRECTORY . $fileName;
@@ -63,6 +65,11 @@ class CsvLibrary
 
         printf('lower filtering count: %s' . "\n", count($list1));
         printf('average: %s' . "\n", $list2);
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
+
+        printf('time: %s' . "\n", $endTime);
+        printf('usageMemory: %s' . "\n", $usageMemory);
 
         return $fileData;
     }
