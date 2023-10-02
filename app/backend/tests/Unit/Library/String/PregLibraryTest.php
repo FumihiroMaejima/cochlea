@@ -22,13 +22,13 @@ class PregLibraryTest extends TestCase
                 'value' => '1a2b3c',
                 'expect' => 123,
             ],
-            '/' => [
-                'value' => '',
-                'expect' => 0,
-            ],
-            'test/' => [
+            'test/null' => [
                 'value' => 'test',
-                'expect' => 0,
+                'expect' => null,
+            ],
+            '/null' => [
+                'value' => '',
+                'expect' => null,
             ],
         ];
     }
@@ -38,10 +38,10 @@ class PregLibraryTest extends TestCase
      *
      * @dataProvider filteringByNumberDataProvider
      * @param string $value
-     * @param int $expect
+     * @param ?int $expect
      * @return void
      */
-    public function testFilteringByNumber(string $value, int $expect): void
+    public function testFilteringByNumber(string $value, ?int $expect): void
     {
         $this->assertEquals(
             PregLibrary::filteringByNumber($value),

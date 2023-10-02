@@ -119,7 +119,7 @@ class CsvLibrary
         $response = [];
         foreach($items as $item) {
             $value = PregLibrary::filteringByNumber($item[$columnName]);
-            if ($value <= $threshold) {
+            if (!is_null($value) && $value <= $threshold) {
                 $response[] = $item;
             }
         }
@@ -141,7 +141,7 @@ class CsvLibrary
         $values = [];
         foreach($items as $item) {
             // 数字以外の文字は空文字列に差し替えてから格納
-            $values[] = PregLibrary::filteringByNumber($item[$columnName]);
+            $values[] = PregLibrary::filteringByNumber($item[$columnName]) ?? 0;
         }
         $sum = array_sum($values);
 
