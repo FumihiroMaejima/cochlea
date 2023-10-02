@@ -7,9 +7,7 @@ class PregLibrary
     /**
      * filtering string value by number & return int value & chage typet to int
      * @param string $value
-     * @param int
-     *
-     * @return string uuid
+     * @return int
      */
     public static function filteringByNumber(string $value): int
     {
