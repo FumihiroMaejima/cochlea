@@ -14,76 +14,13 @@ class TsvLibrary
     public const DIRECTORY = 'tsv/';
 
     /**
-     * get csv file contents
-     *
-     * @param string $path fileName file name & extention.
-     * @return array
-     * @throws Exception
-     */
-    public static function getFileStoream(string $fileName = 'default/test1.csv'): array
-    {
-        $time = microtime(true);
-        $memory = memory_get_usage();
-        // storageまでのパスを追加してルートからのパスの整形
-        $path = storage_path(self::DIRECTORY . $fileName);
-        // $path = self::DIRECTORY . $fileName;
-        // storage/app直下に無い為file_get_contents()で取得
-        // $file = file_get_contents(storage_path($path));
-
-        // ファイルパスを指定し、resourceIdを取得する
-        $file = fopen($path, 'r');
-        echo 'file: ' . $file . "\n";
-
-        $headers = [];
-        $fileRecords = [];
-
-        // ファイルの内容を一行ずつ配列に代入
-        $tmp = [];
-        if ($file) {
-            while ($line = fgets($file)) {
-                echo 'line: ' . $line;
-                $tmp[] = trim($line);
-            }
-        }
-
-        // 配列の各要素をさらに分解
-        foreach ($tmp as $key => $value) {
-            if ($key === 0) {
-                $headers = $value;
-            } else {
-                // カンマを境目に配列データとする
-                $fileRecords[] = explode(',', $value);
-            }
-        }
-
-        // resource idを指定してファイルを閉じる
-        fclose($file);
-
-        // filtering
-        $list1 = self::filteringIsLower($fileRecords, 3, 50);
-        // average
-        $list2 = self::getAverage($fileRecords, 3);
-
-        printf('lower filtering count: %s' . "\n", count($list1));
-        printf('average: %s' . "\n", $list2);
-
-        $endTime = microtime(true) - $time;
-        $usageMemory = memory_get_usage() - $memory;
-
-        printf('time: %s' . "\n", $endTime);
-        printf('usageMemory: %s' . "\n", $usageMemory);
-
-        return $fileRecords;
-    }
-
-    /**
      * get csv file contents by SplFileObject
      *
      * @param string $path fileName file name & extention.
      * @return array
      * @throws Exception
      */
-    public static function getFileStoreamBySplFileObject(string $fileName = 'default/test1.tsv'): array
+    public static function getFileStoream(string $fileName = 'default/test1.tsv'): array
     {
         $time = microtime(true);
         $memory = memory_get_usage();
@@ -92,6 +29,7 @@ class TsvLibrary
 
         $file = new SplFileObject($path);
         foreach ($file as $line) {
+            // $fileRecords[] = explode(' ', $line);
             $fileRecords[] = $line;
         }
 
