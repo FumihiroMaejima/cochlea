@@ -43,6 +43,38 @@ class TsvLibrary
     }
 
     /**
+     * get csv file contents by SplFileObject
+     *
+     * @param array $records file records.
+     * @param string $path fileName file name & extention.
+     * @return void
+     * @throws Exception
+     */
+    public static function createFile(array $records, string $fileName = 'test2.tsv'): void
+    {
+        $time = microtime(true);
+        $memory = memory_get_usage();
+        // storageまでのパスを追加してルートからのパスの整形
+        $path = storage_path(self::DIRECTORY . $fileName);
+
+        // ファイル出力
+        $fp = fopen($path, "w");
+        if (true == $fp) {
+            // tsvとして出力する時のセパレーターを指定
+            fputcsv($fp, $records, "\t");
+        }
+        fclose($fp);
+
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
+
+        printf('time: %s' . "\n", $endTime);
+        printf('usageMemory: %s' . "\n", $usageMemory);
+
+        return;
+    }
+
+    /**
      * filter lesser than threshold.
      *
      * @param array $items
