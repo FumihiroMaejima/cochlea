@@ -60,8 +60,11 @@ class TsvLibrary
         // ファイル出力
         $fp = fopen($path, "w");
         if (true == $fp) {
-            // tsvとして出力する時のセパレーターを指定
-            fputcsv($fp, $records, "\t");
+            // 連想配列を想定
+            foreach ($records as $record) {
+                // tsvとして出力する時のセパレーターを指定
+                fputcsv($fp, $record, "\t");
+            }
         }
         fclose($fp);
 
