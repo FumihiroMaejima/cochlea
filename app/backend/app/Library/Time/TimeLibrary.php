@@ -237,7 +237,7 @@ class TimeLibrary
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付
      * @param string $format datetime format
-     * @return bool 日数
+     * @return bool
      */
     public static function greater(string $dateTime, string $targetDateTime): bool
     {
@@ -250,7 +250,7 @@ class TimeLibrary
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付
      * @param string $format datetime format
-     * @return bool 日数
+     * @return bool
      */
     public static function lesser(string $dateTime, string $targetDateTime): bool
     {
@@ -261,9 +261,9 @@ class TimeLibrary
      * get first day of month of parameter day.
      *
      * @param ?int $timestamp タイムスタンプ
-     * @return bool 日数
+     * @return string 月初
      */
-    public static function startDayOfMonth(?int $timestamp): bool
+    public static function startDayOfMonth(?int $timestamp): string
     {
         $month = is_null($timestamp)
             ? null
@@ -275,9 +275,9 @@ class TimeLibrary
      * get lasf day of month of parameter day.
      *
      * @param ?int $timestamp タイムスタンプ
-     * @return bool 日数
+     * @return string 月末
      */
-    public static function lastDayOfMonth(?int $timestamp): bool
+    public static function lastDayOfMonth(?int $timestamp): string
     {
         $month = is_null($timestamp)
             ? null
