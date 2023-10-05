@@ -59,6 +59,7 @@ class ShardingProxyLibrary
      * @param array $columns columns
      * @param ?array $equals condition values of where
      * @param ?array $ins condition values of whereIn
+     * @param ?array $betweens condition values of between
      * @param ?int $limit limit conditions.
      * @param ?int $offset offset conditions.
      * @return array
@@ -70,6 +71,7 @@ class ShardingProxyLibrary
         array $columns = ['*'],
         ?array $equals = null,
         ?array $ins = null,
+        ?array $betweens = null,
         ?int $limit = null,
         ?int $offset = null
     ): array {
@@ -90,6 +92,12 @@ class ShardingProxyLibrary
                 if (!is_null($ins)) {
                     foreach ($ins as $column => $conditions) {
                         $query = $query->whereIn($column, $conditions);
+                    }
+                }
+
+                if (!is_null($betweens)) {
+                    foreach ($betweens as $column => $condition) {
+                        $query = $query->whereBetween($column, $condition);
                     }
                 }
 
