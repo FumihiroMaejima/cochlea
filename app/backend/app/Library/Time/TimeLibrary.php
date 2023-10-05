@@ -261,28 +261,34 @@ class TimeLibrary
      * get first day of month of parameter day.
      *
      * @param ?int $timestamp タイムスタンプ
+     * @param string $format フォーマット
      * @return string 月初
      */
-    public static function startDayOfMonth(?int $timestamp): string
-    {
+    public static function startDayOfMonth(
+        ?int $timestamp,
+        string $format = self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY
+    ): string {
         $month = is_null($timestamp)
             ? null
             : self::timeStampToDate($timestamp, self::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
-        return date(self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('first day of ' . $month));
+        return date($format, strtotime('first day of ' . $month));
     }
 
     /**
      * get lasf day of month of parameter day.
      *
      * @param ?int $timestamp タイムスタンプ
+     * @param string $format フォーマット
      * @return string 月末
      */
-    public static function lastDayOfMonth(?int $timestamp): string
-    {
+    public static function lastDayOfMonth(
+        ?int $timestamp,
+        string $format = self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY
+    ): string {
         $month = is_null($timestamp)
             ? null
             : self::timeStampToDate($timestamp, self::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
-        return date(self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('last day of ' . $month));
+        return date($format, strtotime('last day of ' . $month));
     }
 
     /**
