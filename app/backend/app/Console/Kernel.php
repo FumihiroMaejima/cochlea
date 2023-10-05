@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\Admins\Coin\UserCoinHistoriesCountingCommand::class,
         Commands\Admins\Database\AddLogDatabasePartitionsCommand::class,
         Commands\Admins\Database\AddUserDatabasePartitionsCommand::class,
         Commands\Admins\Database\RemoveLogDatabasePartitionsCommand::class,
