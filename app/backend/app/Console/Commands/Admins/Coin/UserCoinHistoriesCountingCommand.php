@@ -43,24 +43,55 @@ class UserCoinHistoriesCountingCommand extends Command
     public function handle(): void
     {
         echo TimeLibrary::getCurrentDateTime() . "\n";
-        $records = self::getUserCoinHistories();
-        echo var_dump($records);
+        $records = self::getConsumedUserCoinHistories();
+        $groupingRecords = self::groupingUserCoinHistories($records);
+        echo var_dump($groupingRecords);
     }
 
     /**
-     * get coin histories
+     * get consumed user coin histories
      *
      * @return array
      */
-    private static function getUserCoinHistories(): array
+    private static function getConsumedUserCoinHistories(): array
     {
         $timestamp = TimeLibrary::getCurrentDateTimeTimeStamp();
         $startAt = TimeLibrary::startDayOfMonth($timestamp, TimeLibrary::DATE_TIME_FORMAT_START_DATE);
         $endAt = TimeLibrary::lastDayOfMonth($timestamp, TimeLibrary::DATE_TIME_FORMAT_END_DATE);
         return ShardingProxyLibrary::select(
             (new UserCoinHistories())->getTable(),
+            equals: [UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_CONSUME],
             betweens: [UserCoinHistories::CREATED_AT => [$startAt, $endAt]]
 
         );
+    }
+
+    /**
+     * grouping user coin histories
+     *
+     * @param array $records
+     * @return array
+     */
+    private static function groupingUserCoinHistories(array $records): array
+    {
+        $response = [];
+        foreach($records as $record) {
+            $productId = $record[UserCoinHistories::PRODUCT_ID];
+            if (!isset($response[$productId])) {
+                $response[$productId] = [
+                    UserCoinHistories::PRODUCT_ID => $productId,
+                    UserCoinHistories::USED_FREE_COINS => 0,
+                    UserCoinHistories::USED_PAID_COINS => 0,
+                    UserCoinHistories::USED_LIMITED_TIME_COINS => 0,
+                ];
+            }
+            $tmpResponse = $response[$productId];
+
+            $tmpResponse[UserCoinHistories::USED_FREE_COINS] += $record[UserCoinHistories::USED_FREE_COINS];
+            $tmpResponse[UserCoinHistories::USED_PAID_COINS] += $record[UserCoinHistories::USED_PAID_COINS];
+            $tmpResponse[UserCoinHistories::USED_LIMITED_TIME_COINS] += $record[UserCoinHistories::USED_LIMITED_TIME_COINS];
+            $response[$productId] = $tmpResponse;
+        }
+        return $response ;
     }
 }
