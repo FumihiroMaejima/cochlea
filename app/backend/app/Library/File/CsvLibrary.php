@@ -126,7 +126,7 @@ class CsvLibrary
         if (true == $fp) {
 
             // ヘッダーを先に設定
-            fputcsv($fp, $$headers);
+            fputcsv($fp, $headers);
 
             // 連想配列を想定
             foreach ($records as $record) {
