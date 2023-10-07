@@ -106,6 +106,45 @@ class CsvLibrary
     }
 
     /**
+     * get csv file
+     *
+     * @param array $records file records.
+     * @param array $headers file headers.
+     * @param string $path fileName file name & extention.
+     * @return void
+     * @throws Exception
+     */
+    public static function createFile(array $records, array $headers, string $fileName = 'test2.csv'): void
+    {
+        $time = microtime(true);
+        $memory = memory_get_usage();
+        // storageまでのパスを追加してルートからのパスの整形
+        $path = storage_path(self::DIRECTORY . $fileName);
+
+        // ファイル出力
+        $fp = fopen($path, "w");
+        if (true == $fp) {
+
+            // ヘッダーを先に設定
+            fputcsv($fp, $$headers);
+
+            // 連想配列を想定
+            foreach ($records as $record) {
+                fputcsv($fp, $record);
+            }
+        }
+        fclose($fp);
+
+        $endTime = microtime(true) - $time;
+        $usageMemory = memory_get_usage() - $memory;
+
+        printf('time: %s' . "\n", $endTime);
+        printf('usageMemory: %s' . "\n", $usageMemory);
+
+        return;
+    }
+
+    /**
      * filter lesser than threshold.
      *
      * @param array $items

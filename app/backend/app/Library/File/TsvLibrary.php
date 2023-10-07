@@ -43,7 +43,7 @@ class TsvLibrary
     }
 
     /**
-     * get csv file contents by SplFileObject
+     * create tsv file
      *
      * @param array $records file records.
      * @param string $path fileName file name & extention.
