@@ -5,6 +5,7 @@ namespace App\Console\Commands\Admins\Coin;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use App\Library\Database\ShardingProxyLibrary;
+use App\Library\File\CsvLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Users\UserCoinHistories;
 
@@ -24,6 +25,12 @@ class UserCoinHistoriesCountingCommand extends Command
      */
     protected $description = 'countig user coin histories record in 1 mounth';
 
+    private const CSV_FILE_HEADERS = [
+        'プロダクトID',
+        '合計無料コイン利用額',
+        '合計有料コイン利用額',
+        '合計期限付きコイン利用額',
+    ];
 
     /**
      * DebugTestCommandインスタンスの生成
@@ -45,7 +52,8 @@ class UserCoinHistoriesCountingCommand extends Command
         echo TimeLibrary::getCurrentDateTime() . "\n";
         $records = self::getConsumedUserCoinHistories();
         $groupingRecords = self::groupingUserCoinHistories($records);
-        echo var_dump($groupingRecords);
+        CsvLibrary::createFile($groupingRecords, self::CSV_FILE_HEADERS);
+        // echo var_dump($groupingRecords);
     }
 
     /**
