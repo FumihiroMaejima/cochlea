@@ -49,10 +49,17 @@ class UserCoinHistoriesCountingCommand extends Command
      */
     public function handle(): void
     {
-        echo TimeLibrary::getCurrentDateTime() . "\n";
+        $currentDateTime = TimeLibrary::getCurrentDateTime();
+        $timestamp = TimeLibrary::strToTimeStamp($currentDateTime);
+        $YearMonth = TimeLibrary::timeStampToDate($timestamp, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
+        echo $currentDateTime . "\n";
         $records = self::getConsumedUserCoinHistories();
         $groupingRecords = self::groupingUserCoinHistories($records);
-        CsvLibrary::createFile($groupingRecords, self::CSV_FILE_HEADERS);
+        CsvLibrary::createFile(
+            $groupingRecords,
+            self::CSV_FILE_HEADERS,
+            "UserCoinHistoriesByProductId_$YearMonth" . "_$timestamp.csv"
+        );
         // echo var_dump($groupingRecords);
     }
 
@@ -70,7 +77,6 @@ class UserCoinHistoriesCountingCommand extends Command
             (new UserCoinHistories())->getTable(),
             equals: [UserCoinHistories::TYPE => UserCoinHistories::USER_COINS_HISTORY_TYPE_CONSUME],
             betweens: [UserCoinHistories::CREATED_AT => [$startAt, $endAt]]
-
         );
     }
 
@@ -83,7 +89,7 @@ class UserCoinHistoriesCountingCommand extends Command
     private static function groupingUserCoinHistories(array $records): array
     {
         $response = [];
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $productId = $record[UserCoinHistories::PRODUCT_ID];
             if (!isset($response[$productId])) {
                 $response[$productId] = [
