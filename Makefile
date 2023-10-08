@@ -167,6 +167,9 @@ remove-logs-partitions:
 remove-users-partitions:
 	docker-compose exec app php artisan admins:remove-users-partitions
 
+count-user-coin-histories:
+	docker-compose exec app php artisan admins:counting-user-coin-histories
+
 debug-seed-user-coin-histories:
 	docker-compose exec app php artisan debug:seed-user-coin-histories
 

@@ -332,6 +332,70 @@ class TimeLibraryTest extends TestCase
     }
 
     /**
+     * test start day of month data.
+     * @return array
+     */
+    public static function startDayOfMonthDataProvider(): array
+    {
+        self::createApplicationForStaticDataProvider();
+        $testDateTime = '2023/01/12 00:00:00';
+        $testTimestamp = strtotime($testDateTime);
+        $testExpect = '2023-01-01';
+
+        $testDateTimeFromCurrentDateTime =
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('first day of '));
+        return [
+            "$testDateTime/result format=Y-m-d/" => [
+                'value' => $testTimestamp,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
+                'expect' => $testExpect,
+            ],
+            "$testDateTime/result format=Y-m-d H:i:s" => [
+                'value' => $testTimestamp,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
+                'expect' => "$testExpect 00:00:00",
+            ],
+            "value=null/result format=Y-m-d H:i:s" => [
+                'value' => null,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
+                'expect' => $testDateTimeFromCurrentDateTime,
+            ],
+        ];
+    }
+
+    /**
+     * test last day of month data.
+     * @return array
+     */
+    public static function lastDayOfMonthDataProvider(): array
+    {
+        self::createApplicationForStaticDataProvider();
+        $testDateTime = '2023/01/12 00:00:00';
+        $testTimestamp = strtotime($testDateTime);
+        $testExpect = '2023-01-31';
+
+        $testDateTimeFromCurrentDateTime =
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('last day of '));
+        return [
+            "$testDateTime/result format=Y-m-d/" => [
+                'value' => $testTimestamp,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
+                'expect' => $testExpect,
+            ],
+            "$testDateTime/result format=Y-m-d H:i:s" => [
+                'value' => $testTimestamp,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
+                'expect' => "$testExpect 00:00:00",
+            ],
+            "value=null/result format=Y-m-d H:i:s" => [
+                'value' => null,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
+                'expect' => $testDateTimeFromCurrentDateTime,
+            ],
+        ];
+    }
+
+    /**
      * test check date separated by hyphen data.
      * @return array
      */
@@ -435,6 +499,38 @@ class TimeLibraryTest extends TestCase
                 'expect' => false,
             ],
         ];
+    }
+
+    /**
+     * test start day of month
+     * @dataProvider startDayOfMonthDataProvider
+     * @param ?int $value
+     * @param string $format
+     * @param string $expect
+     * @return void
+     */
+    public function testStartDayOfMonth(?int $value, string $format, string $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::startDayOfMonth($value, $format)
+        );
+    }
+
+    /**
+     * test last day of month
+     * @dataProvider lastDayOfMonthDataProvider
+     * @param ?int $value
+     * @param string $format
+     * @param string $expect
+     * @return void
+     */
+    public function testLastDayOfMonth(?int $value, string $format, string $expect): void
+    {
+        $this->assertEquals(
+            $expect,
+            TimeLibrary::lastDayOfMonth($value, $format)
+        );
     }
 
     /**
