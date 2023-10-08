@@ -342,7 +342,8 @@ class TimeLibraryTest extends TestCase
         $testTimestamp = strtotime($testDateTime);
         $testExpect = '2023-01-01';
 
-        $testDateTimeFromCurrentDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime('first day of '));
+        $testDateTimeFromCurrentDateTime =
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('first day of '));
         return [
             "$testDateTime/result format=Y-m-d/" => [
                 'value' => $testTimestamp,
@@ -356,7 +357,7 @@ class TimeLibraryTest extends TestCase
             ],
             "value=null/result format=Y-m-d H:i:s" => [
                 'value' => null,
-                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
                 'expect' => $testDateTimeFromCurrentDateTime,
             ],
         ];
@@ -373,7 +374,8 @@ class TimeLibraryTest extends TestCase
         $testTimestamp = strtotime($testDateTime);
         $testExpect = '2023-01-31';
 
-        $testDateTimeFromCurrentDateTime = date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT, strtotime('last day of '));
+        $testDateTimeFromCurrentDateTime =
+            date(TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY, strtotime('last day of '));
         return [
             "$testDateTime/result format=Y-m-d/" => [
                 'value' => $testTimestamp,
@@ -387,7 +389,7 @@ class TimeLibraryTest extends TestCase
             ],
             "value=null/result format=Y-m-d H:i:s" => [
                 'value' => null,
-                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT,
+                'format' => TimeLibrary::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY,
                 'expect' => $testDateTimeFromCurrentDateTime,
             ],
         ];

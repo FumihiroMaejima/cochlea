@@ -253,7 +253,7 @@ class MathLibrary
     }
 
     /**
-     * get maskin value base setting list.
+     * get masking value base setting list.
      * @param int $log 対数
      * @return array
      */
