@@ -123,8 +123,7 @@ class CsvLibrary
 
         // ファイル出力
         $fp = fopen($path, "w");
-        if (true == $fp) {
-
+        if ($fp != false) {
             // ヘッダーを先に設定
             fputcsv($fp, $headers);
 
@@ -156,7 +155,7 @@ class CsvLibrary
     public static function filteringIsLower(array $items, int|string $columnName, int $threshold = 30): array
     {
         $response = [];
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $value = PregLibrary::filteringByNumber($item[$columnName]);
             if (!is_null($value) && $value <= $threshold) {
                 $response[] = $item;
@@ -178,7 +177,7 @@ class CsvLibrary
     {
         $count = count($items);
         $values = [];
-        foreach($items as $item) {
+        foreach ($items as $item) {
             // 数字以外の文字は空文字列に差し替えてから格納
             $values[] = PregLibrary::filteringByNumber($item[$columnName]) ?? 0;
         }

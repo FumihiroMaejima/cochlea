@@ -59,7 +59,7 @@ class TsvLibrary
 
         // ファイル出力
         $fp = fopen($path, "w");
-        if (true == $fp) {
+        if ($fp != false) {
             // 連想配列を想定
             foreach ($records as $record) {
                 // tsvとして出力する時のセパレーターを指定
@@ -89,7 +89,7 @@ class TsvLibrary
     public static function filteringIsLower(array $items, int|string $columnName, int $threshold = 30): array
     {
         $response = [];
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $value = PregLibrary::filteringByNumber($item[$columnName]);
             if (!is_null($value) && $value <= $threshold) {
                 $response[] = $item;
@@ -111,7 +111,7 @@ class TsvLibrary
     {
         $count = count($items);
         $values = [];
-        foreach($items as $item) {
+        foreach ($items as $item) {
             // 数字以外の文字は空文字列に差し替えてから格納
             $values[] = PregLibrary::filteringByNumber($item[$columnName]) ?? 0;
         }
