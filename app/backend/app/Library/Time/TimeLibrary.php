@@ -13,6 +13,7 @@ class TimeLibrary
     public const DEFAULT_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; // ex: 2022-01-01 00:00:00
     public const DEFAULT_DATE_TIME_FORMAT_SLASH = 'Y/m/d H:i:s'; // ex: 2022/01/01 00:00:00
     public const DEFAULT_DATE_TIME_FORMAT_DATE_ONLY = 'Y-m-d'; // ex: 2022-01-01
+    public const DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY = 'Y-m'; // ex: 2022-01
 
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
@@ -236,7 +237,7 @@ class TimeLibrary
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付
      * @param string $format datetime format
-     * @return bool 日数
+     * @return bool
      */
     public static function greater(string $dateTime, string $targetDateTime): bool
     {
@@ -249,11 +250,45 @@ class TimeLibrary
      * @param string $dateTime 日時
      * @param string $targetDateTime 比較対象の日付
      * @param string $format datetime format
-     * @return bool 日数
+     * @return bool
      */
     public static function lesser(string $dateTime, string $targetDateTime): bool
     {
         return (new Carbon($dateTime))->lessThan($targetDateTime);
+    }
+
+    /**
+     * get first day of month of parameter day.
+     *
+     * @param ?int $timestamp タイムスタンプ
+     * @param string $format フォーマット
+     * @return string 月初
+     */
+    public static function startDayOfMonth(
+        ?int $timestamp,
+        string $format = self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY
+    ): string {
+        $month = is_null($timestamp)
+            ? null
+            : self::timeStampToDate($timestamp, self::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
+        return date($format, strtotime('first day of ' . $month));
+    }
+
+    /**
+     * get lasf day of month of parameter day.
+     *
+     * @param ?int $timestamp タイムスタンプ
+     * @param string $format フォーマット
+     * @return string 月末
+     */
+    public static function lastDayOfMonth(
+        ?int $timestamp,
+        string $format = self::DEFAULT_DATE_TIME_FORMAT_DATE_ONLY
+    ): string {
+        $month = is_null($timestamp)
+            ? null
+            : self::timeStampToDate($timestamp, self::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
+        return date($format, strtotime('last day of ' . $month));
     }
 
     /**
