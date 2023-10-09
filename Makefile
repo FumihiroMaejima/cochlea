@@ -239,7 +239,7 @@ redis-cluster-up:
 	docker-compose -f ./docker-compose.redis-cluster.yml up -d --scale redis-cluster=6
 
 redis-cluster-down:
-	docker-compose -f ./docker-compose.redis-cluster.yml down
+	docker-compose -f ./docker-compose.redis-cluster.yml down -v
 
 redis-cluster-ps:
 	docker-compose -f ./docker-compose.redis-cluster.yml ps
