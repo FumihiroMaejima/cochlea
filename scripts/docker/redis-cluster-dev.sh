@@ -33,7 +33,7 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
   showMessage 'Up Docker Container!'
   docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --scale redis-cluster=$1
 
-  # dockerに割り当てられたIPの取得
+  # dockerに割り当てられたIPの取得(jqコマンドを利用)
   TARGET_IPS=`docker network inspect cochlea-net | jq '.[0].Containers | .[].IPv4Address'`;
   # cluster設定を行うIPとportの組み合わせ
   CLUSTER_IPS_STRING=''
@@ -45,13 +45,19 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
     echo "${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
     # 文字列連結
     CLUSTER_IPS_STRING="${CLUSTER_IPS_STRING} ${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
-    #echo ${CLUSTER_IPS_STRING}
   done
   echo ${CLUSTER_IPS_STRING}
 
-  # redis clusterの作成
-  docker compose exec redis-cluster redis-cli --cluster create ${CLUSTER_IPS_STRING} --cluster-replicas ${REDIS_CLUSTER_REPLICA_COUNT}
+  # redis clusterの作成(対話形式の箇所がある為パラメーターを渡す)
+  # docker compose exec redis-cluster redis-cli --cluster create ${CLUSTER_IPS_STRING} --cluster-replicas ${REDIS_CLUSTER_REPLICA_COUNT}
+  docker compose exec redis-cluster ash -c "echo yes | redis-cli --cluster create ${CLUSTER_IPS_STRING} --cluster-replicas ${REDIS_CLUSTER_REPLICA_COUNT}"
 
+  # clusterの設定確認
+  echo ${DELIMITER_LINE}
+  docker-compose exec redis-cluster redis-cli cluster nodes
+  # networkの設定確認
+  echo ${DELIMITER_LINE}
+  docker network inspect cochlea-net | jq '.[0].Containers | .[] | {Name, IPv4Address}'
 else
   # コンテナが立ち上がっている状態の時
   showMessage 'Down Docker Container!'
