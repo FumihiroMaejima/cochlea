@@ -245,6 +245,9 @@ redis-cluster-down:
 redis-cluster-ps:
 	docker-compose -f ./docker-compose.redis-cluster.yml ps
 
+redis-cluster-dev:
+	sh ./scripts/docker/redis-cluster-dev.sh $(REDIS_CLUSTER_CONTAINER_COUNT)
+
 redis-cluster-server:
 	docker-compose exec redis-cluster redis-server --version
 
