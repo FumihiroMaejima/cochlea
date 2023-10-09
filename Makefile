@@ -233,6 +233,36 @@ redis-hget:
 	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
 
 ##############################
+# redis cluster container
+##############################
+redis-cluster-up:
+	docker-compose -f ./docker-compose.redis-cluster.yml up -d --scale redis-cluster=6
+
+redis-cluster-down:
+	docker-compose -f ./docker-compose.redis-cluster.yml down
+
+redis-cluster-ps:
+	docker-compose -f ./docker-compose.redis-cluster.yml ps
+
+redis-cluster-server:
+	docker-compose exec redis-cluster redis-server --version
+
+redis-cluster-info:
+	docker-compose exec redis-cluster redis-cli info
+
+redis-cluster-keys:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) keys '*'
+
+redis-cluster-get:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
+
+redis-cluster-del:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) del $(REDIS_KEY)
+
+redis-cluster-hget:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
+
+##############################
 # prometheus docker container
 ##############################
 prometheus-up:

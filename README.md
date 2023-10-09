@@ -40,6 +40,9 @@ docker network create --gateway=172.19.0.1 --subnet=172.19.0.0/16 ${PROJECT_NAME
 
 ### volumeの作り直しをする時
 docker volume rm ${PROJECT_NAME}-db-store
+
+### コンテナのIPアドレスの確認(jqが入っている場合)
+docker network inspect ${NETWORK_NAME} | jq '.[0].Containers | .[].IPv4Address'
 ```
 
 
