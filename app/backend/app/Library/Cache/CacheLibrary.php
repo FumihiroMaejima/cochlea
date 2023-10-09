@@ -6,6 +6,7 @@ use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
+use Predis\Client;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
@@ -24,6 +25,33 @@ class CacheLibrary
 
     private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
+
+    /**
+     * is redis cluster mode.
+     *
+     * @return bool
+     */
+    protected static function isClusterMode(): bool
+    {
+
+        return config('database.redis.cluster');
+    }
+
+    /**
+     * get predis client.
+     *
+     * @return Predis\Client
+     */
+    protected static function getClient(): Client
+    {
+        $connection = static::REDIS_CONNECTION;
+        $parameters = config("database.redis.$connection");
+        $options = null;
+        if (self::isClusterMode()) {
+            $options = config('database.redis.options');
+        }
+        return (new Client($parameters, $options));
+    }
 
     /**
      * get cache value by Key.
