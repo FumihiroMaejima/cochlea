@@ -9,6 +9,7 @@ LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
 # redis
 REDIS_DB=1
 REDIS_KEY=test_key
+REDIS_CLUSTER_CONTAINER_COUNT=6
 
 # etc
 TMP_PARAM=
@@ -236,7 +237,7 @@ redis-hget:
 # redis cluster container
 ##############################
 redis-cluster-up:
-	docker-compose -f ./docker-compose.redis-cluster.yml up -d --scale redis-cluster=6
+	docker-compose -f ./docker-compose.redis-cluster.yml up -d --scale redis-cluster=$(REDIS_CLUSTER_CONTAINER_COUNT)
 
 redis-cluster-down:
 	docker-compose -f ./docker-compose.redis-cluster.yml down -v
@@ -246,6 +247,12 @@ redis-cluster-ps:
 
 redis-cluster-server:
 	docker-compose exec redis-cluster redis-server --version
+
+redis-cluster-nodes: # check cluster status
+	docker-compose exec redis-cluster redis-cli cluster nodes
+
+redis-cluster-networks: # check cluster status
+	docker network inspect cochlea-net | jq '.[0].Containers | .[] | {Name, IPv4Address}'
 
 redis-cluster-info:
 	docker-compose exec redis-cluster redis-cli info
