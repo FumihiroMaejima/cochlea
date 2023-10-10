@@ -47,7 +47,7 @@ class CacheLibrary
     {
         $connection = static::REDIS_CONNECTION;
         $parameters = config("database.redis.$connection");
-        $/* options = null;
+        /* $options = null;
         if (self::isClusterMode()) {
             $options = config('database.redis.options');
         } */
@@ -67,7 +67,8 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        $cache = self::getClient()->get($key);
 
         if (is_null($cache)) {
             return $cache;
@@ -97,7 +98,9 @@ class CacheLibrary
             }
 
             /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
+            // $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
+            $result = self::getClient()->set($key, $value);
+
             $payload = $result->getPayload();
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
@@ -109,7 +112,8 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
+            // $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
+            $setExpireResult = self::getClient()
                 ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
@@ -144,7 +148,8 @@ class CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
+        // $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
+        $result = self::getClient()->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -162,7 +167,8 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        $cache = self::getClient()->get($key);
 
         return $cache ? true : false;
     }
@@ -212,7 +218,8 @@ class CacheLibrary
             return [];
         }
 
-        $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
+        // $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
+        $keys = self::getClient()->command('keys', ['*']);
 
         if (is_array($keys)) {
             return $keys;
