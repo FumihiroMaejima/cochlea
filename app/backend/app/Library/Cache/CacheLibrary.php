@@ -219,7 +219,7 @@ class CacheLibrary
         }
 
         // $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
-        $keys = self::getClient()->command('keys', ['*']);
+        $keys = self::getClient()->keys('*');
 
         if (is_array($keys)) {
             return $keys;
