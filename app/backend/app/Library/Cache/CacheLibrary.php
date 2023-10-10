@@ -41,7 +41,7 @@ class CacheLibrary
      * get predis client.
      * *redis-clusterを使う場合、必須の様な挙動の為通常モードとclusterモード両方で使えるクライアントを用意する
      *
-     * @return Predis\Client
+     * @return Client
      */
     protected static function getClient(): Client
     {
