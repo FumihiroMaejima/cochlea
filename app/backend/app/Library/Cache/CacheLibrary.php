@@ -47,10 +47,11 @@ class CacheLibrary
     {
         $connection = static::REDIS_CONNECTION;
         $parameters = config("database.redis.$connection");
-        $options = null;
+        $/* options = null;
         if (self::isClusterMode()) {
             $options = config('database.redis.options');
-        }
+        } */
+        $options = config('database.redis.options');
         return (new Client($parameters, $options));
     }
 
