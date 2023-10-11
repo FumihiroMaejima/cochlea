@@ -273,24 +273,24 @@ redis-cluster-hget:
 	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
 
 ##############################
-# prometheus docker container
+# grafana docker container
 ##############################
-prometheus-up:
-	docker-compose -f ./docker-compose.prometheus.yml up -d && \
+grafana-up:
+	docker-compose -f ./docker-compose.grafana.yml up -d && \
 	echo 'prometheus : http://localhost:9090' && \
 	echo 'node-exporter : http://localhost:9100/metrics' && \
 	echo 'grafana : http://localhost:3200' && \
 	echo 'alertmanager : http://localhost:9093/#/status' && \
 	echo 'promtail : http://localhost:9080/targets'
 
-prometheus-down:
-	docker-compose -f ./docker-compose.prometheus.yml down
+grafana-down:
+	docker-compose -f ./docker-compose.grafana.yml down
 
-prometheus-ps:
-	docker-compose -f ./docker-compose.prometheus.yml ps
+grafana-ps:
+	docker-compose -f ./docker-compose.grafana.yml ps
 
-prometheus-dev:
-	sh ./scripts/docker/prometheus-container.sh
+grafana-dev:
+	sh ./scripts/docker/grafana-container.sh
 
 ##############################
 # locust docker environmental
