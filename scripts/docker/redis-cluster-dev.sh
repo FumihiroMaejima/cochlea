@@ -37,13 +37,13 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
   # cluster設定を行うIPとportの組み合わせ
   CLUSTER_IPS_STRING=''
   for TARGET_IP in ${TARGET_IPS[@]}
-  do
-    # 各IPアドレスの取得(「"」とは不要の為削除)
-    TMP_IP="${TARGET_IP//\"/}"
-    # ネットワーク部指定の為のCIDR表記のbit指定も削除
-    echo "Target IP is: ${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
-    # 文字列連結
-    CLUSTER_IPS_STRING="${CLUSTER_IPS_STRING} ${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
+    do
+      # 各IPアドレスの取得(「"」とは不要の為削除)
+      TMP_IP="${TARGET_IP//\"/}"
+      # ネットワーク部指定の為のCIDR表記のbit指定も削除
+      echo "Target IP is: ${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
+      # 文字列連結
+      CLUSTER_IPS_STRING="${CLUSTER_IPS_STRING} ${TMP_IP//\/16/}:${DOCKER_REDIS_PORT}"
   done
   echo ${CLUSTER_IPS_STRING}
 
