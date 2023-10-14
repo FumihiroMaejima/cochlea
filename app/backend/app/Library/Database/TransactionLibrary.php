@@ -72,4 +72,43 @@ class TransactionLibrary
     {
         DB::connection(ShardingLibrary::getConnectionByUserId($userId))->rollback();
     }
+
+    /**
+     * begin transaction in sharding table by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function beginTransactionByUserIds(array $userIds): void
+    {
+        foreach ($userIds as $userId) {
+            DB::connection(ShardingLibrary::getConnectionByUserId($userId))->beginTransaction();
+        }
+    }
+
+    /**
+     * commit active database transaction by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function commitTransactionByUserIds(array $userIds): void
+    {
+        foreach ($userIds as $userId) {
+            DB::connection(ShardingLibrary::getConnectionByUserId($userId))->commit();
+        }
+    }
+
+    /**
+     * rollback active database transaction by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function rollbackTransactionByUserIds(array $userIds): void
+    {
+        foreach ($userIds as $userId) {
+            DB::connection(ShardingLibrary::getConnectionByUserId($userId))->rollback();
+        }
+    }
 }
