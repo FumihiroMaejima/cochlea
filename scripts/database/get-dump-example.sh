@@ -46,9 +46,13 @@ if [ "$1" != '' ]; then
         # 拡張子の置き換え
         CSV_FILE_PATH="${TEXT_FILE_PATH//.txt/.csv}"
 
-        # TODO nullへの変換
         # mvで変更
         mv $TEXT_FILE_PATH $CSV_FILE_PATH
+
+        # \Nをnullに変換
+        # macOSの場合、バックアップファイル名を設定する必要がある。-eを指定するか、空文字列指定で回避出来る。
+        # バックスラッシュを文字列として置き換えするにはバックスラッシュを4文字記載する
+        sed -i '' "s/\\\\N/null/g" $CSV_FILE_PATH
     done
   elif [ "$1" == 'tsv' ]; then
     # no --fields-terminated-by option
