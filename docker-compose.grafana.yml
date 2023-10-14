@@ -29,7 +29,7 @@ services:
     image: grafana/grafana
     container_name: ${PROJECT_NAME}_grafana
     ports:
-      - "${PROMETHEUS_GRAFANA_PORT:-3300}:3000"
+      - "${GRAFANA_PORT:-3300}:3000"
     volumes:
       - ./monitoring/grafana/grafana:/var/lib/grafana # 設定ファイル置き場(WORKDIRは別)
     environment:
@@ -42,7 +42,7 @@ services:
     image: grafana/loki
     container_name: ${PROJECT_NAME}_grafana_loki
     ports:
-      - "${PROMETHEUS_GRAFANA_LOKI_PORT:-3400}:3100"
+      - "${GRAFANA_LOKI_PORT:-3400}:3100"
     volumes:
       - ./monitoring/grafana/loki/local-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
@@ -55,7 +55,7 @@ services:
     image: grafana/promtail
     container_name: ${PROJECT_NAME}_grafana_promtail
     ports:
-      - "${PROMETHEUS_GRAFANA_PROMTAIL_PORT:-9080}:9080"
+      - "${GRAFANA_PROMTAIL_PORT:-9080}:9080"
     volumes:
       - ./monitoring/grafana/promtail/config.yml:/etc/promtail/config.yml
       # - /var/log:/var/log
