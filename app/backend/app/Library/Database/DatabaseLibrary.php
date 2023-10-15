@@ -11,6 +11,17 @@ class DatabaseLibrary
     private const DEFAULT_CONNECTION_NAME = 'mysql';
 
     /**
+     * get default database connection by config.
+     *
+     * @param string $connection connection name
+     * @return string database name
+     */
+    public static function getDefaultDatabaseConnection(): string
+    {
+        return config('database.default');
+    }
+
+    /**
      * get single database connection name from config.
      *
      * @param string $connection connection name
