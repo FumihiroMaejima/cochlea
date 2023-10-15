@@ -159,9 +159,9 @@ class ShardingLibrary
      * get connection by user id.
      *
      * @param int $userId user id
-     * @return int
+     * @return string
      */
-    public static function getConnectionByUserId(int $userId): int
+    public static function getConnectionByUserId(int $userId): string
     {
         return self::getUserDataBaseConnection(self::getShardIdByNumber($userId));
     }
