@@ -106,11 +106,7 @@ class TransactionLibrary
      */
     public static function beginTransactionByUserIds(array $userIds): void
     {
-        $connections = [];
-        foreach ($userIds as $userId) {
-            $connections[] = ShardingLibrary::getConnectionByUserId($userId);
-        }
-        $connections = array_unique($connections);
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
         foreach ($connections as $connection) {
             DB::connection($connection)->beginTransaction();
         }
@@ -124,11 +120,7 @@ class TransactionLibrary
      */
     public static function commitTransactionByUserIds(array $userIds): void
     {
-        $connections = [];
-        foreach ($userIds as $userId) {
-            $connections[] = ShardingLibrary::getConnectionByUserId($userId);
-        }
-        $connections = array_unique($connections);
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
         foreach ($connections as $connection) {
             DB::connection($connection)->commit();
         }
@@ -142,11 +134,7 @@ class TransactionLibrary
      */
     public static function rollbackTransactionByUserIds(array $userIds): void
     {
-        $connections = [];
-        foreach ($userIds as $userId) {
-            $connections[] = ShardingLibrary::getConnectionByUserId($userId);
-        }
-        $connections = array_unique($connections);
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
         foreach ($connections as $connection) {
             DB::connection($connection)->rollback();
         }
