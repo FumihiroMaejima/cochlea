@@ -12,6 +12,7 @@ use App\Repositories\Users\UserQuestionnaires\UserQuestionnairesRepositoryInterf
 use App\Http\Resources\Users\UserQuestionnairesResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
+use App\Library\Database\TransactionLibrary;
 use App\Library\Questionnaire\QuestionnaireLibrary;
 use App\Library\User\UserLibrary;
 use App\Models\Masters\Questionnaires;
@@ -95,7 +96,8 @@ class QuestionnairesService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
             UserLibrary::lockUser($userId);
@@ -127,10 +129,12 @@ class QuestionnairesService
 
             // ログの設定
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 
@@ -181,7 +185,8 @@ class QuestionnairesService
         );
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             $resource = UserQuestionnairesResource::toArrayForUpdate($userId, $questionnaireId, $userQuestions);
             $updateCount = $this->userQuestionnairesRepository->update($userId, $questionnaireId, $resource);
@@ -195,10 +200,12 @@ class QuestionnairesService
 
             // ログの設定
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 
