@@ -51,6 +51,7 @@ services:
     volumes:
       - db-volume:/var/lib/mysql # データの永続化
       # - ./mysql/sql:/docker-entrypoint-initdb.d # SQLで設定する場合
+      - ./mysql/files:/var/lib/mysql-files
       - ./mysql/initdb:/docker-entrypoint-initdb.d
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}" # MYSQL_TCP_PORTによってコンテナ側の接続すべきportが変わる

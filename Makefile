@@ -9,6 +9,7 @@ LOCUST_SAMPLE_FILE=./loadTest/locust/samples/locustfileTest.py
 # redis
 REDIS_DB=1
 REDIS_KEY=test_key
+REDIS_CLUSTER_CONTAINER_COUNT=6
 
 # etc
 TMP_PARAM=
@@ -233,24 +234,63 @@ redis-hget:
 	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
 
 ##############################
-# prometheus docker container
+# redis cluster container
 ##############################
-prometheus-up:
-	docker-compose -f ./docker-compose.prometheus.yml up -d && \
+redis-cluster-up:
+	docker-compose -f ./docker-compose.redis-cluster.yml up -d --scale redis-cluster=$(REDIS_CLUSTER_CONTAINER_COUNT)
+
+redis-cluster-down:
+	docker-compose -f ./docker-compose.redis-cluster.yml down -v
+
+redis-cluster-ps:
+	docker-compose -f ./docker-compose.redis-cluster.yml ps
+
+redis-cluster-dev:
+	sh ./scripts/docker/redis-cluster-dev.sh $(REDIS_CLUSTER_CONTAINER_COUNT)
+
+redis-cluster-server:
+	docker-compose exec redis-cluster redis-server --version
+
+redis-cluster-nodes: # check cluster status
+	docker-compose exec redis-cluster redis-cli cluster nodes
+
+redis-cluster-networks: # check cluster status
+	docker network inspect cochlea-net | jq '.[0].Containers | .[] | {Name, IPv4Address}'
+
+redis-cluster-info:
+	docker-compose exec redis-cluster redis-cli info
+
+redis-cluster-keys:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) keys '*'
+
+redis-cluster-get:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
+
+redis-cluster-del:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) del $(REDIS_KEY)
+
+redis-cluster-hget:
+	docker-compose exec redis-cluster redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
+
+##############################
+# grafana docker container
+##############################
+grafana-up:
+	docker-compose -f ./docker-compose.grafana.yml up -d && \
 	echo 'prometheus : http://localhost:9090' && \
 	echo 'node-exporter : http://localhost:9100/metrics' && \
 	echo 'grafana : http://localhost:3200' && \
 	echo 'alertmanager : http://localhost:9093/#/status' && \
 	echo 'promtail : http://localhost:9080/targets'
 
-prometheus-down:
-	docker-compose -f ./docker-compose.prometheus.yml down
+grafana-down:
+	docker-compose -f ./docker-compose.grafana.yml down
 
-prometheus-ps:
-	docker-compose -f ./docker-compose.prometheus.yml ps
+grafana-ps:
+	docker-compose -f ./docker-compose.grafana.yml ps
 
-prometheus-dev:
-	sh ./scripts/docker/prometheus-container.sh
+grafana-dev:
+	sh ./scripts/docker/grafana-container.sh
 
 ##############################
 # locust docker environmental

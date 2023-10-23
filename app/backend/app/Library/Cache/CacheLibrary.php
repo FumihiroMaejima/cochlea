@@ -6,6 +6,7 @@ use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Predis\Response\Status;
+use Predis\Client;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
@@ -26,6 +27,35 @@ class CacheLibrary
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
 
     /**
+     * is redis cluster mode.
+     *
+     * @return bool
+     */
+    protected static function isClusterMode(): bool
+    {
+
+        return config('database.redis.cluster');
+    }
+
+    /**
+     * get predis client.
+     * *redis-clusterを使う場合、必須の様な挙動の為通常モードとclusterモード両方で使えるクライアントを用意する
+     *
+     * @return Client
+     */
+    protected static function getClient(): Client
+    {
+        $connection = static::REDIS_CONNECTION;
+        $parameters = config("database.redis.$connection");
+        /* $options = null;
+        if (self::isClusterMode()) {
+            $options = config('database.redis.options');
+        } */
+        $options = config('database.redis.options');
+        return (new Client($parameters, $options));
+    }
+
+    /**
      * get cache value by Key.
      *
      * @param string $key
@@ -37,7 +67,8 @@ class CacheLibrary
             return null;
         }
 
-        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        $cache = self::getClient()->get($key);
 
         if (is_null($cache)) {
             return $cache;
@@ -67,7 +98,9 @@ class CacheLibrary
             }
 
             /** @var Status $result redisへの設定処理結果 */
-            $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
+            // $result = Redis::connection(static::REDIS_CONNECTION)->set($key, $value);
+            $result = self::getClient()->set($key, $value);
+
             $payload = $result->getPayload();
 
             if ($payload !== self::SET_CACHE_RESULT_VALUE) {
@@ -79,7 +112,8 @@ class CacheLibrary
 
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
+            // $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
+            $setExpireResult = self::getClient()
                 ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
@@ -114,7 +148,8 @@ class CacheLibrary
         }
 
         /** @var int $result 削除結果 */
-        $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
+        // $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
+        $result = self::getClient()->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -132,7 +167,8 @@ class CacheLibrary
      */
     public static function hasCache(string $key): bool
     {
-        $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
+        $cache = self::getClient()->get($key);
 
         return $cache ? true : false;
     }
@@ -182,7 +218,8 @@ class CacheLibrary
             return [];
         }
 
-        $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
+        // $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
+        $keys = self::getClient()->keys('*');
 
         if (is_array($keys)) {
             return $keys;

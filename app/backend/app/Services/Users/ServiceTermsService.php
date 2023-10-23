@@ -14,6 +14,7 @@ use App\Repositories\Users\UserServiceTerms\UserServiceTermsRepositoryInterface;
 use App\Http\Resources\Users\UserServiceTermsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\MasterCacheLibrary;
+use App\Library\Database\TransactionLibrary;
 use App\Library\User\UserLibrary;
 use App\Models\Masters\ServiceTerms;
 use Exception;
@@ -78,7 +79,8 @@ class ServiceTermsService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
             UserLibrary::lockUser($userId);
@@ -104,10 +106,12 @@ class ServiceTermsService
 
             // ログの設定
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 

@@ -3,7 +3,7 @@
 # CURRENT_DIR=$(cd $(dirname $0); pwd)
 DELIMITER_LINE='------------------------------------------------------'
 START_MESSAGE='check container status.'
-DOCKER_COMPOSE_FILE='./docker-compose.prometheus.yml'
+DOCKER_COMPOSE_FILE='./docker-compose.grafana.yml'
 
 # @param {string} message
 showMessage() {

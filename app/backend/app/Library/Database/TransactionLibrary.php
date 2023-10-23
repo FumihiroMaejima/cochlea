@@ -3,6 +3,7 @@
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\DB;
+use App\Library\Database\DatabaseLibrary;
 use App\Library\Database\ShardingLibrary;
 
 class TransactionLibrary
@@ -48,7 +49,15 @@ class TransactionLibrary
      */
     public static function beginTransactionByUserId(int $userId): void
     {
-        DB::connection(ShardingLibrary::getConnectionByUserId($userId))->beginTransaction();
+        $userDBConnection = ShardingLibrary::getConnectionByUserId($userId);
+        DB::connection($userDBConnection)->beginTransaction();
+
+        $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
+        // テスト時は単一のDBを利用している為不要
+        if ($userDBConnection !== $masterDBConnection) {
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            DB::connection($masterDBConnection)->beginTransaction();
+        }
     }
 
     /**
@@ -59,7 +68,15 @@ class TransactionLibrary
      */
     public static function commitByUserId(int $userId): void
     {
-        DB::connection(ShardingLibrary::getConnectionByUserId($userId))->commit();
+        $userDBConnection = ShardingLibrary::getConnectionByUserId($userId);
+        DB::connection($userDBConnection)->commit();
+
+        $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
+        // テスト時は単一のDBを利用している為不要
+        if ($userDBConnection !== $masterDBConnection) {
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            DB::connection($masterDBConnection)->commit();
+        }
     }
 
     /**
@@ -70,6 +87,56 @@ class TransactionLibrary
      */
     public static function rollbackByUserId(int $userId): void
     {
-        DB::connection(ShardingLibrary::getConnectionByUserId($userId))->rollback();
+        $userDBConnection = ShardingLibrary::getConnectionByUserId($userId);
+        DB::connection($userDBConnection)->rollback();
+
+        $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
+        // テスト時は単一のDBを利用している為不要
+        if ($userDBConnection !== $masterDBConnection) {
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            DB::connection($masterDBConnection)->rollback();
+        }
+    }
+
+    /**
+     * begin transaction in sharding table by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function beginTransactionByUserIds(array $userIds): void
+    {
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
+        foreach ($connections as $connection) {
+            DB::connection($connection)->beginTransaction();
+        }
+    }
+
+    /**
+     * commit active database transaction by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function commitTransactionByUserIds(array $userIds): void
+    {
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
+        foreach ($connections as $connection) {
+            DB::connection($connection)->commit();
+        }
+    }
+
+    /**
+     * rollback active database transaction by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return void
+     */
+    public static function rollbackTransactionByUserIds(array $userIds): void
+    {
+        $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
+        foreach ($connections as $connection) {
+            DB::connection($connection)->rollback();
+        }
     }
 }

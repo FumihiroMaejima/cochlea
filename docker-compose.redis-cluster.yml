@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  redis-cluster:
+    # image: redis:7.2-alpine
+    build: ./redis/redisCluster
+    # container_name: ${PROJECT_NAME}_redis-cluster # 複数コンテナを立ち上げる為不要
+    volumes:
+      # - redis-volume:/data # 各コンテナで共通のnode.confを参照する様になる為マウント不要
+      # - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/lua:/usr/local/share/lua
+    # ports: # 複数コンテナを立ち上げる為不要
+    #   - "${REDIS_PORT}:${REDIS_PORT}"
+    # command: --port "${REDIS_PORT}" # TCP接続を考慮してredis-serverを起動するportを指定
+    # command: redis-server /usr/local/etc/redis/redis.conf # cluster設定が記載された設定ファイルを読み込み
+    environment:
+      TZ: "Asia/Tokyo"
+    networks:
+      default:
+
+volumes:
+  redis-volume:
+    name: ${REDIS_VOLUME_NAME}
+    external: true
+
+networks:
+  default:
+    external: true
+    name: ${NETWORK_NAME}
