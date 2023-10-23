@@ -5,10 +5,38 @@ namespace App\Library\Database;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use App\Library\Array\ArrayLibrary;
+use App\Library\Database\ShardingLibrary;
 
 class DatabaseLibrary
 {
     private const DEFAULT_CONNECTION_NAME = 'mysql';
+
+    /**
+     * get default database connection by config.
+     *
+     * @param string $connection connection name
+     * @return string database name
+     */
+    public static function getDefaultDatabaseConnection(): string
+    {
+        return config('database.default');
+    }
+
+    /**
+     * get master database connection.
+     *
+     * @param string $connection connection name
+     * @return string database name
+     */
+    public static function geMasterDatabaseConnection(): string
+    {
+        // test実行時は専用のconnection設定を利用
+        if (config('app.env') === 'testing') {
+            return ShardingLibrary::getSingleConnectionByConfig();
+        } else {
+            return self::getDefaultDatabaseConnection();
+        }
+    }
 
     /**
      * get single database connection name from config.

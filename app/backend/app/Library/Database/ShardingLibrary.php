@@ -159,10 +159,25 @@ class ShardingLibrary
      * get connection by user id.
      *
      * @param int $userId user id
-     * @return int
+     * @return string
      */
-    public static function getConnectionByUserId(int $userId): int
+    public static function getConnectionByUserId(int $userId): string
     {
         return self::getUserDataBaseConnection(self::getShardIdByNumber($userId));
+    }
+
+    /**
+     * get database connections by some user ids.
+     *
+     * @param array $userIds user ids
+     * @return array
+     */
+    public static function getConnectionsByUserIds(array $userIds): array
+    {
+        $connections = [];
+        foreach ($userIds as $userId) {
+            $connections[] = self::getConnectionByUserId($userId);
+        }
+        return array_unique($connections);
     }
 }
