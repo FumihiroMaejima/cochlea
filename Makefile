@@ -367,6 +367,9 @@ sqldef-export:
 sqldef-import:
 	sh ./sqldef/src/scripts/import.sh $(TMP_PARAM) $(TMP_PARAM2)
 
+sqldef-import-dry-run:
+	sh ./sqldef/src/scripts/import.sh $(TMP_PARAM) dryRun
+
 sqldef-help:
 	docker-compose exec sqldef /mysqldef --help
 
