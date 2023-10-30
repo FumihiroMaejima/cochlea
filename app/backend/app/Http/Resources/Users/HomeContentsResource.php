@@ -19,6 +19,7 @@ class HomeContentsResource extends JsonResource
     public const RESOURCE_KEY_DATA = 'data';
     public const RESOURCE_KEY_TEXT = 'text';
     public const RESOURCE_KEY_VALUE = 'value';
+    public const RESOURCE_KEY_IMAGE_SIZE = 'imageSize';
 
     public const RESOURCE_KEY_NAME = 'name';
     public const RESOURCE_KEY_TYPE = 'type';
@@ -114,7 +115,19 @@ class HomeContentsResource extends JsonResource
             if (isset($bannerResponses[$bannerBlockContents[BannerBlockContents::BANNER_ID]])) {
                 $bannerResponse = $bannerResponses[$bannerBlockContents[BannerBlockContents::BANNER_ID]];
             }
-            $contentsGroupByBlockId[$bannerBlockContents[BannerBlockContents::BANNER_BLOCK_ID]][] = array_merge($bannerBlockContents, $bannerResponse);
+
+            if (!empty($bannerResponse)) {
+                $contentsGroupByBlockId[$bannerBlockContents[BannerBlockContents::BANNER_BLOCK_ID]][]
+                = array_merge(
+                    $bannerResponse,
+                    [
+                        BannerBlockContents::BANNER_BLOCK_ID => $bannerBlockContents[BannerBlockContents::BANNER_BLOCK_ID],
+                        BannerBlockContents::BANNER_ID => $bannerBlockContents[BannerBlockContents::BANNER_ID],
+                        BannerBlockContents::TYPE => $bannerBlockContents[BannerBlockContents::TYPE],
+                        BannerBlockContents::ORDER => $bannerBlockContents[BannerBlockContents::ORDER],
+                    ]
+                );
+            }
         }
 
         // $this->resourceはCollection
@@ -149,16 +162,16 @@ class HomeContentsResource extends JsonResource
                 Banners::NAME            => $item[Banners::NAME],
                 Banners::DETAIL          => $item[Banners::DETAIL],
                 Banners::LOCATION        => $item[Banners::LOCATION],
-                Banners::PC_HEIGHT       => $item[Banners::PC_HEIGHT],
-                Banners::PC_WIDTH        => $item[Banners::PC_WIDTH],
-                Banners::SP_HEIGHT       => $item[Banners::SP_HEIGHT],
-                Banners::SP_WIDTH        => $item[Banners::SP_WIDTH],
-                Banners::START_AT        => TimeLibrary::format($item[Banners::START_AT]),
-                Banners::END_AT          => TimeLibrary::format($item[Banners::END_AT]),
+                self::RESOURCE_KEY_IMAGE_SIZE        => [
+                    Banners::PC_HEIGHT       => $item[Banners::PC_HEIGHT],
+                    Banners::PC_WIDTH        => $item[Banners::PC_WIDTH],
+                    Banners::SP_HEIGHT       => $item[Banners::SP_HEIGHT],
+                    Banners::SP_WIDTH        => $item[Banners::SP_WIDTH],
+                ],
+                // Banners::START_AT        => TimeLibrary::format($item[Banners::START_AT]),
+                // Banners::END_AT          => TimeLibrary::format($item[Banners::END_AT]),
                 Banners::URL             => $item[Banners::URL],
                 self::RESOURCE_KEY_IMAGE => BannerLibrary::getUserServiceBannerPath(ArrayLibrary::toArray($item)), // 画像URL設定
-                Banners::CREATED_AT      => $item[Banners::CREATED_AT],
-                Banners::UPDATED_AT      => $item[Banners::UPDATED_AT],
             ];
         }
 
