@@ -134,7 +134,8 @@ class HomeContentsResource extends JsonResource
         // 各itemは1レコードずつのデータを持つRolesResourceクラス
         foreach ($bannerBlocks as $bannerBlock) {
             if (isset($contentsGroupByBlockId[$bannerBlock[BannerBlocks::ID]])) {
-                $response[$bannerBlock[BannerBlocks::ID]] = [
+                $response[] = [
+                    'id' => $bannerBlock[BannerBlocks::ID],
                     'name' => $bannerBlock[BannerBlocks::NAME],
                     'list' => $contentsGroupByBlockId[$bannerBlock[BannerBlocks::ID]],
                 ];
