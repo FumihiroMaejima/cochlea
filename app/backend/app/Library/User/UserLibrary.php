@@ -14,9 +14,10 @@ class UserLibrary
      * validate user password by record.
      *
      * @param string $value
+     * @param array $user
      * @return bool
      */
-    public static function validateUserPassword(string $value, $user): bool
+    public static function validateUserPassword(string $value, array $user): bool
     {
         $pepper = HashLibrary::getPepper();
         $taget = $value. $user[User::SALT] . $pepper;
