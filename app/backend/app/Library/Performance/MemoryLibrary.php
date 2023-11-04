@@ -45,6 +45,9 @@ class MemoryLibrary
             $list[] = $i;
         }
 
+        // 現在の総メモリ使用量を確認する場合
+        // echo self::convert(memory_get_usage()) . "\n";
+
         return self::convert(memory_get_usage() - $start);
     }
 }
