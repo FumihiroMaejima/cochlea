@@ -50,4 +50,15 @@ class MemoryLibrary
 
         return self::convert(memory_get_usage() - $start);
     }
+
+    /**
+     * echo memory usage by start memory size
+     *
+     * @param int $startMemorySize return of memory_get_usage()
+     * @return void
+     */
+    public static function echoMemoryUsageInScript(int $startMemorySize): void
+    {
+        echo 'Used Memory: ' .  self::convert(memory_get_usage() - $startMemorySize);
+    }
 }

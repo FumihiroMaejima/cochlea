@@ -48,6 +48,6 @@ class UserCoinHistoriesSeedCommand extends Command
         Artisan::call('db:seed', ['--class' => UserCoinHistoriesTableSeeder::class, '--no-interaction' => true]);
 
         // メモリ使用量出力
-        echo 'Used Memory: ' . MemoryLibrary::convert(memory_get_usage() - $startMemory) . "\n";
+        MemoryLibrary::echoMemoryUsageInScript($startMemory);
     }
 }

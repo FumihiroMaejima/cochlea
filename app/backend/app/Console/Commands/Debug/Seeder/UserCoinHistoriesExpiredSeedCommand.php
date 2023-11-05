@@ -66,7 +66,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
         $this->createResource($date);
 
         // メモリ使用量出力
-        echo 'Used Memory: ' . MemoryLibrary::convert(memory_get_usage() - $startMemory) . "\n";
+        MemoryLibrary::echoMemoryUsageInScript($startMemory);
     }
 
     /**

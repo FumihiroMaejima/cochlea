@@ -65,7 +65,7 @@ class UserCoinHistoriesCountingCommand extends Command
         // echo var_dump($groupingRecords);
 
         // メモリ使用量出力
-        echo 'Used Memory: ' . MemoryLibrary::convert(memory_get_usage() - $startMemory) . "\n";
+        MemoryLibrary::echoMemoryUsageInScript($startMemory);
     }
 
     /**
