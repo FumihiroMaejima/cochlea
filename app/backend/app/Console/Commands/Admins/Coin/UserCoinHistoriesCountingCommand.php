@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use App\Library\Database\ShardingProxyLibrary;
 use App\Library\File\CsvLibrary;
+use App\Library\Performance\MemoryLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Models\Users\UserCoinHistories;
 
@@ -49,6 +50,7 @@ class UserCoinHistoriesCountingCommand extends Command
      */
     public function handle(): void
     {
+        $startMemory = memory_get_usage();
         $currentDateTime = TimeLibrary::getCurrentDateTime();
         $timestamp = TimeLibrary::strToTimeStamp($currentDateTime);
         $YearMonth = TimeLibrary::timeStampToDate($timestamp, TimeLibrary::DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY);
@@ -61,6 +63,9 @@ class UserCoinHistoriesCountingCommand extends Command
             "UserCoinHistoriesByProductId_$YearMonth" . "_$timestamp.csv"
         );
         // echo var_dump($groupingRecords);
+
+        // メモリ使用量出力
+        echo 'Used Memory: ' . MemoryLibrary::convert(memory_get_usage() - $startMemory) . "\n";
     }
 
     /**
