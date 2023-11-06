@@ -324,7 +324,7 @@ locust-dev:
 ##############################
 jenkins-up:
 	docker-compose -f ./docker-compose.jenkins.yml up -d && \
-	echo 'locust : http://localhost:8280'
+	echo 'jenkis-server : http://localhost:8280'
 
 jenkins-down:
 	docker-compose -f ./docker-compose.jenkins.yml down -v && \

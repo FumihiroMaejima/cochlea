@@ -6,6 +6,8 @@ services:
     image: jenkins/jenkins:latest
     volumes:
       - ./jenkins/home:/var/jenkins_home
+      - ~/.aws:/var/jenkins_home/.aws:ro # read only
+      - ~/.ssh:/var/jenkins_home/.ssh:ro # read only
       - ./jenkins/scripts:/usr/local/scripts
     ports:
       - "${JENKINS_CLIENT_PORT:-8080}:8080"
