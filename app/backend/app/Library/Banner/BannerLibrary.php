@@ -1,6 +1,6 @@
 <?php
 
-// declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Library\Banner;
 
@@ -38,10 +38,12 @@ class BannerLibrary
     {
         // 10以上は16進数に変換
         if ($value > 9) {
-            $value = dechex($value);
+            $target = dechex($value);
+        } else {
+            $target = (string)$value;
         }
         // 末尾を置き換えて返す
-        return str_replace('X', $value, self::BASE_TEST_UUID);
+        return str_replace('X', $target, self::BASE_TEST_UUID);
     }
 
     /**
