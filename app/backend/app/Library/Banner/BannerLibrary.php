@@ -1,5 +1,7 @@
 <?php
 
+// declare(strict_types=1);
+
 namespace App\Library\Banner;
 
 use Illuminate\Support\Facades\Config;
@@ -54,7 +56,7 @@ class BannerLibrary
         // storage/app直下に無い為file_get_contents()で取得
         $file = file_get_contents(storage_path($path));
 
-        if (is_null($file)) {
+        if (is_null($file) || !$file) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
                 'File Not Exist.'
