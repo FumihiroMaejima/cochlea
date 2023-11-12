@@ -8,13 +8,13 @@ use App\Library\CLI\SampleLibrary;
 use Tests\TestCase;
 use Exception;
 
-class SampleLibraryTest extends TestCase
+class EchoParamSampleLibraryTest extends TestCase
 {
     private const RESULT_DATA_INDEX_ZERO = 0;
     private const RESULT_DATA_INDEX_FIRST = 1;
     private const RESULT_DATA_INDEX_SECOND = 2;
 
-    private const FILE_PATH = 'APP/Library/CLI/SampleLibrary.php';
+    private const FILE_PATH = 'APP/Library/CLI/EchoParamSampleLibrary.php';
 
     private string $testFilePath = './' . self::FILE_PATH;
 
