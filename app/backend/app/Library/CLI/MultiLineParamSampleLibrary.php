@@ -10,7 +10,7 @@ namespace App\Library\CLI;
  * @param int
  * @return void
  *
- * @example {string} $ php someiLine.php
+ * @example {string} $ php this.php
  * @example {string} 3
  * @example {string} 2
  * @example {string} 1

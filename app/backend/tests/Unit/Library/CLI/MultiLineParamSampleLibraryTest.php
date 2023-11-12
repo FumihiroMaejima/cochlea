@@ -49,7 +49,7 @@ class MultiLineParamSampleLibraryTest extends TestCase
      * @dataProvider sampleDataProvider
      * @return void
      */
-    public function testSamole(int $count, array $items): void
+    public function testSample(int $count, array $items): void
     {
         $result = null;
 
