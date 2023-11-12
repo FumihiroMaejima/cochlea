@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Library\CLI;
 
-use App\Library\Message\StatusCodeMessages;
-
 /**
- * setFaker time stamp.
+ * get echo parameter execution.
  *
  * @param string
  * @return void

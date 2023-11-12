@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Library\CLI;
 
 // use PHPUnit\Framework\TestCase;
 
-use App\Library\CLI\SampleLibrary;
 use Tests\TestCase;
 use Exception;
 
@@ -49,7 +50,7 @@ class EchoParamSampleLibraryTest extends TestCase
      * @dataProvider sampleDataProvider
      * @return void
      */
-    public function testSamole(int $first, int $second, int $third): void
+    public function testSample(int $first, int $second, int $third): void
     {
         $result = null;
 
@@ -58,8 +59,8 @@ class EchoParamSampleLibraryTest extends TestCase
 
         $this->assertIsArray($result);
         $this->assertIsString($result[self::RESULT_DATA_INDEX_ZERO]);
-        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_ZERO], $first));
-        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_FIRST], $second));
-        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_SECOND], $third));
+        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_ZERO], (string)$first));
+        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_FIRST], (string)$second));
+        $this->assertTrue(str_contains($result[self::RESULT_DATA_INDEX_SECOND], (string)$third));
     }
 }
