@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Questionnaire;
 
 use stdClass;
@@ -130,11 +132,11 @@ class QuestionnaireLibrary
     /**
      * check text is lesser than max count
      *
-     * @param string $text text
+     * @param int $text text
      * @param int $maxCount max count
      * @return bool
      */
-    public static function isLesserThanMaxCountText(string $text, string $maxCount): bool
+    public static function isLesserThanMaxCountText(int $text, int $maxCount): bool
     {
         return $text <= $maxCount;
     }
