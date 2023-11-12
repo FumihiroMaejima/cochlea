@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Debug;
 
 use App\Exceptions\MyApplicationHttpException;
