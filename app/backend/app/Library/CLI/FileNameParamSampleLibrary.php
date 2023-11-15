@@ -27,5 +27,6 @@ function main(string $fileName): void
     echo 'result: ' . var_dump($records) . "\n";
 }
 
+// phpcs:disable -- PHPCS設定の無効化
 $fileName = $argv[1];
 main($fileName);

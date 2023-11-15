@@ -29,4 +29,5 @@ function main(): void
     }
 }
 
+// phpcs:disable -- PHPCS設定の無効化
 main();

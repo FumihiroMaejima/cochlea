@@ -29,4 +29,5 @@ function main(): void
     echo 'result: ' . $result . "\n";
 }
 
+// phpcs:disable -- PHPCS設定の無効化
 main();
