@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports\Admins;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -76,7 +78,11 @@ class RolesExport implements FromCollection, WithHeadings, WithTitle, WithMappin
             'name'   => $item->name,
             'code'   => $item->code,
             'detail' => $item->detail,
-            'permissions' => $this->getPermissionName(explode(',', $item->permissions)),
+            'permissions' => $this->getPermissionName(
+                is_null($item->permissions)
+                    ? []
+                    : explode(',', $item->permissions)
+            ),
         ];
     }
 
