@@ -53,8 +53,6 @@ class EchoParamSampleLibraryTest extends TestCase
         $result = null;
 
         exec('echo $PWD', $pwd);
-        echo 'cehck:' . "\n";
-        echo var_dump($pwd) . "\n";
         $filePath = current($pwd) . self::FILE_PATH;
 
         exec("echo {$first} {$second} {$third} | php $filePath", $result);
