@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Database;
 
 use Illuminate\Support\Facades\DB;
@@ -100,7 +102,7 @@ class ShardingLibrary
      * get user database connection name by shard id.
      *
      * @param int $shardId shard id.
-     * @return int node name
+     * @return string node name
      */
     public static function getUserDataBaseConnection(int $shardId): string
     {

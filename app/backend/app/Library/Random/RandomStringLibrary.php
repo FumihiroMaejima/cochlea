@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Random;
 
 use Exception;
@@ -59,7 +61,7 @@ class RandomStringLibrary
     public static function getRandomShuffleInteger(int $length = self::DEFAULT_RANDOM_STRING_LENGTH): int
     {
         // 同じ文字は2回出ない
-        return mb_substr(str_shuffle(self::RANDOM_VALUES), 0, $length);
+        return (int)mb_substr(str_shuffle(self::RANDOM_VALUES), 0, $length);
     }
 
     /**
@@ -73,7 +75,7 @@ class RandomStringLibrary
         // 同じ文字が複数出現する可能性あり
 
         // 数値の基数を任意に変換する
-        return base_convert(mt_rand(pow(36, $length - 1), pow(36, $length) - 1), 10, 36);
+        return base_convert((string)mt_rand(pow(36, $length - 1), pow(36, $length) - 1), 10, 36);
     }
 
     /**

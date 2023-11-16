@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Auth;
 
 use stdClass;
@@ -15,8 +17,8 @@ class AuthCodeLibrary
     /**
      * validate auth code.
      *
-     * @param array int $userId
-     * @param array int $authCode
+     * @param int $userId
+     * @param int $authCode
      * @param array $record record
      * @return bool
      * @throws MyApplicationHttpException
@@ -113,9 +115,10 @@ class AuthCodeLibrary
      * check is match auth code of paramter & in record.
      *
      * @param array $record record
+     * @param int $code code
      * @return bool
      */
-    public static function isMatchAuthCode(array $record, $code): bool
+    public static function isMatchAuthCode(array $record, int $code): bool
     {
         return $record[UserAuthCodes::CODE] === $code;
     }

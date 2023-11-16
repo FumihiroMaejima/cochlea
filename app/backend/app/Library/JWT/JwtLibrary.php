@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\JWT;
 
 class JwtLibrary
@@ -22,7 +24,9 @@ class JwtLibrary
             exec("echo $value | base64 -D", $output);
         } */
         // ashだと小文字のdしか適用出来ない
-        exec("echo $value | base64 -d", $output);
+        // 改行コードが含まれる為-nで出力
+        // GNUのOSでは4文字ずつ適切な長さにパディングする必要がある。
+        exec("echo -n $value | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d", $output);
         // exec("echo $value | base64 -D", $output);
         return $output;
     }
@@ -36,7 +40,7 @@ class JwtLibrary
     public static function decodeTokenPayload(string $value): array
     {
         // exec("echo $value | base64 -D", $output);
-        exec("echo $value | base64 -d", $output);
+        exec("echo -n $value | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d", $output);
         // 文字化けデータが含まれる為UTF-8へ変換をかける
         return mb_convert_encoding($output, 'UTF-8');
     }
@@ -49,7 +53,8 @@ class JwtLibrary
      */
     public static function encodeTokenHeader(string $value = '{"typ":"JWT","alg":"none"}'): array
     {
-        exec("echo $value | base64", $output);
+        // 改行コードが含まれる為-nで出力
+        exec("echo -n $value | base64", $output);
         return $output;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Banner;
 
 use Illuminate\Support\Facades\Config;
@@ -36,10 +38,12 @@ class BannerLibrary
     {
         // 10以上は16進数に変換
         if ($value > 9) {
-            $value = dechex($value);
+            $target = dechex($value);
+        } else {
+            $target = (string)$value;
         }
         // 末尾を置き換えて返す
-        return str_replace('X', $value, self::BASE_TEST_UUID);
+        return str_replace('X', $target, self::BASE_TEST_UUID);
     }
 
     /**
@@ -54,7 +58,7 @@ class BannerLibrary
         // storage/app直下に無い為file_get_contents()で取得
         $file = file_get_contents(storage_path($path));
 
-        if (is_null($file)) {
+        if (is_null($file) || !$file) {
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_404,
                 'File Not Exist.'

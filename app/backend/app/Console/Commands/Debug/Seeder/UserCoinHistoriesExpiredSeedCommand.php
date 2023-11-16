@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Debug\Seeder;
 
 use Illuminate\Console\Command;
@@ -12,6 +14,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Random\RandomStringLibrary;
+use App\Library\Performance\MemoryLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
 use App\Models\Masters\Coins;
@@ -55,6 +58,7 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
     {
         $date = $this->argument('date');
         echo TimeLibrary::getCurrentDateTime() . "\n";
+        $startMemory = memory_get_usage();
         echo 'target Date is ' . $date . "\n";
         // 入力チェック
         if (!TimeLibrary::checkDateFormatByHyphen($date)) {
@@ -62,6 +66,9 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
             return;
         }
         $this->createResource($date);
+
+        // メモリ使用量出力
+        MemoryLibrary::echoMemoryUsageInScript($startMemory);
     }
 
     /**

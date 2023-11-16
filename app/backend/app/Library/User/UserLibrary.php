@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\User;
 
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +16,10 @@ class UserLibrary
      * validate user password by record.
      *
      * @param string $value
+     * @param array $user
      * @return bool
      */
-    public static function validateUserPassword(string $value, $user): bool
+    public static function validateUserPassword(string $value, array $user): bool
     {
         $pepper = HashLibrary::getPepper();
         $taget = $value. $user[User::SALT] . $pepper;

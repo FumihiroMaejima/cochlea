@@ -324,7 +324,7 @@ locust-dev:
 ##############################
 jenkins-up:
 	docker-compose -f ./docker-compose.jenkins.yml up -d && \
-	echo 'locust : http://localhost:8280'
+	echo 'jenkis-client : http://localhost:8280'
 
 jenkins-down:
 	docker-compose -f ./docker-compose.jenkins.yml down -v && \
@@ -366,6 +366,9 @@ sqldef-export:
 
 sqldef-import:
 	sh ./sqldef/src/scripts/import.sh $(TMP_PARAM) $(TMP_PARAM2)
+
+sqldef-import-dry-run:
+	sh ./sqldef/src/scripts/import.sh $(TMP_PARAM) dryRun
 
 sqldef-help:
 	docker-compose exec sqldef /mysqldef --help
