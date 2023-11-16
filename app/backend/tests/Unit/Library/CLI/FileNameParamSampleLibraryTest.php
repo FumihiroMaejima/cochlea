@@ -17,7 +17,7 @@ class FileNameParamSampleLibraryTest extends TestCase
     private const EOF_STAT_STRING = "<<EOF";
     private const EOF_END_STRING = "EOF";
 
-    private const FILE_PATH = '/APP/Library/CLI/FileNameParamSampleLibrary.php';
+    private const FILE_PATH = '/app/Library/CLI/FileNameParamSampleLibrary.php';
 
     /**
      * test paramteter data

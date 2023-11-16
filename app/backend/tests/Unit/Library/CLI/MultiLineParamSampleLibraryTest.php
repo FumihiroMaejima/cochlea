@@ -17,7 +17,7 @@ class MultiLineParamSampleLibraryTest extends TestCase
     private const EOF_STAT_STRING = "<<EOF";
     private const EOF_END_STRING = "EOF";
 
-    private const FILE_PATH = '/APP/Library/CLI/MultiLineParamSampleLibrary.php';
+    private const FILE_PATH = '/app/Library/CLI/MultiLineParamSampleLibrary.php';
 
     /**
      * test paramteter data

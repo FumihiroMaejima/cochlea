@@ -15,7 +15,7 @@ class EchoParamSampleLibraryTest extends TestCase
     private const RESULT_DATA_INDEX_FIRST = 1;
     private const RESULT_DATA_INDEX_SECOND = 2;
 
-    private const FILE_PATH = '/APP/Library/CLI/EchoParamSampleLibrary.php';
+    private const FILE_PATH = '/app/Library/CLI/EchoParamSampleLibrary.php';
 
     /**
      * test paramteter data
