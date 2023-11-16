@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Performance;
 
 class MemoryLibrary
@@ -45,6 +47,20 @@ class MemoryLibrary
             $list[] = $i;
         }
 
+        // 現在の総メモリ使用量を確認する場合
+        // echo self::convert(memory_get_usage()) . "\n";
+
         return self::convert(memory_get_usage() - $start);
+    }
+
+    /**
+     * echo memory usage by start memory size
+     *
+     * @param int $startMemorySize return of memory_get_usage()
+     * @return void
+     */
+    public static function echoMemoryUsageInScript(int $startMemorySize): void
+    {
+        echo 'Used Memory: ' .  self::convert(memory_get_usage() - $startMemorySize);
     }
 }

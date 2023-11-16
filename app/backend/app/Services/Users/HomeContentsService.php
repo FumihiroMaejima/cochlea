@@ -91,7 +91,7 @@ class HomeContentsService
         $banners = $this->getBannersRecords($bennerIds);
         $bannerResponses = HomeContentsResource::toArrayForGetCollectionListForBanners($banners);
         $bannerBlockResponse = HomeContentsResource::toArrayForGetBannerBlockResponse($bennerBlocks, $bannerBlockContents, $bannerResponses);
-        $response[] = $bannerBlockResponse;
+        $response = $bannerBlockResponse;
 
         return response()->json(['data' => $response], 200);
     }

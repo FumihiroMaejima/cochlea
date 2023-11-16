@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Debug\Seeder;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use App\Library\Performance\MemoryLibrary;
 use App\Library\Time\TimeLibrary;
 use Database\Seeders\Users\UserCoinHistoriesTableSeeder;
 
@@ -42,6 +45,11 @@ class UserCoinHistoriesSeedCommand extends Command
     public function handle(): void
     {
         echo TimeLibrary::getCurrentDateTime() . "\n";
+
+        $startMemory = memory_get_usage();
         Artisan::call('db:seed', ['--class' => UserCoinHistoriesTableSeeder::class, '--no-interaction' => true]);
+
+        // メモリ使用量出力
+        MemoryLibrary::echoMemoryUsageInScript($startMemory);
     }
 }

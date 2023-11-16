@@ -1,1 +1,2 @@
 *.sql
+!test_db_dump_20231028_000000.sql

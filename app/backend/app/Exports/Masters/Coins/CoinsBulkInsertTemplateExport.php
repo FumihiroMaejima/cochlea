@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports\Masters\Coins;
 
 use Maatwebsite\Excel\Concerns\FromCollection;

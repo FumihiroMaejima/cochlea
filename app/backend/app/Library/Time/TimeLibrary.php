@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Library\Time;
 
 use Illuminate\Http\Request;
@@ -94,7 +96,7 @@ class TimeLibrary
     /**
      * convert timestamp to date time.
      *
-     * @param string $timeStamp timestamp
+     * @param int $timeStamp timestamp
      * @param string $format datetime format
      * @return string datetime
      */
@@ -299,7 +301,7 @@ class TimeLibrary
      */
     public static function checkDateFormat(string $date): bool
     {
-        return preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}$/', $date);
+        return (bool)preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}$/', $date);
     }
 
     /**
@@ -310,7 +312,7 @@ class TimeLibrary
      */
     public static function checkDateFormatByHyphen(string $date): bool
     {
-        return preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2}$/', $date);
+        return (bool)preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2}$/', $date);
     }
 
     /**
@@ -321,7 +323,7 @@ class TimeLibrary
      */
     public static function checkDateTimeFormat(string $dateTime): bool
     {
-        return preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
+        return (bool)preg_match('/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
     }
 
     /**
@@ -332,6 +334,6 @@ class TimeLibrary
      */
     public static function checkDateTimeFormatByHyphen(string $dateTime): bool
     {
-        return preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
+        return (bool)preg_match('/^[1-9]{1}[0-9]{0,3}-[0-9]{1,2}-[0-9]{1,2} ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $dateTime);
     }
 }

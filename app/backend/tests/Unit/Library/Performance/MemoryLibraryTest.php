@@ -32,23 +32,23 @@ class MemoryLibraryTest extends TestCase
     public static function convertToMemoryUsageDataProvider(): array
     {
         return [
-            'memory usage 100' => [
+            'memory usage 100/result=100 B' => [
                 'value' => 100,
                 'expect' => '100 B',
             ],
-            'memory usage 1000' => [
+            'memory usage 1000/result=1000 B' => [
                 'value' => 1000,
                 'expect' => '1000 B',
             ],
-            'memory usage 1024' => [
+            'memory usage 1024/result=1 KB' => [
                 'value' => 1024,
                 'expect' => '1 KB',
             ],
-            'memory usage 1100' => [
+            'memory usage 1100/result=1.07 KB' => [
                 'value' => 1100,
                 'expect' => '1.07 KB',
             ],
-            'memory usage 1048576 (1024 * 1024)' => [
+            'memory usage 1048576 (1024 * 1024)/result=1 MB' => [
                 'value' => 1048576,
                 'expect' => '1 MB',
             ],
@@ -62,27 +62,27 @@ class MemoryLibraryTest extends TestCase
     public static function intValueUsageListDataProvider(): array
     {
         return [
-            'lenght 100' => [
+            'lenght 100/result=2.55 KB' => [
                 'value' => 100,
                 'expect' => '2.55 KB',
             ],
-            'lenght 1000' => [
+            'lenght 1000/result=20.05 KB' => [
                 'value' => 1000,
                 'expect' => '20.05 KB',
             ],
-            'lenght 10000' => [
+            'lenght 10000/result=260.05 KB' => [
                 'value' => 10000,
                 'expect' => '260.05 KB',
             ],
-            'lenght 100000' => [
+            'lenght 100000/result=2 MB' => [
                 'value' => 100000,
                 'expect' => '2 MB',
             ],
-            'lenght 1000000' => [
+            'lenght 1000000/result=16 MB' => [
                 'value' => 1000000,
                 'expect' => '16 MB',
             ],
-            'lenght 10000000' => [
+            'lenght 10000000/result=256 MB' => [
                 'value' => 10000000,
                 'expect' => '256 MB',
             ],
