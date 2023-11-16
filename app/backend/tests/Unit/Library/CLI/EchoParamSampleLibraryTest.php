@@ -55,7 +55,7 @@ class EchoParamSampleLibraryTest extends TestCase
         $result = null;
 
         exec("echo {$first} {$second} {$third} | php {$this->testFilePath}", $result);
-        // echo var_dump($result);
+        echo var_dump($result);
 
         $this->assertIsArray($result);
         $this->assertIsString($result[self::RESULT_DATA_INDEX_ZERO]);
