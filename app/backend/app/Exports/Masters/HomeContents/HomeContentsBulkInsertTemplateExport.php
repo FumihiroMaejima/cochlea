@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports\Masters\HomeContents;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
