@@ -17,9 +17,7 @@ class MultiLineParamSampleLibraryTest extends TestCase
     private const EOF_STAT_STRING = "<<EOF";
     private const EOF_END_STRING = "EOF";
 
-    private const FILE_PATH = 'APP/Library/CLI/MultiLineParamSampleLibrary.php';
-
-    private string $testFilePath = './' . self::FILE_PATH;
+    private const FILE_PATH = '/APP/Library/CLI/MultiLineParamSampleLibrary.php';
 
     /**
      * test paramteter data
@@ -68,7 +66,10 @@ class MultiLineParamSampleLibraryTest extends TestCase
         }
         $values = self::EOF_STAT_STRING . $tmpValues . self::EOF_END_STRING;
 
-        $command ="php {$this->testFilePath} {$values}";
+        exec('echo $PWD', $pwd);
+        $filePath = current($pwd) . self::FILE_PATH;
+
+        $command ="php $filePath $values";
 
         // proc_open()で実行する場合
         // パイプで入出力を受け取る

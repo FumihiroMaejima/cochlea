@@ -17,9 +17,7 @@ class FileNameParamSampleLibraryTest extends TestCase
     private const EOF_STAT_STRING = "<<EOF";
     private const EOF_END_STRING = "EOF";
 
-    private const FILE_PATH = 'APP/Library/CLI/FileNameParamSampleLibrary.php';
-
-    private string $testFilePath = './' . self::FILE_PATH;
+    private const FILE_PATH = '/APP/Library/CLI/FileNameParamSampleLibrary.php';
 
     /**
      * test paramteter data
@@ -43,9 +41,12 @@ class FileNameParamSampleLibraryTest extends TestCase
      */
     public function testSample(string $fileName): void
     {
+        exec('echo $PWD', $pwd);
+        $filePath = current($pwd) . self::FILE_PATH;
+
         // use $argv
         // exec("php {$this->testFilePath}", $result);
-        exec("php $this->testFilePath" . " $fileName ", $result);
+        exec("php $filePath" . " $fileName ", $result);
 
         // echo "file test result :\n";
         // echo var_dump($result);

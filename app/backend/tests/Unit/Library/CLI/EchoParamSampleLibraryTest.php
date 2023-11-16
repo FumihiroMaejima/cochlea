@@ -15,9 +15,7 @@ class EchoParamSampleLibraryTest extends TestCase
     private const RESULT_DATA_INDEX_FIRST = 1;
     private const RESULT_DATA_INDEX_SECOND = 2;
 
-    private const FILE_PATH = 'APP/Library/CLI/EchoParamSampleLibrary.php';
-
-    private string $testFilePath = './' . self::FILE_PATH;
+    private const FILE_PATH = '/APP/Library/CLI/EchoParamSampleLibrary.php';
 
     /**
      * test paramteter data
@@ -54,8 +52,11 @@ class EchoParamSampleLibraryTest extends TestCase
     {
         $result = null;
 
-        exec("echo {$first} {$second} {$third} | php {$this->testFilePath}", $result);
-        echo var_dump($result);
+        exec('echo $PWD', $pwd);
+        $filePath = current($pwd) . self::FILE_PATH;
+
+        exec("echo {$first} {$second} {$third} | php $filePath", $result);
+        // echo var_dump($result);
 
         $this->assertIsArray($result);
         $this->assertIsString($result[self::RESULT_DATA_INDEX_ZERO]);
