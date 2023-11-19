@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -208,7 +210,7 @@ class OAuthUsers extends Model
      */
     public function updateByUserIdAndGitHubId(int $userId, int $gitHubId, array $resource): bool
     {
-        return DB::table($this->getTable())
+        return (bool)DB::table($this->getTable())
             ->where(self::USER_ID, '=', $userId)
             ->where(self::GIT_HUB_ID, '=', $gitHubId)
             ->update($resource);
