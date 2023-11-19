@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Imports\Masters\Informations;
 
 use App\Models\Masters\Informations;
