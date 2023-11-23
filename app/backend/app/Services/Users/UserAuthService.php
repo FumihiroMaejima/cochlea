@@ -80,7 +80,7 @@ class UserAuthService
 
                 // 6文字のランダム文字列
                 $code = RandomStringLibrary::getRandomShuffleInteger(6);
-                $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_MINUTE_TIME_SECOND_VALUE);
+                $expiredAt = TimeLibrary::timeStampToDate($timeStamp + TimeLibrary::HALF_AN_HOUR_SECOND_VALUE);
 
                 $authCodeResource = UsersAuthCodeResource::toArrayForCreate(
                     $userId,
