@@ -57,7 +57,7 @@ class TransactionLibrary
         $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
         // テスト時は単一のDBを利用している為不要
         if ($userDBConnection !== $masterDBConnection) {
-            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒なら不要)
             DB::connection($masterDBConnection)->beginTransaction();
         }
     }
@@ -76,7 +76,7 @@ class TransactionLibrary
         $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
         // テスト時は単一のDBを利用している為不要
         if ($userDBConnection !== $masterDBConnection) {
-            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒なら不要)
             DB::connection($masterDBConnection)->commit();
         }
     }
@@ -95,7 +95,7 @@ class TransactionLibrary
         $masterDBConnection = DatabaseLibrary::geMasterDatabaseConnection();
         // テスト時は単一のDBを利用している為不要
         if ($userDBConnection !== $masterDBConnection) {
-            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒な不要)
+            // usersテーブルがあるDBに対してtransactionを設定する。(DBが一緒なら不要)
             DB::connection($masterDBConnection)->rollback();
         }
     }
