@@ -17,7 +17,11 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-$AWS_CLI_PATH iam list-users
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH iam list-users --profile $1
+else
+  $AWS_CLI_PATH iam list-users
+fi
 
 showMessage "Get AWS IAM List Users"
 

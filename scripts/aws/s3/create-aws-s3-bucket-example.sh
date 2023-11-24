@@ -18,11 +18,18 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-# バケットの作成
-$AWS_CLI_PATH/aws s3 mb s3://"$BUCKET_NAME"
+# parameter check
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH/aws s3 mb s3://"$BUCKET_NAME" --profile $1
 
-# バケットのアクセスブロックの設定
-$AWS_CLI_PATH/aws s3api put-public-access-block --bucket "$BUCKET_NAME" --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+  $AWS_CLI_PATH/aws s3api put-public-access-block --bucket "$BUCKET_NAME" --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false" --profile $1
+else
+  # バケットの作成
+  $AWS_CLI_PATH/aws s3 mb s3://"$BUCKET_NAME"
+
+  # バケットのアクセスブロックの設定
+  $AWS_CLI_PATH/aws s3api put-public-access-block --bucket "$BUCKET_NAME" --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+fi
 
 # TODO
 # バケットポリシーを作成&S3バケットにアタッチ

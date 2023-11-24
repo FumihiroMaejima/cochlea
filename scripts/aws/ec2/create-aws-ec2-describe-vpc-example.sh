@@ -18,7 +18,11 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-$AWS_CLI_PATH ec2 describe-vpcs --region "$REGION_NAME"
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH ec2 describe-vpcs --region "$REGION_NAME" --profile $1
+else
+  $AWS_CLI_PATH ec2 describe-vpcs --region "$REGION_NAME"
+fi
 
 showMessage "Get AWS EC2 Describe VPC. $REGION_NAME"
 
