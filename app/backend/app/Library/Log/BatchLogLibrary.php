@@ -12,7 +12,7 @@ use Throwable;
 
 class BatchLogLibrary
 {
-    private const LOG_CAHNNEL_NAME = 'bacthlog';
+    private const LOG_CAHNNEL_NAME = 'batchlog';
 
     // $_SERVERのキー
     private const GLOBAL_VALUE_KEY_REQUEST_URI = 'REQUEST_URI';

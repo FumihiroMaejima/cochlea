@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Log\BatchLogLibrary;
 use App\Library\Log\ErrorLogLibrary;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
+use ErrorException;
 
 class Handler extends ExceptionHandler
 {
@@ -77,7 +80,7 @@ class Handler extends ExceptionHandler
     }
 
 
-    // TODO ログ出力先などを変更する時は下記のメソッドをオーバーライドする。
+    // ログ出力先などを変更する時は下記のメソッドをオーバーライドする。
     /**
      * Report or log an exception.
      *
@@ -86,12 +89,34 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    /* public function report(Throwable $e)
+    public function report(Throwable $e)
     {
-        if (config('app.env') === 'productinon') {
+        /* if (config('app.env') === 'productinon') {
             parent::report($e);
+        } */
+
+        $e = $this->mapException($e);
+
+        // 個別のExceptionクラスを投げるとtrueとなる
+        if ($this->shouldntReport($e)) {
+            return;
         }
-    } */
+
+        // ここまで親クラスと同じ処理
+
+        // HTTPリクエストのエラーの場合
+        if ($this->isHttpException($e)) {
+            $message = $e->getMessage();
+            $status = $e->getStatusCode();
+            if (config('app.env') !== 'testing' && $message !== '') {
+                // エラーログの出力
+                ErrorLogLibrary::exec($e, $status);
+            }
+        } elseif ($e instanceof ErrorException) {
+            // TODO バッチ処理は個別のExceptionクラスを投げる様にする。
+            BatchLogLibrary::exec($e, $e->getCode());
+        }
+    }
 
     /**
      * Render an exception into an HTTP response.
@@ -107,8 +132,7 @@ class Handler extends ExceptionHandler
         $isHttpException = $this->isHttpException($e);
         $message = $e->getMessage();
         $status = $isHttpException ? $e->getStatusCode() : $e->getCode();
-
-        if (config('app.env') !== 'testing' && $message !== '') {
+        if ((MyApplicationHttpException::isThisHttpException($e)) && (config('app.env') !== 'testing' && $message !== '')) {
             // エラーログの出力
             ErrorLogLibrary::exec($e, $status);
         }
