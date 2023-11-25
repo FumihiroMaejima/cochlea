@@ -1435,6 +1435,12 @@ DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
             'path'   => env('LOG_SQL_PATH', storage_path('logs/sql.log')),
             'level'  => env('LOG_SQL_LEVEL', 'debug'),
         ],
+
+        'batchlog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_BATCH_PATH', storage_path('logs/batch.log')),
+            'level'  => env('LOG_BATCH_LEVEL', 'debug'),
+        ],
        ...
     ],
 ```
@@ -1446,10 +1452,12 @@ DB_SLAVE_PASSWORD="${DB_MASTER_PASSWORD}"
 # LOG_ACCESS_PATH=/usr/local/app/log/access.log
 # LOG_ERROR_PATH=/usr/local/app/log/error.log
 # LOG_SQL_PATH=/usr/local/app/log/sql.log
+# LOG_BATCH_PATH=/usr/local/app/log/batch.log
 APP_LOG_DEFAULT_CHANNEL="error"
 LOG_ACCESS_LEVEL=info
 LOG_ERROR_LEVEL=error
 LOG_SQL_LEVEL=info
+LOG_BATCH_LEVEL=info
 ```
 
 *アクセスログを適用させる為に、`middleware`として`AccessLog.php`を作成する。(Karnel.phpにも設定を追加する。)
