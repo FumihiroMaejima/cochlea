@@ -57,12 +57,12 @@ class MyApplicationErrorException extends ErrorException
     }
 
     /**
-     * Determine if the given exception is an HTTP exception (Custom Exception).
+     * Determine if the given exception is an Error exception (Custom Exception).
      *
      * @param  Throwable|Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e
      * @return bool
      */
-    public static function isThisHttpException(Throwable|HttpExceptionInterface $e)
+    public static function isThisException(Throwable|HttpExceptionInterface $e)
     {
         return $e instanceof self;
     }

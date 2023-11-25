@@ -132,7 +132,7 @@ class Handler extends ExceptionHandler
         $isHttpException = $this->isHttpException($e);
         $message = $e->getMessage();
         $status = $isHttpException ? $e->getStatusCode() : $e->getCode();
-        if ((MyApplicationHttpException::isThisHttpException($e)) && (config('app.env') !== 'testing' && $message !== '')) {
+        if ((MyApplicationHttpException::isThisException($e)) && (config('app.env') !== 'testing' && $message !== '')) {
             // エラーログの出力
             ErrorLogLibrary::exec($e, $status);
         }

@@ -108,7 +108,7 @@ class MyApplicationHttpException extends HttpException
      * @param  Throwable|Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
      * @return bool
      */
-    public static function isThisHttpException(Throwable|HttpExceptionInterface $e)
+    public static function isThisException(Throwable|HttpExceptionInterface $e)
     {
         return $e instanceof self;
     }
