@@ -344,7 +344,7 @@ jenkins-quiet: # down jenkins.
 	curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d '{}' localhost:8080/quietDown
 
 jenkins-bash-profile:
-	docker-compose exec jenkins-master bash -c '/usr/local/scripts/create-bash_profile.sh'
+	docker-compose exec jenkins-master bash -c '/usr/local/scripts/bash/create-bash_profile.sh'
 
 jenkins-config-list:
 	docker-compose exec jenkins-master bash -c 'source ~/.bash_profile && /usr/local/scripts/aws/get-aws-config-list.sh'
