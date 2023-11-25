@@ -3,7 +3,9 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Throwable;
 
 class Kernel extends ConsoleKernel
 {
@@ -53,5 +55,28 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    /**
+     * Report the exception to the exception handler.
+     *
+     * @param  \Throwable  $e
+     * @return void
+     */
+    protected function reportException(Throwable $e)
+    {
+        $this->app[ExceptionHandler::class]->report($e);
+    }
+
+    /**
+     * Render the given exception.
+     *
+     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param  \Throwable  $e
+     * @return void
+     */
+    protected function renderException($output, Throwable $e)
+    {
+        $this->app[ExceptionHandler::class]->renderForConsole($output, $e);
     }
 }
