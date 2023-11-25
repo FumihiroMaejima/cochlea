@@ -347,10 +347,10 @@ jenkins-bash-profile:
 	docker-compose exec jenkins-master bash -c '/usr/local/scripts/create-bash_profile.sh'
 
 jenkins-config-list:
-	docker-compose exec jenkins-master bash -c '/usr/local/scripts/aws/get-aws-config-list.sh $(TMP_PARAM)'
+	docker-compose exec jenkins-master bash -c 'source ~/.bash_profile && /usr/local/scripts/aws/get-aws-config-list.sh'
 
 jenkins-s3-list:
-	docker-compose exec jenkins-master bash -c '/usr/local/scripts/aws/s3/get-aws-s3-list.sh $(TMP_PARAM)'
+	docker-compose exec jenkins-master bash -c 'source ~/.bash_profile && /usr/local/scripts/aws/s3/get-aws-s3-list.sh'
 
 ##############################
 # sqldef docker environmental
