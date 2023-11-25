@@ -15,3 +15,4 @@ RUN sudo ./aws/install
 
 USER jenkins
 
+WORKDIR /var/jenkins_home
