@@ -65,7 +65,10 @@ class Kernel extends ConsoleKernel
      */
     protected function reportException(Throwable $e)
     {
+        // 実際に呼び出されるクラスは
+        // NunoMaduro\Collision\Adapters\Laravel\ExceptionHandler
         $this->app[ExceptionHandler::class]->report($e);
+        // parent::reportException($e);
     }
 
     /**
