@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -15,22 +17,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AccessLog
 {
-    // log出力項目
-    private string $requestDateTime;
-    private string $uri;
-    private string $method;
-    private int $statusCode;
-    private string $responseTime;
-    private string $host;
-    private string $ip;
-    private string|null $contentType;
-    private string|array|null $headers;
-    private mixed $requestContent;
-    private string $plathome;
-    private int|false $pid;
-    private int $memory;
-    private int $peakMemory;
-
     /**
      * Handle an incoming request.
      *
@@ -45,10 +31,19 @@ class AccessLog
         }
 
         // $this->host = getmypid();
-        $this->requestDateTime = TimeLibrary::getCurrentDateTime();
-        $this->pid             = getmypid();
+        $requestDateTime = TimeLibrary::getCurrentDateTime();
+        $pid             = getmypid();
 
-        $this->getLogParameterByRequest($request);
+        [
+            $uri,
+            $method,
+            $host,
+            $ip,
+            $contentType,
+            $plathome,
+            $headers,
+            $requestContent,
+        ] = AccessLogLibrary::getLogParameterByRequest($request);
 
 
         // 処理速度の計測
@@ -56,61 +51,30 @@ class AccessLog
 
         $response = $next($request);
 
-        $this->responseTime = microtime(true) - $startTime;
-        $this->memory = memory_get_usage();
-        $this->peakMemory = memory_get_peak_usage();
+        $responseTime = (string)(microtime(true) - $startTime);
+        $memory = memory_get_usage();
+        $peakMemory = memory_get_peak_usage();
 
-        $this->getLogParameterByResponse($response);
+        [$statusCode] = AccessLogLibrary::getLogParameterByResponse($response);
 
         // log出力
         AccessLogLibrary::outputLog(
-            $this->requestDateTime,
-            $this->uri,
-            $this->method,
-            $this->statusCode,
-            $this->responseTime,
-            $this->host,
-            $this->ip,
-            $this->contentType,
-            $this->headers,
-            $this->requestContent,
-            $this->plathome,
-            $this->pid,
-            $this->memory,
-            $this->peakMemory
+            $requestDateTime,
+            $uri,
+            $method,
+            $statusCode,
+            $responseTime,
+            $host,
+            $ip,
+            $contentType,
+            $headers,
+            $requestContent,
+            $plathome,
+            $pid,
+            $memory,
+            $peakMemory
         );
 
         return $response;
-    }
-
-    /**
-     * get log parameter from request.
-     *
-     * @param Request $request
-     * @return void
-     */
-    private function getLogParameterByRequest(Request $request): void
-    {
-        $contentType = $request->getContentType();
-        $this->uri             = $request->getRequestUri();
-        $this->method          = $request->getMethod();
-        $this->host            = $request->getHost();
-        $this->ip              = $request->getClientIp();
-        $this->contentType     = $contentType;
-        $this->plathome        = $request->userAgent() ?? '';
-        $this->headers         = AccessLogLibrary::getRequestHeader($request->header());
-        $this->requestContent  = LogLibrary::maskingSecretKeys($request->all());
-    }
-
-    /**
-     * get log parameter from response.
-     *
-     * @param RedirectResponse|Response|JsonResponse|BinaryFileResponse $response
-     * @return void
-     */
-    private function getLogParameterByResponse(
-        RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
-    ): void {
-        $this->statusCode = $response->getStatusCode();
     }
 }

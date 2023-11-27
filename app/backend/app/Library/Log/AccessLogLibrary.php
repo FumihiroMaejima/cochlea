@@ -23,7 +23,7 @@ class AccessLogLibrary
     private const AUTHORIZATION_HEADER_VALUE_START_POSITION = 0;
     private const AUTHORIZATION_HEADER_VALUE_END_POSITION = 10;
 
-    // ログキー
+    // ログキー(log出力項目)
     private const LOG_KEY_REQUEST_DATETIME = 'request_datetime';
     private const LOG_KEY_REQUEST_URI = 'uri';
     private const LOG_KEY_REQUEST_METHOD = 'method';
@@ -38,22 +38,6 @@ class AccessLogLibrary
     private const LOG_KEY_REQUEST_PROCESS_ID = 'process_id';
     private const LOG_KEY_REQUEST_MEMORY_BYTE = 'memory_byte';
     private const LOG_KEY_REQUEST_PEAK_MEMORY_BYTE = 'peak_memory_byte';
-
-    // log出力項目
-    private string $requestDateTime;
-    private string $uri;
-    private string $method;
-    private int $statusCode;
-    private string $responseTime;
-    private string $host;
-    private string $ip;
-    private string|null $contentType;
-    private string|array|null $headers;
-    private mixed $requestContent;
-    private string $plathome;
-    private int|false $pid;
-    private int $memory;
-    private int $peakMemory;
 
     private const ECLUDE_PATH_LIST = [
         '_debugbar',
@@ -73,39 +57,47 @@ class AccessLogLibrary
         }
 
         // $this->host = getmypid();
-        $this->requestDateTime = TimeLibrary::getCurrentDateTime();
-        $this->pid             = getmypid();
+        $requestDateTime = TimeLibrary::getCurrentDateTime();
+        $pid             = getmypid();
 
-        $this->getLogParameterByRequest($request);
-
+        [
+            $uri,
+            $method,
+            $host,
+            $ip,
+            $contentType,
+            $plathome,
+            $headers,
+            $requestContent,
+        ] = self::getLogParameterByRequest($request);
 
         // 処理速度の計測
         $startTime = microtime(true);
 
         $response = $next($request);
 
-        $this->responseTime = microtime(true) - $startTime;
-        $this->memory = memory_get_usage();
-        $this->peakMemory = memory_get_peak_usage();
+        $responseTime = (string)(microtime(true) - $startTime);
+        $memory = memory_get_usage();
+        $peakMemory = memory_get_peak_usage();
 
-        $this->getLogParameterByResponse($response);
+        [$statusCode] = self::getLogParameterByResponse($response);
 
         // log出力
         self::outputLog(
-            $this->requestDateTime,
-            $this->uri,
-            $this->method,
-            $this->statusCode,
-            $this->responseTime,
-            $this->host,
-            $this->ip,
-            $this->contentType,
-            $this->headers,
-            $this->requestContent,
-            $this->plathome,
-            $this->pid,
-            $this->memory,
-            $this->peakMemory
+            $requestDateTime,
+            $uri,
+            $method,
+            $statusCode,
+            $responseTime,
+            $host,
+            $ip,
+            $contentType,
+            $headers,
+            $requestContent,
+            $plathome,
+            $pid,
+            $memory,
+            $peakMemory
         );
 
         return $response;
@@ -126,31 +118,34 @@ class AccessLogLibrary
      * get log parameter from request.
      *
      * @param Request $request
-     * @return void
+     * @return array
      */
-    private function getLogParameterByRequest(Request $request): void
+    public static function getLogParameterByRequest(Request $request): array
     {
-        $contentType = $request->getContentType();
-        $this->uri             = $request->getRequestUri();
-        $this->method          = $request->getMethod();
-        $this->host            = $request->getHost();
-        $this->ip              = $request->getClientIp();
-        $this->contentType     = $contentType;
-        $this->plathome        = $request->userAgent() ?? '';
-        $this->headers         = self::getRequestHeader($request->header());
-        $this->requestContent  = LogLibrary::maskingSecretKeys($request->all());
+        return [
+            $request->getRequestUri(),
+            $request->getMethod(),
+            $request->getHost(),
+            $request->getClientIp(),
+            $request->getContentTypeFormat(),
+            $request->userAgent() ?? '',
+            self::getRequestHeader($request->header()),
+            LogLibrary::maskingSecretKeys($request->all())
+        ];
     }
 
     /**
      * get log parameter from response.
      *
      * @param RedirectResponse|Response|JsonResponse|BinaryFileResponse $response
-     * @return void
+     * @return array
      */
-    private function getLogParameterByResponse(
+    public static function getLogParameterByResponse(
         RedirectResponse | Response | JsonResponse | BinaryFileResponse $response
-    ): void {
-        $this->statusCode = $response->getStatusCode();
+    ): array {
+        return [
+            $response->getStatusCode(),
+        ];
     }
 
     /**
