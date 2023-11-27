@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Library\Log\LogLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\Log\AccessLogLibrary;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AccessLog
 {
