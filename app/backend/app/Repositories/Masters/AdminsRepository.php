@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -188,9 +190,9 @@ class AdminsRepository implements AdminsRepositoryInterface
      * create recode.
      *
      * @param array $resource create data
-     * @return int create row count
+     * @return bool create row count
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }
