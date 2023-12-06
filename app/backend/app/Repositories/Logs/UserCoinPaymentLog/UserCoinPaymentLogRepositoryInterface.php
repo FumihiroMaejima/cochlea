@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Logs\UserCoinPaymentLog;
 
 use Illuminate\Support\Collection;

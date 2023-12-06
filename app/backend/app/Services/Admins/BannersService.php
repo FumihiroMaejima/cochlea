@@ -158,8 +158,8 @@ class BannersService
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
 
             // レスポンスの制御
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
+            $message = ($insertCount) ? 'success' : 'Bad Request';
+            $status = ($insertCount) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {

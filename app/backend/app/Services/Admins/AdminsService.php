@@ -114,8 +114,8 @@ class AdminsService
             DB::commit();
 
             // 作成されている場合は304
-            $message = ($insertCount && $insertAdminsRolesCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount && $insertAdminsRolesCount > 0) ? 201 : 401;
+            $message = ($insertCount && $insertAdminsRolesCount) ? 'success' : 'Bad Request';
+            $status = ($insertCount && $insertAdminsRolesCount) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {

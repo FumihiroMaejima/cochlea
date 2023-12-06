@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\AdminsRoles;
 
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ interface AdminsRolesRepositoryInterface
 
     public function getByAdminId(int $id): Collection;
 
-    public function create(array $resource): int;
+    public function create(array $resource): bool;
 
     public function update(int $id, array $resource): int;
 
