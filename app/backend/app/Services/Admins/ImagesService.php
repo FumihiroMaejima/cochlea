@@ -139,8 +139,8 @@ class ImagesService
             // $result = $file->storeAs($uploadDirectory, $fileName);
 
             // 作成されている場合は304
-            $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0 && $result) ? 201 : 401;
+            $message = ($insertCount && $result) ? 'success' : 'Bad Request';
+            $status = ($insertCount && $result) ? 201 : 401;
 
             DB::commit();
 
