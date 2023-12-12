@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\Coins;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -164,7 +166,7 @@ class CoinsRepository implements CoinsRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }
