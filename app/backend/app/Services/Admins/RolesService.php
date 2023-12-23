@@ -139,8 +139,8 @@ class RolesService
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
             // 作成されている場合は304
-            $message = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0 && $insertRolePermissionsCount > 0) ? 201 : 401;
+            $message = ($insertCount && $insertRolePermissionsCount) ? 'success' : 'Bad Request';
+            $status = ($insertCount && $insertRolePermissionsCount) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {

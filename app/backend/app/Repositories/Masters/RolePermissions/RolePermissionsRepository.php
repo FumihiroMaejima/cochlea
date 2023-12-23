@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\RolePermissions;
 
 use App\Models\Masters\Roles;
@@ -63,7 +65,7 @@ class RolePermissionsRepository implements RolePermissionsRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }

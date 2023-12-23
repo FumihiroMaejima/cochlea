@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\Roles;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -172,7 +174,7 @@ class RolesRepository implements RolesRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }
