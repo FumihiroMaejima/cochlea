@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserAuthCodes;
 
 use Illuminate\Support\Collection;
@@ -13,7 +15,7 @@ interface UserAuthCodesRepositoryInterface
 
     public function getByUserIdAndCode(int $userId, int $code, bool $isLock = false): Collection|null;
 
-    public function create(int $userId, array $resource): int;
+    public function create(int $userId, array $resource): bool;
 
     public function update(int $userId, int $authCode, array $resource): int;
 
