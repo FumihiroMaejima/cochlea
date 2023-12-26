@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserCoins;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -68,7 +70,7 @@ class UserCoinsRepository extends BaseUserRepository implements UserCoinsReposit
      * @param array $resource create data
      * @return int
      */
-    public function create(int $userId, array $resource): int
+    public function create(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserQuestionnaires;
 
 use Illuminate\Support\Collection;
@@ -11,7 +13,7 @@ interface UserQuestionnairesRepositoryInterface
 
     public function getByUserIdAndQuestionnaireId(int $userId, int $serviceTermId, bool $isLock = false): Collection|null;
 
-    public function create(int $userId, array $resource): int;
+    public function create(int $userId, array $resource): bool;
 
     public function update(int $userId, int $questionnaireId, array $resource): int;
 
