@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserReadInformations;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -109,7 +111,7 @@ class UserReadInformationsRepository extends BaseUserRepository implements UserR
      * @param array $resource create data
      * @return int
      */
-    public function create(int $userId, array $resource): int
+    public function create(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }

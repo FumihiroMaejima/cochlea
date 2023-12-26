@@ -105,7 +105,7 @@ class InformationsService
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
             $createCount = $this->userReadInformationsRepository->create($userId, $resource);
 
-            if ($createCount <= 0) {
+            if (!$createCount) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'

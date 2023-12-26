@@ -97,7 +97,7 @@ class ServiceTermsService
             $resource = UserServiceTermsResource::toArrayForCreate($userId, $serviceTermId);
             $createCount = $this->userServiceTermsRepository->create($userId, $resource);
 
-            if ($createCount <= 0) {
+            if (!$createCount) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'
