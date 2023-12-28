@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admins;
 
 use Illuminate\Http\JsonResponse;
@@ -189,7 +191,7 @@ class AdminsService
         DB::beginTransaction();
         try {
             // ロックをかける為transaction内で実行
-            $admin = $this->getAdminById($request->id);
+            $admin = $this->getAdminById((int)$request->id);
 
             $resource = AdminsResource::toArrayForDelete();
 

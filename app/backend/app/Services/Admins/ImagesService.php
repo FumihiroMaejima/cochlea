@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admins;
 
 use Exception;
@@ -125,7 +127,7 @@ class ImagesService
             if (!$result) {
                 DB::rollBack();
                 throw new MyApplicationHttpException(
-                    StatusCodeMessages::MESSAGE_500,
+                    StatusCodeMessages::STATUS_500,
                     'store file failed.'
                 );
             }
