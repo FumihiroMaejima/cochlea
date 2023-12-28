@@ -16,6 +16,7 @@ use App\Repositories\Users\UserCoinHistories\UserCoinHistoriesRepositoryInterfac
 use App\Repositories\Users\Users\UsersRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Auth\AuthCodeLibrary;
+use App\Library\Database\TransactionLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\User\UserLibrary;
@@ -70,12 +71,13 @@ class UserAuthService
         }
         $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
-        $randomUserId = rand(User::MIN_USER_ID, User::MAX_USER_ID);
-        $resource = UsersResource::toArrayForCreate($randomUserId, (string)$timeStamp, $email, $token);
 
         // IDの競合を考慮して設定回数までリトライを行う
         foreach (range(1, self::USER_CREATE_MAX_COUNT) as $count) {
-            DB::beginTransaction();
+            $randomUserId = rand(User::MIN_USER_ID, User::MAX_USER_ID);
+            $resource = UsersResource::toArrayForCreate($randomUserId, (string)$timeStamp, $email, $token);
+            // DB::beginTransaction();
+            TransactionLibrary::beginTransactionByUserId($randomUserId);
             try {
                 // ユーザーの登録
                 $userId = (new User())->insertUserAndGetId($resource);
@@ -97,14 +99,16 @@ class UserAuthService
 
                 // メール送信
                 (new AuthCodeNotificationService($email))->send((string)$code, $expiredAt);
-                DB::commit();
+                // DB::commit();
+                TransactionLibrary::commitByUserId($userId);
 
                 break;
             } catch (Exception $e) {
                 if ($count < self::USER_CREATE_MAX_COUNT) {
                     continue;
                 }
-                DB::rollBack();
+                // DB::rollBack();
+                TransactionLibrary::rollbackByUserId($randomUserId);
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     '認証コード生成処理に失敗しました。' . $e->getMessage(),
@@ -144,7 +148,8 @@ class UserAuthService
             );
         }
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
             UserLibrary::lockUser($userId);
@@ -197,9 +202,11 @@ class UserAuthService
                 );
             }
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
+            TransactionLibrary::rollbackByUserId($userId);
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
                 '認証コードの検証処理に失敗しました。' . $e->getMessage(),
@@ -245,7 +252,8 @@ class UserAuthService
             );
         }
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
             UserLibrary::lockUser($userId);
@@ -261,9 +269,11 @@ class UserAuthService
                 );
             }
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 

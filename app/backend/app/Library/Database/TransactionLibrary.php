@@ -120,7 +120,7 @@ class TransactionLibrary
      * @param array $userIds user ids
      * @return void
      */
-    public static function commitTransactionByUserIds(array $userIds): void
+    public static function commitByUserIds(array $userIds): void
     {
         $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
         foreach ($connections as $connection) {
@@ -134,7 +134,7 @@ class TransactionLibrary
      * @param array $userIds user ids
      * @return void
      */
-    public static function rollbackTransactionByUserIds(array $userIds): void
+    public static function rollbackByUserIds(array $userIds): void
     {
         $connections = ShardingLibrary::getConnectionsByUserIds($userIds);
         foreach ($connections as $connection) {

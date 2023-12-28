@@ -13,6 +13,7 @@ use App\Http\Resources\Users\UserCoinsResource;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Database\ShardingLibrary;
+use App\Library\Database\TransactionLibrary;
 use App\Library\Random\RandomStringLibrary;
 use App\Library\Performance\MemoryLibrary;
 use App\Library\Time\TimeLibrary;
@@ -140,7 +141,8 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
         $useCoins = $userCoinModel->getAllByUserIds($userIds);
         $useCoins = array_column($useCoins, null, UserCoins::USER_ID);
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserIds($userIds);
         try {
             // 購入の場合の購入ステータステーブルの設定は省略する
 
@@ -205,9 +207,11 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
             }
             // コイン履歴の作成
             $userCoinHistriesModel->insertByUserIdsForMultiUserRecords($userIds, $resouces);
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserIds($userIds);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
+            TransactionLibrary::rollbackByUserIds($userIds);
             throw $e;
         }
     }
