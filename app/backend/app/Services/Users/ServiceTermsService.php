@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -54,7 +56,7 @@ class ServiceTermsService
      * create user rercord.
      *
      * @param int $userId user id
-     * @param string $serviceTermId service term id.
+     * @param int $serviceTermId service term id.
      * @return JsonResponse
      */
     public function createUserServiceTerm(int $userId, int $serviceTermId): JsonResponse

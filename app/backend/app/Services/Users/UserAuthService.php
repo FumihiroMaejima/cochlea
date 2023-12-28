@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Collection;
@@ -69,7 +71,7 @@ class UserAuthService
         $timeStamp = TimeLibrary::strToTimeStamp(TimeLibrary::getCurrentDateTime());
         $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
         $randomUserId = rand(User::MIN_USER_ID, User::MAX_USER_ID);
-        $resource = UsersResource::toArrayForCreate($randomUserId, $timeStamp, $email, $token);
+        $resource = UsersResource::toArrayForCreate($randomUserId, (string)$timeStamp, $email, $token);
 
         // IDの競合を考慮して設定回数までリトライを行う
         foreach (range(1, self::USER_CREATE_MAX_COUNT) as $count) {

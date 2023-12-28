@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -249,7 +251,7 @@ class QuestionnairesService
      * get user questionnaire by user id & questionnaire id.
      *
      * @param int $userId user id
-     * @param string $questionnaireId questionnaire id.
+     * @param int $questionnaireId questionnaire id.
      * @return ?array
      */
     private function getUserQuestionnaire(int $userId, int $questionnaireId): ?array

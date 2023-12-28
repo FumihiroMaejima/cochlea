@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -72,7 +74,7 @@ class InformationsService
      * create user rercord.
      *
      * @param int $userId user id
-     * @param string $informationId information id.
+     * @param int $informationId information id.
      * @return JsonResponse
      */
     public function createUserReadInformation(int $userId, int $informationId): JsonResponse
@@ -143,7 +145,7 @@ class InformationsService
      * remove user rercord.
      *
      * @param int $userId user id
-     * @param string $informationId information id.
+     * @param int $informationId information id.
      * @return JsonResponse
      */
     public function removeUserReadInformation(int $userId, int $informationId): JsonResponse
