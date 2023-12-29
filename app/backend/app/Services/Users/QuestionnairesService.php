@@ -190,6 +190,9 @@ class QuestionnairesService
         // DB::beginTransaction();
         TransactionLibrary::beginTransactionByUserId($userId);
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
             $resource = UserQuestionnairesResource::toArrayForUpdate($userId, $questionnaireId, $userQuestions);
             $updateCount = $this->userQuestionnairesRepository->update($userId, $questionnaireId, $resource);
 

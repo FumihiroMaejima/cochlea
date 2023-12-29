@@ -18,6 +18,7 @@ use App\Library\Random\RandomStringLibrary;
 use App\Library\Performance\MemoryLibrary;
 use App\Library\Time\TimeLibrary;
 use App\Library\String\UuidLibrary;
+use App\Library\User\UserLibrary;
 use App\Models\Masters\Coins;
 use App\Models\Users\UserCoinHistories;
 use App\Models\Users\UserCoins;
@@ -149,6 +150,9 @@ class UserCoinHistoriesExpiredSeedCommand extends Command
             $resouces = [];
             foreach ($data as $row) {
                 $userId = $row[UserCoinHistories::USER_ID];
+                // ロックの実行
+                UserLibrary::lockUser($userId);
+
                 // ユーザーの所持しているコインの更新
                 if (empty($useCoins[$userId])) {
                     // 登録されていない場合は新規登録から
