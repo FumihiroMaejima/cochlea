@@ -3,7 +3,9 @@ version: '3.7'
 services:
   jenkins-master:
     container_name: ${PROJECT_NAME}-jenkins-master
-    image: jenkins/jenkins:latest
+    platform: 'linux/amd64'
+    build: ./jenkins
+    # image: jenkins/jenkins:latest
     volumes:
       - ./jenkins/home:/var/jenkins_home
       - ~/.aws:/var/jenkins_home/.aws:ro # read only

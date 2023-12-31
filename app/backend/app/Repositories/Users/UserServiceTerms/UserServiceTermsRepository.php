@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserServiceTerms;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -109,7 +111,7 @@ class UserServiceTermsRepository extends BaseUserRepository implements UserServi
      * @param array $resource create data
      * @return int
      */
-    public function create(int $userId, array $resource): int
+    public function create(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }

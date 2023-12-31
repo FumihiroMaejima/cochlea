@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Imports\Masters\Events;
 
 use App\Models\Masters\Events;

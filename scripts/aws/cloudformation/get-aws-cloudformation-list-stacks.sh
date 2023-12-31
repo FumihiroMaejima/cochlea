@@ -17,7 +17,12 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-$AWS_CLI_PATH cloudformation list-stacks
+# parameter check
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH cloudformation list-stacks --profile $1
+else
+  $AWS_CLI_PATH cloudformation list-stacks
+fi
 
 showMessage "Get AWS Cloudformation List Stacks"
 

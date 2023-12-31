@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters;
 
 use Illuminate\Http\Request;
@@ -19,7 +21,7 @@ interface AdminsRepositoryInterface
 
     public function getByEmail(string $email): Collection|null;
 
-    public function create(array $resource): int;
+    public function create(array $resource): bool;
 
     public function update(int $id, array $resource): int;
 

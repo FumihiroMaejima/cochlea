@@ -343,6 +343,15 @@ jenkins-rebuild: # down container & remove cacahe & rebuild container.
 jenkins-quiet: # down jenkins.
 	curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d '{}' localhost:8080/quietDown
 
+jenkins-bash-profile:
+	docker-compose exec jenkins-master bash -c '/usr/local/scripts/bash/create-bash_profile.sh'
+
+jenkins-config-list:
+	docker-compose exec jenkins-master bash -c 'source ~/.bash_profile && /usr/local/scripts/aws/get-aws-config-list.sh'
+
+jenkins-s3-list:
+	docker-compose exec jenkins-master bash -c 'source ~/.bash_profile && /usr/local/scripts/aws/s3/get-aws-s3-list.sh'
+
 ##############################
 # sqldef docker environmental
 ##############################

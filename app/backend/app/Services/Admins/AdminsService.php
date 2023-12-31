@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admins;
 
 use Illuminate\Http\JsonResponse;
@@ -114,8 +116,8 @@ class AdminsService
             DB::commit();
 
             // 作成されている場合は304
-            $message = ($insertCount > 0 && $insertAdminsRolesCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0 && $insertAdminsRolesCount > 0) ? 201 : 401;
+            $message = ($insertCount && $insertAdminsRolesCount) ? 'success' : 'Bad Request';
+            $status = ($insertCount && $insertAdminsRolesCount) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
@@ -189,7 +191,7 @@ class AdminsService
         DB::beginTransaction();
         try {
             // ロックをかける為transaction内で実行
-            $admin = $this->getAdminById($request->id);
+            $admin = $this->getAdminById((int)$request->id);
 
             $resource = AdminsResource::toArrayForDelete();
 

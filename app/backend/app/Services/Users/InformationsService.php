@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -72,7 +74,7 @@ class InformationsService
      * create user rercord.
      *
      * @param int $userId user id
-     * @param string $informationId information id.
+     * @param int $informationId information id.
      * @return JsonResponse
      */
     public function createUserReadInformation(int $userId, int $informationId): JsonResponse
@@ -105,7 +107,7 @@ class InformationsService
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
             $createCount = $this->userReadInformationsRepository->create($userId, $resource);
 
-            if ($createCount <= 0) {
+            if (!$createCount) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'
@@ -143,7 +145,7 @@ class InformationsService
      * remove user rercord.
      *
      * @param int $userId user id
-     * @param string $informationId information id.
+     * @param int $informationId information id.
      * @return JsonResponse
      */
     public function removeUserReadInformation(int $userId, int $informationId): JsonResponse

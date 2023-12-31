@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserCoinHistories;
 
 use Illuminate\Support\Collection;
@@ -13,7 +15,7 @@ interface UserCoinHistoriesRepositoryInterface
 
     public function getByUserIdAndUuId(int $userId, string $uuid, bool $isLock = false): Collection|null;
 
-    public function create(int $userId, array $resource): int;
+    public function create(int $userId, array $resource): bool;
 
     public function update(int $userId, string $createdAt, array $resource): int;
 

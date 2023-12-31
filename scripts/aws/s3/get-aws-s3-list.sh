@@ -16,7 +16,12 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-$AWS_CLI_PATH s3 ls
+# parameter check
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH s3 ls --profile $1
+else
+  $AWS_CLI_PATH s3 ls
+fi
 
 showMessage "Get AWS S3 Users"
 
