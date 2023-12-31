@@ -124,6 +124,12 @@ return [
             'level'  => env('LOG_SQL_LEVEL', 'debug'),
         ],
 
+        'batchlog' => [
+            'driver' => 'daily',
+            'path'   => env('LOG_BATCH_PATH', storage_path('logs/batch.log')),
+            'level'  => env('LOG_BATCH_LEVEL', 'debug'),
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admins;
 
 use Exception;
@@ -125,7 +127,7 @@ class ImagesService
             if (!$result) {
                 DB::rollBack();
                 throw new MyApplicationHttpException(
-                    StatusCodeMessages::MESSAGE_500,
+                    StatusCodeMessages::STATUS_500,
                     'store file failed.'
                 );
             }
@@ -139,8 +141,8 @@ class ImagesService
             // $result = $file->storeAs($uploadDirectory, $fileName);
 
             // 作成されている場合は304
-            $message = ($insertCount > 0 && $result) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0 && $result) ? 201 : 401;
+            $message = ($insertCount && $result) ? 'success' : 'Bad Request';
+            $status = ($insertCount && $result) ? 201 : 401;
 
             DB::commit();
 

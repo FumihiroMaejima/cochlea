@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -120,7 +122,7 @@ class QuestionnairesService
             $resource = UserQuestionnairesResource::toArrayForCreate($userId, $questionnaireId, $userQuestions);
             $createCount = $this->userQuestionnairesRepository->create($userId, $resource);
 
-            if ($createCount <= 0) {
+            if (!$createCount) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'
@@ -188,6 +190,9 @@ class QuestionnairesService
         // DB::beginTransaction();
         TransactionLibrary::beginTransactionByUserId($userId);
         try {
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
             $resource = UserQuestionnairesResource::toArrayForUpdate($userId, $questionnaireId, $userQuestions);
             $updateCount = $this->userQuestionnairesRepository->update($userId, $questionnaireId, $resource);
 
@@ -249,7 +254,7 @@ class QuestionnairesService
      * get user questionnaire by user id & questionnaire id.
      *
      * @param int $userId user id
-     * @param string $questionnaireId questionnaire id.
+     * @param int $questionnaireId questionnaire id.
      * @return ?array
      */
     private function getUserQuestionnaire(int $userId, int $questionnaireId): ?array

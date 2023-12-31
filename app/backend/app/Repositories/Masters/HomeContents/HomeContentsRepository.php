@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\HomeContents;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -207,7 +209,7 @@ class HomeContentsRepository implements HomeContentsRepositoryInterface
      * @param array $resource create data
      * @return int
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }

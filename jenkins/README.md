@@ -66,9 +66,38 @@ rm -r src/.cache
 
 ---
 
+## Dockerfileの設定について
+
+`aws-cli`などの個別のパッケージをインストールしたい場合はDockerfileで設定する。
+
+パッケージをインストールする時はrootユーザーにし、最後にjenkinsユーザーに戻す必要がある。
+
+```dockerfile
+FROM jenkins/jenkins:latest
+
+USER root
+
+### パッケージをインストールするのに最低限必要なパッケージを指定しておく
+RUN apt-get update && \
+    apt-get install -y \
+    unzip \
+    sudo
+
+# aws-cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN sudo ./aws/install
+
+USER jenkins
+```
+
+---
+
 ## jobの作成について
 
-jobの具体的な内容はシェルスクリプトなどに書いてjob内のコンソールで呼び出す形が良さそう。
+jobの具体的な内容はシェルスクリプトなどに書いてjob内のコンソール(「シェルの実行」)で呼び出す形が良さそう。
+
+コンソール内では必要に場合シバン(#!/bin/bashなど)を記載する必要がある。
 
 ```shell
 # jobで実行するスクリプトを実行

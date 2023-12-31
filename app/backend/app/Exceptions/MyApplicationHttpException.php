@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use App\Library\Log\ErrorLogLibrary;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 // class MyApplicationHttpException extends RuntimeException implements HttpExceptionInterface
@@ -97,5 +100,16 @@ class MyApplicationHttpException extends HttpException
             // エラーログの出力
             ErrorLogLibrary::exec($this, $statusCode, $parameter);
         }
+    }
+
+    /**
+     * Determine if the given exception is an HTTP exception (Custom Exception).
+     *
+     * @param  Throwable|Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
+     * @return bool
+     */
+    public static function isThisException(Throwable|HttpExceptionInterface $e)
+    {
+        return $e instanceof self;
     }
 }

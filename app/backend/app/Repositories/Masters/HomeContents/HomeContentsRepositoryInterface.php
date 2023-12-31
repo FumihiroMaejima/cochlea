@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\HomeContents;
 
 use Illuminate\Support\Collection;
@@ -20,7 +22,7 @@ interface HomeContentsRepositoryInterface
 
     public function getByGroupId(int $groupId, bool $isLock = false, bool $isSkipDeplicate = true): Collection|null;
 
-    public function create(array $resource): int;
+    public function create(array $resource): bool;
 
     public function update(int $id, array $resource): int;
 

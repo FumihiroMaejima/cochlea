@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\Banners;
 
 use Illuminate\Support\Collection;
@@ -22,7 +24,7 @@ interface BannersBlockContentsRepositoryInterface
 
     public function getByBlockIds(array $blockIds, bool $isLock = false): Collection|null;
 
-    public function create(array $resource): int;
+    public function create(array $resource): bool;
 
     public function update(int $id, array $resource): int;
 

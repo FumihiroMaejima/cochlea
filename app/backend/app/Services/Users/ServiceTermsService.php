@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use Illuminate\Support\Facades\Log;
@@ -54,7 +56,7 @@ class ServiceTermsService
      * create user rercord.
      *
      * @param int $userId user id
-     * @param string $serviceTermId service term id.
+     * @param int $serviceTermId service term id.
      * @return JsonResponse
      */
     public function createUserServiceTerm(int $userId, int $serviceTermId): JsonResponse
@@ -97,7 +99,7 @@ class ServiceTermsService
             $resource = UserServiceTermsResource::toArrayForCreate($userId, $serviceTermId);
             $createCount = $this->userServiceTermsRepository->create($userId, $resource);
 
-            if ($createCount <= 0) {
+            if (!$createCount) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Users\UserAuthCodes;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -123,9 +125,9 @@ class UserAuthCodesRepository extends BaseUserRepository implements UserAuthCode
      *
      * @param int $userId user id
      * @param array $resource create data
-     * @return int
+     * @return bool
      */
-    public function create(int $userId, array $resource): int
+    public function create(int $userId, array $resource): bool
     {
         return $this->getQueryBuilder($userId)->insert($resource);
     }

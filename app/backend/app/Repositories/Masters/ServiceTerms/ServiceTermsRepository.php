@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\ServiceTerms;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -163,9 +165,9 @@ class ServiceTermsRepository implements ServiceTermsRepositoryInterface
      * create recode.
      *
      * @param array $resource create data
-     * @return int
+     * @return bool
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }

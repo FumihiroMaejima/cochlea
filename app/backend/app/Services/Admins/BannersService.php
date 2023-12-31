@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admins;
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -158,8 +160,8 @@ class BannersService
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
 
             // レスポンスの制御
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
+            $message = ($insertCount) ? 'success' : 'Bad Request';
+            $status = ($insertCount) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
@@ -297,7 +299,7 @@ class BannersService
                 $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
                 if (!$result) {
                     throw new MyApplicationHttpException(
-                        StatusCodeMessages::MESSAGE_500,
+                        StatusCodeMessages::STATUS_500,
                         'store file failed.'
                     );
                 }
@@ -380,7 +382,7 @@ class BannersService
             $result = $image->storeAs("$directory$bannerId/", $storageFileName, FileLibrary::getStorageDiskByEnv());
             if (!$result) {
                 throw new MyApplicationHttpException(
-                    StatusCodeMessages::MESSAGE_500,
+                    StatusCodeMessages::STATUS_500,
                     'store file failed.'
                 );
             }
@@ -409,7 +411,7 @@ class BannersService
     /**
      * get banner by banner uuid.
      *
-     * @param int $uuid banner uuid
+     * @param string $uuid banner uuid
      * @return array
      */
     private function getBannerByUuid(string $uuid): array

@@ -23,7 +23,9 @@ class TimeLibrary
     public const DATE_TIME_FORMAT_START_DATE = 'Y-m-d 00:00:00'; // ex: 2022-01-01 00:00:00
     public const DATE_TIME_FORMAT_END_DATE = 'Y-m-d 23:59:59'; // ex: 2022-01-01 23:59:59
 
-    public const HALF_MINUTE_TIME_SECOND_VALUE = 1800; // 30分=1800秒
+    public const HALF_AN_HOUR_SECOND_VALUE = 1800; // 30分=1800秒
+    public const AN_HOUR_SECOND_VALUE = 3600; // 1時間=3600秒
+    public const ONE_DAY_SECOND_VALUE = 86400; // 1日=86400秒
 
     // 偽装時刻
     private static ?int $fakerTimeStamp = null;

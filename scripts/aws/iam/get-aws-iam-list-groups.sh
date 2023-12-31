@@ -17,7 +17,12 @@ showMessage() {
 # process start
 showMessage "$START_MESSAGE"
 
-$AWS_CLI_PATH iam list-groups
+# parameter check
+if [ "$1" != '' ]; then
+  $AWS_CLI_PATH iam list-groups --profile $1
+else
+  $AWS_CLI_PATH iam list-groups
+fi
 
 showMessage "Get AWS IAM List Groups"
 

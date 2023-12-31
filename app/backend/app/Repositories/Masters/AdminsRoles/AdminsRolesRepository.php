@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Masters\AdminsRoles;
 
 use App\Models\Masters\Admins;
@@ -63,9 +65,9 @@ class AdminsRolesRepository implements AdminsRolesRepositoryInterface
      * create recode.
      *
      * @param array $resource create data
-     * @return int
+     * @return bool
      */
-    public function create(array $resource): int
+    public function create(array $resource): bool
     {
         return DB::table($this->getTable())->insert($resource);
     }
