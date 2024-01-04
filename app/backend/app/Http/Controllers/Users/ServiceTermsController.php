@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -57,6 +59,6 @@ class ServiceTermsController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->createUserServiceTerm($userId, $request->{UserServiceTermsCreateRequest::KEY_ID});
+        return $this->service->createUserServiceTerm($userId, (int)$request->{UserServiceTermsCreateRequest::KEY_ID});
     }
 }

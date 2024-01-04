@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admins;
 
 use App\Exceptions\MyApplicationHttpException;
@@ -78,7 +80,7 @@ class SocialLoginController extends Controller
             $user = Socialite::driver('github')->user();
 
             $userId = $user->getId();
-            $oAuthUser = (new OAuthUsers())->getRecordByGitHubUserId($userId);
+            $oAuthUser = (new OAuthUsers())->getRecordByGitHubUserId((int)$userId);
 
             if (is_null($oAuthUser)) {
                 $token = RandomStringLibrary::getByHashRandomString(RandomStringLibrary::RANDOM_STRING_LENGTH_24);
