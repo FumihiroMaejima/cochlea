@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\JsonResponse;
@@ -553,7 +555,7 @@ class DebugController extends Controller
         return response()->json(
             ['data' => [
                 'value' => $value,
-                'unit' => MemoryLibrary::convert($value),
+                'unit' => MemoryLibrary::convert((int)$value),
             ]
             ]
         );

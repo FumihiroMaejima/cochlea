@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -73,7 +75,7 @@ class QuestionnairesController extends Controller
         // サービスの実行
         return $this->service->createUserQuestionnaire(
             $userId,
-            $request->{UserQuestionnairesCreateRequest::KEY_ID},
+            (int)$request->{UserQuestionnairesCreateRequest::KEY_ID},
             $request->{UserQuestionnairesCreateRequest::KEY_QUESTIONS}
         );
     }
@@ -93,7 +95,7 @@ class QuestionnairesController extends Controller
         // サービスの実行
         return $this->service->updateUserQuestionnaire(
             $userId,
-            $request->{UserQuestionnairesUpdateRequest::KEY_ID},
+            (int)$request->{UserQuestionnairesUpdateRequest::KEY_ID},
             $request->{UserQuestionnairesUpdateRequest::KEY_QUESTIONS}
         );
     }

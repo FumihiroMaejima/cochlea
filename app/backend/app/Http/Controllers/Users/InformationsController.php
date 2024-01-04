@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -58,7 +60,10 @@ class InformationsController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->createUserReadInformation($userId, $request->{UserReadInformationCreateRequest::KEY_ID});
+        return $this->service->createUserReadInformation(
+            $userId,
+            (int)$request->{UserReadInformationCreateRequest::KEY_ID}
+        );
     }
 
     /**
@@ -74,6 +79,9 @@ class InformationsController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->removeUserReadInformation($userId, $request->{UserReadInformationDeleteRequest::KEY_ID});
+        return $this->service->removeUserReadInformation(
+            $userId,
+            (int)$request->{UserReadInformationDeleteRequest::KEY_ID}
+        );
     }
 }
