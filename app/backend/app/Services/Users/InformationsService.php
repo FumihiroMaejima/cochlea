@@ -105,9 +105,9 @@ class InformationsService
             }
 
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
-            $createResult = $this->userReadInformationsRepository->create($userId, $resource);
+            $result = $this->userReadInformationsRepository->create($userId, $resource);
 
-            if (!$createResult) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'
