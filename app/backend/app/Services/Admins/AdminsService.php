@@ -105,19 +105,19 @@ class AdminsService
         try {
             $resource = AdminsResource::toArrayForCreate($request);
 
-            $insertCount = $this->adminsRepository->create($resource); // if created => count is 1
+            $insertAdminResult = $this->adminsRepository->create($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
             $latestAdmin = ArrayLibrary::toArray(ArrayLibrary::getFirst($latestAdmin->toArray()));
 
             // 権限情報の作成
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
-            $insertAdminsRolesCount = $this->adminsRolesRepository->create($adminsRolesResource);
+            $insertAdminsRolesResult = $this->adminsRolesRepository->create($adminsRolesResource);
 
             DB::commit();
 
             // 作成されている場合は304
-            $message = ($insertCount && $insertAdminsRolesCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount && $insertAdminsRolesCount) ? 201 : 401;
+            $message = ($insertAdminResult && $insertAdminsRolesResult) ? 'success' : 'Bad Request';
+            $status = ($insertAdminResult && $insertAdminsRolesResult) ? 201 : 401;
 
             return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
