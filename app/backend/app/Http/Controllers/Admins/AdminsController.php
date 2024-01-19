@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 // use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Library\Response\ResponseLibrary;
 use App\Services\Admins\AdminsService;
 use App\Http\Requests\Admin\Admins\AdminCreateRequest;
 use App\Http\Requests\Admin\Admins\AdminDeleteRequest;
@@ -50,7 +51,8 @@ class AdminsController extends Controller
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
-        return $this->service->getAdmins($request);
+        return ResponseLibrary::jsonResponse($this->service->getAdmins($request));
+        // return $this->service->getAdmins($request);
     }
 
     /**

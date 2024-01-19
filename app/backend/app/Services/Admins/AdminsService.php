@@ -62,9 +62,9 @@ class AdminsService
      * get admins data
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
-    public function getAdmins(Request $request): JsonResponse
+    public function getAdmins(Request $request): array
     {
         $admins = $this->adminsRepository->getAdminsList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
@@ -74,7 +74,9 @@ class AdminsService
         // $resourceCollection = app()->make(AdminsResource::class, ['resource' => $admins]);
         // $resource = app()->make(AdminsResource::class, ['resource' => $data]);
 
-        return response()->json($resourceCollection->toArray($request), 200);
+        // dataキーに格納されている
+        return $resourceCollection->toArray($request)['data'];
+        // return response()->json($resourceCollection->toArray($request), 200);
         // return response()->json($resource->toArray($request), 200);
     }
 
