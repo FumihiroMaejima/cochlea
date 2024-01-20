@@ -13,7 +13,7 @@ class ResponseLibrary
     /**
      * json形式のレスポンスの整形
      *
-     * @param array $data
+     * @param ?array $data
      * @param string $message
      * @param int $status
      * @param array $headers
@@ -21,17 +21,21 @@ class ResponseLibrary
      * @throws Exception
      */
     public static function jsonResponse(
-        array $data,
+        ?array $data = null,
         string $message = '',
         int $status = 200,
         array $headers = []
     ): JsonResponse {
+        $dataParam = [
+            'message' => $message,
+            'status' => $status,
+            'data' => $data
+        ];
+        if (!is_null($data)) {
+            $dataParam = array_merge($dataParam, $data);
+        }
         return response()->json(
-            [
-                'message' => $message,
-                'status' => $status,
-                'data' => $data
-            ],
+            $dataParam,
             $status,
             $headers
         );

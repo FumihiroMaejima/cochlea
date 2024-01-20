@@ -75,7 +75,7 @@ class AdminsService
         // $resource = app()->make(AdminsResource::class, ['resource' => $data]);
 
         // dataキーに格納されている
-        return $resourceCollection->toArray($request)['data'];
+        return $resourceCollection->toArray($request);
         // return response()->json($resourceCollection->toArray($request), 200);
         // return response()->json($resource->toArray($request), 200);
     }
@@ -98,10 +98,11 @@ class AdminsService
      *
      * @param AdminCreateRequest $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function createAdmin(AdminCreateRequest $request): JsonResponse
+    public function createAdmin(AdminCreateRequest $request): void
     {
         DB::beginTransaction();
         try {
@@ -115,13 +116,20 @@ class AdminsService
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
             $insertAdminsRolesResult = $this->adminsRolesRepository->create($adminsRolesResource);
 
+            // 作成出来ない場合
+            if (!($insertAdminResult && $insertAdminsRolesResult)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'adminsRolesResource' => $adminsRolesResource,
+                    ]
+                );
+            }
+
             DB::commit();
 
-            // 作成されている場合は304
-            $message = ($insertAdminResult && $insertAdminsRolesResult) ? 'success' : 'Bad Request';
-            $status = ($insertAdminResult && $insertAdminsRolesResult) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
