@@ -127,11 +127,13 @@ class AdminsController extends Controller
      * @param  AdminUpdateRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(AdminUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdmin($request, $id);
+        $this->service->updateAdmin($request, $id);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**

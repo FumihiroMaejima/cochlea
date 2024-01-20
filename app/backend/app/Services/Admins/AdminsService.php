@@ -146,11 +146,12 @@ class AdminsService
      * update admin data service
      *
      * @param AdminUpdateRequest $request
-     * @param int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $id
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function updateAdmin(AdminUpdateRequest $request, int $id): JsonResponse
+    public function updateAdmin(AdminUpdateRequest $request, int $id): void
     {
         DB::beginTransaction();
         try {
@@ -165,17 +166,25 @@ class AdminsService
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
             $updatedAdminsRolesRowCount = $this->adminsRolesRepository->update($id, $roleIdResource);
 
+            // 更新出来ない場合
+            // 更新されていない場合は304を返すでも良さそう
+            if (!($updatedRowCount && $updatedAdminsRolesRowCount)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'roleIdResource' => $roleIdResource,
+                    ]
+                );
+            }
+
             // slack通知
             $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
             app()->make(AdminsSlackNotificationService::class)->send('update admin data.', $attachmentResource);
 
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
