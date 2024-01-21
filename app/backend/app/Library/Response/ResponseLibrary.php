@@ -40,4 +40,19 @@ class ResponseLibrary
             $headers
         );
     }
+
+    /**
+     * file形式のレスポンスの整形
+     *
+     * @param \SplFileInfo|string $file
+     * @param array $headers
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws Exception
+     */
+    public static function fileResponse(
+        \SplFileInfo|string $file,
+        array $headers = []
+    ): BinaryFileResponse {
+        return response()->file($file, $headers);
+    }
 }
