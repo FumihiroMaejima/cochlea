@@ -19,7 +19,7 @@ interface AdminsRepositoryInterface
 
     public function getById(int $id, bool $isLock = false): Collection|null;
 
-    public function getByEmail(string $email): Collection|null;
+    public function getByEmail(string $email, bool $isLock = false): Collection|null;
 
     public function create(array $resource): bool;
 

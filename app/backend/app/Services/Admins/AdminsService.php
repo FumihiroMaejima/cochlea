@@ -202,10 +202,11 @@ class AdminsService
      *
      * @param AdminDeleteRequest $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function deleteAdmin(AdminDeleteRequest $request): JsonResponse
+    public function deleteAdmin(AdminDeleteRequest $request): void
     {
         DB::beginTransaction();
         try {
@@ -220,13 +221,20 @@ class AdminsService
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($admin[Admins::ID], $roleIdResource);
 
+            // 更新出来ない場合
+            if (!($deleteRowCount && $deleteAdminsRolesRowCount)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'roleIdResource' => $roleIdResource,
+                    ]
+                );
+            }
+
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -246,10 +254,11 @@ class AdminsService
      * @param int $id admin id
      * @param string $currentPassword current password
      * @param string $newPassword new password
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): JsonResponse
+    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): void
     {
         DB::beginTransaction();
         try {
@@ -268,17 +277,23 @@ class AdminsService
 
             $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             // slack通知
             $attachmentResource = AdminUpdateNotificationResource::toArrayForCreate($admin[Admins::ID], $admin[Admins::NAME], ":tada: Update Admin Password \n");
             app()->make(AdminsSlackNotificationService::class)->send('update admin password.', $attachmentResource);
 
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -292,10 +307,11 @@ class AdminsService
      * forgot password service
      *
      * @param string $email mail address
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function forgotAdminPassword(string $email): JsonResponse
+    public function forgotAdminPassword(string $email): void
     {
         try {
             // ロックをかける為transaction内で実行
@@ -314,10 +330,7 @@ class AdminsService
             // メール送信
             (new PasswordForgotNotificationService($admin[Admins::EMAIL]))->send($token);
 
-            $message = 'success';
-            $status = 200;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
 
@@ -331,10 +344,11 @@ class AdminsService
      * @param string $sessionId session id
      * @param string $password password
      * @param string $token reset password token
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function resetAdminPassword(string $sessionId, string $password, $token): JsonResponse
+    public function resetAdminPassword(string $sessionId, string $password, $token): void
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
 
@@ -364,16 +378,22 @@ class AdminsService
 
             $updatedRowCount = $this->adminsRepository->updatePassword($admin[Admins::ID], $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -412,7 +432,7 @@ class AdminsService
      */
     private function getAdminByEmail(string $email): array|null
     {
-        $admins = $this->adminsRepository->getByEmail($email);
+        $admins = $this->adminsRepository->getByEmail($email, true);
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(

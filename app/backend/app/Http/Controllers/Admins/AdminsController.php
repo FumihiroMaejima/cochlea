@@ -141,11 +141,13 @@ class AdminsController extends Controller
      *
      * @param  AdminDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(AdminDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteAdmin($request);
+        $this->service->deleteAdmin($request);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -154,11 +156,13 @@ class AdminsController extends Controller
      * @param  AdminUpdatePasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function updatePassword(AdminUpdatePasswordRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
+        $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -167,11 +171,13 @@ class AdminsController extends Controller
      * @param  AdminForgotPasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function forgotPassword(AdminForgotPasswordRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->forgotAdminPassword($request->email);
+        $this->service->forgotAdminPassword($request->email);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -180,6 +186,7 @@ class AdminsController extends Controller
      * @param  AdminResetPasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function resetPassword(AdminResetPasswordRequest $request): JsonResponse
     {
@@ -187,6 +194,7 @@ class AdminsController extends Controller
         $sessionId = $this->getPasswordResetSessionId($request);
 
         // サービスの実行
-        return $this->service->resetAdminPassword($sessionId, $request->password, $request->token);
+        $this->service->resetAdminPassword($sessionId, $request->password, $request->token);
+        return ResponseLibrary::jsonResponse();
     }
 }
