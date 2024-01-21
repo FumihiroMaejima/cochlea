@@ -12,8 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
-use App\Services\Users\BannersService;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
+use App\Services\Users\BannersService;
 use App\Trait\CheckHeaderTrait;
 
 class BannersController extends Controller
@@ -42,7 +43,8 @@ class BannersController extends Controller
     public function index(Request $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->getBanners($request);
+        // return $this->service->getBanners($request);
+        return ResponseLibrary::jsonResponse($this->service->getBanners($request));
     }
 
     /**
@@ -50,9 +52,10 @@ class BannersController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param string $uuid
-     * @return BinaryFileResponse|JsonResponse
+     * @return BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function getImage(Request $request, string $uuid): BinaryFileResponse|JsonResponse
+    public function getImage(Request $request, string $uuid): BinaryFileResponse
     {
         // バリデーションチェック
         $validator = Validator::make(
@@ -69,6 +72,7 @@ class BannersController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getImage($request->uuid);
+        // return $this->service->getImage($request->uuid);
+        return ResponseLibrary::fileResponse($this->service->getImage($request->uuid));
     }
 }

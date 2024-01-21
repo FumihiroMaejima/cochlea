@@ -42,9 +42,9 @@ class BannersService
     /**
      * get banners data
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getBanners(): JsonResponse
+    public function getBanners(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_BANNER_LIST);
 
@@ -57,25 +57,25 @@ class BannersService
                 CacheLibrary::setCache(self::CACHE_KEY_USER_BANNER_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
      * 画像ファイルのダウンロード
      *
      * @param string $uuid
-     * @return BinaryFileResponse
+     * @return string file path
      * @throws MyApplicationHttpException
      */
-    public function getImage(string $uuid): BinaryFileResponse
+    public function getImage(string $uuid): string
     {
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
         // 複数チェックはrepository側で実施済み
@@ -87,9 +87,9 @@ class BannersService
         $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
-        return response()->file(Storage::path($imagePath));
+        return Storage::path($imagePath);
     }
 }
