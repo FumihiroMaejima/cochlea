@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Library\Debug;
 
-use App\Library\Array\ArrayLibrary;
 use App\Library\Debug\WebConsole;
 use Tests\TestCase;
 
