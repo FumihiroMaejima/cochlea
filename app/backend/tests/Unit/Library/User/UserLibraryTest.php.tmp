@@ -29,13 +29,13 @@ class UserLibraryTest extends TestCase
         self::createApplicationForStaticDataProvider();
         return [
             'check user password' => [
-                'command' => 'ls',
+                'password' => 'testPassword',
                 'user' => [
                     User::ID => 1,
                     User::SALT => 'testSalt',
-                    User::PASSWORD => 'testPassword',
+                    User::PASSWORD => bcrypt('testPassword'.'testSalt'.'testPepper123'),
                 ],
-                'expect' => false,
+                'expect' => true,
             ],
         ];
     }
@@ -45,22 +45,28 @@ class UserLibraryTest extends TestCase
      *
      * @dataProvider validateUserPasswordDataProvider
      *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      * @param string $value
      * @param array $user
      * @param bool $expect
      * @return void
      */
-    /* public function testValidateUserPassword(
+    public function testValidateUserPassword(
         string $value,
         array $user,
         bool $expect
     ): void {
-        $userMock = Mockery::mock('overload:'.\App\Models\User::class)->makePartial();
-        $userMock->shouldReceive('getRecordByUserId')->once()->andReturn([123]);
-        $result = UserLibrary::lockUser(1);
+        $testPepper = 'testPepper123';
+
+        // テスト用のpepperを返す様にモックを設定
+        $userMock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
+        $userMock->shouldReceive('getPepper')->once()->andReturn($testPepper);
+
+        $result = UserLibrary::validateUserPassword($value, $user);
 
         $this->assertEquals($result, $expect);
-    } */
+    }
 
     /**
      * test static method mock.

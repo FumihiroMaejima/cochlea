@@ -168,7 +168,7 @@ class AdminsService
 
             // 更新出来ない場合
             // 更新されていない場合は304を返すでも良さそう
-            if (!($updatedRowCount && $updatedAdminsRolesRowCount)) {
+            if (!($updatedRowCount > 0 && $updatedAdminsRolesRowCount > 0)) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     parameter: [
@@ -222,7 +222,7 @@ class AdminsService
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($admin[Admins::ID], $roleIdResource);
 
             // 更新出来ない場合
-            if (!($deleteRowCount && $deleteAdminsRolesRowCount)) {
+            if (!($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0)) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     parameter: [
