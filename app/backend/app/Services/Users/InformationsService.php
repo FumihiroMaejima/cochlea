@@ -91,7 +91,7 @@ class InformationsService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
         TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
@@ -174,7 +174,8 @@ class InformationsService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックをかけて再取得
             $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId, true);
@@ -198,10 +199,12 @@ class InformationsService
             );
             $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource); */
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 
