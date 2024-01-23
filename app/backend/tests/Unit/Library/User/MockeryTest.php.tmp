@@ -9,7 +9,7 @@ use App\Models\User;
 use Tests\TestCase;
 use Mockery;
 
-class UserLibraryTest extends TestCase
+class MockeryTest extends TestCase
 {
     /**
      * setUpは各テストメソッドが実行される前に実行する
