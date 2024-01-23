@@ -20,6 +20,12 @@ class UserLibraryTest extends TestCase
         parent::setUp();
     }
 
+    protected function tearDown(): void
+    {
+        // Mockery::close();
+        parent::tearDown();
+    }
+
     /**
      * validate user password data
      * @return array
@@ -60,10 +66,13 @@ class UserLibraryTest extends TestCase
         $testPepper = 'testPepper123';
 
         // テスト用のpepperを返す様にモックを設定
-        $userMock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
-        $userMock->shouldReceive('getPepper')->once()->andReturn($testPepper);
+        $mock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
+        $mock->shouldReceive('getPepper')->once()->andReturn($testPepper);
 
         $result = UserLibrary::validateUserPassword($value, $user);
+
+        // mockの初期化(今のところ効果無し)
+        unset($mock);
 
         $this->assertEquals($result, $expect);
     }
@@ -80,6 +89,9 @@ class UserLibraryTest extends TestCase
         $mock->shouldReceive('lockUser')->once()->andReturn($value);
 
         $result = UserLibrary::lockUser(1);
+
+        // mockの初期化
+        unset($mock);
 
         $this->assertEquals($result, $value);
     }
@@ -102,6 +114,9 @@ class UserLibraryTest extends TestCase
         $mock->shouldReceive('getRecordByUserId')->once()->andReturn($value);
 
         $result = UserLibrary::lockUser(1);
+
+        // mockの初期化
+        unset($mock);
 
         $this->assertEquals($result, $value);
     }
