@@ -69,7 +69,7 @@ class MockeryTest extends TestCase
 
         // テスト用のpepperを返す様にモックを設定
 
-        $mock = (new Mockery())->mock('overload:'.HashLibrary::class)->makePartial();
+        $mock = (new Mockery())->mock('overload:'.HashLibrary::class);
         // $mock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
         $mock->shouldReceive('getPepper')->once()->andReturn($testPepper);
 
@@ -114,7 +114,7 @@ class MockeryTest extends TestCase
         $value = [123];
         // UserLibraryクラス内で使っているUserクラスのメソッドのモックの作成
         // $mock = Mockery::mock('overload:'.\App\Models\User::class);
-        $mock = (new Mockery())->mock('overload:'.User::class)->makePartial();
+        $mock = (new Mockery())->mock('overload:'.User::class);
         $mock->shouldReceive('getRecordByUserId')->once()->andReturn($value);
 
         $result = UserLibrary::lockUser(1);
