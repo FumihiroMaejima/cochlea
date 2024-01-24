@@ -22,7 +22,9 @@ class MockeryTest extends TestCase
 
     protected function tearDown(): void
     {
-        // Mockery::close();
+        // Mockery設定のリセット
+        // これとは個別に各アノテーションでテストごとに別プロセス実行させる必要がある。
+        Mockery::close();
         parent::tearDown();
     }
 
@@ -66,19 +68,22 @@ class MockeryTest extends TestCase
         $testPepper = 'testPepper123';
 
         // テスト用のpepperを返す様にモックを設定
-        $mock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
+
+        $mock = (new Mockery())->mock('overload:'.HashLibrary::class)->makePartial();
+        // $mock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
         $mock->shouldReceive('getPepper')->once()->andReturn($testPepper);
 
         $result = UserLibrary::validateUserPassword($value, $user);
-
-        // mockの初期化(今のところ効果無し)
-        unset($mock);
+        // Mockery::close();
 
         $this->assertEquals($result, $expect);
     }
 
     /**
      * test static method mock.
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      *
      * @return void
      */
@@ -89,9 +94,6 @@ class MockeryTest extends TestCase
         $mock->shouldReceive('lockUser')->once()->andReturn($value);
 
         $result = UserLibrary::lockUser(1);
-
-        // mockの初期化
-        unset($mock);
 
         $this->assertEquals($result, $value);
     }
@@ -105,18 +107,17 @@ class MockeryTest extends TestCase
      *
      * runInSeparateProcess:該当のテストを個別のプロセスで実行するようする
      * preserveGlobalState:テストを別プロセスで実行するときに、親プロセスのグローバルな状態を保存するのを無効化する
+     * staticメソッドのモックでも上記のアノテーションをつけないと他のテストクラスで影響が出てくる
      * @return void
      */
     public function testOverLoadMock(): void {
         $value = [123];
         // UserLibraryクラス内で使っているUserクラスのメソッドのモックの作成
-        $mock = Mockery::mock('overload:'.\App\Models\User::class);
+        // $mock = Mockery::mock('overload:'.\App\Models\User::class);
+        $mock = (new Mockery())->mock('overload:'.User::class)->makePartial();
         $mock->shouldReceive('getRecordByUserId')->once()->andReturn($value);
 
         $result = UserLibrary::lockUser(1);
-
-        // mockの初期化
-        unset($mock);
 
         $this->assertEquals($result, $value);
     }
