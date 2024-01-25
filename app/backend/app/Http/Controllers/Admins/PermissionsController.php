@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exceptions\MyApplicationHttpException;
 use App\Http\Controllers\Controller;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Services\Admins\PermissionsService;
 use App\Trait\CheckHeaderTrait;
 use Illuminate\Http\JsonResponse;
@@ -42,16 +45,18 @@ class PermissionsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function list(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.permissions'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getPermissionsAsList($request);
+        return ResponseLibrary::jsonResponse($this->service->getPermissionsAsList($request));
+        // return $this->service->getPermissionsAsList($request);
     }
 
     /**
