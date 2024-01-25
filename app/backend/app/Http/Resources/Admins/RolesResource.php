@@ -54,7 +54,7 @@ class RolesResource extends JsonResource
             $item->permissions = !$item->permissions ? [] : array_map(function ($permission) {
                 return (int)$permission;
             }, explode(',', $item->permissions));
-            $response[self::RESOURCE_KEY_DATA][] = $item;
+            $response[] = $item;
         }
 
         return $response;
@@ -80,7 +80,7 @@ class RolesResource extends JsonResource
                 self::RESOURCE_KEY_VALUE => $item->id,
             ];
             // 多次元配列の中の連想配列を格納
-            $response[self::RESOURCE_KEY_DATA][] = $role;
+            $response[] = $role;
         }
 
         return $response;
