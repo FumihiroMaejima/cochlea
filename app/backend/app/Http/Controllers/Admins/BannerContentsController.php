@@ -81,7 +81,9 @@ class BannerContentsController extends Controller
     public function uploadTemplateBannerBlocks(BannerBlocksImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplateForBannerBlocks($request->file);
+        // return $this->service->importTemplateForBannerBlocks($request->file);
+        $this->service->importTemplateForBannerBlocks($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -130,6 +132,8 @@ class BannerContentsController extends Controller
     public function uploadTemplateBannerBlockContents(BannerBlockContentsImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplateForBannerBlockContents($request->file);
+        // return $this->service->importTemplateForBannerBlockContents($request->file);
+        $this->service->importTemplateForBannerBlockContents($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 }
