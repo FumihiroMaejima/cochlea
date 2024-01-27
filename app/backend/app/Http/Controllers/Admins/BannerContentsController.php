@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BannerBlocks\BannerBlocksImportRequest;
 use App\Http\Requests\Admin\BannerBlocks\BannerBlockContentsImportRequest;
@@ -36,13 +39,14 @@ class BannerContentsController extends Controller
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function downloadBannerBlocks(Request $request): BinaryFileResponse|JsonResponse
+    public function downloadBannerBlocks(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.home'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -54,12 +58,13 @@ class BannerContentsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function templateBannerBlocks(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.home'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -71,6 +76,7 @@ class BannerContentsController extends Controller
      *
      * @param BannerBlocksImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplateBannerBlocks(BannerBlocksImportRequest $request): JsonResponse
     {
@@ -82,13 +88,14 @@ class BannerContentsController extends Controller
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function downloadBannerBlockContents(Request $request): BinaryFileResponse|JsonResponse
+    public function downloadBannerBlockContents(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.home'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -99,13 +106,14 @@ class BannerContentsController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function templateBannerBlockContents(Request $request): BinaryFileResponse|JsonResponse
+    public function templateBannerBlockContents(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.home'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -117,6 +125,7 @@ class BannerContentsController extends Controller
      *
      * @param BannerBlockContentsImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplateBannerBlockContents(BannerBlockContentsImportRequest $request): JsonResponse
     {
