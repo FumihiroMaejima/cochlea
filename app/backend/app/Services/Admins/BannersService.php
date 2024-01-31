@@ -52,9 +52,9 @@ class BannersService
     /**
      * get banners data
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getBanners(): JsonResponse
+    public function getBanners(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST);
 
@@ -67,10 +67,10 @@ class BannersService
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**

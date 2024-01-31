@@ -63,7 +63,7 @@ class BannersResource extends JsonResource
         $response = [];
 
         foreach ($collection as $item) {
-            $response[self::RESOURCE_KEY_DATA][] = [
+            $response[] = [
                 Banners::ID              => $item->{Banners::ID},
                 Banners::UUID            => $item->{Banners::UUID},
                 Banners::NAME            => $item->{Banners::NAME},

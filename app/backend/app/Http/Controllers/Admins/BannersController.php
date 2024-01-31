@@ -55,7 +55,8 @@ class BannersController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getBanners($request);
+        // return $this->service->getBanners($request);
+        return ResponseLibrary::jsonResponse($this->service->getBanners($request));
     }
 
     /**
