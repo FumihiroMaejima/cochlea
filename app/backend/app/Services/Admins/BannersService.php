@@ -77,15 +77,15 @@ class BannersService
      * 画像ファイルのダウンロード
      *
      * @param string $uuid
-     * @return BinaryFileResponse
+     * @return string
      * @throws MyApplicationHttpException
      */
-    public function getImage(string $uuid): BinaryFileResponse
+    public function getImage(string $uuid): string
     {
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
         // 複数チェックはrepository側で実施済み
@@ -97,10 +97,10 @@ class BannersService
         $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
-        return response()->file(Storage::path($imagePath));
+        return Storage::path($imagePath);
     }
 
     /**
@@ -361,9 +361,9 @@ class BannersService
      *
      * @param string $uuid
      * @param UploadedFile $image image file
-     * @return JsonResponse
+     * @return void
      */
-    public function uploadImage(string $uuid, UploadedFile $image): JsonResponse
+    public function uploadImage(string $uuid, UploadedFile $image): void
     {
         DB::beginTransaction();
         try {
@@ -391,16 +391,21 @@ class BannersService
             $resource = BannersResource::toArrayForUpdateImage();
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
 
+            // 更新出来ない場合
+            // 更新されていない場合は304を返すでも良さそう
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status, 'data' => []], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

@@ -89,7 +89,8 @@ class BannersController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getImage($request->uuid);
+        // return $this->service->getImage($request->uuid);
+        return ResponseLibrary::fileResponse($this->service->getImage($request->uuid));
     }
 
     /**
@@ -103,7 +104,9 @@ class BannersController extends Controller
     public function uploadImage(BannerImagesImportRequest $request, string $uuid): JsonResponse
     {
         // サービスの実行
-        return $this->service->uploadImage($uuid, $request->image);
+        // return $this->service->uploadImage($uuid, $request->image);
+        $this->service->uploadImage($uuid, $request->image);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -135,7 +138,7 @@ class BannersController extends Controller
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
