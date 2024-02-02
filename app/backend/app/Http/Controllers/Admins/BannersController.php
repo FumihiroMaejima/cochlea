@@ -131,10 +131,10 @@ class BannersController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws MyApplicationHttpException
      */
-    public function template(Request $request): BinaryFileResponse|JsonResponse
+    public function template(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
@@ -155,7 +155,8 @@ class BannersController extends Controller
     public function uploadTemplate(BannersImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplate($request->file);
+        $this->service->importTemplate($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -168,7 +169,7 @@ class BannersController extends Controller
     public function create(BannerCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createBanner(
+        $this->service->createBanner(
             $request->{BannerCreateRequest::KEY_NAME},
             $request->{BannerCreateRequest::KEY_DETAIL},
             $request->{BannerCreateRequest::KEY_LOCATION},
@@ -181,6 +182,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_URL},
             $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**

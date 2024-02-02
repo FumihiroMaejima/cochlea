@@ -133,9 +133,9 @@ class BannersService
      * imort banners by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplate(UploadedFile $file)
+    public function importTemplate(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_banners_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
@@ -154,16 +154,20 @@ class BannersService
 
             $insertCount = $this->bannersRepository->create($resource);
 
+            // 作成出来ない場合
+            if (!$insertCount) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // レスポンスの制御
-            $message = ($insertCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -185,7 +189,7 @@ class BannersService
      * @param string $endAt end datetime
      * @param string $url url
      * @param UploadedFile|null $image image file
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function createBanner(
         string $name,
@@ -199,7 +203,7 @@ class BannersService
         string $endAt,
         string $url,
         ?UploadedFile $image
-    ): JsonResponse {
+    ): void {
         $resource = BannersResource::toArrayForCreate(
             UuidLibrary::uuidVersion4(),
             $name,
@@ -218,16 +222,20 @@ class BannersService
         try {
             $insertCount = $this->bannersRepository->create($resource);
 
+            // 作成出来ない場合
+            if (!$insertCount) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // 作成されている場合は304
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
