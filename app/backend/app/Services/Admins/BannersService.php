@@ -152,10 +152,10 @@ class BannersService
 
             $resource = BannersResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannersRepository->create($resource);
+            $result = $this->bannersRepository->create($resource);
 
             // 作成出来ない場合
-            if (!$insertCount) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     parameter: [
@@ -295,7 +295,6 @@ class BannersService
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
 
             // 更新出来ない場合
-            // 更新されていない場合は304を返すでも良さそう
             if (!($updatedRowCount > 0)) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
@@ -356,7 +355,6 @@ class BannersService
             $deleteRowCount = $this->bannersRepository->delete(array_column($banners, Banners::ID), $resource);
 
             // 削除出来ない場合
-            // 更新されていない場合は304を返すでも良さそう
             if (!($deleteRowCount > 0)) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,

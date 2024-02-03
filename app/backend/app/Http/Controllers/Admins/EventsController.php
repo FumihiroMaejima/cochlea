@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Events\EventCreateRequest;
 use App\Http\Requests\Admin\Events\EventDeleteRequest;
@@ -39,16 +42,17 @@ class EventsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.events'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getEvents($request);
+        return ResponseLibrary::jsonResponse($this->service->getEvents($request));
     }
 
     /**
@@ -56,12 +60,13 @@ class EventsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function download(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.events'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -73,12 +78,13 @@ class EventsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function template(Request $request): BinaryFileResponse|JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.events'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -90,11 +96,13 @@ class EventsController extends Controller
      *
      * @param EventImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplate(EventImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplate($request->file);
+        $this->service->importTemplate($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -102,17 +110,19 @@ class EventsController extends Controller
      *
      * @param  EventCreateRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(EventCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createEvent(
+        $this->service->createEvent(
             $request->{EventCreateRequest::KEY_NAME},
             $request->{EventCreateRequest::KEY_TYPE},
             $request->{EventCreateRequest::KEY_DETAIL},
             $request->{EventCreateRequest::KEY_START_AT},
             $request->{EventCreateRequest::KEY_END_AT},
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -154,11 +164,12 @@ class EventsController extends Controller
      * @param  EventUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(EventUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateEvent(
+        $this->service->updateEvent(
             $id,
             $request->{EventUpdateRequest::KEY_NAME},
             $request->{EventUpdateRequest::KEY_TYPE},
@@ -166,6 +177,7 @@ class EventsController extends Controller
             $request->{EventUpdateRequest::KEY_START_AT},
             $request->{EventUpdateRequest::KEY_END_AT},
         );
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -173,10 +185,12 @@ class EventsController extends Controller
      *
      * @param  EventDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(EventDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteEvent($request->{EventDeleteRequest::KEY_EVENTS});
+        $this->service->deleteEvent($request->{EventDeleteRequest::KEY_EVENTS});
+        return ResponseLibrary::jsonResponse();
     }
 }

@@ -47,9 +47,9 @@ class EventsService
      * get event data
      *
      * @param
-     * @return JsonResponse
+     * @return array
      */
-    public function getEvents(): JsonResponse
+    public function getEvents(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST);
 
@@ -62,10 +62,10 @@ class EventsService
                 CacheLibrary::setCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
@@ -98,9 +98,9 @@ class EventsService
      * imort events by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplate(UploadedFile $file)
+    public function importTemplate(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_events_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
@@ -119,18 +119,24 @@ class EventsService
             // $resource = app()->make(GameEnemiesCreateResource::class, ['resource' => $fileData[0]])->toArray($request);
             $resource = EventsResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->eventsRepository->create($resource);
+            $result = $this->eventsRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, true);
 
-            // レスポンスの制御
-            $message = $insertCount ? 'success' : 'Bad Request';
-            $status = $insertCount ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -182,10 +188,16 @@ class EventsService
      * @param string $detail detail
      * @param string $startAt start datetime
      * @param string $endAt end datetime
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function updateEvent(int $id, string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
-    {
+    public function updateEvent(
+        int $id,
+        string $name,
+        int $type,
+        string $detail,
+        string $startAt,
+        string $endAt
+    ): void {
         $resource = EventsResource::toArrayForUpdate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
@@ -194,16 +206,23 @@ class EventsService
             $event = $this->getEventById($id);
             $updatedRowCount = $this->eventsRepository->update($event[Events::ID], $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'event.id' => $id,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -215,9 +234,9 @@ class EventsService
      * delete event data service
      *
      * @param array $informationIds id of records
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function deleteEvent(array $informationIds): JsonResponse
+    public function deleteEvent(array $informationIds): void
     {
         DB::beginTransaction();
         try {
@@ -228,16 +247,23 @@ class EventsService
 
             $deleteRowCount = $this->eventsRepository->delete($informationIds, $resource);
 
+            // 削除出来ない場合
+            if (!($deleteRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'informationIds' => $informationIds,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
