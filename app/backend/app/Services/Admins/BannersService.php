@@ -220,10 +220,10 @@ class BannersService
 
         DB::beginTransaction();
         try {
-            $insertCount = $this->bannersRepository->create($resource);
+            $result = $this->bannersRepository->create($resource);
 
             // 作成出来ない場合
-            if (!$insertCount) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     parameter: [
