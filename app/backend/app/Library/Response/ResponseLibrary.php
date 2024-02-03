@@ -7,6 +7,7 @@ namespace App\Library\Response;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use \Symfony\Component\HttpFoundation\BinaryFileResponse;
+use SplFileInfo;
 
 class ResponseLibrary
 {
@@ -44,13 +45,13 @@ class ResponseLibrary
     /**
      * file形式のレスポンスの整形
      *
-     * @param \SplFileInfo|string $file
+     * @param SplFileInfo|string $file
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws Exception
      */
     public static function fileResponse(
-        \SplFileInfo|string $file,
+        SplFileInfo|string $file,
         array $headers = []
     ): BinaryFileResponse {
         return response()->file($file, $headers);

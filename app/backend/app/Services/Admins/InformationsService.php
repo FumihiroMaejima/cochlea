@@ -209,7 +209,7 @@ class InformationsService
         string $detail,
         string $startAt,
         string $endAt
-        ): void {
+    ): void {
         $resource = InformationsResource::toArrayForUpdate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();

@@ -87,7 +87,8 @@ class MockeryTest extends TestCase
      *
      * @return void
      */
-    public function testStaticMethodMock(): void {
+    public function testStaticMethodMock(): void
+    {
         $value = [456];
         // UserLibraryクラスのstaticメソッド、lockUser()をモック化させる
         $mock = Mockery::mock('alias:' . UserLibrary::class);
@@ -110,7 +111,8 @@ class MockeryTest extends TestCase
      * staticメソッドのモックでも上記のアノテーションをつけないと他のテストクラスで影響が出てくる
      * @return void
      */
-    public function testOverLoadMock(): void {
+    public function testOverLoadMock(): void
+    {
         $value = [123];
         // UserLibraryクラス内で使っているUserクラスのメソッドのモックの作成
         // $mock = Mockery::mock('overload:'.\App\Models\User::class);
