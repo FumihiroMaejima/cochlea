@@ -61,7 +61,7 @@ class EventsResource extends JsonResource
             // if array
             // $item[Events::START_AT] = TimeLibrary::format($item[Events::START_AT]);
             // $item[Events::END_AT] = TimeLibrary::format($item[Events::END_AT]);
-            $response[self::RESOURCE_KEY_DATA][] = $item;
+            $response[] = $item;
         }
 
         return $response;

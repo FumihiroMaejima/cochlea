@@ -61,7 +61,7 @@ class InformationsResource extends JsonResource
             // if array
             // $item[Informations::START_AT] = TimeLibrary::format($item[Informations::START_AT]);
             // $item[Informations::END_AT] = TimeLibrary::format($item[Informations::END_AT]);
-            $response[self::RESOURCE_KEY_DATA][] = $item;
+            $response[] = $item;
         }
 
         return $response;

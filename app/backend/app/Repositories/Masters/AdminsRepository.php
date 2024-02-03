@@ -159,16 +159,22 @@ class AdminsRepository implements AdminsRepositoryInterface
      * get by mail address.
      *
      * @param int $email mail address
+     * @param bool $isLock exec lock For Update
      * @return Collection|null
      * @throws MyApplicationHttpException
      */
-    public function getByEmail(string $email): ?Collection
+    public function getByEmail(string $email, bool $isLock = false): ?Collection
     {
-        $collection = DB::table($this->getTable())
+        $query = DB::table($this->getTable())
             ->select(['*'])
             ->where(Admins::EMAIL, '=', $email)
-            ->where(Admins::DELETED_AT, '=', null)
-            ->get();
+            ->where(Admins::DELETED_AT, '=', null);
+
+        if ($isLock) {
+            $query->lockForUpdate();
+        }
+
+        $collection = $query->get();
 
         // 存在しない場合
         if ($collection->count() === self::NO_DATA_COUNT) {

@@ -82,9 +82,9 @@ class BannerContentsService
      * imort banner blocks by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplateForBannerBlocks(UploadedFile $file)
+    public function importTemplateForBannerBlocks(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_banner_blocks_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
@@ -100,18 +100,24 @@ class BannerContentsService
 
             $resource = BannerBlocksResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannerBlocksRepository->create($resource);
+            $result = $this->bannerBlocksRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             // CacheLibrary::deleteCache(self::CACHE_KEY_BANNER_BLOCK_CONTENTS_COLLECTION_LIST, true);
 
-            // レスポンスの制御
-            $message = ($insertCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -153,9 +159,9 @@ class BannerContentsService
      * imort banner block contents by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplateForBannerBlockContents(UploadedFile $file)
+    public function importTemplateForBannerBlockContents(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_banner_block_contents_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
@@ -171,18 +177,24 @@ class BannerContentsService
 
             $resource = BannerBlockContentsResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannerBlockContentsRepository->create($resource);
+            $result = $this->bannerBlockContentsRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             // CacheLibrary::deleteCache(self::CACHE_KEY_BANNER_BLOCK_CONTENTS_COLLECTION_LIST, true);
 
-            // レスポンスの制御
-            $message = ($insertCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

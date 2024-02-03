@@ -37,6 +37,17 @@
             "sourceMapPathOverrides": {
               "webpack://_N_E/*": "${webRoot}/*"
             }
+        },
+        {
+          "name": "Next.js Server & Clinet Debug",
+          "type": "node-terminal",
+          "request": "launch",
+          "command": "npm run dev",
+          "serverReadyAction": {
+            "pattern": "started server debug on .+, url: (https?://.+)",
+            "uriFormat": "%s",
+            "action": "debugWithChrome"
+          }
         }
     ]
 }

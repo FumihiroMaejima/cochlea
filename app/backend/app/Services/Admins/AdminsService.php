@@ -62,9 +62,9 @@ class AdminsService
      * get admins data
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
-    public function getAdmins(Request $request): JsonResponse
+    public function getAdmins(Request $request): array
     {
         $admins = $this->adminsRepository->getAdminsList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
@@ -74,7 +74,9 @@ class AdminsService
         // $resourceCollection = app()->make(AdminsResource::class, ['resource' => $admins]);
         // $resource = app()->make(AdminsResource::class, ['resource' => $data]);
 
-        return response()->json($resourceCollection->toArray($request), 200);
+        // dataキーに格納されている
+        return $resourceCollection->toArray($request);
+        // return response()->json($resourceCollection->toArray($request), 200);
         // return response()->json($resource->toArray($request), 200);
     }
 
@@ -96,30 +98,38 @@ class AdminsService
      *
      * @param AdminCreateRequest $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function createAdmin(AdminCreateRequest $request): JsonResponse
+    public function createAdmin(AdminCreateRequest $request): void
     {
         DB::beginTransaction();
         try {
             $resource = AdminsResource::toArrayForCreate($request);
 
-            $insertCount = $this->adminsRepository->create($resource); // if created => count is 1
+            $insertAdminResult = $this->adminsRepository->create($resource); // if created => count is 1
             $latestAdmin = $this->adminsRepository->getLatestAdmin();
             $latestAdmin = ArrayLibrary::toArray(ArrayLibrary::getFirst($latestAdmin->toArray()));
 
             // 権限情報の作成
             $adminsRolesResource = AdminsRolesResource::toArrayForCreate($request, $latestAdmin);
-            $insertAdminsRolesCount = $this->adminsRolesRepository->create($adminsRolesResource);
+            $insertAdminsRolesResult = $this->adminsRolesRepository->create($adminsRolesResource);
+
+            // 作成出来ない場合
+            if (!($insertAdminResult && $insertAdminsRolesResult)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'adminsRolesResource' => $adminsRolesResource,
+                    ]
+                );
+            }
 
             DB::commit();
 
-            // 作成されている場合は304
-            $message = ($insertCount && $insertAdminsRolesCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount && $insertAdminsRolesCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -136,11 +146,12 @@ class AdminsService
      * update admin data service
      *
      * @param AdminUpdateRequest $request
-     * @param int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $id
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function updateAdmin(AdminUpdateRequest $request, int $id): JsonResponse
+    public function updateAdmin(AdminUpdateRequest $request, int $id): void
     {
         DB::beginTransaction();
         try {
@@ -155,17 +166,25 @@ class AdminsService
             $roleIdResource = AdminsRolesResource::toArrayForUpdate($request);
             $updatedAdminsRolesRowCount = $this->adminsRolesRepository->update($id, $roleIdResource);
 
+            // 更新出来ない場合
+            // 更新されていない場合は304を返すでも良さそう
+            if (!($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'roleIdResource' => $roleIdResource,
+                    ]
+                );
+            }
+
             // slack通知
             $attachmentResource = app()->make(AdminUpdateNotificationResource::class, ['resource' => ":tada: Update Member Data \n"])->toArray($request);
             app()->make(AdminsSlackNotificationService::class)->send('update admin data.', $attachmentResource);
 
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0 || $updatedAdminsRolesRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -183,10 +202,11 @@ class AdminsService
      *
      * @param AdminDeleteRequest $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function deleteAdmin(AdminDeleteRequest $request): JsonResponse
+    public function deleteAdmin(AdminDeleteRequest $request): void
     {
         DB::beginTransaction();
         try {
@@ -201,13 +221,20 @@ class AdminsService
             $roleIdResource = AdminsRolesResource::toArrayForDelete($request);
             $deleteAdminsRolesRowCount = $this->adminsRolesRepository->delete($admin[Admins::ID], $roleIdResource);
 
+            // 更新出来ない場合
+            if (!($deleteRowCount > 0 || $deleteAdminsRolesRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'roleIdResource' => $roleIdResource,
+                    ]
+                );
+            }
+
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0 && $deleteAdminsRolesRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -227,10 +254,11 @@ class AdminsService
      * @param int $id admin id
      * @param string $currentPassword current password
      * @param string $newPassword new password
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): JsonResponse
+    public function updateAdminPassword(int $id, string $currentPassword, string $newPassword): void
     {
         DB::beginTransaction();
         try {
@@ -249,17 +277,23 @@ class AdminsService
 
             $updatedRowCount = $this->adminsRepository->updatePassword($id, $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             // slack通知
             $attachmentResource = AdminUpdateNotificationResource::toArrayForCreate($admin[Admins::ID], $admin[Admins::NAME], ":tada: Update Admin Password \n");
             app()->make(AdminsSlackNotificationService::class)->send('update admin password.', $attachmentResource);
 
             DB::commit();
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -273,10 +307,11 @@ class AdminsService
      * forgot password service
      *
      * @param string $email mail address
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function forgotAdminPassword(string $email): JsonResponse
+    public function forgotAdminPassword(string $email): void
     {
         try {
             // ロックをかける為transaction内で実行
@@ -295,10 +330,7 @@ class AdminsService
             // メール送信
             (new PasswordForgotNotificationService($admin[Admins::EMAIL]))->send($token);
 
-            $message = 'success';
-            $status = 200;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
 
@@ -312,10 +344,11 @@ class AdminsService
      * @param string $sessionId session id
      * @param string $password password
      * @param string $token reset password token
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws MyApplicationHttpException
      */
-    public function resetAdminPassword(string $sessionId, string $password, $token): JsonResponse
+    public function resetAdminPassword(string $sessionId, string $password, $token): void
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
 
@@ -345,16 +378,22 @@ class AdminsService
 
             $updatedRowCount = $this->adminsRepository->updatePassword($admin[Admins::ID], $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_PREFIX_ADMIN_PASSWORD_RESET_SESSION . $sessionId);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            return;
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -393,7 +432,7 @@ class AdminsService
      */
     private function getAdminByEmail(string $email): array|null
     {
-        $admins = $this->adminsRepository->getByEmail($email);
+        $admins = $this->adminsRepository->getByEmail($email, true);
 
         if (empty($admins)) {
             throw new MyApplicationHttpException(
