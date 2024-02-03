@@ -152,26 +152,32 @@ class EventsService
      * @param string $detail detail
      * @param string $startAt start datetime
      * @param string $endAt end datetime
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function createEvent(string $name, int $type, string $detail, string $startAt, string $endAt): JsonResponse
+    public function createEvent(string $name, int $type, string $detail, string $startAt, string $endAt): void
     {
         $resource = EventsResource::toArrayForCreate($name, $type, $detail, $startAt, $endAt);
 
         DB::beginTransaction();
         try {
-            $insertCount = $this->eventsRepository->create($resource);
+            $result = $this->eventsRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_EVENT_COIN_COLLECTION_LIST, true);
 
-            // 作成されている場合は304
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -233,19 +239,19 @@ class EventsService
     /**
      * delete event data service
      *
-     * @param array $informationIds id of records
+     * @param array $eventIds id of records
      * @return void
      */
-    public function deleteEvent(array $informationIds): void
+    public function deleteEvent(array $eventIds): void
     {
         DB::beginTransaction();
         try {
             $resource = EventsResource::toArrayForDelete();
 
             // ロックをかける為transaction内で実行
-            $rows = $this->getEventsByIds($informationIds);
+            $rows = $this->getEventsByIds($eventIds);
 
-            $deleteRowCount = $this->eventsRepository->delete($informationIds, $resource);
+            $deleteRowCount = $this->eventsRepository->delete($eventIds, $resource);
 
             // 削除出来ない場合
             if (!($deleteRowCount > 0)) {
@@ -253,7 +259,7 @@ class EventsService
                     StatusCodeMessages::STATUS_401,
                     parameter: [
                         'resource' => $resource,
-                        'informationIds' => $informationIds,
+                        'eventIds' => $eventIds,
                     ]
                 );
             }

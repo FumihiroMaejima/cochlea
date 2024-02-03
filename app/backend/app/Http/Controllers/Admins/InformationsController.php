@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Informations\InformationCreateRequest;
 use App\Http\Requests\Admin\Informations\InformationDeleteRequest;
@@ -39,29 +42,32 @@ class InformationsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getInformations($request);
+        // return $this->service->getInformations($request);
+        return ResponseLibrary::jsonResponse($this->service->getInformations($request));
     }
 
     /**
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function download(Request $request): BinaryFileResponse|JsonResponse
+    public function download(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -72,13 +78,14 @@ class InformationsController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function template(Request $request): BinaryFileResponse|JsonResponse
+    public function template(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.informations'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -90,11 +97,13 @@ class InformationsController extends Controller
      *
      * @param InformationImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplate(InformationImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplate($request->file);
+        $this->service->importTemplate($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -102,17 +111,19 @@ class InformationsController extends Controller
      *
      * @param  InformationCreateRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(InformationCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createInformation(
+        $this->service->createInformation(
             $request->{InformationCreateRequest::KEY_NAME},
             $request->{InformationCreateRequest::KEY_TYPE},
             $request->{InformationCreateRequest::KEY_DETAIL},
             $request->{InformationCreateRequest::KEY_START_AT},
             $request->{InformationCreateRequest::KEY_END_AT},
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -154,11 +165,12 @@ class InformationsController extends Controller
      * @param  InformationUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(InformationUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateInformation(
+        $this->service->updateInformation(
             $id,
             $request->{InformationCreateRequest::KEY_NAME},
             $request->{InformationCreateRequest::KEY_TYPE},
@@ -166,6 +178,7 @@ class InformationsController extends Controller
             $request->{InformationCreateRequest::KEY_START_AT},
             $request->{InformationCreateRequest::KEY_END_AT},
         );
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -173,10 +186,12 @@ class InformationsController extends Controller
      *
      * @param  InformationDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(InformationDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteInformation($request->{InformationCreateRequest::KEY_INFORMATIONS});
+        $this->service->deleteInformation($request->{InformationCreateRequest::KEY_INFORMATIONS});
+        return ResponseLibrary::jsonResponse();
     }
 }
