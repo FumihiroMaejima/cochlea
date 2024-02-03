@@ -100,10 +100,10 @@ class BannerContentsService
 
             $resource = BannerBlocksResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannerBlocksRepository->create($resource);
+            $result = $this->bannerBlocksRepository->create($resource);
 
             // 作成出来ない場合
-            if (!$insertCount) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_401,
                     parameter: [
@@ -177,16 +177,22 @@ class BannerContentsService
 
             $resource = BannerBlockContentsResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannerBlockContentsRepository->create($resource);
+            $result = $this->bannerBlockContentsRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             // CacheLibrary::deleteCache(self::CACHE_KEY_BANNER_BLOCK_CONTENTS_COLLECTION_LIST, true);
-
-            // レスポンスの制御
-            $message = ($insertCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount) ? 201 : 401;
 
             // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {

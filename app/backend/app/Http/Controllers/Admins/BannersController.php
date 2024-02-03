@@ -229,7 +229,7 @@ class BannersController extends Controller
     public function update(BannerUpdateRequest $request, string $uuid): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateBanner(
+        $this->service->updateBanner(
             $uuid,
             $request->{BannerCreateRequest::KEY_NAME},
             $request->{BannerCreateRequest::KEY_DETAIL},
@@ -243,6 +243,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_URL},
             $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -255,6 +256,7 @@ class BannersController extends Controller
     public function destroy(BannerDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_BANNERS});
+        $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_BANNERS});
+        return ResponseLibrary::jsonResponse();
     }
 }
