@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ServiceTerms\ServiceTermsImportRequest;
 use App\Services\Admins\ServiceTermsService;
@@ -35,13 +38,14 @@ class ServiceTermsController extends Controller
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function downloadServiceTerms(Request $request): BinaryFileResponse|JsonResponse
+    public function downloadServiceTerms(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.serviceTerms'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -52,13 +56,14 @@ class ServiceTermsController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function templateServiceTerms(Request $request): BinaryFileResponse|JsonResponse
+    public function templateServiceTerms(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.serviceTerms'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -70,10 +75,12 @@ class ServiceTermsController extends Controller
      *
      * @param ServiceTermsImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplateServiceTerms(ServiceTermsImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplateForServiceTerms($request->file);
+        $this->service->importTemplateForServiceTerms($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 }

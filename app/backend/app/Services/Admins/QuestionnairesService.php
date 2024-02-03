@@ -76,9 +76,9 @@ class QuestionnairesService
      * imort questionnaires by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplateForQuestionnaires(UploadedFile $file)
+    public function importTemplateForQuestionnaires(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_questionnaires_template_\d{14}\.csv/u', $file->getClientOriginalName())) {
@@ -94,18 +94,24 @@ class QuestionnairesService
 
             $resource = QuestionnairesResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->questionnairesRepository->create($resource);
+            $result = $this->questionnairesRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             // CacheLibrary::deleteCache(self::CACHE_KEY_HOME_CONTENTS_COLLECTION_LIST, true);
 
-            // レスポンスの制御
-            $message = $insertCount ? 'success' : 'Bad Request';
-            $status = $insertCount ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

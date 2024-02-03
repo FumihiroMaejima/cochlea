@@ -31,13 +31,13 @@ class PermissionsService
      * get permissions data for frontend parts
      *
      * @param  \Illuminate\Http\Request $request
-     * @return JsonResponse
+     * @return array
      */
-    public function getPermissionsAsList(Request $request): JsonResponse
+    public function getPermissionsAsList(Request $request): array
     {
         $collection = $this->permissionsRepository->getPermissionsList();
         $resource = PermissionsResource::toArrayForGetTextAndValueList($collection);
 
-        return response()->json($resource, 200);
+        return $resource;
     }
 }

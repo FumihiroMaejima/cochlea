@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Coins\CoinCreateRequest;
 use App\Http\Requests\Admin\Coins\CoinDeleteRequest;
@@ -38,29 +41,32 @@ class CoinsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getCoins();
+        // return $this->service->getCoins();
+        return ResponseLibrary::jsonResponse($this->service->getCoins($request));
     }
 
     /**
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function download(Request $request): BinaryFileResponse|JsonResponse
+    public function download(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -71,13 +77,14 @@ class CoinsController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function template(Request $request): BinaryFileResponse|JsonResponse
+    public function template(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.coins'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -89,11 +96,13 @@ class CoinsController extends Controller
      *
      * @param CoinsImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplate(CoinsImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplate($request->file);
+        $this->service->importTemplate($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -101,12 +110,13 @@ class CoinsController extends Controller
      *
      * @param  CoinCreateRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(CoinCreateRequest $request): JsonResponse
     {
         // サービスの実行
         // return $this->service->createCoin($request);
-        return $this->service->createCoin(
+        $this->service->createCoin(
             $request->{CoinCreateRequest::KEY_NAME},
             $request->{CoinCreateRequest::KEY_DETAIL},
             $request->{CoinCreateRequest::KEY_PRICE},
@@ -115,6 +125,7 @@ class CoinsController extends Controller
             $request->{CoinCreateRequest::KEY_END_AT},
             $request->{CoinCreateRequest::KEY_IMAGE} ?? ''
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -156,11 +167,12 @@ class CoinsController extends Controller
      * @param  CoinUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(CoinUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateCoin(
+        $this->service->updateCoin(
             $id,
             $request->{CoinUpdateRequest::KEY_NAME},
             $request->{CoinUpdateRequest::KEY_DETAIL},
@@ -170,6 +182,7 @@ class CoinsController extends Controller
             $request->{CoinUpdateRequest::KEY_END_AT},
             $request->{CoinUpdateRequest::KEY_IMAGE} ?? ''
         );
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -177,10 +190,12 @@ class CoinsController extends Controller
      *
      * @param  CoinDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(CoinDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteCoin($request->{CoinUpdateRequest::KEY_COINS});
+        $this->service->deleteCoin($request->{CoinUpdateRequest::KEY_COINS});
+        return ResponseLibrary::jsonResponse();
     }
 }

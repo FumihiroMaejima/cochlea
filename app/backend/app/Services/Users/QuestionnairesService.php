@@ -120,9 +120,9 @@ class QuestionnairesService
             );
 
             $resource = UserQuestionnairesResource::toArrayForCreate($userId, $questionnaireId, $userQuestions);
-            $createCount = $this->userQuestionnairesRepository->create($userId, $resource);
+            $result = $this->userQuestionnairesRepository->create($userId, $resource);
 
-            if (!$createCount) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'

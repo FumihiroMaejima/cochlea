@@ -106,9 +106,9 @@ class DebugService
             'host' => config('app.url'),
             'clinetIp' => $clinetIp,
             'userAgent' => $userAgent,
-            OAuthUsers::GIT_HUB_ID => $oAuthUser[OAuthUsers::GIT_HUB_ID] ?? null,
-            OAuthUsers::TWITTER_ID => $oAuthUser[OAuthUsers::TWITTER_ID] ?? null,
-            OAuthUsers::FACEBOOK_ID => $oAuthUser[OAuthUsers::FACEBOOK_ID] ?? null,
+            'githubId' => $oAuthUser[OAuthUsers::GIT_HUB_ID] ?? null,
+            'twitterId' => $oAuthUser[OAuthUsers::TWITTER_ID] ?? null,
+            'facebookId' => $oAuthUser[OAuthUsers::FACEBOOK_ID] ?? null,
         ];
 
         return response()->json(['data' => $response, 'status' => 200]);

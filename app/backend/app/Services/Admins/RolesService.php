@@ -53,9 +53,9 @@ class RolesService
      * get roles data
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return JsonResponse
+     * @return array
      */
-    public function getRoles(Request $request): JsonResponse
+    public function getRoles(Request $request): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST);
 
@@ -70,7 +70,7 @@ class RolesService
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
         // TODO GitHub ActionsのUnitテストが成功したら削除
@@ -79,16 +79,16 @@ class RolesService
         // $resourceCollection->toArray($request)
         $resourceCollection = RolesResource::toArrayForGetRolesCollection($collection); */
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
      * get roles data for frontend parts
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return JsonResponse
+     * @return array
      */
-    public function getRolesList(Request $request): JsonResponse
+    public function getRolesList(Request $request): array
     {
         $data = $this->rolesRepository->getRolesList();
         // サービスコンテナからリソースクラスインスタンスを依存解決
@@ -97,7 +97,7 @@ class RolesService
         // $resource->toArray($request);
         $resource = RolesResource::toArrayForGetTextAndValueList($data);
 
-        return response()->json($resource, 200);
+        return $resource;
     }
 
     /**
@@ -118,33 +118,40 @@ class RolesService
      *
      * @param  RoleCreateRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function createRole(RoleCreateRequest $request)
+    public function createRole(RoleCreateRequest $request): void
     {
         DB::beginTransaction();
         try {
             $resource = RolesResource::toArrayForCreate($request);
 
 
-            $insertCount = $this->rolesRepository->create($resource); // if created => count is 1
+            $insertResult = $this->rolesRepository->create($resource); // if created => count is 1
             $latestRoles = $this->rolesRepository->getLatestRole();
 
             // 権限情報の作成
             $permissonsResource = RolePermissionsResource::toArrayForCreate($request, $latestRoles);
 
-            $insertRolePermissionsCount = $this->rolePermissionsRepository->create($permissonsResource);
+            $insertRolePermissionsResult = $this->rolePermissionsRepository->create($permissonsResource);
+
+            // 作成出来ない場合
+            if (!($insertResult && $insertRolePermissionsResult)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'permissonsResource' => $permissonsResource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
-            // 作成されている場合は304
-            $message = ($insertCount && $insertRolePermissionsCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount && $insertRolePermissionsCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -157,9 +164,9 @@ class RolesService
      *
      * @param int $id role id
      * @param RoleUpdateRequest $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function updateRole(int $id, RoleUpdateRequest $request)
+    public function updateRole(int $id, RoleUpdateRequest $request): void
     {
         DB::beginTransaction();
         try {
@@ -177,6 +184,20 @@ class RolesService
             $updateResource = RolePermissionsResource::toArrayForUpdate($request);
             $updatedRolePermissionsRowCount = $this->rolePermissionsRepository->create($updateResource);
 
+
+            // 更新出来ない場合
+            // 更新されていない場合は304を返すでも良さそう
+            if (!($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'removeResource' => $removeResource,
+                        'updateResource' => $updateResource,
+                    ]
+                );
+            }
+
             // slack通知
             $attachmentResource = app()->make(RoleUpdateNotificationResource::class, ['resource' => ":tada: Update Role Data \n"])->toArray($request);
             app()->make(RoleSlackNotificationService::class)->send('update role data.', $attachmentResource);
@@ -186,11 +207,7 @@ class RolesService
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0 || $updatedRolePermissionsRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -203,9 +220,9 @@ class RolesService
      *
      * @param RoleDeleteRequest $request
      * @param int $id role id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function deleteRole(RoleDeleteRequest $request)
+    public function deleteRole(RoleDeleteRequest $request): void
     {
         DB::beginTransaction();
         try {
@@ -214,7 +231,7 @@ class RolesService
             $resource = RolesResource::toArrayForDelete();
 
             // ロックをかける為transaction内で実行
-            $roles = $this->getRolesByIds($roleIds);
+            $this->getRolesByIds($roleIds);
 
             $deleteRowCount = $this->rolesRepository->deleteByIds($roleIds, $resource);
 
@@ -222,16 +239,23 @@ class RolesService
             $rolePermissionsResource = RolePermissionsResource::toArrayForDelete();
             $deleteRolePermissionsRowCount = $this->rolePermissionsRepository->deleteByIds($roleIds, $rolePermissionsResource);
 
+            // 更新出来ない場合
+            if (!($deleteRowCount > 0 && $deleteRolePermissionsRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'rolePermissionsResource' => $rolePermissionsResource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_ROLE_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0 && $deleteRolePermissionsRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0 && $deleteRolePermissionsRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

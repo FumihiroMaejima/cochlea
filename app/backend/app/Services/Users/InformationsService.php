@@ -18,6 +18,7 @@ use App\Repositories\Masters\Informations\InformationsRepositoryInterface;
 use App\Repositories\Users\UserReadInformations\UserReadInformationsRepositoryInterface;
 use App\Library\Array\ArrayLibrary;
 use App\Library\Cache\CacheLibrary;
+use App\Library\Database\TransactionLibrary;
 use App\Library\User\UserLibrary;
 use Exception;
 
@@ -90,7 +91,8 @@ class InformationsService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックの実行
             UserLibrary::lockUser($userId);
@@ -105,9 +107,9 @@ class InformationsService
             }
 
             $resource = UserReadInformationsResource::toArrayForCreate($userId, $informationId);
-            $createCount = $this->userReadInformationsRepository->create($userId, $resource);
+            $result = $this->userReadInformationsRepository->create($userId, $resource);
 
-            if (!$createCount) {
+            if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
                     'Create record failed.'
@@ -123,10 +125,12 @@ class InformationsService
             );
             $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource); */
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 
@@ -170,7 +174,8 @@ class InformationsService
         }
 
         // DB 登録
-        DB::beginTransaction();
+        // DB::beginTransaction();
+        TransactionLibrary::beginTransactionByUserId($userId);
         try {
             // ロックをかけて再取得
             $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId, true);
@@ -194,10 +199,12 @@ class InformationsService
             );
             $this->userCoinPaymentLogRepository->create($userId, $userCoinPaymentLogResource); */
 
-            DB::commit();
+            // DB::commit();
+            TransactionLibrary::commitByUserId($userId);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
-            DB::rollback();
+            // DB::rollback();
+            TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
 

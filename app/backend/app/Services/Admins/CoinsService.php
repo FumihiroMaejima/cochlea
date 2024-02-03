@@ -46,9 +46,9 @@ class CoinsService
     /**
      * get coins data
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getCoins(): JsonResponse
+    public function getCoins(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST);
 
@@ -61,10 +61,10 @@ class CoinsService
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
@@ -97,9 +97,9 @@ class CoinsService
      * imort coins by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplate(UploadedFile $file)
+    public function importTemplate(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_coins_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
@@ -118,18 +118,23 @@ class CoinsService
             // $resource = app()->make(GameEnemiesCreateResource::class, ['resource' => $fileData[0]])->toArray($request);
             $resource = CoinsResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->coinsRepository->create($resource);
+            $result = $this->coinsRepository->create($resource);
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
-            // レスポンスの制御
-            $message = $insertCount ? 'success' : 'Bad Request';
-            $status = $insertCount ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -147,26 +152,39 @@ class CoinsService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string|null $image image
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function createCoin(string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
-    {
+    public function createCoin(
+        string $name,
+        string $detail,
+        int $price,
+        int $cost,
+        string $startAt,
+        string $endAt,
+        string|null $image
+    ): void {
         $resource = CoinsResource::toArrayForCreate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 
         DB::beginTransaction();
         try {
-            $insertCount = $this->coinsRepository->create($resource);
+            $result = $this->coinsRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
-            // 作成されている場合は304
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -185,9 +203,9 @@ class CoinsService
      * @param string $startAt start datetime
      * @param string $endAt end datetime
      * @param string|null $image image
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function updateCoin(int $id, string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): JsonResponse
+    public function updateCoin(int $id, string $name, string $detail, int $price, int $cost, string $startAt, string $endAt, string|null $image): void
     {
         $resource = CoinsResource::toArrayForUpdate($name, $detail, $price, $cost, $startAt, $endAt, $image);
 
@@ -197,16 +215,23 @@ class CoinsService
             $coin = $this->getCoinById($id);
             $updatedRowCount = $this->coinsRepository->update($coin[Coins::ID], $resource);
 
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'coin.id' => $id,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -218,9 +243,9 @@ class CoinsService
      * delete coin data service
      *
      * @param array<int, int> $coinIds
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function deleteCoin(array $coinIds): JsonResponse
+    public function deleteCoin(array $coinIds): void
     {
         DB::beginTransaction();
         try {
@@ -231,16 +256,23 @@ class CoinsService
 
             $deleteRowCount = $this->coinsRepository->delete($coinIds, $resource);
 
+            // 削除出来ない場合
+            if (!($deleteRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'coinIds' => $coinIds,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_COIN_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

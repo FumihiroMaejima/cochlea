@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Services\Admins\RolesService;
 use App\Http\Requests\Admin\Roles\RoleCreateRequest;
 use App\Http\Requests\Admin\Roles\RoleUpdateRequest;
@@ -37,16 +40,18 @@ class RolesController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.roles'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getRoles($request);
+        return ResponseLibrary::jsonResponse($this->service->getRoles($request));
+        // return $this->service->getRoles($request);
     }
 
     /**
@@ -54,29 +59,32 @@ class RolesController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function list(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.roles'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getRolesList($request);
+        return ResponseLibrary::jsonResponse($this->service->getRolesList($request));
+        // return $this->service->getRolesList($request);
     }
 
     /**
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function download(Request $request): BinaryFileResponse|JsonResponse
+    public function download(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.roles'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -87,12 +95,14 @@ class RolesController extends Controller
      * creating a new resource.
      *
      * @param  RoleCreateRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
-    public function create(RoleCreateRequest $request)
+    public function create(RoleCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createRole($request);
+        $this->service->createRole($request);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -133,23 +143,27 @@ class RolesController extends Controller
      *
      * @param  RoleUpdateRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
-    public function update(RoleUpdateRequest $request, int $id)
+    public function update(RoleUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateRole($id, $request);
+        $this->service->updateRole($id, $request);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  RoleDeleteRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
-    public function destroy(RoleDeleteRequest $request)
+    public function destroy(RoleDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteRole($request);
+        $this->service->deleteRole($request);
+        return ResponseLibrary::jsonResponse();
     }
 }

@@ -52,9 +52,9 @@ class BannersService
     /**
      * get banners data
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getBanners(): JsonResponse
+    public function getBanners(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST);
 
@@ -67,25 +67,25 @@ class BannersService
                 CacheLibrary::setCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
      * 画像ファイルのダウンロード
      *
      * @param string $uuid
-     * @return BinaryFileResponse
+     * @return string
      * @throws MyApplicationHttpException
      */
-    public function getImage(string $uuid): BinaryFileResponse
+    public function getImage(string $uuid): string
     {
         $banners = $this->bannersRepository->getByUuid($uuid, true);
 
         if (empty($banners)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
         // 複数チェックはrepository側で実施済み
@@ -97,10 +97,10 @@ class BannersService
         $file = FileLibrary::getFileStoream($imagePath);
 
         if (is_null($file)) {
-            return response()->file(BannerLibrary::getDefaultBannerStoragePath());
+            return BannerLibrary::getDefaultBannerStoragePath();
         }
 
-        return response()->file(Storage::path($imagePath));
+        return Storage::path($imagePath);
     }
 
     /**
@@ -133,9 +133,9 @@ class BannersService
      * imort banners by template data service
      *
      * @param UploadedFile $file
-     * @return JsonResponse
+     * @return void
      */
-    public function importTemplate(UploadedFile $file)
+    public function importTemplate(UploadedFile $file): void
     {
         // ファイル名チェック
         if (!preg_match('/^master_banners_template_\d{14}\.xlsx/u', $file->getClientOriginalName())) {
@@ -152,18 +152,22 @@ class BannersService
 
             $resource = BannersResource::toArrayForBulkInsert(current($fileData));
 
-            $insertCount = $this->bannersRepository->create($resource);
+            $result = $this->bannersRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // レスポンスの制御
-            $message = ($insertCount) ? 'success' : 'Bad Request';
-            $status = ($insertCount) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -185,7 +189,7 @@ class BannersService
      * @param string $endAt end datetime
      * @param string $url url
      * @param UploadedFile|null $image image file
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function createBanner(
         string $name,
@@ -199,7 +203,7 @@ class BannersService
         string $endAt,
         string $url,
         ?UploadedFile $image
-    ): JsonResponse {
+    ): void {
         $resource = BannersResource::toArrayForCreate(
             UuidLibrary::uuidVersion4(),
             $name,
@@ -216,18 +220,22 @@ class BannersService
 
         DB::beginTransaction();
         try {
-            $insertCount = $this->bannersRepository->create($resource);
+            $result = $this->bannersRepository->create($resource);
+
+            // 作成出来ない場合
+            if (!$result) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
 
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // 作成されている場合は304
-            $message = ($insertCount > 0) ? 'success' : 'Bad Request';
-            $status = ($insertCount > 0) ? 201 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -250,7 +258,7 @@ class BannersService
      * @param string $endAt end datetime
      * @param string $url url
      * @param UploadedFile|null $image image file
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function updateBanner(
         string $uuid,
@@ -265,7 +273,7 @@ class BannersService
         string $endAt,
         string $url,
         ?UploadedFile $image
-    ): JsonResponse {
+    ): void {
         $resource = BannersResource::toArrayForUpdate(
             $uuid,
             $name,
@@ -285,6 +293,17 @@ class BannersService
             // ロックをかける為transaction内で実行
             $banner = $this->getBannerByUuid($uuid);
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
+
+            // 更新出来ない場合
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'banner.id' => $banner[Banners::ID],
+                    ]
+                );
+            }
 
             // 画像がアップロードされている場合
             if ($image) {
@@ -310,11 +329,7 @@ class BannersService
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -326,9 +341,9 @@ class BannersService
      * delete banner data service
      *
      * @param array<int, string> $bannerUuids
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function deleteBanner(array $bannerUuids): JsonResponse
+    public function deleteBanner(array $bannerUuids): void
     {
         DB::beginTransaction();
         try {
@@ -339,16 +354,23 @@ class BannersService
 
             $deleteRowCount = $this->bannersRepository->delete(array_column($banners, Banners::ID), $resource);
 
+            // 削除出来ない場合
+            if (!($deleteRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                        'bannerUuids' => $bannerUuids,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
 
-            // 更新されていない場合は304
-            $message = ($deleteRowCount > 0) ? 'success' : 'not deleted';
-            $status = ($deleteRowCount > 0) ? 200 : 401;
-
-            return response()->json(['message' => $message, 'status' => $status], $status);
+            // return response()->json(['message' => $message, 'status' => $status], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();
@@ -361,9 +383,9 @@ class BannersService
      *
      * @param string $uuid
      * @param UploadedFile $image image file
-     * @return JsonResponse
+     * @return void
      */
-    public function uploadImage(string $uuid, UploadedFile $image): JsonResponse
+    public function uploadImage(string $uuid, UploadedFile $image): void
     {
         DB::beginTransaction();
         try {
@@ -383,7 +405,12 @@ class BannersService
             if (!$result) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
-                    'store file failed.'
+                    'store file failed.',
+                    [
+                        'fileResource' => $fileResource,
+                        'bannerId' => $bannerId,
+                        'storageFileName' => $storageFileName,
+                    ]
                 );
             }
 
@@ -391,16 +418,21 @@ class BannersService
             $resource = BannersResource::toArrayForUpdateImage();
             $updatedRowCount = $this->bannersRepository->update($banner[Banners::ID], $resource);
 
+            // 更新出来ない場合
+            // 更新されていない場合は304を返すでも良さそう
+            if (!($updatedRowCount > 0)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_401,
+                    parameter: [
+                        'resource' => $resource,
+                    ]
+                );
+            }
+
             DB::commit();
 
             // キャッシュの削除
             CacheLibrary::deleteCache(self::CACHE_KEY_ADMIN_BANNER_COLLECTION_LIST, true);
-
-            // 更新されていない場合は304
-            $message = ($updatedRowCount > 0) ? 'success' : 'not modified';
-            $status = ($updatedRowCount > 0) ? 200 : 304;
-
-            return response()->json(['message' => $message, 'status' => $status, 'data' => []], $status);
         } catch (Exception $e) {
             Log::error(__CLASS__ . '::' . __FUNCTION__ . ' line:' . __LINE__ . ' ' . 'message: ' . json_encode($e->getMessage()));
             DB::rollback();

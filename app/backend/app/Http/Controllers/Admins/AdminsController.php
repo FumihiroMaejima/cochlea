@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 // use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Services\Admins\AdminsService;
 use App\Http\Requests\Admin\Admins\AdminCreateRequest;
 use App\Http\Requests\Admin\Admins\AdminDeleteRequest;
@@ -42,28 +45,30 @@ class AdminsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.admins'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
-        return $this->service->getAdmins($request);
+        return ResponseLibrary::jsonResponse($this->service->getAdmins($request));
     }
 
     /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function download(Request $request): BinaryFileResponse|JsonResponse
+    public function download(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.admins'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -75,10 +80,12 @@ class AdminsController extends Controller
      *
      * @param  AdminCreateRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(AdminCreateRequest $request): JsonResponse
     {
-        return $this->service->createAdmin($request);
+        $this->service->createAdmin($request);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -120,11 +127,13 @@ class AdminsController extends Controller
      * @param  AdminUpdateRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(AdminUpdateRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdmin($request, $id);
+        $this->service->updateAdmin($request, $id);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -132,11 +141,13 @@ class AdminsController extends Controller
      *
      * @param  AdminDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(AdminDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteAdmin($request);
+        $this->service->deleteAdmin($request);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -145,11 +156,13 @@ class AdminsController extends Controller
      * @param  AdminUpdatePasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function updatePassword(AdminUpdatePasswordRequest $request, int $id): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
+        $this->service->updateAdminPassword($id, $request->currentPassword, $request->newPassword);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -158,11 +171,13 @@ class AdminsController extends Controller
      * @param  AdminForgotPasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function forgotPassword(AdminForgotPasswordRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->forgotAdminPassword($request->email);
+        $this->service->forgotAdminPassword($request->email);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -171,6 +186,7 @@ class AdminsController extends Controller
      * @param  AdminResetPasswordRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function resetPassword(AdminResetPasswordRequest $request): JsonResponse
     {
@@ -178,6 +194,7 @@ class AdminsController extends Controller
         $sessionId = $this->getPasswordResetSessionId($request);
 
         // サービスの実行
-        return $this->service->resetAdminPassword($sessionId, $request->password, $request->token);
+        $this->service->resetAdminPassword($sessionId, $request->password, $request->token);
+        return ResponseLibrary::jsonResponse();
     }
 }

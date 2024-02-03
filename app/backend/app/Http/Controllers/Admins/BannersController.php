@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Banners\BannerCreateRequest;
 use App\Http\Requests\Admin\Banners\BannerDeleteRequest;
@@ -18,7 +20,6 @@ use App\Http\Requests\Admin\Banners\BannerImagesImportRequest;
 use App\Http\Requests\Admin\Banners\BannersImportRequest;
 use App\Http\Requests\Admin\Banners\BannerUpdateRequest;
 use App\Services\Admins\BannersService;
-use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
 use App\Trait\CheckHeaderTrait;
 
@@ -44,16 +45,18 @@ class BannersController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(Request $request): JsonResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
-        return $this->service->getBanners($request);
+        // return $this->service->getBanners($request);
+        return ResponseLibrary::jsonResponse($this->service->getBanners($request));
     }
 
     /**
@@ -61,13 +64,14 @@ class BannersController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param string $uuid
-     * @return BinaryFileResponse|JsonResponse
+     * @return BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function getImage(Request $request, string $uuid): BinaryFileResponse|JsonResponse
+    public function getImage(Request $request, string $uuid): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // バリデーションチェック
@@ -85,7 +89,8 @@ class BannersController extends Controller
         }
 
         // サービスの実行
-        return $this->service->getImage($request->uuid);
+        // return $this->service->getImage($request->uuid);
+        return ResponseLibrary::fileResponse($this->service->getImage($request->uuid));
     }
 
     /**
@@ -94,24 +99,28 @@ class BannersController extends Controller
      * @param BannerImagesImportRequest $request
      * @param string $uuid
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadImage(BannerImagesImportRequest $request, string $uuid): JsonResponse
     {
         // サービスの実行
-        return $this->service->uploadImage($uuid, $request->image);
+        // return $this->service->uploadImage($uuid, $request->image);
+        $this->service->uploadImage($uuid, $request->image);
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
      * download a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function download(Request $request): BinaryFileResponse|JsonResponse
+    public function download(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -122,13 +131,14 @@ class BannersController extends Controller
      * download import template for import the resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws MyApplicationHttpException
      */
-    public function template(Request $request): BinaryFileResponse|JsonResponse
+    public function template(Request $request): BinaryFileResponse
     {
         // 権限チェック
         if (!$this->checkRequestAuthority($request, Config::get('myapp.executionRole.services.banners'))) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            throw new MyApplicationHttpException(StatusCodeMessages::STATUS_403);
         }
 
         // サービスの実行
@@ -140,11 +150,13 @@ class BannersController extends Controller
      *
      * @param BannersImportRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function uploadTemplate(BannersImportRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->importTemplate($request->file);
+        $this->service->importTemplate($request->file);
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -152,11 +164,12 @@ class BannersController extends Controller
      *
      * @param  BannerCreateRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(BannerCreateRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->createBanner(
+        $this->service->createBanner(
             $request->{BannerCreateRequest::KEY_NAME},
             $request->{BannerCreateRequest::KEY_DETAIL},
             $request->{BannerCreateRequest::KEY_LOCATION},
@@ -169,6 +182,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_URL},
             $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -210,11 +224,12 @@ class BannersController extends Controller
      * @param  BannerUpdateRequest  $request
      * @param  string $uuid
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function update(BannerUpdateRequest $request, string $uuid): JsonResponse
     {
         // サービスの実行
-        return $this->service->updateBanner(
+        $this->service->updateBanner(
             $uuid,
             $request->{BannerCreateRequest::KEY_NAME},
             $request->{BannerCreateRequest::KEY_DETAIL},
@@ -228,6 +243,7 @@ class BannersController extends Controller
             $request->{BannerCreateRequest::KEY_URL},
             $request->{BannerCreateRequest::KEY_IMAGE} ?? null
         );
+        return ResponseLibrary::jsonResponse();
     }
 
     /**
@@ -235,10 +251,12 @@ class BannersController extends Controller
      *
      * @param  BannerDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function destroy(BannerDeleteRequest $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_BANNERS});
+        $this->service->deleteBanner($request->{BannerDeleteRequest::KEY_BANNERS});
+        return ResponseLibrary::jsonResponse();
     }
 }
