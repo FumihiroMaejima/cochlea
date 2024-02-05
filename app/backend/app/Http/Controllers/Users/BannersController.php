@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\MyApplicationHttpException;
-use App\Http\Controllers\Controller;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Response\ResponseLibrary;
+use App\Http\Controllers\Controller;
 use App\Services\Users\BannersService;
 use App\Trait\CheckHeaderTrait;
 
