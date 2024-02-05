@@ -6,6 +6,9 @@ namespace App\Http\Controllers\Users;
 
 // use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Contacts\ContactCreateRequest;
 use App\Services\Users\ContactsService;
@@ -37,7 +40,7 @@ class ContactsController extends Controller
     public function index(): JsonResponse
     {
         // サービスの実行
-        return $this->service->getCategories();
+        return ResponseLibrary::jsonResponse($this->service->getCategories());
     }
 
     /**
@@ -48,7 +51,7 @@ class ContactsController extends Controller
     public function categories(): JsonResponse
     {
         // サービスの実行
-        return $this->service->getCategories();
+        return ResponseLibrary::jsonResponse($this->service->getCategories());
     }
 
     /**
@@ -56,6 +59,7 @@ class ContactsController extends Controller
      *
      * @param ContactCreateRequest $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function create(ContactCreateRequest $request): JsonResponse
     {
@@ -63,7 +67,7 @@ class ContactsController extends Controller
         $userId = $this->getUserId($request);
 
         // サービスの実行
-        return $this->service->createContact(
+        $this->service->createContact(
             $userId,
             $request->email,
             $request->name,
@@ -72,5 +76,6 @@ class ContactsController extends Controller
             $request->failureDetail,
             $request->failureAt
         );
+        return ResponseLibrary::jsonResponse(['data' => true]);
     }
 }
