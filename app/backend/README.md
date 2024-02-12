@@ -1643,6 +1643,68 @@ CACHE_DRIVER=redis
 
 ---
 
+# Xhprofの設定
+
+## 環境設定
+
+### Dockerfile
+
+2024年現在は`pecl`からインストールするのが推奨されている
+
+[参考](https://pecl.php.net/package/xhprof)
+
+```Dockerfile
+# pecl installが出来る状態にする必要がある。
+RUN apk update && \
+  apk add --update --no-cache \
+  git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
+  pecl install xhprof && \
+  docker-php-ext-enable xhprof && \
+
+# インストールしたパッケージは下記で確認出来る
+# ls /usr/local/lib/php/extensions/no-debug-non-zts-20yymmdd/
+
+```
+### php.iniへの設定
+
+`php.ini`の設定
+
+```ini
+[xhprof]
+extension=xhprof
+xhprof.output_dir=/tmp/xhprof
+```
+
+## 使い方
+
+```php
+# プロファイリングを開始する場所で`xhprof_enable`関数を呼び出す。
+# 基本は、プロファイリングを開始したいPHPスクリプトの先頭にこの関数を記述する
+xhprof_enable();
+
+// ... プロファイリングする処理
+
+// プロファイリングを終了する場所でxhprof_disable関数を呼び出す。
+$xhprofData = xhprof_disable();
+
+// xhprofの結果を保存する場合
+// laravelではstorage_path()で設定するのが良さそう
+$path = storage_path('/xhprof');
+// file_put_contents('/path/to/output/file.xhprof', serialize($xhprofData));
+file_put_contents("$path/file.xhprof", serialize($xhprofData));
+
+// xhprofの結果をブラウザに表示する場合
+// xhprof_htmlの場所はphpコマンドの場所と同じ階層内の可能性がある。(/usr/local/lib/php?)
+include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_lib.php';
+include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_runs.php';
+$xhprofRuns = new XHProfRuns_Default();
+$runId = $xhprofRuns->save_run($xhprofData, 'run_name');
+echo '<a href="/path/to/xhprof_html/index.php?run=' . $runId . '&source=run_name">View Profiling Results</a>';
+
+```
+
+---
+
 # 補足
 
 ### Composer パッケージのアップデート
