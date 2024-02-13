@@ -1665,6 +1665,7 @@ RUN apk update && \
 # ls /usr/local/lib/php/extensions/no-debug-non-zts-20yymmdd/
 
 ```
+
 ### php.iniへの設定
 
 `php.ini`の設定
@@ -1708,6 +1709,25 @@ $runId = $xhprofRuns->save_run($xhprofData, 'run_name');
 echo '<a href="/path/to/xhprof_html/index.php?run=' . $runId . '&source=run_name">View Profiling Results</a>';
 
 ```
+
+ブラウザでDockerコンテナ内の`/path/to/xhprof_html`でアクセスするのが難しい場合はLaravelプロジェクト内の`storage`配下にコピーしてローカル環境でサーバーを立ち上げて確認するなどが出来る。
+
+```shell
+# laravel project root (Docker Container)
+cd storage/xhprof
+cp -rf /usr/local/lib/php/xhprof_html xhprof_html
+cp -rf /usr/local/lib/php/xhprof_lib xhprof_lib
+
+# ローカルのhost環境でローカルサーバーを立ち上げる
+php -d xhprof.output_dir=`pwd`/app/xhprof \
+-S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
+# ブラウザでアクセス
+http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
+
+```
+
 
 ---
 
