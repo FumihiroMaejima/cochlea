@@ -1675,6 +1675,12 @@ extension=xhprof
 xhprof.output_dir=/tmp/xhprof
 ```
 
+設定の確認
+
+```shell
+php -i | grep xhprof
+```
+
 ## 使い方
 
 ```php
@@ -1728,6 +1734,27 @@ $ composer install
 
 ---
 
+## php-fpmの設定
+
+php-fpmの設定の設定周りは下記で確認出来る
+
+```shell
+# php-fpm.conf
+cat /usr/local/etc/php-fpm.conf
+
+# その他のconf
+ls /usr/local/etc/php-fpm.d
+docker.conf       www.conf          www.conf.default  zz-docker.conf
+
+# www.confの中にuser,group,portの設定が記載されている。
+cat /usr/local/etc/php-fpm.d/www.conf
+### ...
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+```
+
+---
 
 ## Stripeの利用について
 
