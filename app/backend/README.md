@@ -1706,6 +1706,8 @@ include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_lib.php';
 include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_runs.php';
 $xhprofRuns = new XHProfRuns_Default();
 $runId = $xhprofRuns->save_run($xhprofData, 'run_name');
+### 下記の通り$runIdをファイル名に設定して保存した方がデフォルトのファイル名に近い
+file_put_contents("$path/$runId.run_name.xhprof", serialize($xhprofData));
 echo '<a href="/path/to/xhprof_html/index.php?run=' . $runId . '&source=run_name">View Profiling Results</a>';
 
 ```
@@ -1720,6 +1722,11 @@ cp -rf /usr/local/lib/php/xhprof_lib xhprof_lib
 
 # ローカルのhost環境でローカルサーバーを立ち上げる
 php -d xhprof.output_dir=`pwd`/app/xhprof \
+-S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
+# .xhprofファイルをstorage配下に出力している場合
+php -d xhprof.output_dir=`pwd`/app/backend/storage/xhprof \
 -S 127.0.0.1:3334 \
 -t `pwd`/app/backend/storage/xhprof/xhprof_html/
 
