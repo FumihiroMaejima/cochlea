@@ -11,6 +11,7 @@ services:
       - ./app/php.ini:/usr/local/etc/php/php.ini
       - ./app/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./app/xhprof.ini:/usr/local/etc/php/conf.d/xhprof.ini
+      - ./app/xhprof:/tmp/xhprof
     ports:
       - "${PHP_FPM_PORT}:9000"
     expose:
