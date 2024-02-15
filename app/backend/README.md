@@ -1743,6 +1743,26 @@ http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
 
 ```
 
+以上を踏まえると計測の手順としては下記が良さそう。
+
+```php
+# パスを算出しても良さそう
+# $path = storage_path('/xhprof');
+include_once '../storage/xhprof/xhprof_lib/utils/xhprof_lib.php';
+include_once '../storage/xhprof/xhprof_lib/utils/xhprof_runs.php';
+
+xhprof_enable();
+# ... 計測したい処理
+$xhprofData = xhprof_disable();
+
+### xhprofファイルの格納
+$path = storage_path('/xhprof');
+$xhprofRuns = new XHProfRuns_Default();
+$runId = $xhprofRuns->save_run($xhprofData, 'run_name');
+file_put_contents("$path/$runId.run_name.xhprof", serialize($xhprofData));
+
+```
+
 
 ---
 
