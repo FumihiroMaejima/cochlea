@@ -1730,7 +1730,15 @@ php -d xhprof.output_dir=`pwd`/app/backend/storage/xhprof \
 -S 127.0.0.1:3334 \
 -t `pwd`/app/backend/storage/xhprof/xhprof_html/
 
+# ローカル環境にxhprofをインストールしていない場合は環境変数`XHPROF_OUTPUT_DIR`を指定した状態で実行すれば対象のパスを指定出来る
+XHPROF_OUTPUT_DIR=`pwd`/app/backend/storage/xhprof \
+php -S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
 # ブラウザでアクセス
+## 一覧
+http://localhost:3334/index.php
+## 各プロファイル
 http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
 
 ```
