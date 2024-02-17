@@ -118,6 +118,9 @@ config-clear:
 phpunit:
 	docker-compose exec app vendor/bin/phpunit --testdox
 
+phpunit-feature:
+	docker-compose exec app vendor/bin/phpunit --testdox tests/Feature
+
 phpunit-cov:
 	docker-compose exec app php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
 
