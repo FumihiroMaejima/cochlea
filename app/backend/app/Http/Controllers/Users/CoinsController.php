@@ -6,6 +6,9 @@ namespace App\Http\Controllers\Users;
 
 // use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\CoinsService;
 
@@ -30,10 +33,11 @@ class CoinsController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(): JsonResponse
     {
         // サービスの実行
-        return $this->service->getCoins();
+        return ResponseLibrary::jsonResponse($this->service->getCoins());
     }
 }

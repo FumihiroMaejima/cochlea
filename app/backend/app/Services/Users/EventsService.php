@@ -38,9 +38,9 @@ class EventsService
      * get event data
      *
      * @param
-     * @return JsonResponse
+     * @return array
      */
-    public function getEvents(): JsonResponse
+    public function getEvents(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_EVENT_LIST);
 
@@ -53,10 +53,10 @@ class EventsService
                 CacheLibrary::setCache(self::CACHE_KEY_USER_EVENT_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**

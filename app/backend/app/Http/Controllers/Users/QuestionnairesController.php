@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Questionnaires\UserQuestionnairesCreateRequest;
 use App\Http\Requests\User\Questionnaires\UserQuestionnairesUpdateRequest;
@@ -44,7 +45,7 @@ class QuestionnairesController extends Controller
     public function index(): JsonResponse
     {
         // サービスの実行
-        return $this->service->getQuestionnaires();
+        return ResponseLibrary::jsonResponse($this->service->getQuestionnaires());
     }
 
     /**
@@ -53,11 +54,14 @@ class QuestionnairesController extends Controller
      * @param Request $request
      * @param int $questionnaireId
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function detail(Request $request, int $questionnaireId): JsonResponse
     {
         // サービスの実行
-        return $this->service->getQuestionnaire(self::getUserId($request), $questionnaireId);
+        return ResponseLibrary::jsonResponse(
+            $this->service->getQuestionnaire(self::getUserId($request), $questionnaireId)
+        );
     }
 
     /**
@@ -66,6 +70,7 @@ class QuestionnairesController extends Controller
      * @param UserQuestionnairesCreateRequest $request
      * @param int $informationId
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function createUserQuestionnaire(UserQuestionnairesCreateRequest $request): JsonResponse
     {
@@ -73,11 +78,12 @@ class QuestionnairesController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->createUserQuestionnaire(
+        $this->service->createUserQuestionnaire(
             $userId,
             (int)$request->{UserQuestionnairesCreateRequest::KEY_ID},
             $request->{UserQuestionnairesCreateRequest::KEY_QUESTIONS}
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -86,6 +92,7 @@ class QuestionnairesController extends Controller
      * @param UserQuestionnairesUpdateRequest $request
      * @param int $informationId
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function updateUserQuestionnaire(UserQuestionnairesUpdateRequest $request): JsonResponse
     {
@@ -93,10 +100,11 @@ class QuestionnairesController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->updateUserQuestionnaire(
+        $this->service->updateUserQuestionnaire(
             $userId,
             (int)$request->{UserQuestionnairesUpdateRequest::KEY_ID},
             $request->{UserQuestionnairesUpdateRequest::KEY_QUESTIONS}
         );
+        return ResponseLibrary::jsonResponse();
     }
 }

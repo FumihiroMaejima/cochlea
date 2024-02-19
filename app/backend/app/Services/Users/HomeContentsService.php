@@ -72,9 +72,9 @@ class HomeContentsService
     /**
      * get home contents data
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getHomeContents(): JsonResponse
+    public function getHomeContents(): array
     {
         $response = [];
 
@@ -95,7 +95,7 @@ class HomeContentsService
         $bannerBlockResponse = HomeContentsResource::toArrayForGetBannerBlockResponse($bennerBlocks, $bannerBlockContents, $bannerResponses);
         $response = $bannerBlockResponse;
 
-        return response()->json(['data' => $response], 200);
+        return $response;
     }
 
     /**

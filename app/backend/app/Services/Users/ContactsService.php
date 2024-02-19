@@ -37,13 +37,12 @@ class ContactsService
     /**
      * get contact categories
      *
-     * @return JsonResponse
+     * @return array
      * @throws Exception
      */
-    public function getCategories(): JsonResponse
+    public function getCategories(): array
     {
-        $resource = ContactsResource::toArrayForGetTextAndValueListForCategories();
-        return response()->json(['data' => $resource], StatusCodeMessages::STATUS_200);
+        return ContactsResource::toArrayForGetTextAndValueListForCategories();
     }
 
     /**
@@ -56,8 +55,9 @@ class ContactsService
      * @param string $detail detail
      * @param ?string $failureDetail failure detail
      * @param ?string $failureAt failure datetime
-     * @return JsonResponse
+     * @return void
      * @throws Exception
+     * @throws MyApplicationHttpException
      */
     public function createContact(
         int $userId,
@@ -67,11 +67,11 @@ class ContactsService
         string $detail,
         ?string $failureDetail,
         ?string $failureAt
-    ): JsonResponse {
+    ): void {
         // キャッシュ確認(連投チェック)
         $cache = LogicCacheLibrary::getContactCache($detail);
         if ($cache) {
-            return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
+            return;
         }
 
         $resource = ContactsResource::toArrayForCreate(
@@ -106,7 +106,7 @@ class ContactsService
             DB::rollBack();
             throw new MyApplicationHttpException(
                 StatusCodeMessages::STATUS_401,
-                '認証コード生成処理に失敗しました。' . $e->getMessage(),
+                'お問合せ登録・通知処理に失敗しました。' . $e->getMessage(),
                 [],
                 false
             );
@@ -121,6 +121,6 @@ class ContactsService
             $failureAt ?? ''
         );
 
-        return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
+        // return response()->json(['data' => true], StatusCodeMessages::STATUS_200);
     }
 }

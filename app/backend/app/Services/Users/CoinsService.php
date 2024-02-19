@@ -37,10 +37,10 @@ class CoinsService
     /**
      * get coins data
      *
-     * @return JsonResponse
+     * @return array
      * @throws Exception
      */
-    public function getCoins(): JsonResponse
+    public function getCoins(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_COINS_LIST);
         // hash型の検証
@@ -56,10 +56,10 @@ class CoinsService
                 // HashCacheLibrary::setCache(self::CACHE_KEY_USER_COINS_LIST.'_test', $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json(['data' => $resourceCollection], StatusCodeMessages::STATUS_200);
+        return $resourceCollection;
     }
 
     /**

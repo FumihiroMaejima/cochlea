@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Services\Users\HomeContentsService;
 use App\Trait\CheckHeaderTrait;
@@ -39,6 +42,6 @@ class HomeContentsController extends Controller
     public function index(Request $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->getHomeContents($request);
+        return ResponseLibrary::jsonResponse($this->service->getHomeContents($request));
     }
 }
