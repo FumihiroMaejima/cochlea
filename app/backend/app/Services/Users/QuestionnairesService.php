@@ -44,12 +44,12 @@ class QuestionnairesService
     /**
      * get questionnaires
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function getQuestionnaires(): JsonResponse
+    public function getQuestionnaires(): array
     {
         $questionnaireList = $this->getQuestionnaireList();
-        return response()->json(['data' => UserQuestionnairesResource::toArrayForList($questionnaireList)]);
+        return UserQuestionnairesResource::toArrayForList($questionnaireList);
     }
 
     /**
@@ -57,9 +57,10 @@ class QuestionnairesService
      *
      * @param int $userId user id
      * @param int $questionnaireId questionnaire id.
-     * @return JsonResponse
+     * @return array
+     * @throws MyApplicationHttpException
      */
-    public function getQuestionnaire(int $userId, int $questionnaireId): JsonResponse
+    public function getQuestionnaire(int $userId, int $questionnaireId): array
     {
         $questionnaireList = $this->getQuestionnaireList();
         $questionnaireList = array_column($questionnaireList, null, Questionnaires::ID);
@@ -72,7 +73,7 @@ class QuestionnairesService
         }
         $userQuestionnaire = $this->getUserQuestionnaire($userId, $questionnaireId);
 
-        return response()->json(['data' => UserQuestionnairesResource::toArrayForDetail($questionnaire)]);
+        return UserQuestionnairesResource::toArrayForDetail($questionnaire);
     }
 
     /**
@@ -81,9 +82,9 @@ class QuestionnairesService
      * @param int $userId user id
      * @param int $questionnaireId questionnaire id.
      * @param array $userQuestions user answer questions informations.
-     * @return JsonResponse
+     * @return void
      */
-    public function createUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): JsonResponse
+    public function createUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): void
     {
         // アンケート情報の取得
         $questionnaireList = $this->getQuestionnaireList();
@@ -139,15 +140,6 @@ class QuestionnairesService
             TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
-
-        return response()->json(
-            [
-                'code' => StatusCodeMessages::STATUS_201,
-                'message' => 'Successfully Create!',
-                'data' => true,
-            ],
-            StatusCodeMessages::STATUS_201
-        );
     }
 
     /**
@@ -156,9 +148,9 @@ class QuestionnairesService
      * @param int $userId user id
      * @param int $questionnaireId questionnaire id.
      * @param array $userQuestions user answer questions informations.
-     * @return JsonResponse
+     * @return void
      */
-    public function updateUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): JsonResponse
+    public function updateUserQuestionnaire(int $userId, int $questionnaireId, array $userQuestions): void
     {
         // アンケート情報の取得
         $questionnaireList = $this->getQuestionnaireList();
@@ -213,15 +205,6 @@ class QuestionnairesService
             TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
-
-        return response()->json(
-            [
-                'code' => StatusCodeMessages::STATUS_200,
-                'message' => 'Successfully Update!',
-                'data' => true,
-            ],
-            StatusCodeMessages::STATUS_200
-        );
     }
 
     /**

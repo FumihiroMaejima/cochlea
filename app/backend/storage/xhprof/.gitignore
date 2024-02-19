@@ -1,0 +1,7 @@
+*.xhprof
+!default/
+!.gitignore
+
+# xhprof directories
+xhprof_html
+xhprof_lib

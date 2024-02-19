@@ -49,10 +49,10 @@ class InformationsService
      * get information data
      *
      * @param
-     * @return JsonResponse
+     * @return array
      * @throws Exception
      */
-    public function getInformations(): JsonResponse
+    public function getInformations(): array
     {
         $cache = CacheLibrary::getByKey(self::CACHE_KEY_USER_INFORMATION_LIST);
 
@@ -65,10 +65,10 @@ class InformationsService
                 CacheLibrary::setCache(self::CACHE_KEY_USER_INFORMATION_LIST, $resourceCollection);
             }
         } else {
-            $resourceCollection = $cache;
+            $resourceCollection = (array)$cache;
         }
 
-        return response()->json($resourceCollection, 200);
+        return $resourceCollection;
     }
 
     /**
@@ -76,9 +76,9 @@ class InformationsService
      *
      * @param int $userId user id
      * @param int $informationId information id.
-     * @return JsonResponse
+     * @return void
      */
-    public function createUserReadInformation(int $userId, int $informationId): JsonResponse
+    public function createUserReadInformation(int $userId, int $informationId): void
     {
         // お知らせの取得
         $information = $this->getInformationById($userId, $informationId);
@@ -133,15 +133,6 @@ class InformationsService
             TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
-
-        return response()->json(
-            [
-                'code' => StatusCodeMessages::STATUS_201,
-                'message' => 'Successfully Create!',
-                'data' => true,
-            ],
-            StatusCodeMessages::STATUS_201
-        );
     }
 
 
@@ -150,9 +141,9 @@ class InformationsService
      *
      * @param int $userId user id
      * @param int $informationId information id.
-     * @return JsonResponse
+     * @return void
      */
-    public function removeUserReadInformation(int $userId, int $informationId): JsonResponse
+    public function removeUserReadInformation(int $userId, int $informationId): void
     {
         // お知らせの取得
         $information = $this->getInformationById($userId, $informationId);
@@ -164,21 +155,21 @@ class InformationsService
             );
         }
 
-        // 既読情報の取得
-        $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
-        if (is_null($userReadInformation)) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'User Read Information is Not Exist.'
-            );
-        }
-
         // DB 登録
         // DB::beginTransaction();
         TransactionLibrary::beginTransactionByUserId($userId);
         try {
-            // ロックをかけて再取得
-            $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId, true);
+            // ロックの実行
+            UserLibrary::lockUser($userId);
+
+            // 既読情報の取得
+            $userReadInformation = $this->userReadInformationsRepository->getByUserIdAndInformationId($userId, $informationId);
+            if (is_null($userReadInformation)) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'User Read Information is Not Exist.'
+                );
+            }
 
             $resource = UserReadInformationsResource::toArrayForDelete($userId, $informationId);
             $removeCount = $this->userReadInformationsRepository->delete($userId, $resource);
@@ -207,14 +198,6 @@ class InformationsService
             TransactionLibrary::rollbackByUserId($userId);
             throw $e;
         }
-
-        return response()->json(
-            [
-                'code' => StatusCodeMessages::STATUS_200,
-                'message' => 'Successfully Delete!',
-                'data' => true,
-            ]
-        );
     }
 
     /**

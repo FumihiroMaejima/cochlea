@@ -1643,6 +1643,130 @@ CACHE_DRIVER=redis
 
 ---
 
+# Xhprofの設定
+
+## 環境設定
+
+### Dockerfile
+
+2024年現在は`pecl`からインストールするのが推奨されている
+
+[参考](https://pecl.php.net/package/xhprof)
+
+```Dockerfile
+# pecl installが出来る状態にする必要がある。
+RUN apk update && \
+  apk add --update --no-cache \
+  git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
+  pecl install xhprof && \
+  docker-php-ext-enable xhprof && \
+
+# インストールしたパッケージは下記で確認出来る
+# ls /usr/local/lib/php/extensions/no-debug-non-zts-20yymmdd/
+
+```
+
+### php.iniへの設定
+
+`php.ini`の設定
+
+```ini
+[xhprof]
+# 下記は/usr/local/etc/php/conf.d/docker-php-ext-xhprof.iniに既に記載されている為コメントアウトでも良い
+extension=xhprof
+xhprof.output_dir=/tmp/xhprof
+```
+
+設定の確認
+
+```shell
+php -i | grep xhprof
+```
+
+## 使い方
+
+```php
+# プロファイリングを開始する場所で`xhprof_enable`関数を呼び出す。
+# 基本は、プロファイリングを開始したいPHPスクリプトの先頭にこの関数を記述する
+xhprof_enable();
+
+// ... プロファイリングする処理
+
+// プロファイリングを終了する場所でxhprof_disable関数を呼び出す。
+$xhprofData = xhprof_disable();
+
+// xhprofの結果を保存する場合
+// laravelではstorage_path()で設定するのが良さそう
+$path = storage_path('/xhprof');
+// file_put_contents('/path/to/output/file.xhprof', serialize($xhprofData));
+file_put_contents("$path/file.xhprof", serialize($xhprofData));
+
+// xhprofの結果をブラウザに表示する場合
+// xhprof_htmlの場所はphpコマンドの場所と同じ階層内の可能性がある。(/usr/local/lib/php?)
+include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_lib.php';
+include_once '/path/to/xhprof_html/xhprof_lib/utils/xhprof_runs.php';
+$xhprofRuns = new XHProfRuns_Default();
+$runId = $xhprofRuns->save_run($xhprofData, 'run_name');
+### 下記の通り$runIdをファイル名に設定して保存した方がデフォルトのファイル名に近い
+file_put_contents("$path/$runId.run_name.xhprof", serialize($xhprofData));
+echo '<a href="/path/to/xhprof_html/index.php?run=' . $runId . '&source=run_name">View Profiling Results</a>';
+
+```
+
+ブラウザでDockerコンテナ内の`/path/to/xhprof_html`でアクセスするのが難しい場合はLaravelプロジェクト内の`storage`配下にコピーしてローカル環境でサーバーを立ち上げて確認するなどが出来る。
+
+```shell
+# laravel project root (Docker Container)
+cd storage/xhprof
+cp -rf /usr/local/lib/php/xhprof_html xhprof_html
+cp -rf /usr/local/lib/php/xhprof_lib xhprof_lib
+
+# ローカルのhost環境でローカルサーバーを立ち上げる
+php -d xhprof.output_dir=`pwd`/app/xhprof \
+-S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
+# .xhprofファイルをstorage配下に出力している場合
+php -d xhprof.output_dir=`pwd`/app/backend/storage/xhprof \
+-S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
+# ローカル環境にxhprofをインストールしていない場合は環境変数`XHPROF_OUTPUT_DIR`を指定した状態で実行すれば対象のパスを指定出来る
+XHPROF_OUTPUT_DIR=`pwd`/app/backend/storage/xhprof \
+php -S 127.0.0.1:3334 \
+-t `pwd`/app/backend/storage/xhprof/xhprof_html/
+
+# ブラウザでアクセス
+## 一覧
+http://localhost:3334/index.php
+## 各プロファイル
+http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
+
+```
+
+以上を踏まえると計測の手順としては下記が良さそう。
+
+```php
+# パスを算出しても良さそう
+# $path = storage_path('/xhprof');
+include_once '../storage/xhprof/xhprof_lib/utils/xhprof_lib.php';
+include_once '../storage/xhprof/xhprof_lib/utils/xhprof_runs.php';
+
+xhprof_enable();
+# ... 計測したい処理
+$xhprofData = xhprof_disable();
+
+### xhprofファイルの格納
+$path = storage_path('/xhprof');
+$xhprofRuns = new XHProfRuns_Default();
+$runId = $xhprofRuns->save_run($xhprofData, 'run_name');
+file_put_contents("$path/$runId.run_name.xhprof", serialize($xhprofData));
+
+```
+
+
+---
+
 # 補足
 
 ### Composer パッケージのアップデート
@@ -1666,6 +1790,27 @@ $ composer install
 
 ---
 
+## php-fpmの設定
+
+php-fpmの設定の設定周りは下記で確認出来る
+
+```shell
+# php-fpm.conf
+cat /usr/local/etc/php-fpm.conf
+
+# その他のconf
+ls /usr/local/etc/php-fpm.d
+docker.conf       www.conf          www.conf.default  zz-docker.conf
+
+# www.confの中にuser,group,portの設定が記載されている。
+cat /usr/local/etc/php-fpm.d/www.conf
+### ...
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+```
+
+---
 
 ## Stripeの利用について
 

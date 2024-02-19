@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Exceptions\MyApplicationHttpException;
+use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Events\EventCreateRequest;
-use App\Http\Requests\Admin\Events\EventDeleteRequest;
-use App\Http\Requests\Admin\Events\EventImportRequest;
-use App\Http\Requests\Admin\Events\EventUpdateRequest;
 use App\Services\Users\EventsService;
 use App\Trait\CheckHeaderTrait;
 
@@ -43,6 +42,6 @@ class EventsController extends Controller
     public function index(Request $request): JsonResponse
     {
         // サービスの実行
-        return $this->service->getEvents($request);
+        return ResponseLibrary::jsonResponse($this->service->getEvents($request));
     }
 }

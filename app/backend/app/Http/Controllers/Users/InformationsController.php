@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
+use App\Library\Response\ResponseLibrary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Informations\UserReadInformationCreateRequest;
 use App\Http\Requests\User\Informations\UserReadInformationDeleteRequest;
@@ -40,11 +41,12 @@ class InformationsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function index(): JsonResponse
     {
         // サービスの実行
-        return $this->service->getInformations();
+        return ResponseLibrary::jsonResponse($this->service->getInformations());
     }
 
     /**
@@ -53,6 +55,7 @@ class InformationsController extends Controller
      * @param UserReadInformationCreateRequest $request
      * @param int $informationId
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function createUserReadInformation(UserReadInformationCreateRequest $request): JsonResponse
     {
@@ -60,10 +63,11 @@ class InformationsController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->createUserReadInformation(
+        $this->service->createUserReadInformation(
             $userId,
             (int)$request->{UserReadInformationCreateRequest::KEY_ID}
         );
+        return ResponseLibrary::jsonResponse(status: StatusCodeMessages::STATUS_201);
     }
 
     /**
@@ -72,6 +76,7 @@ class InformationsController extends Controller
      * @param UserReadInformationDeleteRequest $request
      * @param int $informationId
      * @return JsonResponse
+     * @throws MyApplicationHttpException
      */
     public function deleteUserReadInformation(UserReadInformationDeleteRequest $request): JsonResponse
     {
@@ -79,9 +84,10 @@ class InformationsController extends Controller
         $userId = self::getUserId($request);
 
         // サービスの実行
-        return $this->service->removeUserReadInformation(
+        $this->service->removeUserReadInformation(
             $userId,
             (int)$request->{UserReadInformationDeleteRequest::KEY_ID}
         );
+        return ResponseLibrary::jsonResponse();
     }
 }
