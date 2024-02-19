@@ -1672,6 +1672,7 @@ RUN apk update && \
 
 ```ini
 [xhprof]
+# 下記は/usr/local/etc/php/conf.d/docker-php-ext-xhprof.iniに既に記載されている為コメントアウトでも良い
 extension=xhprof
 xhprof.output_dir=/tmp/xhprof
 ```
