@@ -1742,6 +1742,13 @@ http://localhost:3334/index.php
 ## 各プロファイル
 http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
 
+### ローカル環境に`graohviz`をインストールした状態で[View Full Callgraph]とクリックすると処理のフローイメージが表示される。(結構重い。)
+
+### Callgraph の読み方
+#### Priority: Red > Yellow > White
+#### Inc: exec time lower than current target
+#### Excl: exec time in current target
+#### Allow Image: How many times in exec
 ```
 
 以上を踏まえると計測の手順としては下記が良さそう。
