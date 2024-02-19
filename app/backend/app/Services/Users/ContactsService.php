@@ -42,7 +42,7 @@ class ContactsService
      */
     public function getCategories(): array
     {
-        return ContactsResource::toArrayForGetTextAndValueListForCategories();;
+        return ContactsResource::toArrayForGetTextAndValueListForCategories();
     }
 
     /**
