@@ -2006,3 +2006,22 @@ $ npm audit fix --force
 ```
 
 ---
+
+### Docker Container内のユーザーの変更
+
+ユーザーのUID/GUIDの確認
+
+```shell
+### www-dataが設定したいユーザー名
+id www-data
+uid=82(www-data) gid=82(www-data) groups=82(www-data),82(www-data)
+```
+
+Dockerfileにて下記を追記すればディレクトリをownerを変更出来る。(wwwディレクトリ内が全てwww-dataユーザーがownerになる。)
+
+```dockerfile
+RUN chown www-data:www-data -R /var/www
+USER www-data
+```
+
+---
