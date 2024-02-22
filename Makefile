@@ -40,7 +40,7 @@ rebuild: # 個別のコンテナを作り直し
 
 recreate-volume:
 	docker volume rm $(VOLUME_NAME) && \
-	docker volume create $(VOLUME_NAME) && \
+	docker volume create $(VOLUME_NAME)
 
 dev:
 	sh ./scripts/docker/container-dev.sh && \
