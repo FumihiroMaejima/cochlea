@@ -45,6 +45,13 @@ docker volume rm ${PROJECT_NAME}-db-store
 docker network inspect ${NETWORK_NAME} | jq '.[0].Containers | .[].IPv4Address'
 ```
 
+Docker Containerのデフォルトユーザーがrootで無い場合。
+下記でユーザーを指定すればrootユーザーでコンテナに入る事が出来る。
+
+```shell
+docker exec -u root -it php-alg_app ash
+```
+
 
 ---
 
