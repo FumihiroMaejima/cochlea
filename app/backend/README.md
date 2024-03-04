@@ -6,10 +6,10 @@ Laravel環境をDockerで構築する為の手順書
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.0.15(php:8.0.15-fpm-alpine) |
+| PHP | 8.2(php:8.2-fpm-alpine3.17) |
 | MySQL | 5.7 |
-| Nginx | 1.19(nginx:1.19-alpine) |
-| Laravel | 9.* |
+| Nginx | 1.25(nginx:1.25-alpine) |
+| Laravel | 10.* |
 
 ---
 # ローカル環境の構築(Mac)
