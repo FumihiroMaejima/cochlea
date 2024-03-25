@@ -89,16 +89,19 @@ class SortedSetLibrary extends CacheLibrary
                 );
             }
 
-            // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
-            /** @var int $setExpireResult 期限設定処理結果 */
-            $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
-                ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
+            // 期限が設定済みでは無い場合
+            if (!(0 < self::getTtl(static::SORTED_SET_RECORD_KEY))) {
+                // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
+                /** @var int $setExpireResult 期限設定処理結果 */
+                $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
+                    ->expireAt(static::SORTED_SET_RECORD_KEY, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
-            if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
-                throw new MyApplicationHttpException(
-                    StatusCodeMessages::STATUS_500,
-                    'set cache expire action is failure.'
-                );
+                if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
+                    throw new MyApplicationHttpException(
+                        StatusCodeMessages::STATUS_500,
+                        'set cache expire action is failure.'
+                    );
+                }
             }
         }
     }
