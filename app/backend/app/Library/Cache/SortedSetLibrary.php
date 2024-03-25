@@ -85,7 +85,7 @@ class SortedSetLibrary extends CacheLibrary
             if ($result <= 0) {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
-                    'set zadd cache action is failure.'
+                    'zincr cache action is failure.'
                 );
             }
 
@@ -102,6 +102,29 @@ class SortedSetLibrary extends CacheLibrary
                         'set cache expire action is failure.'
                     );
                 }
+            }
+        }
+    }
+
+    /**
+     * remove zincre or zdd cache.
+     *
+     * @param string $key
+     * @param bool $igoreResult
+     * @return void
+     */
+    public static function zRem(string $key, bool $igoreResult = false): void
+    {
+        // test時は実行しない
+        if (!self::isTesting()) {
+            $result = Redis::connection(static::REDIS_CONNECTION)
+                ->command('ZREM', [static::SORTED_SET_RECORD_KEY, $key]);
+            // 登録済みはresult = 0。これもエラーとする。
+            if ($igoreResult && $result <= 0) {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    'zrem cache action is failure.'
+                );
             }
         }
     }
