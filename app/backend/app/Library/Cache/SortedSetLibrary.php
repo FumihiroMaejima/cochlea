@@ -29,6 +29,8 @@ class SortedSetLibrary extends CacheLibrary
     private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
     private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
 
+    public const ZREVRANGE_OPTION_WITH_SCORE = 'WITHSCORES';
+
     /**
      * get cache value by Key.
      *
@@ -127,6 +129,33 @@ class SortedSetLibrary extends CacheLibrary
                 );
             }
         }
+    }
+
+    /**
+     * zet add for increment.
+     *
+     * @param string $key
+     * @param int $top
+     * @param int $end
+     * @param bool $isWithScore
+     * @return array
+     */
+    public static function zRevRange(string $key, int $top, int $end, bool $isWithScore = false): array
+    {
+        // test時は実行しない
+        if (self::isTesting()) {
+            return [];
+        }
+
+        $option = [];
+        if ($isWithScore) {
+            $option = [self::ZREVRANGE_OPTION_WITH_SCORE => true];
+        }
+
+        $result = Redis::connection(static::REDIS_CONNECTION)
+            ->command('ZREVRANGE', [static::SORTED_SET_RECORD_KEY, $top, $end, $option]);
+
+        return $result;
     }
 
     /**
