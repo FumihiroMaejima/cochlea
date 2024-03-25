@@ -11,12 +11,9 @@ use App\Exceptions\MyApplicationHttpException;
 use App\Library\Cache\CacheLibrary;
 use App\Library\Message\StatusCodeMessages;
 use App\Library\Time\TimeLibrary;
-use App\Trait\CheckHeaderTrait;
 
 class SortedSetLibrary extends CacheLibrary
 {
-    use CheckHeaderTrait;
-
     // database.phpのキー名
     protected const REDIS_CONNECTION = 'cache';
     protected const DEFAULT_CACHE_EXPIRE = 86400; // (1日=86400秒)
@@ -26,36 +23,7 @@ class SortedSetLibrary extends CacheLibrary
     private const SET_CACHE_RESULT_VALUE = 'OK';
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
 
-    private const DELETE_CACHE_RESULT_VALUE_SUCCESS = 1;
-    private const DELETE_CACHE_RESULT_VALUE_NO_DATA = 0;
-
-    public const ZREVRANGE_OPTION_WITH_SCORE = 'WITHSCORES';
-
-    /**
-     * get cache value by Key.
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public static function getByKey(string $key): mixed
-    {
-        if (self::isTesting()) {
-            return null;
-        }
-
-        // hashキーとhash内のキーの両方を配列で指定
-        $cache = Redis::connection(static::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
-
-        if (empty($cache)) {
-            return null;
-        }
-
-        if (is_array($cache)) {
-            return $cache;
-        }
-
-        return json_decode($cache, true);
-    }
+    private const ZREVRANGE_OPTION_WITH_SCORE = 'WITHSCORES';
 
     /**
      * zet add for increment.
@@ -69,18 +37,11 @@ class SortedSetLibrary extends CacheLibrary
     {
         // test時は実行しない
         if (!self::isTesting()) {
-            // 設定済みの場合は削除が必要
-            /* if (self::hasCache($key)) {
-                self::deleteCache($key);
-            } */
 
             // floatに変換
             $floatValue = (float)$value;
 
-            // $result = Redis::connection(self::REDIS_CONNECTION)->command('HSET', [$key, self::HASH_RECORD_KEY, $jsonValue]);
-            // $result = Redis::connection(static::REDIS_CONNECTION)
-                // ->command('ZADD', [static::SORTED_SET_RECORD_KEY, [$key => $floatValue]]);
-                // ->command('ZINCRBY', [static::SORTED_SET_RECORD_KEY, $key, $floatValue]);
+            // $result = Redis::connection(static::REDIS_CONNECTION)->command('ZADD', [static::SORTED_SET_RECORD_KEY, [$key => $floatValue]]);
             $result = Redis::connection(static::REDIS_CONNECTION)
                 ->command('ZINCRBY', [static::SORTED_SET_RECORD_KEY, $floatValue, $key]);
             // 登録済みはresult = 0。これもエラーとする。
@@ -156,52 +117,5 @@ class SortedSetLibrary extends CacheLibrary
             ->command('ZREVRANGE', [static::SORTED_SET_RECORD_KEY, $top, $end, $option]);
 
         return $result;
-    }
-
-    /**
-     * remove cache by request header data.
-     *
-     * @param string $key
-     * @param bool $isIgnore ignore data check result.
-     * @return bool
-     */
-    public static function deleteCache(string $key, bool $isIgnore = false): void
-    {
-        $cache = self::getByKey($key);
-
-        if (empty($cache)) {
-            if ($isIgnore || self::isTesting()) {
-                return;
-            }
-
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'cache is not exist.'
-            );
-        }
-
-        /** @var int $result 削除結果 *hashキーとhash内のキーの両方を配列で指定 */
-        $result = Redis::connection(static::REDIS_CONNECTION)->command('HDEL', [$key, self::HASH_RECORD_KEY]);
-
-        if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
-            throw new MyApplicationHttpException(
-                StatusCodeMessages::STATUS_500,
-                'delete cache action is failure.'
-            );
-        }
-    }
-
-    /**
-     * check has cache by key.
-     *
-     * @param string $key
-     * @return bool
-     */
-    public static function hasCache(string $key): bool
-    {
-        // hashキーとhash内のキーの両方を配列で指定
-        $cache = Redis::connection(static::REDIS_CONNECTION)->command('HGET', [$key, self::HASH_RECORD_KEY]);
-
-        return !empty($cache) ? true : false;
     }
 }
