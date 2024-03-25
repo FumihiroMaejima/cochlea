@@ -162,6 +162,23 @@ class CacheLibrary
     }
 
     /**
+     * set cache to redis.
+     *
+     * @param string $key
+     * @return int
+     */
+    public static function getTtl(string $key): int
+    {
+        // test時は実行しない
+        if (self::isTesting()) {
+            return -1;
+        }
+        if (!self::isTesting()) {
+            return self::getClient()->ttl($key);
+        }
+    }
+
+    /**
      * check has cache by key.
      *
      * @param string $key
