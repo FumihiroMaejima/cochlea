@@ -37,7 +37,6 @@ class SortedSetLibrary extends CacheLibrary
     {
         // test時は実行しない
         if (!self::isTesting()) {
-
             // floatに変換
             $floatValue = (float)$value;
 
