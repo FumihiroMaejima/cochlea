@@ -114,7 +114,8 @@ class SortedSetLibrary extends CacheLibrary
         }
 
         $result = Redis::connection(static::REDIS_CONNECTION)
-            ->command('ZREVRANGE', [static::SORTED_SET_RECORD_KEY, $top, $end, $option]);
+            // ->command('ZREVRANGE', [static::SORTED_SET_RECORD_KEY, $top, $end, $option]);
+            ->command('ZRANGE', [static::SORTED_SET_RECORD_KEY, $top, $end, $option]);
 
         return $result;
     }
