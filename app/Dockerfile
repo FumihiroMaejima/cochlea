@@ -52,5 +52,7 @@ RUN apk update && \
   # && \
   # composer global require hirak/prestissimo
 
+RUN chown www-data:www-data -R /var/www
+USER www-data
 
 WORKDIR /var/www/html

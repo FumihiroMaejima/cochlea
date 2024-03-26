@@ -6,10 +6,10 @@ Laravel環境をDockerで構築する為の手順書
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.0.15(php:8.0.15-fpm-alpine) |
+| PHP | 8.2(php:8.2-fpm-alpine3.17) |
 | MySQL | 5.7 |
-| Nginx | 1.19(nginx:1.19-alpine) |
-| Laravel | 9.* |
+| Nginx | 1.25(nginx:1.25-alpine) |
+| Laravel | 10.* |
 
 ---
 # ローカル環境の構築(Mac)
@@ -1742,6 +1742,13 @@ http://localhost:3334/index.php
 ## 各プロファイル
 http://localhost:3334/index.php?run={runId}&sort=fn&source=run_name
 
+### ローカル環境に`graohviz`をインストールした状態で[View Full Callgraph]とクリックすると処理のフローイメージが表示される。(結構重い。)
+
+### Callgraph の読み方
+#### Priority: Red > Yellow > White
+#### Inc: exec time lower than current target
+#### Excl: exec time in current target
+#### Allow Image: How many times in exec
 ```
 
 以上を踏まえると計測の手順としては下記が良さそう。
@@ -1996,6 +2003,25 @@ $ npm audit fix
 
 ```shell
 $ npm audit fix --force
+```
+
+---
+
+### Docker Container内のユーザーの変更
+
+ユーザーのUID/GUIDの確認
+
+```shell
+### www-dataが設定したいユーザー名
+id www-data
+uid=82(www-data) gid=82(www-data) groups=82(www-data),82(www-data)
+```
+
+Dockerfileにて下記を追記すればディレクトリをownerを変更出来る。(wwwディレクトリ内が全てwww-dataユーザーがownerになる。)
+
+```dockerfile
+RUN chown www-data:www-data -R /var/www
+USER www-data
 ```
 
 ---

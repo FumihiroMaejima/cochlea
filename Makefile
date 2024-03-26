@@ -40,7 +40,7 @@ rebuild: # 個別のコンテナを作り直し
 
 recreate-volume:
 	docker volume rm $(VOLUME_NAME) && \
-	docker volume create $(VOLUME_NAME) && \
+	docker volume create $(VOLUME_NAME)
 
 dev:
 	sh ./scripts/docker/container-dev.sh && \
@@ -238,6 +238,18 @@ redis-del:
 
 redis-hget:
 	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
+
+redis-zrevrange:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) ZREVRANGE $(REDIS_KEY) 0 5
+
+redis-zrevrange-with-scores:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) ZREVRANGE $(REDIS_KEY) 0 5 WITHSCORES
+
+redis-zincrby:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) ZINCRBY $(REDIS_KEY) 10 'testKey0'
+
+redis-zrem:
+	docker-compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) ZREM $(REDIS_KEY) 'testKey0'
 
 ##############################
 # redis cluster container
