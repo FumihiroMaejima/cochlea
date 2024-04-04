@@ -24,6 +24,7 @@ class SortedSetLibrary extends CacheLibrary
     private const SET_CACHE_EXPIRE_RESULT_VALUE = 1;
 
     private const ZREVRANGE_OPTION_WITH_SCORE = 'WITHSCORES';
+    private const ZREVRANGE_OPTION_REV = 'rev';
 
     /**
      * zet add for increment.
@@ -98,10 +99,16 @@ class SortedSetLibrary extends CacheLibrary
      * @param int $top
      * @param int $end
      * @param bool $isWithScore
+     * @param bool $isRev
      * @return array
      */
-    public static function zRevRange(string $key, int $top, int $end, bool $isWithScore = false): array
-    {
+    public static function zRevRange(
+        string $key,
+        int $top,
+        int $end,
+        bool $isWithScore = false,
+        bool $isRev = false
+    ): array {
         // test時は実行しない
         if (self::isTesting()) {
             return [];
@@ -110,6 +117,13 @@ class SortedSetLibrary extends CacheLibrary
         $option = [];
         if ($isWithScore) {
             $option = [self::ZREVRANGE_OPTION_WITH_SCORE => true];
+        }
+
+        if ($isRev) {
+            $option = array_merge(
+                $option,
+                [self::ZREVRANGE_OPTION_REV => true]
+            );
         }
 
         $result = Redis::connection(static::REDIS_CONNECTION)
