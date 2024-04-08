@@ -70,7 +70,7 @@ class CacheLibrary
         }
 
         // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
-        $cache = self::getClient()->get($key);
+        $cache = static::getClient()->get($key);
 
         if (is_null($cache)) {
             return $cache;
@@ -115,7 +115,7 @@ class CacheLibrary
             // 現在の時刻から$expire秒後のタイムスタンプを期限に設定
             /** @var int $setExpireResult 期限設定処理結果 */
             // $setExpireResult = Redis::connection(static::REDIS_CONNECTION)
-            $setExpireResult = self::getClient()
+            $setExpireResult = static::getClient()
                 ->expireAt($key, TimeLibrary::getCurrentDateTimeTimeStamp() + $expire);
 
             if ($setExpireResult !== self::SET_CACHE_EXPIRE_RESULT_VALUE) {
@@ -136,7 +136,7 @@ class CacheLibrary
      */
     public static function deleteCache(string $key, bool $isIgnore = false): void
     {
-        $cache = self::getByKey($key);
+        $cache = static::getByKey($key);
 
         if (empty($cache)) {
             if ($isIgnore || self::isTesting()) {
@@ -151,7 +151,7 @@ class CacheLibrary
 
         /** @var int $result 削除結果 */
         // $result = Redis::connection(static::REDIS_CONNECTION)->del($key);
-        $result = self::getClient()->del($key);
+        $result = static::getClient()->del($key);
 
         if (($result !== self::DELETE_CACHE_RESULT_VALUE_SUCCESS) && !$isIgnore) {
             throw new MyApplicationHttpException(
@@ -174,7 +174,7 @@ class CacheLibrary
             return -1;
         }
         if (!self::isTesting()) {
-            return self::getClient()->ttl($key);
+            return static::getClient()->ttl($key);
         }
     }
 
@@ -187,7 +187,7 @@ class CacheLibrary
     public static function hasCache(string $key): bool
     {
         // $cache = Redis::connection(static::REDIS_CONNECTION)->get($key);
-        $cache = self::getClient()->get($key);
+        $cache = static::getClient()->get($key);
 
         return $cache ? true : false;
     }
@@ -238,7 +238,7 @@ class CacheLibrary
         }
 
         // $keys = Redis::connection(static::REDIS_CONNECTION)->command('keys', ['*']);
-        $keys = self::getClient()->keys('*');
+        $keys = static::getClient()->keys('*');
 
         if (is_array($keys)) {
             return $keys;
