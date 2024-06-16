@@ -94,6 +94,8 @@ class CsvLibrary
 
         $file = new SplFileObject($path);
         $file->setFlags(SplFileObject::READ_CSV);
+        // その他下記の記述がある
+        // SplFileObject::DROP_NEW_LINE,SplFileObject::READ_AHEAD,SplFileObject::SKIP_EMPTY
         foreach ($file as $line) {
             $fileRecords[] = $line;
         }
