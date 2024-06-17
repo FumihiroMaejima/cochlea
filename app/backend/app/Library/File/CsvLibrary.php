@@ -93,9 +93,10 @@ class CsvLibrary
         $path = storage_path(self::DIRECTORY . $fileName);
 
         $file = new SplFileObject($path);
-        $file->setFlags(SplFileObject::READ_CSV);
-        // その他下記の記述がある
-        // SplFileObject::DROP_NEW_LINE,SplFileObject::READ_AHEAD,SplFileObject::SKIP_EMPTY
+        // $file->setFlags(SplFileObject::READ_CSV);
+        $file->setFlags(
+            SplFileObject::DROP_NEW_LINE|SplFileObject::READ_AHEAD|SplFileObject::READ_CSV|SplFileObject::SKIP_EMPTY
+        );
         foreach ($file as $line) {
             $fileRecords[] = $line;
         }
