@@ -8,6 +8,8 @@ use stdClass;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
 use Fiber;
+use FiberError;
+use ReflectionFiber;
 
 class FiberLibrary
 {
@@ -19,7 +21,7 @@ class FiberLibrary
     public static function getFiber(int $value): Fiber
     {
         $fiber = new Fiber(
-            function($value) {
+            function($value): int {
                 $two = Fiber::suspend($value);
                 $three = Fiber::suspend($two);
                 $four = Fiber::suspend($three);
@@ -28,6 +30,20 @@ class FiberLibrary
                 return $six;
             }
         );
+
+        return $fiber;
+    }
+
+    /**
+     * sampel suspend.
+     * @return Fiber
+     */
+    public static function sampleSuspend(): Fiber
+    {
+        $fiber = new Fiber(function (): string {
+            $value = Fiber::suspend('saple value');
+            return "catch resume $value";
+        });
 
         return $fiber;
     }

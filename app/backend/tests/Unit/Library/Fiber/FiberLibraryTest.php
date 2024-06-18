@@ -38,6 +38,20 @@ class FiberLibraryTest extends TestCase
     }
 
     /**
+     * get sample suspend data
+     * @return array
+     */
+    public static function sampleSuspendDataProvider(): array
+    {
+        return [
+            'value=test1/return=test1' => [
+                'value'  => 'test1',
+                'expect' => 'catch resume test1',
+            ],
+        ];
+    }
+
+    /**
      * test get fiber.
      *
      * @dataProvider getFiberDataProvider
@@ -54,6 +68,25 @@ class FiberLibraryTest extends TestCase
         $fiber->resume(++$value);
         $fiber->resume(++$value);
         $fiber->resume(++$value);
+
+        $this->assertEquals($expect, $fiber->getReturn());
+    }
+
+    /**
+     * test sample suspend.
+     *
+     * @dataProvider sampleSuspendDataProvider
+     * @param string $value
+     * @param string $expect
+     * @return void
+     */
+    public function testSampleSuspend(string $value, string $expect): void
+    {
+        $fiber = FiberLibrary::sampleSuspend($value);
+
+        // 初期値
+        $this->assertEquals('saple value', $fiber->start());
+        $fiber->resume($value);
 
         $this->assertEquals($expect, $fiber->getReturn());
     }
