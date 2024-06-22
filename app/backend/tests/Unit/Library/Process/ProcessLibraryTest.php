@@ -48,7 +48,6 @@ class ProcessLibraryTest extends TestCase
      */
     public function testSampleProcess(string $value, string $expect): void
     {
-
         $result = ProcessLibrary::sampleProcess();
         $this->assertEquals('.', current(explode("\n", $result)));
     }
