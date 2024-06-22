@@ -20,6 +20,8 @@ class ProcessLibrary
     {
         $process = new Process(['ls', 'app', '-a']);
         $process->run();
+        // プロセスIDの取得
+        $process->getPid();
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
