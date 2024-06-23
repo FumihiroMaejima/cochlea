@@ -29,4 +29,31 @@ class ProcessLibrary
 
         return $process->getOutput();
     }
+
+    /**
+     * sampel artisan command process.
+     * @return void
+     */
+    public static function sampleArtisanCommandProcess(): void
+    {
+        $processeList = [
+            new Process(['php', 'artisan', 'debug:test1', 'value1']),
+            new Process(['php', 'artisan', 'debug:test1', 'value2']),
+        ];
+
+        foreach ($processeList as $i => $process) {
+            $process->start(); // bashを実行
+            sleep(1); // プロセスが順番に起動させる為にwait
+        }
+
+        do {
+            $isRunning = false;
+            foreach ($processeList as $i => $process) {
+                echo $process->getIncrementalOutput(); // 標準出力
+                if ($process->isRunning()) {
+                    $isRunning = true;
+                }
+            }
+        } while($isRunning);
+    }
 }
