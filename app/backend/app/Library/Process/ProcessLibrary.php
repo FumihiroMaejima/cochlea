@@ -37,8 +37,8 @@ class ProcessLibrary
     public static function sampleArtisanCommandProcess(): void
     {
         $processeList = [
-            new Process(['php', 'artisan', 'debug:test1', 'value1']),
-            new Process(['php', 'artisan', 'debug:test1', 'value2']),
+            new Process(['php', 'artisan', 'debug:test1', 'value1'], env: ['PROCESS_VALUE' => 1]),
+            new Process(['php', 'artisan', 'debug:test1', 'value2'], env: ['PROCESS_VALUE' => 2]),
         ];
 
         foreach ($processeList as $i => $process) {
