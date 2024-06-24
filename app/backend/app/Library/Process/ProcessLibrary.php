@@ -43,6 +43,9 @@ class ProcessLibrary
 
         foreach ($processeList as $i => $process) {
             $process->start(); // bashを実行
+            if ($process->isRunning()) {
+                echo "...\n";
+            }
             sleep(1); // プロセスが順番に起動させる為にwait
         }
 
