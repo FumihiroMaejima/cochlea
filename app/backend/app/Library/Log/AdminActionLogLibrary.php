@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -83,6 +84,13 @@ class AdminActionLogLibrary
         $startTime = microtime(true);
 
         $response = $next($request);
+
+        // 管理者の取得
+        $admin = Auth::guard('api-admins')->user();
+        // 管理者を取得出来ない場合
+        if (empty($admin) || empty($admin->id)) {
+            return $response;
+        }
 
         $responseTime = (string)(microtime(true) - $startTime);
         $memory = memory_get_usage();
