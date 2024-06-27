@@ -22,6 +22,10 @@ class AdminActionLog
      */
     public function handle(Request $request, Closure $next)
     {
+        // 管理画面以外
+        if (!str_contains($request->url(), '/admin')) {
+            return $next($request);
+        }
         if (AdminActionLogLibrary::isExcludePath($request->path())) {
             return $next($request);
         }
