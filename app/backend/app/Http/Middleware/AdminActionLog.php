@@ -22,8 +22,6 @@ class AdminActionLog
      */
     public function handle(Request $request, Closure $next)
     {
-        $test1 = $request->route()?->getName() ?? null;
-        // $test2 = request()->route()->getName();
         if (AdminActionLogLibrary::isExcludePath($request->path())) {
             return $next($request);
         }
@@ -48,6 +46,8 @@ class AdminActionLog
         $startTime = microtime(true);
 
         $response = $next($request);
+
+        $routeName= request()->route()?->getName();
 
         $responseTime = (string)(microtime(true) - $startTime);
         $memory = memory_get_usage();
