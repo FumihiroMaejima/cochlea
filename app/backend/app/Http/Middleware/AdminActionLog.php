@@ -10,6 +10,7 @@ use App\Library\Log\AdminActionLogLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AdminActionLog
 {
@@ -26,6 +27,11 @@ class AdminActionLog
         if (!str_contains($request->url(), '/admin')) {
             return $next($request);
         }
+        // GETリクエストは対象外
+        if ($request->getMethod() === 'GET') {
+            return $next($request);
+        }
+
         if (AdminActionLogLibrary::isExcludePath($request->path())) {
             return $next($request);
         }
@@ -52,6 +58,15 @@ class AdminActionLog
         $response = $next($request);
 
         $routeName= request()->route()?->getName();
+        $descriptionPrefix = 'アクション';
+        foreach (AdminActionLogLibrary::ROUTE_NAME_LIST as $key => $name) {
+            if (str_contains($routeName, $key)) {
+                $descriptionPrefix = $name;
+                break;
+            }
+        }
+        $admin = Auth::guard('api-admins')->user();
+        $adminId = $admin ? $admin->id : 0;
 
         $responseTime = (string)(microtime(true) - $startTime);
         $memory = memory_get_usage();
@@ -59,7 +74,7 @@ class AdminActionLog
 
         [$statusCode] = AdminActionLogLibrary::getLogParameterByResponse($response);
 
-        $description = '';
+        $description = "管理者ID=$adminId さんが $descriptionPrefix" . 'しました。';
 
         // log出力
         AdminActionLogLibrary::outputLog(

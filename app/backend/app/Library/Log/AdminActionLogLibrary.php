@@ -47,6 +47,12 @@ class AdminActionLogLibrary
         '_debugbar',
     ];
 
+    public const ROUTE_NAME_LIST = [
+        'auth' => 'ログイン',
+        'logout' => 'ログアウト',
+        'sampleImageUploader1' => 'テストアップロード処理',
+    ];
+
     /**
      * check current path is log exclude path.
      *
@@ -167,9 +173,9 @@ class AdminActionLogLibrary
             self::LOG_KEY_REQUEST_HOST             => $host,
             self::LOG_KEY_REQUEST_IP               => $ip,
             self::LOG_KEY_REQUEST_CONTENT_TYPE     => $contentType,
-            self::LOG_KEY_REQUEST_HEADERS          => $headers,
+            // self::LOG_KEY_REQUEST_HEADERS          => $headers,
             self::LOG_KEY_REQUEST_REQUEST_CONTENT  => $requestContent,
-            self::LOG_KEY_REQUEST_PLATHOME         => $plathome,
+            // self::LOG_KEY_REQUEST_PLATHOME         => $plathome,
             self::LOG_KEY_REQUEST_DESCRIPTION      => $description,
             self::LOG_KEY_REQUEST_PROCESS_ID       => $pid,
             self::LOG_KEY_REQUEST_MEMORY_BYTE      => $memory,
