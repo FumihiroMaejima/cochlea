@@ -21,7 +21,7 @@ class FiberLibrary
     public static function getFiber(int $value): Fiber
     {
         $fiber = new Fiber(
-            function($value): int {
+            function ($value): int {
                 $two = Fiber::suspend($value);
                 $three = Fiber::suspend($two);
                 $four = Fiber::suspend($three);

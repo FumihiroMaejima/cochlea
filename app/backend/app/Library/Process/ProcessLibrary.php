@@ -57,6 +57,6 @@ class ProcessLibrary
                     $isRunning = true;
                 }
             }
-        } while($isRunning);
+        } while ($isRunning);
     }
 }
