@@ -613,3 +613,17 @@ yarn debug
 ```
 
 ---
+
+# licenses
+
+```shell
+
+### 一覧出力
+yarn licenses list
+
+### LINCENSESの出力
+yarn licenses generate-disclaimer
+```
+
+---
+
