@@ -24,7 +24,7 @@ class AdminActionLog
     public function handle(Request $request, Closure $next)
     {
         // 管理画面以外
-        if (!str_contains($request->url(), '/admin')) {
+        if (!str_contains($request->url(), '/admin/')) {
             return $next($request);
         }
         // GETリクエストは対象外
@@ -56,6 +56,11 @@ class AdminActionLog
         $startTime = microtime(true);
 
         $response = $next($request);
+
+        // リクエストが失敗している場合はログに出力しない
+        if (!AdminActionLogLibrary::isSuccess($response)) {
+            return $response;
+        }
 
         $routeName= request()->route()?->getName();
         $descriptionPrefix = 'アクション';
