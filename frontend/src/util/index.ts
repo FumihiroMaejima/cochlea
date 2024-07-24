@@ -169,6 +169,33 @@ export const readFileDataAsBinaryString = async (
 }
 
 /**
+ * 画像の縦横サイズの取得
+ * @param {File} file
+ * @return {Promise<number[]>}
+ */
+export const getImageWidthAndHeight = async (file: File): Promise<number[]> => {
+  const image = new Image()
+  return new Promise(
+    (resolve: (param: number[]) => void, reject: (reason: unknown) => void) => {
+      image.onload = () => {
+        const width = image.naturalWidth
+        const height = image.naturalHeight
+        // 読み込んだ結果をresolve(解決)する
+        resolve([width, height])
+      }
+
+      image.onerror = (error) => {
+        // throw new Error('get width, height error: ' + (typeof error === 'string') ? error : '')
+        reject(error)
+      }
+
+      // 読み込み
+      image.src = URL.createObjectURL(file)
+    }
+  )
+}
+
+/**
  * 日付の形式(yyyy/mm/dd)のチェック
  * @param {string} value
  * @return {boolean}
