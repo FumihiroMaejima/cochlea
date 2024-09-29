@@ -227,7 +227,7 @@ Dockerコンテナを用意した為もうnpmコマンドを利用する必要�
 下記でSwaggerエディターとSwaggerUIのコンテナを立ち上げる。(UI,Mockコンテナはやや立ち上がりに時間がかかる(1分ほど？))
 
 ```shell
-docker-compose -f ./docker-compose.swagger.yml up -d
+docker compose -f ./docker-compose.swagger.yml up -d
 
 # editor
 http://localhost:8100
