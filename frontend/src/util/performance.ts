@@ -12,7 +12,9 @@ import { performance } from 'perf_hooks'
 /* eslint-disable-next-line */
 export const checkPerformance = (name: string, callback: any): void => {
   const startTime = performance.now()
-  callback()
+  if (typeof callback === 'function') {
+    callback()
+  }
   const endTime = performance.now()
 
   console.log('performance %s: %d ms', name, `${endTime - startTime}`) // per ＊/ms
