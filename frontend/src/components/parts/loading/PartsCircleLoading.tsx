@@ -4,7 +4,7 @@ import React from 'react'
   open: boolean
 } */
 
-export const PartsCircleLoading: React.VFC = () => {
+export const PartsCircleLoading: React.FC = () => {
   return (
     <div className="parts-circle-loading">
       <div className="parts-circle-loading__content">

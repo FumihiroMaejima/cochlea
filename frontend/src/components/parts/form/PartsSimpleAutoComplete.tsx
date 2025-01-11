@@ -26,7 +26,7 @@ type Props = {
   disabled?: boolean
 }
 
-export const PartsSimpleAutoComplete: React.VFC<Props> = ({
+export const PartsSimpleAutoComplete: React.FC<Props> = ({
   value = undefined,
   // onInput = undefined,
   // onChange = undefined,
@@ -81,7 +81,7 @@ export const PartsSimpleAutoComplete: React.VFC<Props> = ({
    * @return {(Record<'text', string> & Record<'value', number>)[]}
    */
   const getSelectedChipItems = (
-    v: string | number | readonly string[] | undefined
+    v: string | number | readonly string[] | undefined,
   ): (Record<'text', string> & Record<'value', number>)[] => {
     if (v) {
       if (typeof v === 'string') {
@@ -160,13 +160,13 @@ export const PartsSimpleAutoComplete: React.VFC<Props> = ({
             ? items
             : items.filter(
                 (
-                  item: Record<string, string | number | string[] | undefined>
+                  item: Record<string, string | number | string[] | undefined>,
                 ) => {
                   const keyText = item[itemText]
                   return typeof keyText === 'string'
                     ? keyText.match(searchValue)
                     : false
-                }
+                },
               )
         }
         // multiple={false}

@@ -43,7 +43,7 @@ export const sortArrayNumbersDesc = (nums: number[]): number[] => {
  */
 export const getMultiSelectLabel = (
   value: number[],
-  items: SelectBoxType[]
+  items: SelectBoxType[],
 ): string[] => {
   return items
     .filter((item) => value.includes(item.value))
@@ -108,7 +108,7 @@ export const getFloorRandomInt = (maxNumber: number): number => {
  * @return {Promise<string | ArrayBuffer | null>}
  */
 export const readFileDataAsText = async (
-  file: File
+  file: File,
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise(
     (resolve: (param: string | ArrayBuffer | null) => void) => {
@@ -120,7 +120,7 @@ export const readFileDataAsText = async (
       }
       // 読み込み
       reader.readAsText(file)
-    }
+    },
   )
 }
 
@@ -130,7 +130,7 @@ export const readFileDataAsText = async (
  * @return {Promise<string | ArrayBuffer | null>}
  */
 export const readFileDataAsDataURL = async (
-  file: File
+  file: File,
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise(
     (resolve: (param: string | ArrayBuffer | null) => void) => {
@@ -142,7 +142,7 @@ export const readFileDataAsDataURL = async (
       }
       // 読み込み
       reader.readAsDataURL(file)
-    }
+    },
   )
 }
 
@@ -152,7 +152,7 @@ export const readFileDataAsDataURL = async (
  * @return {Promise<string | ArrayBuffer | null>}
  */
 export const readFileDataAsBinaryString = async (
-  file: File
+  file: File,
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise(
     (resolve: (param: string | ArrayBuffer | null) => void) => {
@@ -164,7 +164,34 @@ export const readFileDataAsBinaryString = async (
       }
       // 読み込み
       reader.readAsBinaryString(file)
-    }
+    },
+  )
+}
+
+/**
+ * 画像の縦横サイズの取得
+ * @param {File} file
+ * @return {Promise<number[]>}
+ */
+export const getImageWidthAndHeight = async (file: File): Promise<number[]> => {
+  const image = new Image()
+  return new Promise(
+    (resolve: (param: number[]) => void, reject: (reason: unknown) => void) => {
+      image.onload = () => {
+        const width = image.naturalWidth
+        const height = image.naturalHeight
+        // 読み込んだ結果をresolve(解決)する
+        resolve([width, height])
+      }
+
+      image.onerror = (error) => {
+        // throw new Error('get width, height error: ' + (typeof error === 'string') ? error : '')
+        reject(error)
+      }
+
+      // 読み込み
+      image.src = URL.createObjectURL(file)
+    },
   )
 }
 
@@ -185,7 +212,7 @@ export const checkDateFormat = (value: string): boolean => {
 export const checkDateTimeFormat = (value: string): boolean => {
   return (
     value.match(
-      /^[0-9]{4}\/[0-9]{2}\/[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}/u
+      /^[0-9]{4}\/[0-9]{2}\/[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}/u,
     ) !== null
   )
 }

@@ -4,7 +4,7 @@ type Props = {
   showPosition?: number
 }
 
-export const GlobalBackToPageTopButton: React.VFC<Props> = ({
+export const GlobalBackToPageTopButton: React.FC<Props> = ({
   showPosition = 100, //ボタンを表示させ始める位置
 }) => {
   const [isButtonActive, setIsButtonActive] = useState(false)

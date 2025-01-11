@@ -9,7 +9,7 @@ type Props = {
   isUpAndDown?: boolean
 }
 
-export const PartsSimpleHeading: React.VFC<Props> = ({
+export const PartsSimpleHeading: React.FC<Props> = ({
   text = '',
   color = 'dark-grey',
   isDashed = false,

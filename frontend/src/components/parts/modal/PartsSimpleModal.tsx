@@ -6,7 +6,7 @@ type Props = {
   closeModalHandler: () => void
 }
 
-export const PartsSimpleModal: React.VFC<Props> = ({
+export const PartsSimpleModal: React.FC<Props> = ({
   isOpen = false,
   hideOnClickOutSide = false,
   closeModalHandler = () => {

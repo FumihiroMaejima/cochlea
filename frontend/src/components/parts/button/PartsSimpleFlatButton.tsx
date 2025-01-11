@@ -7,7 +7,7 @@ type Props = {
   textColor?: ColorType
 }
 
-export const PartsSimpleFlatButton: React.VFC<Props> = ({
+export const PartsSimpleFlatButton: React.FC<Props> = ({
   icon = '',
   color = 'dark-grey',
   textColor = 'white',

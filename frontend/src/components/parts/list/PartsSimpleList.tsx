@@ -8,7 +8,7 @@ type Props = {
   textColor?: ColorType
 }
 
-export const PartsSimpleList: React.VFC<Props> = ({
+export const PartsSimpleList: React.FC<Props> = ({
   items = [],
   color = 'dark-grey',
   textColor = 'dark-grey',

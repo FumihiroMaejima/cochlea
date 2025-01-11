@@ -6,7 +6,7 @@
  */
 export const getFileObjectByUrl = async (
   url: string,
-  fileName = 'image.png'
+  fileName = 'image.png',
 ): Promise<File> => {
   return await fetch(url)
     .then((response: Response) => response.blob())
@@ -25,7 +25,7 @@ export const getFileObjectByUrl = async (
  */
 export const createFileRequestFormData = (
   file: File,
-  key = 'file'
+  key = 'file',
 ): FormData => {
   const data = new FormData()
   data.append(key, file)

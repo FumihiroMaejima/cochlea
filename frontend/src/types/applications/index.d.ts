@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { AxiosResponse, AxiosError, AxiosResponseHeaders } from 'axios'
+import {
+  AxiosResponse,
+  AxiosError,
+  AxiosResponseHeaders,
+  RawAxiosResponseHeaders,
+} from 'axios'
 
 export type ToastType = {
   add(args: ToastData): void
@@ -32,7 +37,7 @@ export type ServerRequestType<T = any> = {
 export type ServerRequestResponseType<T = any> = {
   data: T | AxiosError<ServerErrorResponseType>
   status: number
-  headers: AxiosResponseHeaders
+  headers: RawAxiosResponseHeaders | AxiosResponseHeaders
 }
 
 export type ServerErrorResponseType = {

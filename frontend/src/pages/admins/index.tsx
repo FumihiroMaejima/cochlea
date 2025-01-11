@@ -30,7 +30,7 @@ const simpleTableData: SimpleTableDataType[] = [
   { label1: 'v7', label2: 'v8', label3: 'v9' },
 ]
 
-export const Admins: React.VFC = () => {
+export const Admins: React.FC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const { adminsState, getAdminsRequest } = useAdmins()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)

@@ -6,7 +6,7 @@ type Props = {
   color: ColorType
 }
 
-export const PartsLabelHeader: React.VFC<Props> = (props) => {
+export const PartsLabelHeader: React.FC<Props> = (props) => {
   return (
     <h2 className={`parts-label-header parts-label-header__${props.color}`}>
       {props.text}

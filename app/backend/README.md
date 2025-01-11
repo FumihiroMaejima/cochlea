@@ -214,9 +214,9 @@ $ composer create-project laravel/laravel=7.* --prefer-dist backend
 ＊コンテナイメージの作り直し時も同様
 
 ```shell
-$ docker-compose down --rmi all
-$ docker-compose down
-$ docker-compose up -d
+$ docker compose down --rmi all
+$ docker compose down
+$ docker compose up -d
 
 ```
 
@@ -281,10 +281,12 @@ vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resour
 vendor/bin/phpunit tests/Unit/ExampleTest --testdox
 vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
+### deprecatedを表示したい場合
+vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php -display-phpunit-deprecations
 
 # Dockerコンテナ内で実行する場合
-docker-compose exec app vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
-docker-compose exec app vendor/bin/phpunit tests/Feature/Service/Admins/AdminsServiceTest.php --testdox
+docker compose exec app vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
+docker compose exec app vendor/bin/phpunit tests/Feature/Service/Admins/AdminsServiceTest.php --testdox
 ```
 
 カバレッジ出力
@@ -293,7 +295,7 @@ docker コマンド経由で実行する場合は相対パスが変わる。
 
 ```shell
 vendor/bin/phpunit --coverage-text --colors=never > storage/logs/coverage.log
-docker-compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
+docker compose exec app vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
 ```
 
 `--testdox`と`--coverage-text`を同時に指定すると、textdoxの内容がcoverage.logに出力される。
@@ -338,7 +340,7 @@ DB_PASSWORD=
 マイグレーションは必ずコンテナの内部で実行すること
 
 ```shell
-$ docker-compose exec app php artisan migrate
+$ docker compose exec app php artisan migrate
 Migration table created successfully.
 Migrating: 2014_10_12_000000_create_users_table
 Migrated:  2014_10_12_000000_create_users_table (0.07 seconds)
@@ -351,7 +353,7 @@ DBのテーブル内の状態を初期化したい場合は、refreshコマン�
 データベース全体を作り直すことが出来る。
 
 ```shell
-$ docker-compose exec app php artisan migrate:refresh
+$ docker compose exec app php artisan migrate:refresh
 Rolling back: 2019_08_19_000000_create_failed_jobs_table
 Rolled back:  2019_08_19_000000_create_failed_jobs_table (0.08 seconds)
 Rolling back: 2014_10_12_000000_create_users_table
@@ -399,7 +401,7 @@ laravel/uiのインストール(Larevel 8以降は不要。)
 メモリ消費量が大きい為、コンテナ側で実行する。(php.iniの設定)
 
 ```shell
-$ docker-compose exec app composer require laravel/ui
+$ docker compose exec app composer require laravel/ui
 ```
 
 認証系のファイルの作成
@@ -419,7 +421,7 @@ $ php artisan jetstream:install livewire
 マイグレーションの実行
 
 ```shell
-$ docker-compose exec app php artisan migrate
+$ docker compose exec app php artisan migrate
 ```
 
 アセットのコンパイル

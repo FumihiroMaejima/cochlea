@@ -7,7 +7,7 @@ type Props = {
   textColor?: ColorType
 }
 
-export const PartsCircleButton: React.VFC<Props> = ({
+export const PartsCircleButton: React.FC<Props> = ({
   text = 'text',
   color = 'dark-grey',
   textColor = 'white',

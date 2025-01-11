@@ -15,7 +15,7 @@ type Props = {
   readOnly?: boolean
 }
 
-export const PartsSimpleTextField: React.VFC<Props> = ({
+export const PartsSimpleTextField: React.FC<Props> = ({
   value = '',
   className = undefined,
   id = undefined,

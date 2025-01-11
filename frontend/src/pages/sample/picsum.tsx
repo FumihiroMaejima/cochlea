@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { PartsLabelHeading } from '@/components/parts/heading/PartsLabelHeading'
 import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeading'
 
-export const Picsum: React.VFC = () => {
+export const Picsum: React.FC = () => {
   const baseImageHost = 'https://picsum.photos/'
 
   return (

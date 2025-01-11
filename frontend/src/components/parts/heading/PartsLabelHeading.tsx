@@ -9,7 +9,7 @@ type Props = {
   isUpAndDown?: boolean
 }
 
-export const PartsLabelHeading: React.VFC<Props> = ({
+export const PartsLabelHeading: React.FC<Props> = ({
   text = '',
   color = 'dark-grey',
   isDashed = false,

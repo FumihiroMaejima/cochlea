@@ -32,14 +32,14 @@ showMessage ${START_MESSAGE}
 # parameter check
 if [ "$1" != '' ]; then
   if [ "$2" == 'dryRun' ]; then
-    docker-compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 ${DRY_RUN_OPTION} < ${OUTPUT_PATH}${OUTPUT_FILE}
+    docker compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 ${DRY_RUN_OPTION} < ${OUTPUT_PATH}${OUTPUT_FILE}
   else
     # -T is required to avoid error: the input device is not a TTY
-    docker-compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 < ${OUTPUT_PATH}${OUTPUT_FILE}
+    docker compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 < ${OUTPUT_PATH}${OUTPUT_FILE}
   fi
 else
   # command.
-  docker-compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} < ${OUTPUT_PATH}${OUTPUT_FILE}
+  docker compose exec -T ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} < ${OUTPUT_PATH}${OUTPUT_FILE}
 fi
 
 showMessage 'import data base.'

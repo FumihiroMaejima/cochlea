@@ -8,7 +8,7 @@ import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProvid
 import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
 import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
-export const Members: React.VFC = () => {
+export const Members: React.FC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const { membersState, getMembersRequest } = useMembers()
   const { updateGlobalLoading } = useContext(GlobalLoadingContext)

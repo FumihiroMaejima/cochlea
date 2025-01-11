@@ -11,7 +11,7 @@ type Props = {
   routes?: AppRouteType[]
 }
 
-export const AuthGlobalHeader: React.VFC<Props> = ({ routes = [] }) => {
+export const AuthGlobalHeader: React.FC<Props> = ({ routes = [] }) => {
   // ナビゲーションメニューの開閉フラグ
   const [isOpen, updateOpenStatus] = useState(false)
   const { logout } = useContext(AuthAppContext)
@@ -89,7 +89,7 @@ export const AuthGlobalHeader: React.VFC<Props> = ({ routes = [] }) => {
       // Router外の為baseNameも指定
       // location.assign('/admin/login')
       location.assign(
-        process.env.NODE_ENV === 'production' ? '/admin/login' : '/login'
+        process.env.NODE_ENV === 'production' ? '/admin/login' : '/login',
       )
     } else {
       updateToastState('Logout Filed', 'error', true)
@@ -132,17 +132,17 @@ export const AuthGlobalHeader: React.VFC<Props> = ({ routes = [] }) => {
           <div className="global-header__navigation-item">
             {routes.map((route, i) => (
               <Link
-                // className="global-header__navigation-item-button"
+                className="global-header__navigation-item-button"
                 key={i}
                 href={route.path}
               >
-                {/* {route.shortTitle} */}
-                <a
+                {route.shortTitle}
+                {/* <a
                   className="global-header__navigation-item-button"
                   href={route.path}
                 >
                   {route.shortTitle}
-                </a>
+                </a> */}
               </Link>
             ))}
             {/* <a

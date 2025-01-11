@@ -89,7 +89,7 @@ export function useAdmins() {
   const updateAdminTextData = (
     index: number,
     key: AdminTextKeys,
-    value: string
+    value: string,
   ) => {
     dispatch({
       admins: adminsState.admins.map((admin, i) => {
@@ -111,7 +111,7 @@ export function useAdmins() {
   const updateAdminNumberData = (
     index: number,
     key: AdminSelectKeys,
-    value: number
+    value: number,
   ) => {
     dispatch({
       admins: adminsState.admins.map((admin, i) => {
@@ -139,7 +139,7 @@ export function useAdmins() {
    * @return {void}
    */
   const getAdminsRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -147,7 +147,7 @@ export function useAdmins() {
         config.endpoint.admins.admins,
         {
           headers: options.headers,
-        }
+        },
       )
       .then((response) => {
         // TODO remove comment out

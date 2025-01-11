@@ -10,7 +10,7 @@ type Props = {
   isDouble?: boolean
 }
 
-export const PartsTitleBox: React.VFC<Props> = ({
+export const PartsTitleBox: React.FC<Props> = ({
   text = '',
   title = 'title',
   color = 'dark-grey',
@@ -22,8 +22,8 @@ export const PartsTitleBox: React.VFC<Props> = ({
     <div
       className={`parts-title-box util-border-full-solid-2p__color--${color} util-border-radius__round--5p util-color__text--${textColor}
        ${isDashed ? `util-border-full-dash__color--${color}` : ''} ${
-        isDouble ? 'parts-title-box__double' : ''
-      }
+         isDouble ? 'parts-title-box__double' : ''
+       }
       `}
     >
       <span
