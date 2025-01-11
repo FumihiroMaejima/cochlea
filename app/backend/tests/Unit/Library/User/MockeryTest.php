@@ -62,13 +62,13 @@ class MockeryTest extends TestCase
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @param string $value
+     * @param string $password
      * @param array $user
      * @param bool $expect
      * @return void
      */
     public function testValidateUserPassword(
-        string $value,
+        string $password,
         array $user,
         bool $expect
     ): void {
@@ -83,7 +83,7 @@ class MockeryTest extends TestCase
         $mock2 = (new Mockery())->mock('overload:'.Hash::class);
         $mock2->shouldReceive('check')->once()->andReturn(true);
 
-        $result = UserLibrary::validateUserPassword($value, $user);
+        $result = UserLibrary::validateUserPassword($password, $user);
         // Mockery::close();
 
         $this->assertEquals($result, $expect);
