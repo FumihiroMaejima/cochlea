@@ -98,16 +98,22 @@ services:
       default:
 
   mail:
-    image: mailhog/mailhog
+    # image: mailhog/mailhog
+    image: axllent/mailpit:latest
     container_name: ${PROJECT_NAME}_mail
     volumes:
       - mail-volume:/tmp
     ports:
-      - "${MAIL_PORT}:8025"
+      - "${MAIL_PORT}:8025" # SMTP
+      - "${MAIL_WEB_PORT:-1025}:1025"
     environment:
       TZ: "Asia/Tokyo"
       # MH_STORAGE: maildir
-      MH_MAILDIR_PATH: /tmp
+      # MH_MAILDIR_PATH: /tmp
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /tmp/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
       default:
 
