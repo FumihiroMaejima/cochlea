@@ -4,7 +4,7 @@ type Props = {
   isOpen?: boolean
 }
 
-export const PartsSimpleCarousel: React.VFC<Props> = () => {
+export const PartsSimpleCarousel: React.FC<Props> = () => {
   return (
     <section className="parts-simple-carousel" aria-label="Gallery">
       <ol className="parts-simple-carousel__viewport">

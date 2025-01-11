@@ -11,7 +11,7 @@ const defaultContextValue: UseToastType = {
   updateToastState: (
     message: string,
     status: StatusType,
-    isDisplay: boolean
+    isDisplay: boolean,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
   ) => {},
 }

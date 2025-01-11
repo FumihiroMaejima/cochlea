@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { JSX, useContext } from 'react'
 import Head from 'next/head'
 /* import type {
   NextPage,
@@ -49,7 +49,7 @@ export type GlobalNavigationGuardHandlerType = {
   return { props: { posts } };
 } */
 
-export const Layout: React.VFC<Props> = ({ children = undefined }) => {
+export const Layout: React.FC<Props> = ({ children = undefined }) => {
   const { getAuthId } = useContext(AuthAppContext)
 
   // return <>{children}</>
@@ -64,7 +64,7 @@ export const Layout: React.VFC<Props> = ({ children = undefined }) => {
       {getAuthId() !== null ? (
         <AuthGlobalHeader
           routes={routes.filter(
-            (route) => !(route.path === '/login' || route.path === '*')
+            (route) => !(route.path === '/login' || route.path === '*'),
           )}
         />
       ) : (

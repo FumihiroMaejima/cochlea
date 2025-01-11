@@ -1,6 +1,4 @@
-// TODO install @types/node error, but not resolved,
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { performance } = require('perf_hooks')
+import { performance } from 'perf_hooks'
 // import performance from 'perf_hooks'
 // NOTICE
 //Node.jsでPerformation API(performanceオブジェクト)を使用する為には pref_hookモジュールをインポートする必要がある。
@@ -14,7 +12,7 @@ const { performance } = require('perf_hooks')
 /* eslint-disable-next-line */
 export const checkPerformance = (name: string, callback: any): void => {
   const startTime = performance.now()
-  callback
+  callback()
   const endTime = performance.now()
 
   console.log('performance %s: %d ms', name, `${endTime - startTime}`) // per ＊/ms
@@ -65,7 +63,7 @@ export const sortArrayNumbersDesc = (nums: number[]): number[] => {
  */
 export const getMultiSelectLabel = (
   value: number[],
-  items: SelectBoxType[]
+  items: SelectBoxType[],
 ): string[] => {
   return items
     .filter((item) => value.includes(item.value))
@@ -130,7 +128,7 @@ export const getFloorRandomInt = (maxNumber: number): number => {
  * @return {Promise<string | ArrayBuffer | null>}
  */
 export const readFileDataAsText = async (
-  file: File
+  file: File,
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise(
     (resolve: (param: string | ArrayBuffer | null) => void) => {
@@ -142,7 +140,7 @@ export const readFileDataAsText = async (
       }
       // 読み込み
       reader.readAsText(file)
-    }
+    },
   )
 }
 
@@ -152,7 +150,7 @@ export const readFileDataAsText = async (
  * @return {Promise<string | ArrayBuffer | null>}
  */
 export const readFileDataAsDataURL = async (
-  file: File
+  file: File,
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise(
     (resolve: (param: string | ArrayBuffer | null) => void) => {
@@ -164,7 +162,7 @@ export const readFileDataAsDataURL = async (
       }
       // 読み込み
       reader.readAsDataURL(file)
-    }
+    },
   )
 }
 
@@ -185,7 +183,7 @@ export const checkDateFormat = (value: string): boolean => {
 export const checkDateTimeFormat = (value: string): boolean => {
   return (
     value.match(
-      /^[0-9]{4}\/[0-9]{2}\/[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}/u
+      /^[0-9]{4}\/[0-9]{2}\/[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}/u,
     ) !== null
   )
 }

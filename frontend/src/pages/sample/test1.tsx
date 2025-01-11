@@ -7,7 +7,7 @@ import { PartsSimpleHeading } from '@/components/parts/heading/PartsSimpleHeadin
 import { PartsSimpleCarousel } from '@/components/parts/carousel/PartsSimpleCarousel'
 import { PartsSimpleModal } from '@/components/parts/modal/PartsSimpleModal'
 
-export const Test1: React.VFC = () => {
+export const Test1: React.FC = () => {
   const baseImageHost = 'https://picsum.photos/'
 
   const [isOpenModal, updateOpenModalFlad] = useState(false)
@@ -27,7 +27,7 @@ export const Test1: React.VFC = () => {
    */
   const openModalHandler: MouseEventHandler<HTMLButtonElement> = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     changeOpenModalValueHandler()
   }

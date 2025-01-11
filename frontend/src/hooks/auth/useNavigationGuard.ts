@@ -25,7 +25,7 @@ export function useNavigationGuard(): GlobalNavigationGuardHandlerType {
     // navigate('/login', { replace: true })
     // データの初期化も兼ねてグローバルなLocationクラスを利用する
     location.assign(
-      process.env.NODE_ENV === 'production' ? '/admin/login' : '/login'
+      process.env.NODE_ENV === 'production' ? '/admin/login' : '/login',
     )
   }
 
@@ -37,7 +37,7 @@ export function useNavigationGuard(): GlobalNavigationGuardHandlerType {
     async (): Promise<void> => {
       const currentRoute = routes.find(
         // (route) => route.path === locationState.pathname
-        (route) => route.path === routerState.pathname
+        (route) => route.path === routerState.pathname,
       )
 
       // 認証が必要なページ
@@ -54,7 +54,7 @@ export function useNavigationGuard(): GlobalNavigationGuardHandlerType {
             if (
               !getAuthAuthority().some((role) =>
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                currentRoute.permissions!.includes(role)
+                currentRoute.permissions!.includes(role),
               )
             ) {
               // 認可されていないユーザーの場合

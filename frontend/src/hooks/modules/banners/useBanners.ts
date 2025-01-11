@@ -77,7 +77,7 @@ export function useBanners() {
   const updateBannerTextData = (
     index: number,
     key: BannerTextKeys,
-    value: string
+    value: string,
   ) => {
     dispatch({
       banners: bannersState.banners.map((banner, i) => {
@@ -100,7 +100,7 @@ export function useBanners() {
   const updateBannerNumberData = (
     index: number,
     key: BannerSelectKeys,
-    value: number
+    value: number,
   ) => {
     dispatch({
       banners: bannersState.banners.map((banner, i) => {
@@ -129,7 +129,7 @@ export function useBanners() {
    * @return {void}
    */
   const setBannerFileObjectList = async (
-    banners: BannerType[]
+    banners: BannerType[],
   ): Promise<void> => {
     const fileObjectList: Record<number, File> = {}
     // 直列でファイルオブジェクトを取得
@@ -150,7 +150,7 @@ export function useBanners() {
    */
   const updateBannerFileObject = (
     index: number,
-    file: File | undefined
+    file: File | undefined,
   ): void => {
     const banner = bannersState.banners[index]
     if (!banner || !bannersState.images) {
@@ -182,7 +182,7 @@ export function useBanners() {
    * @return {void}
    */
   const getBannersRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     const response = await useRequest()
@@ -190,7 +190,7 @@ export function useBanners() {
         config.endpoint.banners.banners,
         {
           headers: options.headers,
-        }
+        },
       )
       .then((response) => {
         const data = response.data as ServerRequestType<BannerType[]>
@@ -217,7 +217,7 @@ export function useBanners() {
    * @return {void}
    */
   const getBannersCsvFileRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -231,8 +231,8 @@ export function useBanners() {
           makeDataUrl(data, response.headers['content-type']),
           response.headers['content-disposition'].replace(
             'attachment; filename=',
-            ''
-          )
+            '',
+          ),
         )
         return { data: response.data, status: 200 }
       })
@@ -250,7 +250,7 @@ export function useBanners() {
    * @return {void}
    */
   const getBannerTemplateRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -259,7 +259,7 @@ export function useBanners() {
         {
           headers: options.headers,
           responseType: 'blob',
-        }
+        },
       )
       .then((response) => {
         const data = response.data as unknown as BlobPart
@@ -268,8 +268,8 @@ export function useBanners() {
           makeDataUrl(data, response.headers['content-type']),
           response.headers['content-disposition'].replace(
             'attachment; filename=',
-            ''
-          )
+            '',
+          ),
         )
         return { data: response.data, status: 200 }
       })
@@ -289,7 +289,7 @@ export function useBanners() {
    */
   const updateBannerRequest = async (
     banner: BannerType,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     const body = {
@@ -310,7 +310,7 @@ export function useBanners() {
         body,
         {
           headers: options.headers,
-        }
+        },
       )
       .then((response) => {
         return { data: response.data, status: 200 }
@@ -331,7 +331,7 @@ export function useBanners() {
    */
   const updateImageRequest = async (
     banner: BannerType,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     if (!bannersState.images) {
@@ -350,7 +350,7 @@ export function useBanners() {
         form,
         {
           headers: options.headers,
-        }
+        },
       )
       .then((response) => {
         return { data: response.data, status: 200 }
@@ -371,7 +371,7 @@ export function useBanners() {
    */
   const deleteBannerRequest = async (
     bannerIds: number[],
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     const body = { banners: bannerIds }
@@ -381,7 +381,7 @@ export function useBanners() {
         {
           headers: options.headers,
           data: body,
-        }
+        },
       )
       .then((response) => {
         return { data: response.data, status: 200 }

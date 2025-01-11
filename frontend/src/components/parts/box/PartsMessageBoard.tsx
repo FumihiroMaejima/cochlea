@@ -6,7 +6,7 @@ type Props = {
   children: ReactElement
 }
 
-export const PartsMessageBoard: React.VFC<Props> = (props) => {
+export const PartsMessageBoard: React.FC<Props> = (props) => {
   return <div className="parts-message-board">{props.children}</div>
 }
 

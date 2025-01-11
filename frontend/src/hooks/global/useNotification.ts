@@ -45,7 +45,7 @@ export function useNotificationCore(): UseNotificationCoreType {
   const updateState = (
     message: string,
     status: StatusType,
-    isDisplay: boolean
+    isDisplay: boolean,
   ): void => {
     dispatch({ ...state, message, status, isDisplay })
   }

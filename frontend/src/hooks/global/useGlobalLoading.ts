@@ -14,7 +14,7 @@ export type UseGlobalLoadingType = {
  */
 const reducer = (
   currentValue: boolean,
-  action: Record<'value', boolean> & Record<'type', 'update'>
+  action: Record<'value', boolean> & Record<'type', 'update'>,
 ) => {
   if (action.type === 'update') {
     return action.value
@@ -34,7 +34,7 @@ export function useGlobalLoading(): UseGlobalLoadingType {
     (nextValue: boolean) => {
       dispatch({ type: 'update', value: nextValue })
     },
-    [dispatch]
+    [dispatch],
   )
 
   return {

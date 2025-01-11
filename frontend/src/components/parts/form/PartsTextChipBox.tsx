@@ -20,7 +20,7 @@ type Props = {
   readOnly?: boolean
 }
 
-export const PartsTextChipBox: React.VFC<Props> = ({
+export const PartsTextChipBox: React.FC<Props> = ({
   value = '',
   className = undefined,
   items = [],

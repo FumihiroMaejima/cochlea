@@ -1,7 +1,7 @@
 import React from 'react'
 // import '@/assets/scss/index.scss'
 
-export const GlobalFooter: React.VFC = () => {
+export const GlobalFooter: React.FC = () => {
   // const currentYear = process.env.REACT_APP_CURRENT_YEAR || 2022
   // for vite
   const currentYear = process.env.NEXT_PUBLIC_CURRENT_YEAR || ''

@@ -20,7 +20,7 @@ export function checkTextLength(value: string): boolean {
  */
 export function checkTextMaxLength(
   value: string,
-  maxlength: null | number = null
+  maxlength: null | number = null,
 ): boolean {
   if (maxlength === null) {
     return true
@@ -46,7 +46,7 @@ export function checkTextMinLength(value: string, minlength = 0): boolean {
  */
 export function checkPrimitiveType(
   value: string | number | string[] | number[] | Record<string, any>,
-  target = 'string'
+  target = 'string',
 ): boolean {
   return typeof value === target
 }
@@ -104,7 +104,7 @@ export function checkKatakana(value: string): boolean {
  */
 export function checkFileSize(
   targetSize: number,
-  maxFileSize: number
+  maxFileSize: number,
 ): boolean {
   return targetSize <= maxFileSize
 }
@@ -117,7 +117,7 @@ export function checkFileSize(
  */
 export function checkFileType(
   targetAccept: string,
-  accept: string | string[]
+  accept: string | string[],
 ): boolean {
   if (typeof accept === 'string') {
     // wildcard check
@@ -142,7 +142,7 @@ export function checkFileType(
  */
 export function checkFileLength(
   targetLength: number,
-  maxFileLength: number
+  maxFileLength: number,
 ): boolean {
   return targetLength <= maxFileLength
 }
@@ -220,7 +220,7 @@ export function validatePassword(value: string, textSize = 8): string {
  */
 export function validateConfirmPassword(
   value: string,
-  comparedValue: string
+  comparedValue: string,
 ): string {
   let message = ''
   if (!checkTextLength(value)) {

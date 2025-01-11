@@ -9,7 +9,7 @@ import React, { useState, useReducer, useCallback } from 'react'
  */
 const reducer = (
   currentValue: boolean,
-  action: Record<'value', boolean> & Record<'type', 'update'>
+  action: Record<'value', boolean> & Record<'type', 'update'>,
 ) => {
   if (action.type === 'update') {
     return action.value
@@ -34,7 +34,7 @@ export function useGlobalLinerLoading(): useGlobalLinerLoadingType {
     (nextValue: boolean) => {
       dispatch({ type: 'update', value: nextValue })
     },
-    [dispatch]
+    [dispatch],
   )
 
   return {

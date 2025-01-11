@@ -89,7 +89,7 @@ export function useMembers() {
   const updateMemberTextData = (
     index: number,
     key: MemberTextKeys,
-    value: string
+    value: string,
   ) => {
     dispatch({
       members: membersState.members.map((member, i) => {
@@ -111,7 +111,7 @@ export function useMembers() {
   const updateMemberNumberData = (
     index: number,
     key: MemberSelectKeys,
-    value: number
+    value: number,
   ) => {
     dispatch({
       members: membersState.members.map((member, i) => {
@@ -140,7 +140,7 @@ export function useMembers() {
    * @return {void}
    */
   const getMembersRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()

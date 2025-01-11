@@ -12,7 +12,7 @@ export const useRequest = () => {
    */
   const getRequest = async <T = any, D = any>(
     url: string,
-    options?: AxiosRequestConfig
+    options?: AxiosRequestConfig,
   ): Promise<ServerRequestResponseType<T>> => {
     axios.defaults.withCredentials = true
     return await axios
@@ -42,7 +42,7 @@ export const useRequest = () => {
    */
   const deleteRequest = async <T = unknown, D = any>(
     url: string,
-    options?: AxiosRequestConfig
+    options?: AxiosRequestConfig,
   ): Promise<ServerRequestResponseType<T>> => {
     axios.defaults.withCredentials = true
     return await axios
@@ -74,7 +74,7 @@ export const useRequest = () => {
   const postRequest = async <T = unknown, D = any>(
     url: string,
     data: any,
-    options?: AxiosRequestConfig
+    options?: AxiosRequestConfig,
   ): Promise<ServerRequestResponseType<T>> => {
     axios.defaults.withCredentials = true
     return await axios
@@ -106,7 +106,7 @@ export const useRequest = () => {
   const putRequest = async <T = unknown, D = any>(
     url: string,
     data: any,
-    options?: AxiosRequestConfig
+    options?: AxiosRequestConfig,
   ): Promise<ServerRequestResponseType<T>> => {
     axios.defaults.withCredentials = true
     return await axios
@@ -138,7 +138,7 @@ export const useRequest = () => {
   const patchRequest = async <T = unknown, D = any>(
     url: string,
     data: any,
-    options?: AxiosRequestConfig
+    options?: AxiosRequestConfig,
   ): Promise<ServerRequestResponseType<T>> => {
     axios.defaults.withCredentials = true
     return await axios

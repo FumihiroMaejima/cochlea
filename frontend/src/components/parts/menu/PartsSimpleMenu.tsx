@@ -26,7 +26,7 @@ type Props = {
   // disabled?: boolean
 }
 
-export const PartsSimpleMenu: React.VFC<Props> = ({
+export const PartsSimpleMenu: React.FC<Props> = ({
   value = undefined,
   className = undefined,
   // onInput = undefined,
@@ -51,7 +51,7 @@ export const PartsSimpleMenu: React.VFC<Props> = ({
    * @return {boolean}
    */
   const checkIsSelected = (
-    v: string | number | readonly string[] | undefined
+    v: string | number | readonly string[] | undefined,
   ): boolean => {
     if (!v || Array.isArray(v)) {
       return false

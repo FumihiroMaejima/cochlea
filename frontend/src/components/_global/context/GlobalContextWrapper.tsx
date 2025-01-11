@@ -9,7 +9,7 @@ import { ToastContext } from '@/components/container/ToastProviderContainer'
 import { GlobalLinerLoadingContext } from '@/components/container/GlobalLinerLoadingProviderContainer'
 import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProviderContainer'
 
-export const GlobalContextWrapper: React.VFC = () => {
+export const GlobalContextWrapper: React.FC = () => {
   const { isOpenLinerLoading } = useContext(GlobalLinerLoadingContext)
   const { isOpenLoading } = useContext(GlobalLoadingContext)
   const { toastState, updateToastState } = useContext(ToastContext)

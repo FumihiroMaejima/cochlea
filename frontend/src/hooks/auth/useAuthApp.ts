@@ -83,7 +83,7 @@ export function useAuthApp(): UseAuthAppType {
   const updateState = (
     id: number | null,
     name: string | null,
-    authority: string[]
+    authority: string[],
   ): void => {
     dispatch({ ...state, id, name, authority })
   }
@@ -160,7 +160,7 @@ export function useAuthApp(): UseAuthAppType {
   const setStoreStatus = (
     id: number | null,
     name: string | null,
-    authority: string[] = []
+    authority: string[] = [],
   ) => {
     // state.store = { id, name, authority }
     updateState(id, name, authority)
@@ -258,10 +258,13 @@ export function useAuthApp(): UseAuthAppType {
 
   /**
    * restore or remove cookie.
+   * @param {string} token
    * @param {boolean} isRestore
    * @return {void}
    */
   const restoreToken = (token = '', isRestore = false) => {
+    // TODO appKeyのパラメーター化
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     isRestore ? setCookie(appKey, token) : removeCookie(appKey)
   }
 
@@ -283,7 +286,7 @@ export function useAuthApp(): UseAuthAppType {
       setStoreStatus(
         response.data.user.id,
         response.data.user.name,
-        response.data.user.authority
+        response.data.user.authority,
       )
       setCookie(appKey, response.data.access_token)
 
@@ -299,7 +302,7 @@ export function useAuthApp(): UseAuthAppType {
    */
   const logout = async (): Promise<boolean> => {
     const response = await authentication.logoutRequest(
-      getHeaderOptions().headers
+      getHeaderOptions().headers,
     )
     const result = response.status === 200
 

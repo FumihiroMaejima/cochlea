@@ -31,7 +31,7 @@ const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'updated_at' },
 ]
 
-export const Banners: React.VFC = () => {
+export const Banners: React.FC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const {
     bannersState,
@@ -77,7 +77,7 @@ export const Banners: React.VFC = () => {
   const editRecordHandler = (
     index: number,
     key: Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
-    value: string
+    value: string,
   ): void => {
     // TODO remove
     // 追加になる。
@@ -124,7 +124,7 @@ export const Banners: React.VFC = () => {
    * @return {Promise<void>}
    */
   const updateRecordImageRequestHandler = async (
-    index: number
+    index: number,
   ): Promise<void> => {
     const banner = bannersState.banners[index]
     updateGlobalLoading(true)
@@ -213,7 +213,7 @@ export const Banners: React.VFC = () => {
               editRecordHandler(
                 index,
                 key as Extract<keyof BannerType, 'name' | 'detail' | 'url'>,
-                value as unknown as string
+                value as unknown as string,
               )
             }}
             onClickUpdate={updateRecordRequestHandler}

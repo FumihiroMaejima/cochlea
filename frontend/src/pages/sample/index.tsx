@@ -64,7 +64,7 @@ const selectBoxItems = [
   { text: 'test15', value: 15 },
 ]
 
-export const Sample: React.VFC = () => {
+export const Sample: React.FC = () => {
   /* const { navigationGuardHandler } =
     useOutletContext<GlobalNavigationGuardHandlerType>() */
   const [toastValue, setToastValue] = useState<boolean>(false)
@@ -115,8 +115,8 @@ export const Sample: React.VFC = () => {
       // 重複を削除しつつ配列の値を更新する。
       setSelectMultiValue(
         [...selectMultiValue, parseInt(x)].filter(
-          (v, i, self) => self.indexOf(v) === i
-        )
+          (v, i, self) => self.indexOf(v) === i,
+        ),
       )
     } else {
       throw Error('invalid type')
@@ -301,7 +301,6 @@ export const Sample: React.VFC = () => {
             value={selectValue}
             onChange={(e) => setSelectValue(parseInt(e.target.value))}
             items={selectBoxItems}
-            placeholder="test select box"
             disabled={false}
           />
         </div>

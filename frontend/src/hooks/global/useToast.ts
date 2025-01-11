@@ -31,7 +31,7 @@ export type UseToastType = {
   updateToastState: (
     message: string,
     status: StatusType,
-    isDisplay: boolean
+    isDisplay: boolean,
   ) => void
 }
 
@@ -43,7 +43,7 @@ export type UseToastType = {
  */
 const reducer = (
   currentValue: State,
-  action: State & Record<'type', 'update'>
+  action: State & Record<'type', 'update'>,
 ) => {
   if (action.type === 'update') {
     return {
@@ -75,7 +75,7 @@ export function useToast(): UseToastType {
     (message: string, status: StatusType, isDisplay: boolean) => {
       dispatch({ type: 'update', message, status, isDisplay })
     },
-    [dispatch]
+    [dispatch],
   )
 
   /**
