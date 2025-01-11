@@ -18,7 +18,7 @@ type Props = {
   onClickClose?: MouseEventHandler<HTMLButtonElement>
 }
 
-export const PartsSimpleChip: React.VFC<Props> = ({
+export const PartsSimpleChip: React.FC<Props> = ({
   label = 'label text',
   value = undefined,
   className = undefined,

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const GlobalHeader: React.VFC = () => {
+export const GlobalHeader: React.FC = () => {
   // ナビゲーションメニューの開閉フラグ
   // const [isOpen, updateOpenStatus] = useState(false)
 

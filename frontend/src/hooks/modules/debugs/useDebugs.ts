@@ -72,7 +72,7 @@ export function useDebugs() {
    * @return {void}
    */
   const getDebugStatusRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
 
@@ -106,7 +106,7 @@ export function useDebugs() {
    */
   const getDebugDateTimeToTimeStampRequest = async (
     datetime: string,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
 
@@ -142,7 +142,7 @@ export function useDebugs() {
    */
   const getDebugTimeStampToDateTimeRequest = async (
     timestamp: number,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
 
@@ -156,7 +156,7 @@ export function useDebugs() {
         config.endpoint.debugs.datetime + `?timestamp=${timestamp}`,
         {
           headers: { ...options.headers, ...debugHeader },
-        }
+        },
       )
       .then((response) => {
         // const data = response.data as ServerRequestType<string>
@@ -180,7 +180,7 @@ export function useDebugs() {
    */
   const getDebugEmailToEncryptRequest = async (
     email: string,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
 
@@ -194,7 +194,7 @@ export function useDebugs() {
         config.endpoint.debugs.encrypt + `?email=${email}`,
         {
           headers: { ...options.headers, ...debugHeader },
-        }
+        },
       )
       .then((response) => {
         // const data = response.data as ServerRequestType<number>
@@ -218,7 +218,7 @@ export function useDebugs() {
    */
   const getDebugEmailToDecryptRequest = async (
     email: string,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
 

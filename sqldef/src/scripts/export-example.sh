@@ -31,10 +31,10 @@ showMessage ${START_MESSAGE}
 
 # parameter check
 if [ "$1" != '' ]; then
-  docker-compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 --export > ${OUTPUT_PATH}"$1_"${OUTPUT_FILE}
+  docker compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} $1 --export > ${OUTPUT_PATH}"$1_"${OUTPUT_FILE}
 else
   # command.
-  docker-compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export > ${OUTPUT_PATH}${DATABASE_NAME}_${OUTPUT_FILE}
+  docker compose exec ${SERVICE_NAME} ${SERVICE_BIN_PATH} -h ${DATABASE_HOST} -P ${DATABASE_PORT} -u ${DATABASE_USER} -p ${DATABASE_PASSWORD} ${DATABASE_NAME} --export > ${OUTPUT_PATH}${DATABASE_NAME}_${OUTPUT_FILE}
 fi
 
 showMessage 'export data base.'

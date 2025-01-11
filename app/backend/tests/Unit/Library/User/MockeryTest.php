@@ -6,7 +6,9 @@ use App\Library\Debug\WebConsole;
 use App\Library\User\UserLibrary;
 use App\Library\Hash\HashLibrary;
 use App\Models\User;
-use Tests\TestCase;
+use Illuminate\Support\Facades\Hash;
+use PHPUnit\Framework\TestCase;
+//use Tests\TestCase;
 use Mockery;
 
 class MockeryTest extends TestCase
@@ -34,14 +36,19 @@ class MockeryTest extends TestCase
      */
     public static function validateUserPasswordDataProvider(): array
     {
-        self::createApplicationForStaticDataProvider();
+        // TODO php8.3以降、Laravelのテストクラスでstaticメソッドのテストが上手く動かなくなっている。
+        // 会費の為`PHPUnit\Framework\TestCase`を継承している。
+        // この為、Laravel関係のクラスを使えない。
+
+        // self::createApplicationForStaticDataProvider();
         return [
             'check user password' => [
                 'password' => 'testPassword',
                 'user' => [
                     User::ID => 1,
                     User::SALT => 'testSalt',
-                    User::PASSWORD => bcrypt('testPassword'.'testSalt'.'testPepper123'),
+                    // User::PASSWORD => bcrypt('testPassword'.'testSalt'.'testPepper123'),
+                    User::PASSWORD => 'test',
                 ],
                 'expect' => true,
             ],
@@ -55,13 +62,13 @@ class MockeryTest extends TestCase
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @param string $value
+     * @param string $password
      * @param array $user
      * @param bool $expect
      * @return void
      */
     public function testValidateUserPassword(
-        string $value,
+        string $password,
         array $user,
         bool $expect
     ): void {
@@ -70,10 +77,13 @@ class MockeryTest extends TestCase
         // テスト用のpepperを返す様にモックを設定
 
         $mock = (new Mockery())->mock('overload:'.HashLibrary::class);
-        // $mock = Mockery::mock('overload:'.HashLibrary::class)->makePartial();
         $mock->shouldReceive('getPepper')->once()->andReturn($testPepper);
 
-        $result = UserLibrary::validateUserPassword($value, $user);
+        // Hash::classのcheckメソッドをモック化
+        $mock2 = (new Mockery())->mock('overload:'.Hash::class);
+        $mock2->shouldReceive('check')->once()->andReturn(true);
+
+        $result = UserLibrary::validateUserPassword($password, $user);
         // Mockery::close();
 
         $this->assertEquals($result, $expect);

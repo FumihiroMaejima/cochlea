@@ -13,7 +13,7 @@
 ## ローカル環境の構築(Mac)
 
 ```shell
-docker-compose up -d
+docker compose up -d
 
 # 設定したポートを指定してlocalhostにアクセス
 http://localhost:8280
@@ -39,7 +39,7 @@ ssh-keygen -t rsa -C ""
 `/var/jenkins_hom/.cache`は削除した方が良さそう。
 
 ```shell
-docker-compose down --rmi all
+docker compose down --rmi all
 ```
 
 ---
@@ -59,7 +59,7 @@ cat /var/jenkins_hom/.ssh/id_rsa.pub | pbcopy
 コンテナのダウン時にvolumeの削除とcacheの削除を実行するとコンテナ再立ち上げが上手くいく。
 
 ```shell
-docker-compose -f ${DOCKER_COMPOSE_FILE} down -v
+docker compose -f ${DOCKER_COMPOSE_FILE} down -v
 # cacheも削除する
 rm -r src/.cache
 ```

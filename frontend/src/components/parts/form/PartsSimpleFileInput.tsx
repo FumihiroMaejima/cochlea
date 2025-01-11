@@ -34,7 +34,7 @@ type Props = {
 // acceptはWindowsの時は注意が必要
 // for windows csv : application/octet-stream(Excel無し),application/vnd.ms-excel(Excel有り)
 
-export const PartsSimpleFileInput: React.VFC<Props> = ({
+export const PartsSimpleFileInput: React.FC<Props> = ({
   value = undefined,
   onUpdateFile = (v) => console.log(JSON.stringify(v)),
   onResetFile = () => console.log(''),
@@ -121,7 +121,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    * @return {void}
    */
   const inputEventHandler = (
-    event: HTMLElementEvent<HTMLInputElement>
+    event: HTMLElementEvent<HTMLInputElement>,
   ): void => {
     const data = event.target.files ? event.target.files : undefined
 
@@ -146,7 +146,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    */
   const resetFileHandler: MouseEventHandler<HTMLSpanElement> = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _: MouseEvent<HTMLSpanElement>
+    _: MouseEvent<HTMLSpanElement>,
   ): void => {
     // reset emit
     onResetFile()
@@ -184,7 +184,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
    */
   const changeDragedStateHandler = (
     dragEvent: DragEvent,
-    value = false
+    value = false,
   ): void => {
     // イベントの伝播の中断とデフォルトアクションの抑制
     const event = dragEvent as unknown as Event
@@ -284,7 +284,7 @@ export const PartsSimpleFileInput: React.VFC<Props> = ({
               accept={accept}
               onInput={(e) =>
                 inputEventHandler(
-                  e as unknown as HTMLElementEvent<HTMLInputElement>
+                  e as unknown as HTMLElementEvent<HTMLInputElement>,
                 )
               }
               required={required}

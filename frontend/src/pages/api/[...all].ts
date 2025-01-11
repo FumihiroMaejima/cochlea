@@ -14,7 +14,7 @@ export const config = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): ReturnType<typeof httpProxyMiddleware> => {
   const proxy = httpProxyMiddleware(req, res, {
     // target: process.env.API_HOST,

@@ -5,7 +5,7 @@ type Props = {
   items: TableContentsType[]
 }
 
-export const PartsLabelTable: React.VFC<Props> = (props) => {
+export const PartsLabelTable: React.FC<Props> = (props) => {
   return (
     <table className="parts-label-table parts-label-table__table-element">
       <tbody>

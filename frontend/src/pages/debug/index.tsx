@@ -14,7 +14,7 @@ import { GlobalLoadingContext } from '@/components/container/GlobalLoadingProvid
 import { AuthAppContext } from '@/components/container/AuthAppProviderContainer'
 import { useNavigationGuard } from '@/hooks/auth/useNavigationGuard'
 
-export const Debug: React.VFC = () => {
+export const Debug: React.FC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const {
     debugsState,
@@ -73,7 +73,7 @@ export const Debug: React.VFC = () => {
     await getDebugDateTimeToTimeStampRequest(datetime, getHeaderOptions()).then(
       (res) => {
         updateGlobalLoading(false)
-      }
+      },
     )
   }
 
@@ -87,7 +87,7 @@ export const Debug: React.VFC = () => {
     updateGlobalLoading(true)
     await getDebugTimeStampToDateTimeRequest(
       timestamp,
-      getHeaderOptions()
+      getHeaderOptions(),
     ).then((res) => {
       updateGlobalLoading(false)
     })
@@ -104,7 +104,7 @@ export const Debug: React.VFC = () => {
     await getDebugEmailToEncryptRequest(email, getHeaderOptions()).then(
       (res) => {
         updateGlobalLoading(false)
-      }
+      },
     )
   }
 
@@ -119,7 +119,7 @@ export const Debug: React.VFC = () => {
     await getDebugEmailToDecryptRequest(email, getHeaderOptions()).then(
       (res) => {
         updateGlobalLoading(false)
-      }
+      },
     )
   }
 
@@ -258,7 +258,7 @@ export const Debug: React.VFC = () => {
                 onClick={() => {
                   if (debugsState.decryptEmail) {
                     onClickConvertEncryptEmailButtonHandler(
-                      debugsState.decryptEmail
+                      debugsState.decryptEmail,
                     )
                   }
                 }}
@@ -290,7 +290,7 @@ export const Debug: React.VFC = () => {
                 onClick={() => {
                   if (debugsState.encryptEmail) {
                     onClickConvertDecryptEmailButtonHandler(
-                      debugsState.encryptEmail
+                      debugsState.encryptEmail,
                     )
                   }
                 }}

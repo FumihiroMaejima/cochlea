@@ -57,7 +57,7 @@ docker exec -u root -it php-alg_app ash
 
 ## メールサーバーについて
 
-[mailhog](https://github.com/mailhog/MailHog)を利用する。
+[mailpit](https://github.com/axllent/mailpit)を利用する。
 
 データの永続化の為に専用のvolumeを新規で作成する。
 
@@ -67,14 +67,19 @@ docker exec -u root -it php-alg_app ash
 
 ```yaml
   mail:
-    image: mailhog/mailhog
+    image: axllent/mailpit:latest
     container_name: container_name
     volumes:
       - volumeName:/tmp
     ports:
-      - "8025:8025"
+      - "${MAIL_PORT:-8025}:8025" # WEB
+      - "${MAIL_SMTP_PORT:-1025}:1025" # SMTP
     environment:
-      MH_MAILDIR_PATH: /tmp
+      TZ: "Asia/Tokyo"
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /tmp/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
 ```
 
 `app/backend/.env`のメール設定を下記の通りに設定すること。
@@ -87,6 +92,19 @@ docker exec -u root -it php-alg_app ash
 MAIL_MAILER=smtp
 MAIL_HOST=mail
 MAIL_PORT=1025
+```
+
+### mailpitのAPIについて
+
+`http://localhost:8025/api/v1/`でAPIドキュメントを開ける
+
+```shell
+# 例
+`http://localhost:8025/api/v1/info`=mailpitの設定の確認
+`http://localhost:8025/api/v1/info`=WebUI設定の確認
+`http://localhost:8025/api/v1/message/{ID}`=メッセージ概要の確認
+`http://localhost:8025/api/v1/search?query=value`=メッセージの検索
+`http://localhost:8025/api/v1/swagger.json`=swagger定義の確認
 ```
 
 ---
@@ -227,7 +245,7 @@ Dockerコンテナを用意した為もうnpmコマンドを利用する必要�
 下記でSwaggerエディターとSwaggerUIのコンテナを立ち上げる。(UI,Mockコンテナはやや立ち上がりに時間がかかる(1分ほど？))
 
 ```shell
-docker-compose -f ./docker-compose.swagger.yml up -d
+docker compose -f ./docker-compose.swagger.yml up -d
 
 # editor
 http://localhost:8100

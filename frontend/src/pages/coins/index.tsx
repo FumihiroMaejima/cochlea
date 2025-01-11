@@ -32,7 +32,7 @@ const simpleTableHeaderData: TableHeaderType[] = [
   { label: 'deleted_at' },
 ]
 
-export const Coins: React.VFC = () => {
+export const Coins: React.FC = () => {
   const { navigationGuardHandler } = useNavigationGuard()
   const {
     coinsState,
@@ -78,7 +78,7 @@ export const Coins: React.VFC = () => {
   const editRecordHandler = (
     index: number,
     key: Extract<keyof CoinType, 'name' | 'detail'>,
-    value: string
+    value: string,
   ): void => {
     // TODO remove
     // 追加になる。
@@ -178,7 +178,7 @@ export const Coins: React.VFC = () => {
               editRecordHandler(
                 index,
                 key as Extract<keyof CoinType, 'name' | 'detail'>,
-                value as unknown as string
+                value as unknown as string,
               )
             }}
             onClickUpdate={updateRecordRequestHandler}

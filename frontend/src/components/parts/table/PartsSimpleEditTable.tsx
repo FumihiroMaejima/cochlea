@@ -32,7 +32,7 @@ type Props = {
 // 画像を表示するkey
 const imageKeys = ['image', 'pc_image', 'sp_image']
 
-export const PartsSimpleEditTable: React.VFC<Props> = ({
+export const PartsSimpleEditTable: React.FC<Props> = ({
   headers = [],
   items = [],
   fileObjects = undefined,

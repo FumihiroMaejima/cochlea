@@ -5,7 +5,7 @@ type Props = {
   isDarkMode?: boolean
 }
 
-export const PartsLinerLoadingWrapper: React.VFC<Props> = ({
+export const PartsLinerLoadingWrapper: React.FC<Props> = ({
   isDarkMode = true,
 }) => {
   return (

@@ -21,7 +21,7 @@ const defaulPassword =
     ? ''
     : process.env.NEXT_PUBLIC_ADMIN_PASSWORD || ''
 
-export const Login: React.VFC = () => {
+export const Login: React.FC = () => {
   // const navigate = useNavigate()
   const router = useRouter()
   const [emailValue, setEmailValue] = useState(defaulName)
@@ -80,7 +80,7 @@ export const Login: React.VFC = () => {
                   updateToastState(
                     result ? 'login success' : 'login failed',
                     result ? 'success' : 'error',
-                    true
+                    true,
                   )
                   updateGlobalLoading(false)
 

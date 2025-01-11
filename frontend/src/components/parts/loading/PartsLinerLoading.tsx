@@ -4,7 +4,7 @@ import React from 'react'
   open: boolean
 } */
 
-export const PartsLinerLoading: React.VFC = () => {
+export const PartsLinerLoading: React.FC = () => {
   return (
     <div className="parts-liner-loading">
       {/* <div className="parts-liner-loading__bar"></div> */}

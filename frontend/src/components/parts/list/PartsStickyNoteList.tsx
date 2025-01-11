@@ -8,7 +8,7 @@ type Props = {
   textColor?: ColorType
 }
 
-export const PartsStickyNoteList: React.VFC<Props> = ({
+export const PartsStickyNoteList: React.FC<Props> = ({
   items = [],
   // color = 'dark-grey',
   textColor = 'dark-grey',

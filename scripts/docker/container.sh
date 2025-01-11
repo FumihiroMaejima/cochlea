@@ -6,8 +6,8 @@ echo ${DELIMITER_LINE}
 echo ${START_MESSAGE}
 
 # プロセスチェック結果を変数に格納
-CHECK_PROCESS_MESSAGE=`docker-compose ps`
-# docker-compose ps | head -5
+CHECK_PROCESS_MESSAGE=`docker compose ps`
+# docker compose ps | head -5
 
 # 配列の用意
 LINES=()
@@ -29,23 +29,23 @@ if [ ${LINES_LENGTH} -eq 5 ]; then
   # コンテナが立ち上がっていない状態の時
   echo 'Up Docker Container!'
   echo ${DELIMITER_LINE}
-  docker-compose up -d
+  docker compose up -d
 elif [ ${LINES_LENGTH} -eq 22 ]; then
   # コンテナが立ち上がっている状態の時
   # Exitなどのエラー状態の判別が出来ればより便利
   echo 'Down Docker Container!'
   echo ${DELIMITER_LINE}
-  docker-compose down
+  docker compose down
 else
   # コンテナが立ち上がっている状態の時
   echo 'Down Docker Container!'
   echo ${DELIMITER_LINE}
-  docker-compose down
+  docker compose down
 fi
 
 # 現在のDocker コンテナの状態を出力
 echo ${DELIMITER_LINE}
 echo 'Current Docker Status.'
 echo ${DELIMITER_LINE}
-docker-compose ps
+docker compose ps
 

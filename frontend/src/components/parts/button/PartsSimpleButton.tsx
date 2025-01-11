@@ -10,7 +10,7 @@ type Props = {
   disabled?: boolean
 }
 
-export const PartsSimpleButton: React.VFC<Props> = ({
+export const PartsSimpleButton: React.FC<Props> = ({
   className = undefined,
   text = 'text',
   color = 'dark-grey',

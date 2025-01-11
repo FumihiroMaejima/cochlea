@@ -27,10 +27,10 @@ fi
 # -qオプション container idのみを表示
 # /dev/null: 出力が破棄され、なにも表示されない。
 # 2(標準エラー出力) を/dev/nullに破棄することで、1(標準出力)のみを出力する。
-if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; then
+if [[ "$(docker compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; then
   # コンテナが立ち上がっていない状態の時
   showMessage 'Up Docker Container!'
-  docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --scale ${DOCKER_SERVICE_NAME}=$1
+  docker compose -f ${DOCKER_COMPOSE_FILE} up -d --scale ${DOCKER_SERVICE_NAME}=$1
 
   # dockerに割り当てられたIPの取得(jqコマンドを利用)
   TARGET_IPS=`docker network inspect ${DOCKER_NETWORK_NAME} | jq '.[0].Containers | .[].IPv4Address'`;
@@ -53,7 +53,7 @@ if [[ "$(docker-compose -f ${DOCKER_COMPOSE_FILE} ps -q 2>/dev/null)" == "" ]]; 
 
   # clusterの設定確認
   echo ${DELIMITER_LINE}
-  docker-compose exec ${DOCKER_SERVICE_NAME} redis-cli cluster nodes
+  docker compose exec ${DOCKER_SERVICE_NAME} redis-cli cluster nodes
   # networkの設定確認
   echo ${DELIMITER_LINE}
   docker network inspect ${DOCKER_NETWORK_NAME} | jq '.[0].Containers | .[] | {Name, IPv4Address}'
@@ -61,10 +61,10 @@ else
   # コンテナが立ち上がっている状態の時
   showMessage 'Down Docker Container!'
   # 全redisコンテナのvolumeも削除する
-  docker-compose -f ${DOCKER_COMPOSE_FILE} down -v
+  docker compose -f ${DOCKER_COMPOSE_FILE} down -v
 fi
 
 # 現在のDocker コンテナの状態を出力
 showMessage 'Current Docker Status.'
-docker-compose -f ${DOCKER_COMPOSE_FILE} ps
+docker compose -f ${DOCKER_COMPOSE_FILE} ps
 

@@ -99,7 +99,7 @@ export function useCoins() {
   const updateCoinTextData = (
     index: number,
     key: CoinTextKeys,
-    value: string
+    value: string,
   ) => {
     dispatch({
       coins: coinsState.coins.map((coin, i) => {
@@ -121,7 +121,7 @@ export function useCoins() {
   const updateCoinNumberData = (
     index: number,
     key: CoinSelectKeys,
-    value: number
+    value: number,
   ) => {
     dispatch({
       coins: coinsState.coins.map((coin, i) => {
@@ -149,7 +149,7 @@ export function useCoins() {
    * @return {void}
    */
   const getCoinsRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -185,7 +185,7 @@ export function useCoins() {
    * @return {void}
    */
   const getCoinsCsvFileRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -199,8 +199,8 @@ export function useCoins() {
           makeDataUrl(data, response.headers['content-type']),
           response.headers['content-disposition'].replace(
             'attachment; filename=',
-            ''
-          )
+            '',
+          ),
         )
         return { data: response.data, status: 200 }
       })
@@ -218,7 +218,7 @@ export function useCoins() {
    * @return {void}
    */
   const getCoinTemplateRequest = async (
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     return await useRequest()
@@ -227,7 +227,7 @@ export function useCoins() {
         {
           headers: options.headers,
           responseType: 'blob',
-        }
+        },
       )
       .then((response) => {
         const data = response.data as unknown as BlobPart
@@ -236,8 +236,8 @@ export function useCoins() {
           makeDataUrl(data, response.headers['content-type']),
           response.headers['content-disposition'].replace(
             'attachment; filename=',
-            ''
-          )
+            '',
+          ),
         )
         return { data: response.data, status: 200 }
       })
@@ -257,7 +257,7 @@ export function useCoins() {
    */
   const updateCoinRequest = async (
     coin: CoinType,
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     const body = {
@@ -274,7 +274,7 @@ export function useCoins() {
         body,
         {
           headers: options.headers,
-        }
+        },
       )
       .then((response) => {
         return { data: response.data, status: 200 }
@@ -295,7 +295,7 @@ export function useCoins() {
    */
   const deleteCoinRequest = async (
     coinIds: number[],
-    options: AuthAppHeaderOptions
+    options: AuthAppHeaderOptions,
   ): Promise<ServerRequestType> => {
     // axios.defaults.withCredentials = true
     const body = { coins: coinIds }
@@ -305,7 +305,7 @@ export function useCoins() {
         {
           headers: options.headers,
           data: body,
-        }
+        },
       )
       .then((response) => {
         return { data: response.data, status: 200 }

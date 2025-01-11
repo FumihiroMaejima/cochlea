@@ -8,7 +8,7 @@ type Props = {
   onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement> | undefined
 }
 
-export const PartsSimpleToast: React.VFC<Props> = ({
+export const PartsSimpleToast: React.FC<Props> = ({
   value = false,
   className = undefined,
   data = undefined,

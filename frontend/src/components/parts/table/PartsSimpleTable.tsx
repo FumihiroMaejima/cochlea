@@ -14,7 +14,7 @@ type Props = {
 // 画像を表示するkey
 const imageKeys = ['image', 'pc_image', 'sp_image']
 
-export const PartsSimpleTable: React.VFC<Props> = (props) => {
+export const PartsSimpleTable: React.FC<Props> = (props) => {
   return (
     <table className="parts-simple-table parts-simple-table__table-element">
       <thead>
