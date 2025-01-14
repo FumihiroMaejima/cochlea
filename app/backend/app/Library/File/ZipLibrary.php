@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Library\File;
 
-use Illuminate\Support\Facades\Storage;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\Message\StatusCodeMessages;
-use App\Library\String\PregLibrary;
 use Exception;
-use SplFileObject;
 use ZipArchive;
 
 class ZipLibrary
@@ -27,24 +24,30 @@ class ZipLibrary
     public static function getZipFileByParameterFileList(
         array $fileList,
         string $fileName = 'test1.zip'
-        ): string {
-            $zip = new ZipArchive();
-            $zipFilePath = storage_path(self::DIRECTORY . $fileName);
+    ): string {
+        $zip = new ZipArchive();
+        $zipFilePath = storage_path(self::DIRECTORY . $fileName);
 
-            if ($zip->open($zipFilePath, ZipArchive::CREATE) !== TRUE) {
-                exit("cannot open <$zipFilePath>\n");
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) !== true) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_500,
+                "cannot open <$zipFilePath>\n"
+            );
+        }
+
+        foreach ($fileList as $file) {
+            $path = storage_path(self::DIRECTORY . $file);
+            if (file_exists($path)) {
+                $zip->addFile($path, basename($path));
+            } else {
+                throw new MyApplicationHttpException(
+                    StatusCodeMessages::STATUS_500,
+                    "File $path does not exist.\n"
+                );
             }
+        }
 
-            foreach ($fileList as $file) {
-                $path = storage_path(self::DIRECTORY . $file);
-                if (file_exists($path)) {
-                    $zip->addFile($path, basename($path));
-                } else {
-                    echo "File $path does not exist.\n";
-                }
-            }
-
-            $zip->close();
+        $zip->close();
         return $zipFilePath;
     }
 }
