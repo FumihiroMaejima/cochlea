@@ -325,6 +325,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('sample-pdf/coinHistory/{uuid}', [\App\Http\Controllers\Users\DebugController::class, 'getSampleCoinHistoryDesignPDF'])->name('user.debug.samplePdf.coinHistory');
             // QRコード出力
             Route::get('sample-qr', [\App\Http\Controllers\Users\DebugController::class, 'getSampleQRCode'])->name('user.debug.sampleQrCode.get');
+            // ZIP出力
+            Route::get('sample-zip', [\App\Http\Controllers\Users\DebugController::class, 'getSampleZip'])->name('user.debug.sampleZip.get');
 
             // JWT関係
             Route::group(['prefix' => 'jwt'], function () {
