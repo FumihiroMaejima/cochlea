@@ -10,12 +10,15 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\MyApplicationHttpException;
+use App\Library\Banner\BannerLibrary;
 use App\Library\Database\DatabaseLibrary;
 use App\Library\Database\ShardingLibrary;
 use App\Library\Database\TableMemoryLibrary;
 use App\Library\Debug\WebConsole;
 use App\Library\File\PdfLibrary;
 use App\Library\File\QRCodeLibrary;
+use App\Library\File\ZipLibrary;
+use App\Library\Response\ResponseLibrary;
 use App\Library\Encrypt\EncryptLibrary;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Log\LogLibrary;
@@ -282,6 +285,25 @@ class DebugController extends Controller
     {
         // SVGのQRコードをHTMLとして返却
         return response(QRCodeLibrary::getSampleQrCode());
+    }
+
+    /**
+     * テスト用Zipファイルの表示
+     *
+     * @param DebugFileUploadRequest $request
+     * @return BinaryFileResponse|JsonResponse
+     * @throws MyApplicationHttpException
+     */
+    public function getSampleZip(): BinaryFileResponse|JsonResponse
+    {
+        $extention = BannerLibrary::EXTENTION;
+        return ResponseLibrary::fileResponse(
+            ZipLibrary::getZipFileByParameterFileList([
+                BannerLibrary::DEFAULT_FILE_IMAGE_NAME_200X600_1 . ".$extention",
+                BannerLibrary::DEFAULT_FILE_IMAGE_NAME_200X600_2 . ".$extention",
+                BannerLibrary::DEFAULT_FILE_IMAGE_NAME_200X600_3 . ".$extention",
+            ])
+        );
     }
 
     /**
