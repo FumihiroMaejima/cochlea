@@ -48,5 +48,6 @@ return $config
         // 'mb_str_functions'                       => true, // strlen()が必要なケースもある為除外
         'simplified_if_return'                   => true,
         'simplified_null_return'                 => true,
+        // 'php_unit_attributes' => true, # for phpunit attirbutes setting.
     ])
     ->setFinder($finder);

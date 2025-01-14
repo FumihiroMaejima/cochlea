@@ -124,6 +124,9 @@ phpunit-feature:
 phpunit-unit:
 	docker compose exec app vendor/bin/phpunit --testdox tests/Unit
 
+phpunit-deprecations:
+	docker compose exec app vendor/bin/phpunit -display-phpunit-deprecations
+
 phpunit-cov:
 	docker compose exec app php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-text --colors=never > app/backend/storage/logs/coverage.log
 

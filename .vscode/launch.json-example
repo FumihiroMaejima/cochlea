@@ -25,7 +25,8 @@
             "type": "node",
             "request": "attach",
             "skipFiles": ["<node_internals>/**"],
-            "port": 9229
+            // "port": 9229, // Not Next.js
+            "port": 9230, // Next.js
         },
         {
             "name": "Next.js Clinet Side Debug",
