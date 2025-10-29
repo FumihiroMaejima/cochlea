@@ -8,6 +8,9 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
     '^.+\\.tsx$': 'ts-jest',
+    '<transform_regex>': ['ts-jest', {
+      tsconfig: './tsconfig.json',
+    }],
   },
   testMatch: ['<rootDir>/tests/unit/**/*.spec.ts'],
   moduleFileExtensions: ['ts', 'js', 'tsx', 'jsx', 'json'],
@@ -17,8 +20,8 @@ module.exports = {
   },
   collectCoverage: false, // no check coverage
   globals: {
-    'ts-jest': {
+    /* 'ts-jest': {
       tsconfig: './tsconfig.json',
-    },
+    }, */
   },
 }
