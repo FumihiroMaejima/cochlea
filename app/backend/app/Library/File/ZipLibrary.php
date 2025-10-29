@@ -39,6 +39,8 @@ class ZipLibrary
             $path = storage_path(self::DIRECTORY . $file);
             if (file_exists($path)) {
                 $zip->addFile($path, basename($path));
+                // ファイルストリームを読み込んで追加する場合(s3のgetObject等($object['body']で取得))
+                // $zip->addFromString($path, file_get_contents($path));
             } else {
                 throw new MyApplicationHttpException(
                     StatusCodeMessages::STATUS_500,
