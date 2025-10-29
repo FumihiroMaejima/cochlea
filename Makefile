@@ -222,7 +222,7 @@ mysql-restore:
 	sh ./scripts/database/restore-dump.sh $(TMP_PARAM)
 
 ##############################
-# redis container
+# redis(valkey) container
 ##############################
 redis-server:
 	docker compose exec redis redis-server --version
@@ -253,6 +253,36 @@ redis-zincrby:
 
 redis-zrem:
 	docker compose exec redis redis-cli -h localhost -p 6379 -n $(REDIS_DB) ZREM $(REDIS_KEY) 'testKey0'
+
+valkey-server:
+	docker compose exec redis valkey-server --version
+
+valkey-info:
+	docker compose exec redis valkey-cli info
+
+valkey-keys:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) keys '*'
+
+valkey-get:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) get $(REDIS_KEY)
+
+valkey-del:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) del $(REDIS_KEY)
+
+valkey-hget:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) HGETALL $(REDIS_KEY)
+
+valkey-zrevrange:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) ZREVRANGE $(REDIS_KEY) 0 5
+
+valkey-zrevrange-with-scores:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) ZREVRANGE $(REDIS_KEY) 0 5 WITHSCORES
+
+valkey-zincrby:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) ZINCRBY $(REDIS_KEY) 10 'testKey0'
+
+valkey-zrem:
+	docker compose exec redis valkey-cli -h localhost -p 6379 -n $(REDIS_DB) ZREM $(REDIS_KEY) 'testKey0'
 
 ##############################
 # redis cluster container

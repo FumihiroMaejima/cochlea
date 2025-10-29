@@ -1785,7 +1785,10 @@ file_put_contents("$path/$runId.run_name.xhprof", serialize($xhprofData));
 下記のコマンドで`yarn upgrade`と同様の要領でパッケージの更新を掛けられる。
 
 ```shell
-$ composer update
+composer update
+
+### 依存関係まとめて更新
+composer update --with-dependencies
 ```
 
 ### Composer パッケージの削除
