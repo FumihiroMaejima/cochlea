@@ -62,13 +62,23 @@ export const getImageWidthAndHeightByDataUrl = async (dataUrl: string): Promise<
 /**
  * base64エンコードデータのサイズ取得
  * @param {string} base64Data base64エンコードデータ
- * @return {Promise<number[]>}
+ * @return {number}
  */
-export const getBase64FileSize = (base64Data: string): number => {
+export const getBase64DataFileSize = (base64Data: string): number => {
   // データURLの「,」以降を取得(「data:image/png;base64,」などのprefix部分を除去)
   const cleaned = base64Data.split(',').pop() ?? ''
   // パディングの数を取得(末尾の「=」の数)
   const padding = (cleaned.match(/=+$/)?.[0].length ?? 0)
   // サイズ計算(元データのバイト数を計算。base64は元データの3バイト4文字にエンコードするため、その比率で計算)
   return Math.floor((cleaned.length * 3) / 4) - padding
+}
+
+/**
+ * base64エンコードデータのサイズ取得
+ * @param {string} base64Data base64エンコードデータ
+ * @return {string | null}
+ */
+export const getBase64DataMimeType = (base64Data: string): string | null => {
+  const match = base64Data.match(/^data:(.+?);base64,/)
+  return match?.[1] ?? null
 }
