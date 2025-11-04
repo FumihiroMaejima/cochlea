@@ -65,7 +65,7 @@ class EncryptLibrary
     /**
      * create initialization vector
      *
-     * @param string $value length of iv
+     * @param int $value length of iv
      * @return string initialization vector
      */
     public static function createIv(int $value = 16): string

@@ -170,10 +170,10 @@ export const readFileDataAsBinaryString = async (
 
 /**
  * 画像の縦横サイズの取得
- * @param {File} file
+ * @param {File|Blob} file
  * @return {Promise<number[]>}
  */
-export const getImageWidthAndHeight = async (file: File): Promise<number[]> => {
+export const getImageWidthAndHeight = async (file: File|Blob): Promise<number[]> => {
   const image = new Image()
   return new Promise(
     (resolve: (param: number[]) => void, reject: (reason: unknown) => void) => {

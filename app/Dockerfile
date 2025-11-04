@@ -2,7 +2,8 @@
 # FROM php:8.0.22-fpm-alpine
 # FROM php:8.1.9-fpm-alpine
 # FROM php:8.2-fpm-alpine3.17
-FROM php:8.3-fpm-alpine3.21
+# FROM php:8.3-fpm-alpine3.21
+FROM php:8.4-fpm-alpine3.21
 # FROM php:8.2-rc-fpm-alpine
 
 # tinker(psysh)
