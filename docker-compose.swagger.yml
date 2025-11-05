@@ -1,4 +1,3 @@
-version: '3'
 services:
   editor:
     container_name: ${PROJECT_NAME:-testProject}_swagger-editor
