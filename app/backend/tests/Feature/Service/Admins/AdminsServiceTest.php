@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admin\Admins\AdminBaseRequest;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -80,9 +82,10 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * admin create request test.
-     * @dataProvider adminCreateDataProvider
      * @return void
      */
+    #[Test]
+    #[DataProvider('adminCreateDataProvider')]
     public function testCreateAdminsSuccess(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
         $response = $this->json('POST', route('admin.admins.create'), [
@@ -123,9 +126,10 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * admins create 422 error request test.
-     * @dataProvider adminCreate422FailedDataProvider
      * @return void
      */
+    #[Test]
+    #[DataProvider('adminCreate422FailedDataProvider')]
     public function testCreateAdmin422Failed(string $name, string $email, int $roleId, string $password, string $password_confirmation): void
     {
         /* $data = Config::get('myappTest.test.admin.create.success');
@@ -197,9 +201,10 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * admin delete request test.
-     * @dataProvider adminRemoveDataProvider
      * @return void
      */
+    #[Test]
+    #[DataProvider('adminRemoveDataProvider')]
     public function testRemoveAdminsSuccess(int $id): void
     {
         // $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
@@ -221,9 +226,10 @@ class AdminsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * admin delete request test.
-     * @dataProvider adminRemoveValidationErrorDataProvider
      * @return void
      */
+    #[Test]
+    #[DataProvider('adminRemoveValidationErrorDataProvider')]
     public function testRemoveAdminsValidationError(int $id): void
     {
         // $response = $this->json('DELETE', route('admin.admins.delete', [AdminBaseRequest::KEY_ID => $id]), [], self::getHeaders());
