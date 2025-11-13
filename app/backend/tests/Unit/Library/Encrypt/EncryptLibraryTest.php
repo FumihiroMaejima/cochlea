@@ -164,7 +164,7 @@ class EncryptLibraryTest extends TestCase
      * @param Exception|null $exception
      * @return void
      */
-    public function testCreateIvRandomValue(int $length, Exception $exception = null): void
+    public function testCreateIvRandomValue(int $length, ?Exception $exception = null): void
     {
         /* if (!is_null($exception)) {
             $this->assertThrows(, $exception);

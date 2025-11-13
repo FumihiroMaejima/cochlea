@@ -536,60 +536,60 @@ class TimeLibraryTest extends TestCase
     /**
      * test check date for hyphen
      * @dataProvider checkDateDataProvider
-     * @param string $date
+     * @param string $value
      * @param bool $expect
      * @return void
      */
-    public function testCheckDete(string $date, bool $expect): void
+    public function testCheckDete(string $value, bool $expect): void
     {
         $this->assertEquals(
             $expect,
-            TimeLibrary::checkDateFormat($date)
+            TimeLibrary::checkDateFormat($value)
         );
     }
 
     /**
      * test check date separated by hyphen.
      * @dataProvider checkDateDataByHyphenDataProvider
-     * @param string $date
+     * @param string $value
      * @param bool $expect
      * @return void
      */
-    public function testCheckDeteByHyphen(string $date, bool $expect): void
+    public function testCheckDeteByHyphen(string $value, bool $expect): void
     {
         $this->assertEquals(
             $expect,
-            TimeLibrary::checkDateFormatByHyphen($date)
+            TimeLibrary::checkDateFormatByHyphen($value)
         );
     }
 
     /**
      * test check datetime
      * @dataProvider checkDateDataTimeDataProvider
-     * @param string $dateTime
+     * @param string $value
      * @param bool $expect
      * @return void
      */
-    public function testCheckTimeDete(string $dateTime, bool $expect): void
+    public function testCheckTimeDete(string $value, bool $expect): void
     {
         $this->assertEquals(
             $expect,
-            TimeLibrary::checkDateTimeFormat($dateTime)
+            TimeLibrary::checkDateTimeFormat($value)
         );
     }
 
     /**
      * test check datetime for hyphen
      * @dataProvider checkDateDataTimeByHyphenDataProvider
-     * @param string $dateTime
+     * @param string $value
      * @param bool $expect
      * @return void
      */
-    public function testCheckTimeByHyphenDete(string $dateTime, bool $expect): void
+    public function testCheckTimeByHyphenDete(string $value, bool $expect): void
     {
         $this->assertEquals(
             $expect,
-            TimeLibrary::checkDateTimeFormatByHyphen($dateTime)
+            TimeLibrary::checkDateTimeFormatByHyphen($value)
         );
     }
 }

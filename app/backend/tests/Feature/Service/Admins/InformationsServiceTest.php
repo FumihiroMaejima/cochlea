@@ -69,15 +69,16 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
         string $name,
         int $type,
         string $detail,
-        string $startAt,
-        string $endAt
+        string $start_at,
+        string $end_at,
+        array $informations
     ): void {
         $response = $this->json('POST', route('admin.informations.create'), [
             InformationBaseRequest::KEY_NAME     => $name,
             InformationBaseRequest::KEY_TYPE     => $type,
             InformationBaseRequest::KEY_DETAIL   => $detail,
-            InformationBaseRequest::KEY_START_AT => $startAt,
-            InformationBaseRequest::KEY_END_AT   => $endAt,
+            InformationBaseRequest::KEY_START_AT => $start_at,
+            InformationBaseRequest::KEY_END_AT   => $end_at,
             // InformationBaseRequest::KEY_IMAGE    => $image,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
@@ -126,15 +127,16 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
         string $name,
         int|null $type,
         string $detail,
-        string $startAt,
-        string $endAt
+        string $start_at,
+        string $end_at,
+        array $informations
     ): void {
         $response = $this->json('POST', route('admin.informations.create'), [
             InformationBaseRequest::KEY_NAME     => $name,
             InformationBaseRequest::KEY_TYPE     => $type,
             InformationBaseRequest::KEY_DETAIL   => $detail,
-            InformationBaseRequest::KEY_START_AT => $startAt,
-            InformationBaseRequest::KEY_END_AT   => $endAt,
+            InformationBaseRequest::KEY_START_AT => $start_at,
+            InformationBaseRequest::KEY_END_AT   => $end_at,
             // InformationBaseRequest::KEY_IMAGE    => $image,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);

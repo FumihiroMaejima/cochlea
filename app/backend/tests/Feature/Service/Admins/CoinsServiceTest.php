@@ -71,17 +71,18 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
         string $detail,
         int $price,
         int $cost,
-        string $startAt,
-        string $endAt,
-        string|null $image
+        string $start_at,
+        string $end_at,
+        string|null $image,
+        array $coins
     ): void {
         $response = $this->json('POST', route('admin.coins.create'), [
             CoinBaseRequest::KEY_NAME     => $name,
             CoinBaseRequest::KEY_DETAIL   => $detail,
             CoinBaseRequest::KEY_PRICE    => $price,
             CoinBaseRequest::KEY_COST     => $cost,
-            CoinBaseRequest::KEY_START_AT => $startAt,
-            CoinBaseRequest::KEY_END_AT   => $endAt,
+            CoinBaseRequest::KEY_START_AT => $start_at,
+            CoinBaseRequest::KEY_END_AT   => $end_at,
             // CoinBaseRequest::KEY_IMAGE    => $image,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
@@ -138,17 +139,18 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
         string $detail,
         int|null $price,
         int|null $cost,
-        string $startAt,
-        string $endAt,
-        string|null $image
+        string $start_at,
+        string $end_at,
+        string|null $image,
+        array $coins
     ): void {
         $response = $this->json('POST', route('admin.coins.create'), [
             CoinBaseRequest::KEY_NAME     => $name,
             CoinBaseRequest::KEY_DETAIL   => $detail,
             CoinBaseRequest::KEY_PRICE    => $price,
             CoinBaseRequest::KEY_COST     => $cost,
-            CoinBaseRequest::KEY_START_AT => $startAt,
-            CoinBaseRequest::KEY_END_AT   => $endAt,
+            CoinBaseRequest::KEY_START_AT => $start_at,
+            CoinBaseRequest::KEY_END_AT   => $end_at,
             // CoinBaseRequest::KEY_IMAGE    => $image,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);
