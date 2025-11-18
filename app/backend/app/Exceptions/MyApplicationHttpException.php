@@ -36,7 +36,7 @@ class MyApplicationHttpException extends HttpException
         string $message = '',
         array $parameter = [],
         bool $isResponseMessage = false,
-        Throwable $previous = null,
+        ?Throwable $previous = null,
         array $headers = [],
         int $code = 0
     ) {
