@@ -69,15 +69,16 @@ class EventsServiceTest extends AdminServiceBaseTestCase
         string $name,
         int $type,
         string $detail,
-        string $startAt,
-        string $endAt
+        string $start_at,
+        string $end_at,
+        array $events
     ): void {
         $response = $this->json('POST', route('admin.events.create'), [
             EventBaseRequest::KEY_NAME     => $name,
             EventBaseRequest::KEY_TYPE     => $type,
             EventBaseRequest::KEY_DETAIL   => $detail,
-            EventBaseRequest::KEY_START_AT => $startAt,
-            EventBaseRequest::KEY_END_AT   => $endAt,
+            EventBaseRequest::KEY_START_AT => $start_at,
+            EventBaseRequest::KEY_END_AT   => $end_at,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_201);
     }
@@ -125,15 +126,16 @@ class EventsServiceTest extends AdminServiceBaseTestCase
         string $name,
         int|null $type,
         string $detail,
-        string $startAt,
-        string $endAt
+        string $start_at,
+        string $end_at,
+        array $events
     ): void {
         $response = $this->json('POST', route('admin.events.create'), [
             EventBaseRequest::KEY_NAME     => $name,
             EventBaseRequest::KEY_TYPE     => $type,
             EventBaseRequest::KEY_DETAIL   => $detail,
-            EventBaseRequest::KEY_START_AT => $startAt,
-            EventBaseRequest::KEY_END_AT   => $endAt,
+            EventBaseRequest::KEY_START_AT => $start_at,
+            EventBaseRequest::KEY_END_AT   => $end_at,
             // EventBaseRequest::KEY_IMAGE    => $image,
         ], self::getHeaders());
         $response->assertStatus(StatusCodeMessages::STATUS_422);

@@ -16,11 +16,11 @@ class BaseSlackNotificationService
     /**
      * send slack notification
      *
-     * @param  string $message
-     * @param  array $attachment
+     * @param ?string $message
+     * @param ?array $attachment
      * @return void
      */
-    public function send(string $message = null, array $attachment = null): void
+    public function send(?string $message = null, ?array $attachment = null): void
     {
         if (Config::get('app.env') !== 'testing') {
             $this->notify(new AdminUpdateNotification($message, $attachment));

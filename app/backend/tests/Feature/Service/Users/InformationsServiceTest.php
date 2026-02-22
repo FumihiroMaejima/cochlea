@@ -76,14 +76,15 @@ class InformationsServiceTest extends UserServiceBaseTestCase
     }
 
     /**
-     * user reead information create request test.
+     * user read information create request test.
      * @dataProvider userReadInformationCreateDataProvider
+     * @param int $id
      * @return void
      */
-    public function testCreateUserReadInformationSuccess(int $informationId): void
+    public function testCreateUserReadInformationSuccess(int $id): void
     {
         $response = $this->post(
-            route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $informationId]),
+            route('user.informations.information.read.create', [InformationBaseRequest::KEY_ID => $id]),
             headers: self::getHeaders()
         );
         $response->assertStatus(StatusCodeMessages::STATUS_201);

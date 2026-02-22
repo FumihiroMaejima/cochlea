@@ -82,14 +82,16 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
     /**
      * user service term create request test.
      * @dataProvider createUserServiceTermDataProvider
+     * @param int $id
+     * @param int $expect
      * @return void
      */
-    public function testCreateUserServiceTermSuccess(int $serviceTermId, int $expect): void
+    public function testCreateUserServiceTermSuccess(int $id, int $expect): void
     {
         $response = $this->post(
             route(
                 'user.serviceTerms.serviceTerm.agree.create',
-                [UserServiceTermsCreateRequest::KEY_ID => $serviceTermId]
+                [UserServiceTermsCreateRequest::KEY_ID => $id]
             ),
             headers: self::getHeaders()
         );

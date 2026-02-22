@@ -126,15 +126,18 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
     /**
      * user Questionnaire create request test.
      * @dataProvider createUserQuestionnairesDataProvider
+     * @param int $id
+     * @param array $requestBody
+     * @param int $expect
      * @return void
      */
-    public function testCreateUserQuestionnairesSuccess(int $questionnaireId, array $requestBody, int $expect): void
+    public function testCreateUserQuestionnairesSuccess(int $id, array $requestBody, int $expect): void
     {
         // TODO UserQuestionnaireの初期化処理
         $response = $this->post(
             route(
                 'user.questionnaires.questionnaire.answer.create',
-                [UserQuestionnairesCreateRequest::KEY_ID => $questionnaireId]
+                [UserQuestionnairesCreateRequest::KEY_ID => $id]
             ),
             $requestBody,
             headers: self::getHeaders()
@@ -145,15 +148,18 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
     /**
      * user Questionnaire update request test.
      * @dataProvider updateUserQuestionnairesDataProvider
+     * @param int $id
+     * @param array $requestBody
+     * @param int $expect
      * @return void
      */
-    public function testUpdateUserQuestionnairesSuccess(int $questionnaireId, array $requestBody, int $expect): void
+    public function testUpdateUserQuestionnairesSuccess(int $id, array $requestBody, int $expect): void
     {
         // TODO UserQuestionnaireの初期化処理
         $response = $this->patch(
             route(
                 'user.questionnaires.questionnaire.answer.update',
-                [UserQuestionnairesCreateRequest::KEY_ID => $questionnaireId]
+                [UserQuestionnairesCreateRequest::KEY_ID => $id]
             ),
             $requestBody,
             headers: self::getHeaders()

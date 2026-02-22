@@ -1,44 +1,42 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2.0",
-        "chillerlan/php-qrcode": "^4.3",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.2",
-        "laravel/jetstream": "^2.7",
-        "laravel/sanctum": "^3.2",
-        "laravel/slack-notification-channel": "^2.4",
-        "laravel/socialite": "^5.6",
-        "laravel/tinker": "^2.7",
-        "league/flysystem-aws-s3-v3": "^3.10",
-        "livewire/livewire": "^2.5",
+        "php": "^8.2",
+        "chillerlan/php-qrcode": "^5.0",
+        "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/slack-notification-channel": "^3.6",
+        "laravel/socialite": "^5.23",
+        "laravel/tinker": "^2.10.1",
+        "league/flysystem-aws-s3-v3": "^3.30",
         "maatwebsite/excel": "^3.1",
-        "predis/predis": "^1.1",
-        "psr/simple-cache": "^1.0",
-        "stripe/stripe-php": "^8.9",
-        "tecnickcom/tcpdf": "^6.5",
-        "tymon/jwt-auth": "^2.0.0"
+        "predis/predis": "^3.2",
+        "stripe/stripe-php": "^18.1",
+        "tecnickcom/tcpdf": "^6.10",
+        "tymon/jwt-auth": "^2.2"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.6",
-        "barryvdh/laravel-ide-helper": "^2.12",
-        "codedungeon/phpunit-result-printer": "^0.32.0",
-        "fakerphp/faker": "^1.9.1",
-        "friendsofphp/php-cs-fixer": "^3.8",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "nunomaduro/phpinsights": "^2.6",
-        "phpmd/phpmd": "^2.12",
-        "phpstan/extension-installer": "^1.2",
-        "phpstan/phpstan": "^1.9",
-        "phpunit/phpunit": "^10.0",
-        "spatie/laravel-ignition": "^2.0",
-        "squizlabs/php_codesniffer": "^3.6"
+        "barryvdh/laravel-debugbar": "^3.16",
+        "barryvdh/laravel-ide-helper": "^3.6",
+        "codedungeon/phpunit-result-printer": "^0.1.0",
+        "fakerphp/faker": "^1.23",
+        "friendsofphp/php-cs-fixer": "^3.89",
+        "laravel/pail": "^1.2.2",
+        "laravel/pint": "^1.24",
+        "laravel/sail": "^1.41",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "nunomaduro/phpinsights": "^2.13",
+        "phpmd/phpmd": "^2.15",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5.3",
+        "squizlabs/php_codesniffer": "^3.13"
     },
     "autoload": {
         "psr-4": {
@@ -56,6 +54,22 @@
         }
     },
     "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan migrate --force",
+            "npm install",
+            "npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -67,7 +81,12 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
     },
     "extra": {
@@ -80,8 +99,10 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": false,
-            "phpstan/extension-installer": false
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     },
     "minimum-stability": "stable",

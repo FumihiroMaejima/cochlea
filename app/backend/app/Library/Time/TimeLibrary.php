@@ -232,7 +232,8 @@ class TimeLibrary
      */
     public static function diffDays(string $dateTime, string $targetDateTime): int
     {
-        return (new Carbon($dateTime))->diffInDays($targetDateTime);
+        // 切り捨てで日数を取得
+        return intval(floor((new Carbon($dateTime))->diffInDays($targetDateTime)));
     }
 
     /**
