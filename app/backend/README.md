@@ -6,10 +6,10 @@ Laravel環境をDockerで構築する為の手順書
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.2(php:8.2-fpm-alpine3.17) |
+| PHP | 8.4(php:8.4-fpm-alpine3.17) |
 | MySQL | 5.7 |
-| Nginx | 1.25(nginx:1.25-alpine) |
-| Laravel | 10.* |
+| Nginx | 1.29(nginx:1.29-alpine) |
+| Laravel | 12.* |
 
 ---
 # ローカル環境の構築(Mac)
@@ -207,6 +207,9 @@ nginxのポート設定は要注意が必要。
 
 ```shell
 $ composer create-project laravel/laravel=7.* --prefer-dist backend
+
+### 移行用プロジェクトを作成する場合
+composer create-project laravel/laravel=12.* --prefer-dist backend2
 ```
 
 ## 不要ファイルの削除
@@ -255,7 +258,23 @@ $ composer require --dev codedungeon/phpunit-result-printer
 $ composer require --dev barryvdh/laravel-ide-helper
 
 # one liner
-$ composer require --dev nunomaduro/phpinsights barryvdh/laravel-debugbar friendsofphp/php-cs-fixer squizlabs/php_codesniffer phpmd/phpmd codedungeon/phpunit-result-printer barryvdh/laravel-ide-helper
+composer require --dev nunomaduro/phpinsights barryvdh/laravel-debugbar friendsofphp/php-cs-fixer squizlabs/php_codesniffer phpmd/phpmd codedungeon/phpunit-result-printer barryvdh/laravel-ide-helper phpstan/phpstan phpstan/extension-installer
+
+# requireパッケージ
+composer require tymon/jwt-auth maatwebsite/excel tecnickcom/tcpdf laravel/slack-notification-channel predis/predis stripe/stripe-php league/flysystem-aws-s3-v3 laravel/socialite chillerlan/php-qrcode
+```
+
+### 下記のvendor:publishを実行
+
+```shell
+
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
+php artisan vendor:publish --provider="NunoMaduro\PhpInsights\Application\Adapters\Laravel\InsightsServiceProvider"
+
+### ついでに鍵を作成しておく
+php artisan jwt:secret
+
 ```
 
 php-cs-fixer,phpcs,phpmdの設定ファイルを格納する

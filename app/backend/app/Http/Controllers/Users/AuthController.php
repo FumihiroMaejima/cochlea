@@ -105,6 +105,13 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $user = auth('api-users')->user();
+        if (empty($user)) {
+            throw new MyApplicationHttpException(
+                StatusCodeMessages::STATUS_401,
+                'Unauthorized',
+                isResponseMessage: true,
+            );
+        }
 
         // ログイン日時を更新
         (new User())->updateLastLoginAt($user->id, TimeLibrary::getCurrentDateTime());

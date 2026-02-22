@@ -64,7 +64,7 @@ class StatusCodeMessages
 
 
     /** @var array A list of Http Error Message. */
-    public array $httpErrorsMessages = [
+    public const HTTP_STATUS_MESSAGE_LIST = [
         self::STATUS_400 => self::MESSAGE_400,
         self::STATUS_401 => self::MESSAGE_401,
         self::STATUS_402 => self::MESSAGE_402,

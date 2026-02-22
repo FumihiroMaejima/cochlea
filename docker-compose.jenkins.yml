@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   jenkins-master:
     container_name: ${PROJECT_NAME}-jenkins-master
