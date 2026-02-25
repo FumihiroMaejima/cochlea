@@ -13,10 +13,12 @@ use App\Library\Time\TimeLibrary;
 use App\Models\Masters\OAuthUsers;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteManager;
+use Laravel\Socialite\Two\GithubProvider;
 use Laravel\Socialite\Two\GoogleProvider;
 use Exception;
 
@@ -46,9 +48,25 @@ class SocialLoginController extends Controller
      */
     public function redirectToGitHub(): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
     {
+        /* @var GithubProvider $provider */
         $provider = Socialite::driver('github');
 
         return $provider->redirect();
+    }
+
+    /**
+     * GithubへのリダイレクトURL取得処理
+     *
+     * @return JsonResponse
+     */
+    public function getRedirectUrlForGitHub(): JsonResponse
+    {
+        /* @var GithubProvider $provider */
+        $provider = Socialite::driver('github');
+
+        return response()->json([
+            'redirect_url' => $provider->redirect()->getTargetUrl()
+        ]);
     }
 
     /**

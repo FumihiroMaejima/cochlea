@@ -280,6 +280,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::middleware(['middleware' => 'oauth_api'])->group(function () {
         Route::group(['prefix' => 'oauth'], function () {
             Route::get('github', [\App\Http\Controllers\Admins\SocialLoginController::class, 'redirectToGitHub'])->name('oauth.github.redirectProvider');
+            Route::get('github/redirectUrl', [\App\Http\Controllers\Admins\SocialLoginController::class, 'getRedirectUrlForGitHub'])->name('oauth.github.getRedirectUrl');
             Route::get('github/callback', [\App\Http\Controllers\Admins\SocialLoginController::class, 'callBackOfGitHub'])->name('oauth.github.callBack');
         });
     });
