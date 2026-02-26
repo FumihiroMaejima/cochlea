@@ -64,6 +64,10 @@ class SocialLoginController extends Controller
         /* @var GithubProvider $provider */
         $provider = Socialite::driver('github');
 
+        /* @see SocialiteManager::buildProvider */
+        /* @var GithubProvider $provider */
+        // $provider = Socialite::buildProvider('github', config('services.github'));
+
         return response()->json([
             'redirect_url' => $provider->redirect()->getTargetUrl()
         ]);
