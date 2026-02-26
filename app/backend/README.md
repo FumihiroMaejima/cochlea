@@ -303,6 +303,11 @@ vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
 ### deprecatedを表示したい場合
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php -display-phpunit-deprecations
 
+### 一括で行いたい場合はphpunit.xmlのphpunitタグ内に下記のプロパティを追加する
+```xml
+displayDetailsOnPhpunitDeprecations="true"
+```
+
 # Dockerコンテナ内で実行する場合
 docker compose exec app vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 docker compose exec app vendor/bin/phpunit tests/Feature/Service/Admins/AdminsServiceTest.php --testdox
