@@ -5,6 +5,8 @@ namespace Tests\Unit\Library\Array;
 use App\Library\Array\ArrayLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ArrayLibraryTest extends TestCase
 {
@@ -35,7 +37,7 @@ class ArrayLibraryTest extends TestCase
     {
         return [
             'convert array to array' => [
-                [
+                'data'  => [
                     'test_key11' => [
                         'test_key11' => 11,
                         'test_key12' => 12,
@@ -49,7 +51,7 @@ class ArrayLibraryTest extends TestCase
                 ],
             ],
             'convert object to array' => [
-                [
+                'data' => [
                     'test_key11' => (object)[
                         'test_key11' => 11,
                         'test_key12' => 12,
@@ -166,9 +168,11 @@ class ArrayLibraryTest extends TestCase
     /**
      * test to array.
      *
-     * @dataProvider arraySampleDataProvider
+     * @param array $data
      * @return void
      */
+    #[Test]
+    #[DataProvider('arraySampleDataProvider')]
     public function testToArray(array $data): void
     {
         $result = ArrayLibrary::toArray($data);
