@@ -14,6 +14,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Exports\Masters\Coins\CoinsBulkInsertTemplateExport;
 use App\Http\Requests\Admin\Roles\RoleBaseRequest;
 use App\Http\Requests\Admin\Coins\CoinBaseRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\CoinsTableSeeder;
@@ -63,9 +64,9 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * coin create request test.
-     * @dataProvider coinCreateDataProvider
      * @return void
      */
+    #[DataProvider('coinCreateDataProvider')]
     public function testCreateCoinSuccess(
         string $name,
         string $detail,
@@ -131,9 +132,9 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * coin create 422 error request test.
-     * @dataProvider coinCreate422FailedDataProvider
      * @return void
      */
+    #[DataProvider('coinCreate422FailedDataProvider')]
     public function testCreateCoin422Failed(
         string $name,
         string $detail,
@@ -270,9 +271,9 @@ class CoinsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * coin remove validation error test.
-     * @dataProvider coinRemoveValidationErrorDataProvider
      * @return void
      */
+    #[DataProvider('coinRemoveValidationErrorDataProvider')]
     public function testRemoveCoinValidationError(array $coins): void
     {
         $response = $this->json('DELETE', route('admin.coins.delete'), [

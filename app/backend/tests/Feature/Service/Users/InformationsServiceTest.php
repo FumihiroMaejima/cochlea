@@ -14,6 +14,7 @@ use App\Models\Masters\Informations;
 use App\Models\Users\UserReadInformations;
 use App\Repositories\Users\UserReadInformations\UserReadInformationsRepository;
 use Database\Seeders\Masters\InformationsTableSeeder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,10 +78,10 @@ class InformationsServiceTest extends UserServiceBaseTestCase
 
     /**
      * user read information create request test.
-     * @dataProvider userReadInformationCreateDataProvider
      * @param int $id
      * @return void
      */
+    #[DataProvider('userReadInformationCreateDataProvider')]
     public function testCreateUserReadInformationSuccess(int $id): void
     {
         $response = $this->post(

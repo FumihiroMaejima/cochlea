@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Library\Message\StatusCodeMessages;
 use App\Exports\Masters\Informations\InformationsBulkInsertTemplateExport;
 use App\Http\Requests\Admin\Informations\InformationBaseRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\InformationsTableSeeder;
@@ -62,9 +63,9 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * information create request test.
-     * @dataProvider informationCreateDataProvider
      * @return void
      */
+    #[DataProvider('informationCreateDataProvider')]
     public function testCreateInformationSuccess(
         string $name,
         int $type,
@@ -120,9 +121,9 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * information create 422 error request test.
-     * @dataProvider informationCreate422FailedDataProvider
      * @return void
      */
+    #[DataProvider('informationCreate422FailedDataProvider')]
     public function testCreateInformation422Failed(
         string $name,
         int|null $type,
@@ -254,9 +255,9 @@ class InformationsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * information remove validation error test.
-     * @dataProvider informationRemoveValidationErrorDataProvider
      * @return void
      */
+    #[DataProvider('informationRemoveValidationErrorDataProvider')]
     public function testRemoveInformationValidationError(array $informations): void
     {
         $response = $this->json('DELETE', route('admin.informations.delete'), [

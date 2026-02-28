@@ -12,6 +12,7 @@ use App\Http\Requests\User\ServiceTerms\UserServiceTermsCreateRequest;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\ServiceTerms;
 use Database\Seeders\Masters\ServiceTermsTableSeeder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -81,11 +82,11 @@ class ServiceTermsServiceTest extends UserServiceBaseTestCase
 
     /**
      * user service term create request test.
-     * @dataProvider createUserServiceTermDataProvider
      * @param int $id
      * @param int $expect
      * @return void
      */
+    #[DataProvider('createUserServiceTermDataProvider')]
     public function testCreateUserServiceTermSuccess(int $id, int $expect): void
     {
         $response = $this->post(
