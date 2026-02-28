@@ -15,6 +15,7 @@ use App\Library\Message\StatusCodeMessages;
 use App\Exports\Masters\Banners\BannersBulkInsertTemplateExport;
 use App\Exports\Masters\Events\EventsBulkInsertTemplateExport;
 use App\Http\Requests\Admin\Banners\BannerBaseRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\BannersTableSeeder;
@@ -64,9 +65,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
 
     /**
      * banner create request test.
-     * @dataProvider bannerCreateDataProvider
      * @return void
      */
+    #[DataProvider('bannerCreateDataProvider')]
     public function testCreateBannerSuccess(
         string $name,
         string $detail,
@@ -139,9 +140,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
 
     /**
      * banner create 422 error request test.
-     * @dataProvider bannerCreate422FailedDataProvider
      * @return void
      */
+    #[DataProvider('bannerCreate422FailedDataProvider')]
     public function testCreateBanner422Failed(
         string $name,
         string $detail,
@@ -300,9 +301,9 @@ class BannersServiceTest extends AdminServiceBaseTestCase
 
     /**
      * banner remove validation error test.
-     * @dataProvider bannerRemoveValidationErrorDataProvider
      * @return void
      */
+    #[DataProvider('bannerRemoveValidationErrorDataProvider')]
     public function testRemoveBannerValidationError(array $banners): void
     {
         $response = $this->json('DELETE', route('admin.banners.delete'), [

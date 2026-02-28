@@ -6,6 +6,7 @@ use App\Library\Array\ArrayLibrary;
 use App\Library\Fiber\FiberLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FiberLibraryTest extends TestCase
 {
@@ -54,11 +55,11 @@ class FiberLibraryTest extends TestCase
     /**
      * test get fiber.
      *
-     * @dataProvider getFiberDataProvider
      * @param int $value
      * @param int $expect
      * @return void
      */
+    #[DataProvider('getFiberDataProvider')]
     public function testGetFiber(int $value, int $expect): void
     {
         $fiber = FiberLibrary::getFiber($value);
@@ -75,11 +76,11 @@ class FiberLibraryTest extends TestCase
     /**
      * test sample suspend.
      *
-     * @dataProvider sampleSuspendDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('sampleSuspendDataProvider')]
     public function testSampleSuspend(string $value, string $expect): void
     {
         $fiber = FiberLibrary::sampleSuspend($value);

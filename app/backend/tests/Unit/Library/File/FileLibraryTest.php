@@ -6,6 +6,7 @@ namespace Tests\Unit\Library\File;
 
 use App\Library\File\FileLibrary;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileLibraryTest extends TestCase
 {
@@ -34,10 +35,10 @@ class FileLibraryTest extends TestCase
     /**
      * test get storage disk by env.
      *
-     * @dataProvider getQRCodeByUrlDataProvider
      * @param string $$expect
      * @return void
      */
+    #[DataProvider('getQRCodeByUrlDataProvider')]
     public function testGetStorageDiskByEnv(string $expect): void
     {
         $this->assertEquals($expect, FileLibrary::getStorageDiskByEnv());

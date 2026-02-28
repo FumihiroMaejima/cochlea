@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Library\Message\StatusCodeMessages;
 use App\Exports\Masters\Events\EventsBulkInsertTemplateExport;
 use App\Http\Requests\Admin\Events\EventBaseRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Database\Seeders\Masters\AdminsTableSeeder;
 use Database\Seeders\Masters\AdminsRolesTableSeeder;
 use Database\Seeders\Masters\EventsTableSeeder;
@@ -62,9 +63,9 @@ class EventsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * event create request test.
-     * @dataProvider eventCreateDataProvider
      * @return void
      */
+    #[DataProvider('eventCreateDataProvider')]
     public function testCreateEventSuccess(
         string $name,
         int $type,
@@ -119,9 +120,9 @@ class EventsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * event create 422 error request test.
-     * @dataProvider eventCreate422FailedDataProvider
      * @return void
      */
+    #[DataProvider('eventCreate422FailedDataProvider')]
     public function testCreateEvent422Failed(
         string $name,
         int|null $type,
@@ -253,9 +254,9 @@ class EventsServiceTest extends AdminServiceBaseTestCase
 
     /**
      * event remove validation error test.
-     * @dataProvider eventRemoveValidationErrorDataProvider
      * @return void
      */
+    #[DataProvider('eventRemoveValidationErrorDataProvider')]
     public function testRemoveEventValidationError(array $events): void
     {
         $response = $this->json('DELETE', route('admin.events.delete'), [

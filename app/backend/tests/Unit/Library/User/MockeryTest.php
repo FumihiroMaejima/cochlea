@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 use PHPUnit\Framework\TestCase;
 //use Tests\TestCase;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 class MockeryTest extends TestCase
 {
@@ -58,15 +61,14 @@ class MockeryTest extends TestCase
     /**
      * test validate user password.
      *
-     * @dataProvider validateUserPasswordDataProvider
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @param string $password
      * @param array $user
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('validateUserPasswordDataProvider')]
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testValidateUserPassword(
         string $password,
         array $user,
@@ -92,11 +94,10 @@ class MockeryTest extends TestCase
     /**
      * test static method mock.
      *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     *
      * @return void
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testStaticMethodMock(): void
     {
         $value = [456];
@@ -113,14 +114,13 @@ class MockeryTest extends TestCase
      * test for overload class mock.
      * *特定のクラスのoverloadする場合は下記のアノテーションをつける
      *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     *
      * runInSeparateProcess:該当のテストを個別のプロセスで実行するようする
      * preserveGlobalState:テストを別プロセスで実行するときに、親プロセスのグローバルな状態を保存するのを無効化する
      * staticメソッドのモックでも上記のアノテーションをつけないと他のテストクラスで影響が出てくる
      * @return void
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testOverLoadMock(): void
     {
         $value = [123];

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Library\Message\StatusCodeMessages;
 use App\Http\Requests\Admin\Roles\RoleBaseRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,9 +56,9 @@ class RolesServiceTest extends AdminServiceBaseTestCase
 
     /**
      * role create request test.
-     * @dataProvider roleCreateDataProvider
      * @return void
      */
+    #[DataProvider('roleCreateDataProvider')]
     public function testCreateRoleSuccess(string $name, string $code, string $detail, array $permissions): void
     {
         $response = $this->json('POST', route('admin.roles.create'), [
@@ -95,9 +96,9 @@ class RolesServiceTest extends AdminServiceBaseTestCase
 
     /**
      * role create 422 error request test.
-     * @dataProvider roleCreate422FailedDataProvider
      * @return void
      */
+    #[DataProvider('roleCreate422FailedDataProvider')]
     public function testCreateRole422Failed(string $name, string $code, string $detail, array $permissions): void
     {
         $response = $this->json('POST', route('admin.roles.create'), [
@@ -181,9 +182,9 @@ class RolesServiceTest extends AdminServiceBaseTestCase
 
     /**
      * role remove validation error test.
-     * @dataProvider roleRemoveValidationErrorDataProvider
      * @return void
      */
+    #[DataProvider('roleRemoveValidationErrorDataProvider')]
     public function testRemoveRoleValidationError(array $roles): void
     {
         $response = $this->json('DELETE', route('admin.roles.delete'), [

@@ -5,6 +5,7 @@ namespace Tests\Unit\Library\String;
 use App\Library\String\SurrogatePair;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SurrogatePairTest extends TestCase
 {
@@ -38,11 +39,11 @@ class SurrogatePairTest extends TestCase
     /**
      * test check surrogatePair.
      *
-     * @dataProvider checkSurrogatePairDataProvider
      * @param string $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('checkSurrogatePairDataProvider')]
     public function testCheckSurrogatePair(string $value, bool $expect): void
     {
         $this->assertSame($expect, SurrogatePair::isNotSurrogatePair($value));

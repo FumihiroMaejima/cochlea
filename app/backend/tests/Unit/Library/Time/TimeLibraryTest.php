@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Time;
 use App\Library\Time\TimeLibrary;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TimeLibraryTest extends TestCase
 {
@@ -503,12 +504,12 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test start day of month
-     * @dataProvider startDayOfMonthDataProvider
      * @param ?int $value
      * @param string $format
      * @param string $expect
      * @return void
      */
+    #[DataProvider('startDayOfMonthDataProvider')]
     public function testStartDayOfMonth(?int $value, string $format, string $expect): void
     {
         $this->assertEquals(
@@ -519,12 +520,12 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test last day of month
-     * @dataProvider lastDayOfMonthDataProvider
      * @param ?int $value
      * @param string $format
      * @param string $expect
      * @return void
      */
+    #[DataProvider('lastDayOfMonthDataProvider')]
     public function testLastDayOfMonth(?int $value, string $format, string $expect): void
     {
         $this->assertEquals(
@@ -535,11 +536,11 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check date for hyphen
-     * @dataProvider checkDateDataProvider
      * @param string $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('checkDateDataProvider')]
     public function testCheckDete(string $value, bool $expect): void
     {
         $this->assertEquals(
@@ -550,11 +551,11 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check date separated by hyphen.
-     * @dataProvider checkDateDataByHyphenDataProvider
      * @param string $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('checkDateDataByHyphenDataProvider')]
     public function testCheckDeteByHyphen(string $value, bool $expect): void
     {
         $this->assertEquals(
@@ -565,11 +566,11 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check datetime
-     * @dataProvider checkDateDataTimeDataProvider
      * @param string $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('checkDateDataTimeDataProvider')]
     public function testCheckTimeDete(string $value, bool $expect): void
     {
         $this->assertEquals(
@@ -580,11 +581,11 @@ class TimeLibraryTest extends TestCase
 
     /**
      * test check datetime for hyphen
-     * @dataProvider checkDateDataTimeByHyphenDataProvider
      * @param string $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('checkDateDataTimeByHyphenDataProvider')]
     public function testCheckTimeByHyphenDete(string $value, bool $expect): void
     {
         $this->assertEquals(
