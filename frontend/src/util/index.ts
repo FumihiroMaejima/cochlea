@@ -173,7 +173,9 @@ export const readFileDataAsBinaryString = async (
  * @param {File|Blob} file
  * @return {Promise<number[]>}
  */
-export const getImageWidthAndHeight = async (file: File|Blob): Promise<number[]> => {
+export const getImageWidthAndHeight = async (
+  file: File | Blob,
+): Promise<number[]> => {
   const image = new Image()
   return new Promise(
     (resolve: (param: number[]) => void, reject: (reason: unknown) => void) => {

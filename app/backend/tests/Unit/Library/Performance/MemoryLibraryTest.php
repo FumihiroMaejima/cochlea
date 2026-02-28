@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Performance;
 use App\Library\Performance\MemoryLibrary;
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Class of MemoryLibrary
@@ -92,11 +93,11 @@ class MemoryLibraryTest extends TestCase
     /**
      * test get int vakue list memory usage.
      *
-     * @dataProvider convertToMemoryUsageDataProvider
      * @param int $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('convertToMemoryUsageDataProvider')]
     public function testConvert(int $value, string $expect): void
     {
         $this->assertSame($expect, MemoryLibrary::convert($value));
@@ -105,11 +106,11 @@ class MemoryLibraryTest extends TestCase
     /**
      * test get int vakue list memory usage.
      *
-     * @dataProvider intValueUsageListDataProvider
      * @param int $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('intValueUsageListDataProvider')]
     public function testGetIntValueListUsage(int $value, string $expect): void
     {
         $this->assertSame($expect, MemoryLibrary::getIntValueListUsage($value));

@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Hash;
 use App\Library\Hash\SHA256HasherLibrary;
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Class of SHA256HasherLibrary
@@ -76,11 +77,11 @@ class SHA256HasherLibraryTest extends TestCase
     /**
      * test hash make hash.
      *
-     * @dataProvider makeHashDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('makeHashDataProvider')]
     public function testMake(string $value): void
     {
         $value1 = SHA256HasherLibrary::make($value);
@@ -91,12 +92,12 @@ class SHA256HasherLibraryTest extends TestCase
     /**
      * test hash check hash.
      *
-     * @dataProvider makeHashCheckDataProvider
      * @param string $value1
      * @param string $value2
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('makeHashCheckDataProvider')]
     public function testCheck(string $value1, string $value2, bool $expect): void
     {
         $hashedValue = SHA256HasherLibrary::make($value2);
@@ -106,10 +107,10 @@ class SHA256HasherLibraryTest extends TestCase
     /**
      * test password get info.
      *
-     * @dataProvider makeHashDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('makeHashDataProvider')]
     public function testPasswordGetInfo(string $value): void
     {
         $hashedValue = SHA256HasherLibrary::make($value);

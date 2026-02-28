@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Hash;
 use App\Library\Hash\HashLibrary;
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Class of HashLibrary
@@ -76,11 +77,11 @@ class HashLibraryTest extends TestCase
     /**
      * test crete hash.
      *
-     * @dataProvider makeHashDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('makeHashDataProvider')]
     public function testHash(string $value): void
     {
         $value1 = HashLibrary::hash($value);
@@ -91,12 +92,12 @@ class HashLibraryTest extends TestCase
     /**
      * test check hash.
      *
-     * @dataProvider makeHashCheckDataProvider
      * @param string $value1
      * @param string $value2
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('makeHashCheckDataProvider')]
     public function testCheck(string $value1, string $value2, bool $expect): void
     {
         $hashedValue = HashLibrary::hash($value2);
@@ -106,10 +107,10 @@ class HashLibraryTest extends TestCase
     /**
      * test password get info.
      *
-     * @dataProvider makeHashDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('makeHashDataProvider')]
     public function testPasswordGetInfo(string $value): void
     {
         $hashedValue = HashLibrary::hash($value);

@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Math;
 use App\Library\Math\MathLibrary;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MathLibraryTest extends TestCase
 {
@@ -102,11 +103,11 @@ class MathLibraryTest extends TestCase
     /**
      * test get prime factorization.
      *
-     * @dataProvider getPrimeFactorizationDataProvider
      * @param int $value
      * @param array $expect
      * @return void
      */
+    #[DataProvider('getPrimeFactorizationDataProvider')]
     public function testGetPrimeFactorization(int $value, array $expect): void
     {
         $this->assertSame($expect, MathLibrary::getPrimeFactorization($value));
@@ -115,12 +116,12 @@ class MathLibraryTest extends TestCase
     /**
      * test get greatest common divisor.
      *
-     * @dataProvider getGreatestCommonDivisorDataProvider
      * @param int $value1
      * @param int $value2
      * @param int $expect
      * @return void
      */
+    #[DataProvider('getGreatestCommonDivisorDataProvider')]
     public function testGetGreatestCommonDivisor(int $value1, int $value2, int $expect): void
     {
         $this->assertSame($expect, MathLibrary::getGreatestCommonDivisor($value1, $value2));
@@ -129,12 +130,12 @@ class MathLibraryTest extends TestCase
     /**
      * test get least common multiple.
      *
-     * @dataProvider getLeastCommonMultipleDataProvider
      * @param int $value1
      * @param int $value2
      * @param int $expect
      * @return void
      */
+    #[DataProvider('getLeastCommonMultipleDataProvider')]
     public function testGetLeastCommonMultiple(int $value1, int $value2, int $expect): void
     {
         $this->assertSame($expect, MathLibrary::getLeastCommonMultiple($value1, $value2));

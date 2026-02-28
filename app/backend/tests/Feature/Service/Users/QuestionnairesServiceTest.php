@@ -12,6 +12,7 @@ use App\Http\Requests\User\Questionnaires\UserQuestionnairesCreateRequest;
 use App\Library\Message\StatusCodeMessages;
 use App\Models\Masters\Questionnaires;
 use Database\Seeders\Masters\QuestionnairesTableSeeder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 // use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -125,12 +126,12 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
 
     /**
      * user Questionnaire create request test.
-     * @dataProvider createUserQuestionnairesDataProvider
      * @param int $id
      * @param array $requestBody
      * @param int $expect
      * @return void
      */
+    #[DataProvider('createUserQuestionnairesDataProvider')]
     public function testCreateUserQuestionnairesSuccess(int $id, array $requestBody, int $expect): void
     {
         // TODO UserQuestionnaireの初期化処理
@@ -147,12 +148,12 @@ class QuestionnairesServiceTest extends UserServiceBaseTestCase
 
     /**
      * user Questionnaire update request test.
-     * @dataProvider updateUserQuestionnairesDataProvider
      * @param int $id
      * @param array $requestBody
      * @param int $expect
      * @return void
      */
+    #[DataProvider('updateUserQuestionnairesDataProvider')]
     public function testUpdateUserQuestionnairesSuccess(int $id, array $requestBody, int $expect): void
     {
         // TODO UserQuestionnaireの初期化処理

@@ -37,7 +37,9 @@ export const createFileRequestFormData = (
  * @param {string} dataUrl base64などのDataURL形式の画像データ
  * @return {Promise<number[]>}
  */
-export const getImageWidthAndHeightByDataUrl = async (dataUrl: string): Promise<number[]> => {
+export const getImageWidthAndHeightByDataUrl = async (
+  dataUrl: string,
+): Promise<number[]> => {
   const image = new Image()
   return new Promise(
     (resolve: (param: number[]) => void, reject: (reason: unknown) => void) => {
@@ -68,7 +70,7 @@ export const getBase64DataFileSize = (base64Data: string): number => {
   // データURLの「,」以降を取得(「data:image/png;base64,」などのprefix部分を除去)
   const cleaned = base64Data.split(',').pop() ?? ''
   // パディングの数を取得(末尾の「=」の数)
-  const padding = (cleaned.match(/=+$/)?.[0].length ?? 0)
+  const padding = cleaned.match(/=+$/)?.[0].length ?? 0
   // サイズ計算(元データのバイト数を計算。base64は元データの3バイト4文字にエンコードするため、その比率で計算)
   return Math.floor((cleaned.length * 3) / 4) - padding
 }

@@ -6,6 +6,7 @@ namespace Tests\Unit\Library\File;
 
 use App\Library\File\QRCodeLibrary;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QRCodeLibraryTest extends TestCase
 {
@@ -36,10 +37,10 @@ class QRCodeLibraryTest extends TestCase
     /**
      * test get qr code by url.
      *
-     * @dataProvider getQRCodeByUrlDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('getQRCodeByUrlDataProvider')]
     public function testGetQRCodeByUrl(string $value): void
     {
         $this->assertIsString(QRCodeLibrary::getQrCodeByUrl($value));

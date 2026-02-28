@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\JWT;
 use App\Library\JWT\JwtLibrary;
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Class of JwtLibrary
@@ -53,10 +54,10 @@ class JwtLibraryTest extends TestCase
     /**
      * test decode token header.
      *
-     * @dataProvider decodeTokenHeaderDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('decodeTokenHeaderDataProvider')]
     public function testDecodeTokenHeader(string $value): void
     {
         $decodeValue = JwtLibrary::decodeTokenHeader($value);
@@ -67,10 +68,10 @@ class JwtLibraryTest extends TestCase
     /**
      * test decode token payload.
      *
-     * @dataProvider decodeTokenHeaderDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('decodeTokenHeaderDataProvider')]
     public function testDecodeTokenPayload(string $value): void
     {
         $decodeValue = JwtLibrary::decodeTokenPayload($value);
@@ -81,10 +82,10 @@ class JwtLibraryTest extends TestCase
     /**
      * test encode token header.
      *
-     * @dataProvider encodeTokenHeaderDataProvider
      * @param string $value
      * @return void
      */
+    #[DataProvider('encodeTokenHeaderDataProvider')]
     public function testEncodeTokenPayload(string $value): void
     {
         $decodeValue = JwtLibrary::encodeTokenHeader($value);

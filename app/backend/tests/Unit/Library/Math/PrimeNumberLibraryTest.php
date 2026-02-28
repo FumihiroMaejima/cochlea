@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Math;
 use App\Library\Math\PrimeNumberLibrary;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PrimeNumberLibraryTest extends TestCase
 {
@@ -112,11 +113,11 @@ class PrimeNumberLibraryTest extends TestCase
     /**
      * test is prime number.
      *
-     * @dataProvider isPrimeNumberDataProvider
      * @param int $value
      * @param bool $expect
      * @return void
      */
+    #[DataProvider('isPrimeNumberDataProvider')]
     public function testIsPrimeNumber(int $value, bool $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::isPrimeNumber($value));
@@ -125,11 +126,11 @@ class PrimeNumberLibraryTest extends TestCase
     /**
      * test get max prime number.
      *
-     * @dataProvider getMaxPrimeNumberDataProvider
      * @param int $value
      * @param int $expect
      * @return void
      */
+    #[DataProvider('getMaxPrimeNumberDataProvider')]
     public function testGetMaxPrimeNumber(int $value, int $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::getMaxPrimeNumber($value));
@@ -138,12 +139,12 @@ class PrimeNumberLibraryTest extends TestCase
     /**
      * test get greter prime numbers.
      *
-     * @dataProvider getGreaterPrimeNumbersDataProvider
      * @param int $value
      * @param int $count
      * @param array $expect
      * @return void
      */
+    #[DataProvider('getGreaterPrimeNumbersDataProvider')]
     public function testGetGreaterPrimeNumbers(int $value, int $count, array $expect): void
     {
         $this->assertSame($expect, PrimeNumberLibrary::getGreaterPrimeNumbers($value, $count));
