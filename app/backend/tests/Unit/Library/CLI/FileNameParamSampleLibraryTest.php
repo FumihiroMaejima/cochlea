@@ -8,6 +8,7 @@ namespace Tests\Unit\Library\CLI;
 
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileNameParamSampleLibraryTest extends TestCase
 {
@@ -35,10 +36,10 @@ class FileNameParamSampleLibraryTest extends TestCase
     /**
      * sample test.
      *
-     * @dataProvider sampleDataProvider
      * @param string $fileName
      * @return void
      */
+    #[DataProvider('sampleDataProvider')]
     public function testSample(string $fileName): void
     {
         exec('echo $PWD', $pwd);

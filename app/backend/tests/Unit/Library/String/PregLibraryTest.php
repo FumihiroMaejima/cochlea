@@ -4,6 +4,7 @@ namespace Tests\Unit\Library\String;
 
 use App\Library\String\PregLibrary;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PregLibraryTest extends TestCase
 {
@@ -36,11 +37,11 @@ class PregLibraryTest extends TestCase
     /**
      * test filtering by number.
      *
-     * @dataProvider filteringByNumberDataProvider
      * @param string $value
      * @param ?int $expect
      * @return void
      */
+    #[DataProvider('filteringByNumberDataProvider')]
     public function testFilteringByNumber(string $value, ?int $expect): void
     {
         $this->assertEquals(

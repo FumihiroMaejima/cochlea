@@ -7,6 +7,7 @@ use App\Library\Process\ProcessLibrary;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Process\Process;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProcessLibraryTest extends TestCase
 {
@@ -41,11 +42,11 @@ class ProcessLibraryTest extends TestCase
     /**
      * test sample process.
      *
-     * @dataProvider sampleProcessDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('sampleProcessDataProvider')]
     public function testSampleProcess(string $value, string $expect): void
     {
         $result = ProcessLibrary::sampleProcess();

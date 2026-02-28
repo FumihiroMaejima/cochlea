@@ -7,6 +7,7 @@ namespace Tests\Unit\Library\Encrypt;
 use App\Library\Encrypt\EncryptLibrary;
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Class of EncryptLibrary
@@ -106,11 +107,11 @@ class EncryptLibraryTest extends TestCase
     /**
      * test encrypt string by ECB mode.
      *
-     * @dataProvider encryptStringDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('encryptStringDataProvider')]
     public function testEncryptByEbcMode(string $value, string $expect): void
     {
         $this->assertSame($expect, EncryptLibrary::encrypt($value, false));
@@ -119,11 +120,11 @@ class EncryptLibraryTest extends TestCase
     /**
      * test encrypt string by CBC mode.
      *
-     * @dataProvider encryptStringDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('encryptStringDataProvider')]
     public function testEncryptByCbcMode(string $value, string $expect): void
     {
         // EBCモードとは値が異なる
@@ -133,11 +134,11 @@ class EncryptLibraryTest extends TestCase
     /**
      * test decrypt string by ECB mode.
      *
-     * @dataProvider decryptStringDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('decryptStringDataProvider')]
     public function testDecryptByEbcMode(string $value, string $expect): void
     {
         $this->assertSame($expect, EncryptLibrary::decrypt($value, false));
@@ -146,11 +147,11 @@ class EncryptLibraryTest extends TestCase
     /**
      * test decrypt string by CBC mode.
      *
-     * @dataProvider decryptCbcStringDataProvider
      * @param string $value
      * @param string $expect
      * @return void
      */
+    #[DataProvider('decryptCbcStringDataProvider')]
     public function testDecryptByCbcMode(string $value, string $expect): void
     {
         $this->assertSame($expect, EncryptLibrary::decrypt($value, true));
@@ -159,11 +160,11 @@ class EncryptLibraryTest extends TestCase
     /**
      * test create iv method output is random.
      *
-     * @dataProvider createIvDataProvider
      * @param int $length
      * @param Exception|null $exception
      * @return void
      */
+    #[DataProvider('createIvDataProvider')]
     public function testCreateIvRandomValue(int $length, ?Exception $exception = null): void
     {
         /* if (!is_null($exception)) {

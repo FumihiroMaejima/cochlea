@@ -8,6 +8,7 @@ namespace Tests\Unit\Library\CLI;
 
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class EchoParamSampleLibraryTest extends TestCase
 {
@@ -45,9 +46,9 @@ class EchoParamSampleLibraryTest extends TestCase
     /**
      * a sample test.
      *
-     * @dataProvider sampleDataProvider
      * @return void
      */
+    #[DataProvider('sampleDataProvider')]
     public function testSample(int $first, int $second, int $third): void
     {
         $result = null;

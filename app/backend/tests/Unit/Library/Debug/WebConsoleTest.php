@@ -4,6 +4,7 @@ namespace Tests\Unit\Library\Debug;
 
 use App\Library\Debug\WebConsole;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WebConsoleTest extends TestCase
 {
@@ -43,11 +44,11 @@ class WebConsoleTest extends TestCase
     /**
      * test exec web console.
      *
-     * @dataProvider execDataProvider
      * @param string $value
      * @param array $expect
      * @return void
      */
+    #[DataProvider('execDataProvider')]
     public function testExec(string $value, array $expect): void
     {
         $result = WebConsole::exec($value);

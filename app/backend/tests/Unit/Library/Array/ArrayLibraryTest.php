@@ -188,9 +188,9 @@ class ArrayLibraryTest extends TestCase
     /**
      * test get first in array items.
      *
-     * @dataProvider arraySampleDataProvider
      * @return void
      */
+    #[DataProvider('arraySampleDataProvider')]
     public function testGetFirst(array $data): void
     {
         $result = ArrayLibrary::toArray($data);
@@ -204,9 +204,9 @@ class ArrayLibraryTest extends TestCase
     /**
      * test paging array items.
      *
-     * @dataProvider pagingDataProvider
      * @return void
      */
+    #[DataProvider('pagingDataProvider')]
     public function testPaging(array $items, int $page, ?int $limit, array $expect): void
     {
         $this->assertEquals($expect, ArrayLibrary::paging($items, $page, $limit));

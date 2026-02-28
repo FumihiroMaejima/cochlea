@@ -8,6 +8,7 @@ namespace Tests\Unit\Library\CLI;
 
 use Tests\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MultiLineParamSampleLibraryTest extends TestCase
 {
@@ -44,9 +45,9 @@ class MultiLineParamSampleLibraryTest extends TestCase
     /**
      * sample test.
      *
-     * @dataProvider sampleDataProvider
      * @return void
      */
+    #[DataProvider('sampleDataProvider')]
     public function testSample(int $count, array $items): void
     {
         $result = null;
