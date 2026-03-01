@@ -9,6 +9,7 @@ services:
       - ./app/php.ini:/usr/local/etc/php/php.ini
       - ./app/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./app/xhprof.ini:/usr/local/etc/php/conf.d/xhprof.ini
+      - ./app/imagick.ini:/usr/local/etc/php/conf.d/imagick.ini
     ports:
       - "${PHP_FPM_PORT:-9000}:9000"
     expose:

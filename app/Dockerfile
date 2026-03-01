@@ -3,7 +3,8 @@
 # FROM php:8.1.9-fpm-alpine
 # FROM php:8.2-fpm-alpine3.17
 # FROM php:8.3-fpm-alpine3.21
-FROM php:8.4-fpm-alpine3.21
+# FROM php:8.4-fpm-alpine3.21
+FROM php:8.5-fpm-alpine3.23
 # FROM php:8.2-rc-fpm-alpine
 
 # tinker(psysh)
@@ -39,14 +40,18 @@ RUN apk update && \
   apk add --update --no-cache \
   icu-dev \
   libzip-dev \
-  oniguruma-dev && \
+  oniguruma-dev \
+  imagemagick \
+  imagemagick-dev \
+  sqlite-dev && \
   pecl install xdebug && \
   git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   pecl install xhprof && \
+  pecl install imagick && \
   apk del .build-dependencies && \
   docker-php-ext-install intl pdo_mysql mbstring zip bcmath redis && \
   docker-php-ext-enable xdebug && \
-  docker-php-ext-enable xhprof && \
+  docker-php-ext-enable xhprof imagick && \
   mkdir $PSYSH_DIR && curl $PHP_MANUAL_URL -o $PSYSH_PHP_MANUAL && \
   curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
   composer config -g process-timeout 3600 && \
