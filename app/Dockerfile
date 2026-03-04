@@ -43,13 +43,14 @@ RUN apk update && \
   oniguruma-dev \
   imagemagick \
   imagemagick-dev \
+  sqlite-libs \
   sqlite-dev && \
   pecl install xdebug && \
   git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   pecl install xhprof && \
   pecl install imagick && \
   apk del .build-dependencies && \
-  docker-php-ext-install intl pdo_mysql mbstring zip bcmath redis && \
+  docker-php-ext-install intl pdo_mysql pdo_sqlite mbstring zip bcmath redis && \
   docker-php-ext-enable xdebug && \
   docker-php-ext-enable xhprof imagick && \
   mkdir $PSYSH_DIR && curl $PHP_MANUAL_URL -o $PSYSH_PHP_MANUAL && \
