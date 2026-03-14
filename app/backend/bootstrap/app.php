@@ -1,9 +1,12 @@
 <?php
 
 use App\Exceptions\MyApplicationHttpException;
+use App\Http\Middleware\AccessLog;
 use App\Library\Log\BatchLogLibrary;
 use App\Library\Log\ErrorLogLibrary;
 use App\Library\Message\StatusCodeMessages;
+use App\Http\Middleware\CheckMaintenanceMode;
+use App\Http\Middleware\FakerTime;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -27,10 +30,14 @@ return Application::configure(basePath: dirname(__DIR__))
             // \Illuminate\Http\Middleware\TrustHosts::class,
             \Illuminate\Http\Middleware\TrustProxies::class,
             \Illuminate\Http\Middleware\HandleCors::class,
+            CheckMaintenanceMode::class,
             \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
             \Illuminate\Http\Middleware\ValidatePostSize::class,
             \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+            // \App\Http\Middleware\AdminActionLog::class, // TODO 管理画面のみに設定する。
+            AccessLog::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+            FakerTime::class,
         ]);
 
         // middlewareGroupsの設定
