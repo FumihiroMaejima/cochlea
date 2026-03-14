@@ -112,11 +112,12 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'errorlog' => [
+        // Not Used
+        /* 'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
-        ],
+        ], */
 
         'null' => [
             'driver' => 'monolog',
