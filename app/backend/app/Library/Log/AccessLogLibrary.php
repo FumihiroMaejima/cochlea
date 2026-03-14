@@ -229,6 +229,7 @@ class AccessLogLibrary
             self::LOG_KEY_REQUEST_PEAK_MEMORY_BYTE => $peakMemory,
         ];
 
+        // @see vendor/laravel/framework/src/Illuminate/Log/LogManager.php
         Log::channel(self::LOG_CAHNNEL_NAME)->info('Access:', $context);
     }
 }
