@@ -7,6 +7,13 @@ namespace App\Library\Log;
 use App\Library\Time\TimeLibrary;
 use Monolog\Formatter\LineFormatter;
 
+/*
+* ログのフォーマットを定義するクラス
+* ログのフォーマットはMonologのLineFormatterを継承している
+* @see Monolog/Formatter/LineFormatter.php
+* @see Illuminate\Support\Facades\Log::channel()
+* @see Illuminate\Log\LogManager::driver()
+*/
 class LogFormatterLibrary extends LineFormatter
 {
     public const DATE_FORMAT = TimeLibrary::DEFAULT_DATE_TIME_MILLI_SECOND_FORMAT;
