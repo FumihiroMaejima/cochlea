@@ -32,6 +32,8 @@ class TimeLibrary
     // 偽装時刻
     private static ?int $fakerTimeStamp = null;
 
+    private static ?string $fakerTimeZone = null;
+
     /**
      * setFaker time stamp.
      *
@@ -43,6 +45,20 @@ class TimeLibrary
         // production環境以外で設定する
         if (config('app.env') !== 'productinon') {
             static::$fakerTimeStamp = $timeStamp;
+        }
+    }
+
+    /**
+     * setFaker timezone.
+     *
+     * @param ?string $timeZone timezone
+     * @return void
+     */
+    public static function setFakerTimeZone(?string $timeZone): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'productinon') {
+            static::$fakerTimeZone = $timeZone;
         }
     }
 
@@ -68,6 +84,7 @@ class TimeLibrary
         }
 
         return (new Carbon($dateTime))->timezone(Config::get('app.timezone'))->format($format);
+        // return (new Carbon($dateTime))->timezone(static::getTimezone())->format($format);
     }
 
     /**
@@ -84,6 +101,20 @@ class TimeLibrary
         // return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
         // return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
         return time();
+    }
+
+    /**
+     * get timezone of current setting.
+     *
+     * @return string timezone
+     */
+    public static function getTimezone(): string
+    {
+        // 偽装時刻が設定されている場合
+        if (!is_null(static::$fakerTimeZone)) {
+            return static::$fakerTimeZone;
+        }
+        return config('app.timezone');
     }
 
     /**
