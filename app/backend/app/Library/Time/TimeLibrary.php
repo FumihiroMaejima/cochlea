@@ -43,7 +43,7 @@ class TimeLibrary
     public static function setFakerTimeStamp(?int $timeStamp): void
     {
         // production環境以外で設定する
-        if (config('app.env') !== 'productinon') {
+        if (config('app.env') !== 'production') {
             static::$fakerTimeStamp = $timeStamp;
         }
     }
@@ -57,7 +57,7 @@ class TimeLibrary
     public static function setFakerTimeZone(?string $timeZone): void
     {
         // production環境以外で設定する
-        if (config('app.env') !== 'productinon') {
+        if (config('app.env') !== 'production') {
             static::$fakerTimeZone = $timeZone;
         }
     }
