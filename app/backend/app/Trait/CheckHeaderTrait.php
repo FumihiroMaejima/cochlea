@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Trait;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use App\Exceptions\MyApplicationHttpException;
 use App\Library\JWT\JwtLibrary;
 use App\Library\Message\StatusCodeMessages;
@@ -21,7 +20,7 @@ trait CheckHeaderTrait
      */
     public function checkRequestAuthority(Request $request, array $targets): bool
     {
-        return in_array($request->header(Config::get('myapp.headers.authority')), $targets, true);
+        return in_array($request->header(config('myapp.headers.authority')), $targets, true);
     }
 
     /**
@@ -32,7 +31,7 @@ trait CheckHeaderTrait
      */
     public static function getSessionId(Request $request): ?string
     {
-        $sessionId = $request->header(Config::get('myapp.headers.authorization'));
+        $sessionId = $request->header(config('myapp.headers.authorization'));
         if (!is_string($sessionId) || empty($sessionId)) {
             return null;
         }
@@ -51,7 +50,7 @@ trait CheckHeaderTrait
     public static function getUserId(Request $request, bool $ignoreNoData = false): int
     {
         // ヘッダーから取得した時は文字列になっている。
-        $userId = (int)$request->header(Config::get('myapp.headers.id'));
+        $userId = (int)$request->header(config('myapp.headers.id'));
 
         if (!is_integer($userId) || ($userId <= 0)) {
             if ($ignoreNoData) {
@@ -73,7 +72,7 @@ trait CheckHeaderTrait
      */
     public function getPasswordResetSessionId(Request $request): string
     {
-        $sessionId = $request->header(Config::get('myapp.headers.passwordReset'));
+        $sessionId = $request->header(config('myapp.headers.passwordReset'));
 
         if (empty($sessionId)) {
             throw new MyApplicationHttpException(
@@ -85,7 +84,7 @@ trait CheckHeaderTrait
     }
 
     /**
-     * get user id from header
+     * get faker timestamp from header
      *
      * @param Illuminate\Http\Request $request
      * @param bool $ignoreNoData ignore if no user id.
@@ -94,11 +93,29 @@ trait CheckHeaderTrait
     public static function getFakerTimeStamp(Request $request): ?int
     {
         // ヘッダーから取得した時は文字列になっている。
-        $timeStamp = (int)$request->header(Config::get('myapp.headers.fakerTime'));
+        $timeStamp = (int)$request->header(config('myapp.headers.fakerTime'));
 
         if (!is_integer($timeStamp) || ($timeStamp <= 0)) {
             return null;
         }
         return $timeStamp;
+    }
+
+    /**
+     * get fakertimezone from header
+     *
+     * @param Illuminate\Http\Request $request
+     * @param bool $ignoreNoData ignore if no user id.
+     * @return ?string
+     */
+    public static function getFakerTimeZone(Request $request): ?string
+    {
+        // ヘッダーから取得した時は文字列になっている。
+        $timeZone = $request->header(config('myapp.headers.fakerTimeZone'));
+
+        if (!is_string($timeZone) || empty($timeZone)) {
+            return null;
+        }
+        return $timeZone;
     }
 }
