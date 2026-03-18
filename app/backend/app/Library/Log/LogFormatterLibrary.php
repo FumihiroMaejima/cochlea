@@ -16,7 +16,7 @@ use Monolog\Formatter\LineFormatter;
 */
 class LogFormatterLibrary extends LineFormatter
 {
-    public const DATE_FORMAT = TimeLibrary::DEFAULT_DATE_TIME_MILLI_SECOND_FORMAT;
+    public const DATE_FORMAT = TimeLibrary::DEFAULT_DATE_TIME_FORMAT_MILLI_SECOND_FORMAT;
 
     // ログのフォーマットはMonologのLineFormatterを継承している為、以下の定数は使用可能。
     // 変更したい場合は、親クラスの定数を上書きする形で定義する。

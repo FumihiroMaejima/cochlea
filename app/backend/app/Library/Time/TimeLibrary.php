@@ -16,8 +16,8 @@ class TimeLibrary
     public const DEFAULT_DATE_TIME_FORMAT_SLASH = 'Y/m/d H:i:s'; // ex: 2022/01/01 00:00:00
     public const DEFAULT_DATE_TIME_FORMAT_DATE_ONLY = 'Y-m-d'; // ex: 2022-01-01
     public const DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY = 'Y-m'; // ex: 2022-01
-    public const DEFAULT_DATE_TIME_MILLI_SECOND_FORMAT = 'Y-m-d H:i:s.v'; // ex: 2022-01-01 00:00:00.000 (ミリ秒)
-    public const DEFAULT_DATE_TIME_MICRO_SECOND_FORMAT = 'Y-m-d H:i:s.u'; // ex: 2022-01-01 00:00:00.000000 (マイクロ秒)
+    public const DEFAULT_DATE_TIME_FORMAT_MILLI_SECOND_FORMAT = 'Y-m-d H:i:s.v'; // ex: 2022-01-01 00:00:00.000 (ミリ秒)
+    public const DEFAULT_DATE_TIME_FORMAT_MICRO_SECOND_FORMAT = 'Y-m-d H:i:s.u'; // ex: 2022-01-01 00:00:00.000000 (マイクロ秒)
 
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
