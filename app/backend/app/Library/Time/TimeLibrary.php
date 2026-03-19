@@ -33,6 +33,8 @@ class TimeLibrary
     private static ?int $fakerTimeStamp = null;
 
     private static ?string $fakerTimeZone = null;
+    private static ?int $serverfakerTimeStamp = null; // サーバー全体でfakerTimeStampを統一する場合に使用。個別に設定する場合は$fakerTimeStampを使用する。
+    private static ?string $serverFakerTimeZone = null; // サーバー全体でfakerTimeZoneを統一する場合に使用。個別に設定する場合は$fakerTimeZoneを使用する。
 
     /**
      * setFaker time stamp.
@@ -59,6 +61,34 @@ class TimeLibrary
         // production環境以外で設定する
         if (config('app.env') !== 'production') {
             static::$fakerTimeZone = $timeZone;
+        }
+    }
+
+    /**
+     * set Server Faker time stamp.
+     *
+     * @param ?int $timeStamp timestamp
+     * @return void
+     */
+    public static function setServerFakerTimeStamp(?int $timeStamp): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'production') {
+            static::$serverfakerTimeStamp = $timeStamp;
+        }
+    }
+
+    /**
+     * set Server Faker timezone.
+     *
+     * @param ?string $timeZone timezone
+     * @return void
+     */
+    public static function setServerFakerTimeZone(?string $timeZone): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'production') {
+            static::$serverFakerTimeZone = $timeZone;
         }
     }
 
