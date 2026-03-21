@@ -118,4 +118,22 @@ trait CheckHeaderTrait
         }
         return $timeZone;
     }
+
+    /**
+     * get fakertimezone from header
+     *
+     * @param Illuminate\Http\Request $request
+     * @param bool $ignoreNoData ignore if no user id.
+     * @return ?string
+     */
+    public static function getServerFakerTimeZone(Request $request): ?string
+    {
+        // ヘッダーから取得した時は文字列になっている。
+        $timeZone = $request->header(config('myapp.headers.fakerServerTimeZone'));
+
+        if (!is_string($timeZone) || empty($timeZone)) {
+            return null;
+        }
+        return $timeZone;
+    }
 }
