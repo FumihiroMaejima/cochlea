@@ -44,66 +44,6 @@ class AccessLogLibrary
     ];
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Closure  $next
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
-    {
-        if (self::isExcludePath($request->path())) {
-            return $next($request);
-        }
-
-        // $this->host = getmypid();
-        $requestDateTime = TimeLibrary::getCurrentDateTime();
-        $pid             = getmypid();
-
-        [
-            $uri,
-            $method,
-            $host,
-            $ip,
-            $contentType,
-            $plathome,
-            $headers,
-            $requestContent,
-        ] = self::getLogParameterByRequest($request);
-
-        // 処理速度の計測
-        $startTime = microtime(true);
-
-        $response = $next($request);
-
-        $responseTime = (string)(microtime(true) - $startTime);
-        $memory = memory_get_usage();
-        $peakMemory = memory_get_peak_usage();
-
-        [$statusCode] = self::getLogParameterByResponse($response);
-
-        // log出力
-        self::outputLog(
-            $requestDateTime,
-            $uri,
-            $method,
-            $statusCode,
-            $responseTime,
-            $host,
-            $ip,
-            $contentType,
-            $headers,
-            $requestContent,
-            $plathome,
-            $pid,
-            $memory,
-            $peakMemory
-        );
-
-        return $response;
-    }
-
-    /**
      * check current path is log exclude path.
      *
      * @param string $path
@@ -129,7 +69,7 @@ class AccessLogLibrary
             $request->getClientIp(),
             $request->getContentTypeFormat(),
             $request->userAgent() ?? '',
-            self::getRequestHeader($request->header()),
+            self::getRequestHeaderContentsList($request->header()),
             LogLibrary::maskingSecretKeys($request->all())
         ];
     }
@@ -154,7 +94,7 @@ class AccessLogLibrary
      * @param string|array|null $headers header contents. (\Illuminate\Http\Request->header())
      * @return string|array|null
      */
-    public static function getRequestHeader(string|array|null $headers): string|array|null
+    public static function getRequestHeaderContentsList(string|array|null $headers): string|array|null
     {
         if (is_array($headers)) {
             $response = [];
