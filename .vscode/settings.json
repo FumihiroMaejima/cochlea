@@ -1,0 +1,16 @@
+{
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "host": "http://localhost:50100"
+        },
+        /* "dev": {
+            "host": "http://localhost:8080"
+        },
+        "prd": {
+            "host": "http://localhost:8080"
+        } */
+    },
+    "rest-client.decodeEscapedUnicodeCharacters": true,
+    "rest-client.previewOption": "full" // default
+    // "rest-client.previewOption": "body" response body only
+}
