@@ -302,8 +302,8 @@ vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
 ### deprecatedを表示したい場合
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php -display-phpunit-deprecations
-
-vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testCheckTimeByHyphenDete
+### テストするメソッドを絞りこみたい場合
+vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testFakerTimeCurrentDateTime --testdox
 
 ### 一括で行いたい場合はphpunit.xmlのphpunitタグ内に下記のプロパティを追加する
 ```xml
