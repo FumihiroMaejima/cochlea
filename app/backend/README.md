@@ -305,6 +305,9 @@ vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php -display-phpuni
 ### テストするメソッドを絞りこみたい場合
 vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testFakerTimeCurrentDateTime --testdox
 
+### テスト実行時のコマンドステータスを確認したい場合
+vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testFakerTimeCurrentDateTime --testdox; echo "$?"
+
 ### 一括で行いたい場合はphpunit.xmlのphpunitタグ内に下記のプロパティを追加する
 ```xml
 displayDetailsOnPhpunitDeprecations="true"
