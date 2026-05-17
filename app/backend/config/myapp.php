@@ -7,6 +7,8 @@ return [
         'authorization' => 'Authorization',
         'passwordReset' => 'X-Auth-Reset-Session-ID',
         'fakerTime'     => 'X-Faker-Time',
+        'fakerTimeZone' => 'X-Faker-Timezone',
+        'fakerServerTimeZone' => 'X-Faker-Server-Timezone',
     ],
     'executionRole' => [
         'services' => [

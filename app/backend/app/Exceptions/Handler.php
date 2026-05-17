@@ -91,7 +91,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e)
     {
-        /* if (config('app.env') === 'productinon') {
+        /* if (config('app.env') === 'production') {
             parent::report($e);
         } */
 

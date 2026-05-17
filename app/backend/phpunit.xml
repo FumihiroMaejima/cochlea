@@ -3,7 +3,8 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         displayDetailsOnPhpunitDeprecations="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnPhpunitDeprecations="true"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -13,7 +14,9 @@
             <directory suffix="Test.php">tests/Feature</directory>
         </testsuite>
     </testsuites>
-    <source>
+    <!-- <source> -->
+    <!-- ignore vendor dir -->
+    <source ignoreIndirectDeprecations="true">
         <include>
             <!-- <directory>app</directory> -->
             <directory suffix="Test.php">./app</directory>

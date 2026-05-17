@@ -85,7 +85,7 @@ class AdminActionLogLibrary
             $request->getClientIp(),
             $request->getContentTypeFormat(),
             $request->userAgent() ?? '',
-            self::getRequestHeader($request->header()),
+            self::getRequestHeaderContentsList($request->header()),
             LogLibrary::maskingSecretKeys($request->all())
         ];
     }
@@ -122,7 +122,7 @@ class AdminActionLogLibrary
      * @param string|array|null $headers header contents. (\Illuminate\Http\Request->header())
      * @return string|array|null
      */
-    public static function getRequestHeader(string|array|null $headers): string|array|null
+    public static function getRequestHeaderContentsList(string|array|null $headers): string|array|null
     {
         if (is_array($headers)) {
             $response = [];

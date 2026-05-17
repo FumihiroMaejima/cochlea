@@ -16,6 +16,8 @@ class TimeLibrary
     public const DEFAULT_DATE_TIME_FORMAT_SLASH = 'Y/m/d H:i:s'; // ex: 2022/01/01 00:00:00
     public const DEFAULT_DATE_TIME_FORMAT_DATE_ONLY = 'Y-m-d'; // ex: 2022-01-01
     public const DEFAULT_DATE_TIME_FORMAT_YEAR_MONTH_ONLY = 'Y-m'; // ex: 2022-01
+    public const DEFAULT_DATE_TIME_FORMAT_MILLI_SECOND_FORMAT = 'Y-m-d H:i:s.v'; // ex: 2022-01-01 00:00:00.000 (ミリ秒)
+    public const DEFAULT_DATE_TIME_FORMAT_MICRO_SECOND_FORMAT = 'Y-m-d H:i:s.u'; // ex: 2022-01-01 00:00:00.000000 (マイクロ秒)
 
     public const DATE_TIME_FORMAT_YMD = 'Ymd'; // ex: 20220101
     public const DATE_TIME_FORMAT_HIS = 'His'; // ex: 125959
@@ -30,6 +32,9 @@ class TimeLibrary
     // 偽装時刻
     private static ?int $fakerTimeStamp = null;
 
+    private static ?string $fakerTimeZone = null;
+    private static ?string $fakerServerTimeZone = null; // サーバー全体でfakerTimeZoneを統一する場合に使用。個別に設定する場合は$fakerTimeZoneを使用する。
+
     /**
      * setFaker time stamp.
      *
@@ -39,8 +44,36 @@ class TimeLibrary
     public static function setFakerTimeStamp(?int $timeStamp): void
     {
         // production環境以外で設定する
-        if (config('app.env') !== 'productinon') {
+        if (config('app.env') !== 'production') {
             static::$fakerTimeStamp = $timeStamp;
+        }
+    }
+
+    /**
+     * setFaker timezone.
+     *
+     * @param ?string $timeZone timezone
+     * @return void
+     */
+    public static function setFakerTimeZone(?string $timeZone): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'production') {
+            static::$fakerTimeZone = $timeZone;
+        }
+    }
+
+    /**
+     * set Faker server timezone.
+     *
+     * @param ?string $timeZone timezone
+     * @return void
+     */
+    public static function setFakerServerTimeZone(?string $timeZone): void
+    {
+        // production環境以外で設定する
+        if (config('app.env') !== 'production') {
+            static::$fakerServerTimeZone = $timeZone;
         }
     }
 
@@ -66,6 +99,7 @@ class TimeLibrary
         }
 
         return (new Carbon($dateTime))->timezone(Config::get('app.timezone'))->format($format);
+        // return (new Carbon($dateTime))->timezone(static::getTimezone())->format($format);
     }
 
     /**
@@ -82,6 +116,34 @@ class TimeLibrary
         // return Carbon::now()->timezone(Config::get('app.timezone'))->timestamp;
         // return (new Carbon())->timezone(Config::get('app.timezone'))->timestamp;
         return time();
+    }
+
+    /**
+     * get timezone of current setting.
+     *
+     * @return string timezone
+     */
+    public static function getTimezone(): string
+    {
+        // 偽装時刻が設定されている場合
+        if (!is_null(static::$fakerTimeZone)) {
+            return static::$fakerTimeZone;
+        }
+        return config('app.timezone');
+    }
+
+    /**
+     * get servertimezone of current setting.
+     *
+     * @return string timezone
+     */
+    public static function getServerTimezone(): string
+    {
+        // 偽装時刻が設定されている場合
+        if (!is_null(static::$fakerServerTimeZone)) {
+            return static::$fakerServerTimeZone;
+        }
+        return config('app.timezone');
     }
 
     /**
