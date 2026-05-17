@@ -32,8 +32,8 @@ class LogFormatterLibrary extends LineFormatter
         ?string $dateFormat = self::DATE_FORMAT,
         bool $allowInlineLineBreaks = false,
         bool $ignoreEmptyContextAndExtra = false,
-        bool $includeStacktraces = false)
-    {
+        bool $includeStacktraces = false
+    ) {
         // format設定は固定
         parent::__construct($format, self::DATE_FORMAT, $allowInlineLineBreaks, $ignoreEmptyContextAndExtra, $includeStacktraces);
     }
