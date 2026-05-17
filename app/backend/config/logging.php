@@ -1,5 +1,6 @@
 <?php
 
+use App\Library\Log\LogFormatterLibrary;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -112,11 +113,12 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'errorlog' => [
+        // Not Used
+        /* 'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
-        ],
+        ], */
 
         'null' => [
             'driver' => 'monolog',
@@ -131,9 +133,13 @@ return [
         'accesslog' => [
             'driver' => 'daily',
             'path'   => env('LOG_ACCESS_PATH', storage_path('logs/access.log')),
-            'level'  => env('LOG_ACCESS_LEVEL', 'debug'),
-            'days' => env('LOG_DAILY_DAYS', 14),
+            'level'  => env('LOG_ACCESS_LEVEL', 'info'),
+            'days' => env('LOG_DAILY_DAYS', 14), // 厳密には1日1ファイルのファイル数。
             'replace_placeholders' => true,
+            'formatter' => LogFormatterLibrary::class,
+            /* 'formatter_with' => [
+                // 'dateFormat' => LogFormatterLibrary::DATE_FORMAT,
+            ], */
         ],
 
         'errorlog' => [
@@ -142,6 +148,7 @@ return [
             'level'  => env('LOG_ERROR_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'formatter' => LogFormatterLibrary::class,
         ],
 
         'sqllog' => [
@@ -150,6 +157,7 @@ return [
             'level'  => env('LOG_SQL_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'formatter' => LogFormatterLibrary::class,
         ],
 
         'batchlog' => [
@@ -158,6 +166,7 @@ return [
             'level'  => env('LOG_BATCH_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'formatter' => LogFormatterLibrary::class,
         ],
 
         'adminActionLog' => [
@@ -166,6 +175,7 @@ return [
             'level'  => env('LOG_ADIMIN_ACTION_LEVEL', 'info'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'formatter' => LogFormatterLibrary::class,
         ],
 
     ],

@@ -88,6 +88,14 @@ migrate-rollback:
 migrate-reset:
 	docker compose exec app php artisan migrate:reset
 
+# migrationのSQLを表示する
+migrate-pretend:
+	docker compose exec app php artisan migrate --pretend
+
+# migrationの状態を表示する
+migrate-state:
+	docker compose exec app php artisan migrate:status
+
 seed:
 	docker compose exec app php artisan db:seed
 

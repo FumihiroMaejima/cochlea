@@ -6,7 +6,7 @@ Laravel環境をDockerで構築する為の手順書
 
 | 名前 | バージョン |
 | :--- | :---: |
-| PHP | 8.4(php:8.4-fpm-alpine3.17) |
+| PHP | 8.5(php:8.5-fpm-alpine3.23) |
 | MySQL | 5.7 |
 | Nginx | 1.29(nginx:1.29-alpine) |
 | Laravel | 12.* |
@@ -302,6 +302,11 @@ vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --testdox
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php --testdox
 ### deprecatedを表示したい場合
 vendor/bin/phpunit tests/Unit/Library/String/UuidLibraryTest.php -display-phpunit-deprecations
+### テストするメソッドを絞りこみたい場合
+vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testFakerTimeCurrentDateTime --testdox
+
+### テスト実行時のコマンドステータスを確認したい場合
+vendor/bin/phpunit tests/Unit/Library/Time/TimeLibraryTest.php --filter testFakerTimeCurrentDateTime --testdox; echo "$?"
 
 ### 一括で行いたい場合はphpunit.xmlのphpunitタグ内に下記のプロパティを追加する
 ```xml
@@ -1404,7 +1409,7 @@ class Kernel extends ConsoleKernel
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_SSL_CA => env('ATTR_SSL_CA'),
             ]) : [],
         ],
         ...

@@ -21,7 +21,7 @@ class FakerTime
     public function handle(Request $request, Closure $next)
     {
         // productionでは対応しない
-        if (config('app.env') === 'productinon') {
+        if (config('app.env') === 'production') {
             return $next($request);
         } else {
             $timeStamp = self::getFakerTimeStamp($request);

@@ -1,10 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import {
-  AxiosResponse,
-  AxiosError,
-  AxiosResponseHeaders,
-  RawAxiosResponseHeaders,
-} from 'axios'
 
 export type ToastType = {
   add(args: ToastData): void
@@ -24,20 +18,17 @@ export type SelectBoxType = {
   value: number
 }
 
+export type ServerHeadersType = Record<string, string>
+
 export type ServerRequestType<T = any> = {
-  data:
-    | string
-    | T
-    | AxiosResponse<T>
-    | ServerErrorResponseType
-    | AxiosError<ServerErrorResponseType>
+  data: string | T | ServerErrorResponseType | unknown
   status: number
 }
 
 export type ServerRequestResponseType<T = any> = {
-  data: T | AxiosError<ServerErrorResponseType>
+  data: T | ServerErrorResponseType | unknown
   status: number
-  headers: RawAxiosResponseHeaders | AxiosResponseHeaders
+  headers: ServerHeadersType
 }
 
 export type ServerErrorResponseType = {

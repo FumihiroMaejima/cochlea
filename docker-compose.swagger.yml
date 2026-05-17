@@ -1,5 +1,6 @@
 services:
   editor:
+    platform: 'linux/amd64'
     container_name: ${PROJECT_NAME:-testProject}_swagger-editor
     image: 'swaggerapi/swagger-editor'
     volumes:
@@ -12,6 +13,7 @@ services:
 
   # 立ち上がりにやや時間がかかる(30sec?)
   ui:
+    platform: 'linux/amd64'
     container_name: ${PROJECT_NAME:-testProject}_swagger-ui
     image: 'swaggerapi/swagger-ui'
     volumes:
@@ -22,6 +24,7 @@ services:
       URL: "./docs/api.yaml"
 
   api:
+    platform: 'linux/amd64'
     container_name: ${PROJECT_NAME:-testProject}_swagger-api
     image: 'stoplight/prism'
     volumes:

@@ -1,0 +1,53 @@
+# global environment variables
+# @host = http://localhost:50100
+
+# customaize environment variables
+
+######################################################
+
+# @name debugTest
+# @description debug test API
+# @tags debug
+GET {{host}}/api/v1/debug/test
+Content-Type: application/json
+Accept: application/json
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Cache-Control: no-cache
+Connection: keep-alive
+Keep-Alive: true
+
+######################################################
+
+# @name debugEmoji
+# @description debug emoji API
+# @tags debug
+GET {{host}}/api/v1/debug/emoji
+?emoji=😀
+Content-Type: application/json
+Accept: application/json
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Cache-Control: no-cache
+Connection: keep-alive
+Keep-Alive: true
+
+######################################################
+
+# @name debugUnicodeConvert
+# @description debug Unicode convert API
+# @tags debug
+# Unicodeエスケープされた文字列をデコードするAPIのテスト
+GET {{host}}/api/v1/debug/unicode/convert
+?unicode=\u8cea\u554f\u9078\u629e\u80a2\u306f\u5fc5\u9808\u9805\u76ee\u3067\u3059\u3002
+Content-Type: application/json
+Accept: application/json
+Accept-Encoding: gzip, deflate, br
+Accept-Language: UTF-8,ja;q=0.9
+Cache-Control: no-cache
+Connection: keep-alive
+Keep-Alive: true
+
+
+
+
